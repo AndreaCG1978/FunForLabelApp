@@ -1,0 +1,2 @@
+rootProject.name='FunForLabelApp'
+include ':app'
