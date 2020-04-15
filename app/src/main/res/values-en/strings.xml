@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="usuario">USER</string>
+    <string name="usuarioHint">User</string>
+    <string name="contrasenia">PASSWORD</string>
+    <string name="contraseniaHint">Password</string>
+    <string name="recordarPsw">SAVE LOGIN</string>
+    <string name="cancelar">CANCEL</string>
+    <string name="loginLabel">LOGIN</string>
+    <string name="login_error">The username or password is incorrect.</string>
+    <string name="conexion_server_error">Problems connecting to the Data Server.</string>
+    <string name="login_progress">Trying to Log-in...</string>
+    <string name="atencion">Attention!</string>
+</resources>

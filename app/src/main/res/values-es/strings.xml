@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FunForLabelApp</string>
     <string name="usuario">USUARIO</string>
     <string name="usuarioHint">Usuario</string>
     <string name="contrasenia">CONTRASEÑA</string>
