@@ -92,6 +92,8 @@ public class LoginActivity extends FragmentActivity {
                 }
             }
         });
+        userEntry.setText("acgrassano1978@gmail.com");
+        passEntry.setText("andrea");
     }
 
     private void loginCustomer() {
@@ -166,6 +168,7 @@ public class LoginActivity extends FragmentActivity {
             ConstantsAdmin.mensaje = null;
             //   this.inicializarConexionServidor();
             call = customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
+       //     call = customerService.loginCustomer("grassanoandrea@gmail.com", "bocha123", ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 customers = new ArrayList<>(response.body());
