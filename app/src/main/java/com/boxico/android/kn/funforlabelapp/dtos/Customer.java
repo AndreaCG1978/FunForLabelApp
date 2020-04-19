@@ -3,7 +3,9 @@ package com.boxico.android.kn.funforlabelapp.dtos;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
 
     @SerializedName("customers_id")
     @Expose

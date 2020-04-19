@@ -102,8 +102,8 @@ public class LoginActivity extends FragmentActivity {
         pswText = passEntry.getText().toString();
 
         if (!usrText.equals("") && (!pswText.equals(""))) {
-          //  buttonLogin.setEnabled(false);
-           // buttonLogin.setTextColor(Color.GRAY);
+            buttonLogin.setEnabled(false);
+            buttonLogin.setTextColor(Color.GRAY);
             new LoginCustomerTask().execute();
         } else {
             createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion));
@@ -175,14 +175,14 @@ public class LoginActivity extends FragmentActivity {
                 customers = new ArrayList<>(response.body());
                 if(customers.size() == 1){
                     Customer currentCustomer = customers.get(0);
-                /*    Intent intent = new Intent(me, MainActivity.class);
-                    intent.putExtra(ConstantsAdmin.currentInspectorConstant, currentInspector);
+                    Intent intent = new Intent(me, MainActivity.class);
+                    intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
                     if(saveLogin.isChecked()){
-                        ConstantsAdmin.createLogin(currentInspector,me);
+                        ConstantsAdmin.createLogin(currentCustomer,me);
                     }else{
                         ConstantsAdmin.deleteLogin(me);
                     }
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }else{
                     //createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion) );
                     ConstantsAdmin.mensaje = getResources().getString(R.string.login_error);
@@ -256,5 +256,12 @@ public class LoginActivity extends FragmentActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        buttonLogin.setEnabled(true);
+        buttonLogin.setTextColor(Color.WHITE);
     }
 }
