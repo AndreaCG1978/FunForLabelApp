@@ -100,9 +100,10 @@ public class LoginActivity extends FragmentActivity {
 
         usrText = userEntry.getText().toString();
         pswText = passEntry.getText().toString();
+
         if (!usrText.equals("") && (!pswText.equals(""))) {
-            buttonLogin.setEnabled(false);
-            buttonLogin.setTextColor(Color.GRAY);
+          //  buttonLogin.setEnabled(false);
+           // buttonLogin.setTextColor(Color.GRAY);
             new LoginCustomerTask().execute();
         } else {
             createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion));

@@ -9,7 +9,8 @@
     error_reporting(E_ALL);
     include $_SERVER['DOCUMENT_ROOT']."/includes/functions/password_funcs.php";
   //  include "password_funcs.php";
-    include $_SERVER['DOCUMENT_ROOT']."/includes/functions/database.php";
+	include $_SERVER['DOCUMENT_ROOT']."/includes/functions/database.php";
+	include $_SERVER['DOCUMENT_ROOT']."/includes/database_tables.php";
     include $_SERVER['DOCUMENT_ROOT']."/includes/functions/general.php";
     include $_SERVER['DOCUMENT_ROOT']."/includes/classes/passwordhash.php";
   //	include "passwordhash.php";
@@ -20,17 +21,21 @@
         {
  		$email_address = tep_db_prepare_input($_GET['email']);
     	$pswEntry = tep_db_prepare_input($_GET['psw']);
-		$consulta = "SELECT * FROM customers where customers_email_address = '".$email_address."'";
+		$consulta = "SELECT * FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
 		$sql = $dbConn->prepare($consulta);
 	    $sql->execute();
 		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-
-		$psw = $resultado['customers_password'];
-		$validacion = tep_validate_password($pswEntry, $psw);
-
-		if ($validacion) {
-			header("HTTP/1.1 200 OK");
-			echo json_encode([$resultado],JSON_UNESCAPED_UNICODE);
+		if($resultado != null){
+			$psw = $resultado['customers_password'];
+			$validacion = tep_validate_password($pswEntry, $psw);
+			if ($validacion != null && $validacion==true) {
+				header("HTTP/1.1 200 OK");
+				echo json_encode([$resultado],JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+		}else{
+			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}
 		exit();
         
