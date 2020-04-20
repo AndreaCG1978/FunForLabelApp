@@ -4,5 +4,6 @@
     <color name="color_gris_oscuro">#2F3242</color>
     <color name="color_blanco">#FFFFFF</color>
     <color name="color_gris_claro">#D3D2CD</color>
+    <color name="color_gris_muy_claro">#f4f5f4</color>
     <color name="color_negro">#000000</color>
 </resources>

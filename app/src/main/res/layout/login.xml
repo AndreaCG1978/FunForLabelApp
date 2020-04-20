@@ -26,6 +26,8 @@
                 android:gravity="center_horizontal"
                 />
 
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,12 +35,16 @@
                 android:textStyle="bold"
                 android:gravity="center_horizontal"
                 android:text="@string/bienvenido_title"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:background="@android:color/white"
                 />
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/custom_line" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -46,7 +52,9 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
-                android:layout_marginTop="25dp">
+                >
+
+
 
                 <TextView
                     android:layout_width="match_parent"
@@ -59,11 +67,13 @@
                     android:background="@android:color/white"
                     />
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
+                    android:background="@color/color_blanco"
                     >
 
                     <TextView
@@ -78,17 +88,17 @@
 
                     <EditText
                         android:id="@+id/usrEntry"
-                        android:layout_width="247dp"
-                        android:layout_height="20dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@android:color/white"
+                        android:layout_width="225dp"
                         android:hint="@string/usuarioHint"
-                        android:backgroundTint="@color/color_blanco"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="5dp"
+                        android:paddingStart="5dp"
+                        android:textColor="@android:color/black"
+                        android:backgroundTint="@color/color_gris_muy_claro"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:maxLength="80"
-                        android:focusedByDefault="false"
-                        android:textColor="@android:color/black"
+                        android:background="@android:color/white"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -97,8 +107,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="7dp"
                     android:orientation="horizontal"
+                    android:background="@color/color_blanco"
                     android:gravity="center_vertical|clip_vertical">
 
 
@@ -114,13 +125,13 @@
 
                     <EditText
                         android:id="@+id/passEntry"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="145dp"
+                        android:layout_height="27dp"
                         android:hint="@string/contraseniaHint"
-                        android:focusedByDefault="false"
-                        android:backgroundTint="@color/color_blanco"
                         android:layout_marginStart="5dp"
-                        android:textColor="@color/color_gris_oscuro"
+                        android:paddingStart="5dp"
+                        android:textColor="@android:color/black"
+                        android:backgroundTint="@color/color_gris_muy_claro"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:maxLength="30"
@@ -129,6 +140,7 @@
 
                     <ImageButton android:id="@+id/imagenShowPassword"
                         android:background="@drawable/hidepass"
+                        android:layout_marginStart="5dp"
                         android:layout_height="45dp" android:layout_width="40dp"
                         android:layout_gravity="center_vertical"
                         android:contentDescription="imagenShowPassword" />
@@ -143,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="10dp">
 
                     <CheckBox
                         android:id="@+id/checkSaveLogin"
@@ -170,13 +182,13 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 >
 
                 <Button
                     android:id="@+id/buttonCancel"
                     android:layout_width="wrap_content"
-                    android:layout_height="33dp"
+                    android:layout_height="30dp"
                     android:text="@string/cancelar"
                     android:fontFamily="sans-serif-smallcaps"
                     android:textSize="15dp"
@@ -191,7 +203,7 @@
                     android:id="@+id/buttonLogin"
                     android:layout_width="wrap_content"
                     android:text="@string/loginLabel"
-                    android:layout_height="33dp"
+                    android:layout_height="30dp"
                     android:fontFamily="sans-serif-smallcaps"
                     android:textSize="15dp"
                     android:padding="3dp"
@@ -207,6 +219,12 @@
             </LinearLayout>
 
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/custom_line" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +232,7 @@
                 android:layout_gravity="start"
                 android:padding="5dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="40dp">
+                android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -222,7 +240,7 @@
                 android:textColor="@android:color/holo_blue_dark"
                 android:textStyle="bold"
                 android:text="@string/no_soy_cliente_title"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:background="@android:color/white"
                 android:layout_marginBottom="7dp"
                 />
@@ -234,7 +252,7 @@
                 android:textColor="@android:color/holo_red_dark"
                 android:textStyle="bold"
                 android:text="@string/crear_cuenta_title"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_gravity="center_horizontal"
                 android:background="@android:color/white"
                 android:fontFamily="sans-serif-smallcaps"
@@ -255,7 +273,7 @@
                     android:textColor="@android:color/holo_blue_dark"
                     android:textStyle="bold"
                     android:text="@string/olvidaste_contrasenia_title"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:background="@android:color/white"
                     android:layout_marginBottom="7dp"
                     />
@@ -268,7 +286,7 @@
                     android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/presione_aqui_title"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:background="@android:color/white"
                     android:fontFamily="sans-serif-smallcaps"
                     />
