@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="usuario">USUARIO</string>
+    <string name="app_name">FunForLabel App</string>
+    <string name="usuario">USUARIO:</string>
     <string name="usuarioHint">Usuario</string>
-    <string name="contrasenia">CONTRASEÑA</string>
+    <string name="contrasenia">CONTRASEÑA:</string>
     <string name="contraseniaHint">Contraseña</string>
-    <string name="recordarPsw">RECORDAR INGRESO</string>
-    <string name="cancelar">CANCELAR</string>
-    <string name="loginLabel">INGRESAR</string>
+    <string name="recordarPsw">Recordar Ingreso</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="loginLabel">Ingresar</string>
     <string name="login_error">Los datos del usuario o contraseña son incorrectos.</string>
     <string name="conexion_server_error">Problemas para conectarse con el Servidor de datos.</string>
     <string name="login_progress">Intento de logueo...</string>
     <string name="atencion">Atención!</string>
+    <string name="soy_cliente_title">░ Soy Cliente!</string>
+    <string name="bienvenido_title">Bienvenido a FunForLabels App</string>
+    <string name="no_soy_cliente_title">░ No sos Cliente?</string>
+    <string name="crear_cuenta_title"><![CDATA[Crear Cuenta]]></string>
+    <string name="olvidaste_contrasenia_title">░ Olvidaste tu contraseña?</string>
+    <string name="presione_aqui_title"><![CDATA[Recuperar Contraseña]]></string>
 </resources>

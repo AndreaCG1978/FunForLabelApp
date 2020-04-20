@@ -4,14 +4,14 @@
     <item>        
         <shape>
             <stroke
-                android:width="2dp"
-                android:color="@color/color_gris_oscuro" />
+                android:width="3dp"
+                android:color="@android:color/holo_red_dark" />
             <corners
                 android:radius="3dp" />
-            <gradient
-                android:endColor="@color/color_negro"
-                android:startColor="@color/color_gris"
-                android:angle="180" />
+            <solid
+                android:color="@color/color_blanco"/>
+
+
  
         </shape>
     </item>

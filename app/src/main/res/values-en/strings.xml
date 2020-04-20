@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="usuario">USER</string>
+    <string name="app_name">FunForLabel App</string>
+    <string name="usuario">USER:</string>
     <string name="usuarioHint">User</string>
-    <string name="contrasenia">PASSWORD</string>
+    <string name="contrasenia">PASSWORD:</string>
     <string name="contraseniaHint">Password</string>
-    <string name="recordarPsw">SAVE LOGIN</string>
-    <string name="cancelar">CANCEL</string>
-    <string name="loginLabel">LOGIN</string>
+    <string name="recordarPsw">Save Login</string>
+    <string name="cancelar">Cancel</string>
+    <string name="loginLabel">Login</string>
     <string name="login_error">The username or password is incorrect.</string>
     <string name="conexion_server_error">Problems connecting to the Data Server.</string>
     <string name="login_progress">Trying to Log-in...</string>
     <string name="atencion">Attention!</string>
+    <string name="soy_cliente_title">░ Soy Cliente!</string>
+    <string name="bienvenido_title">Bienvenido a FunForLabels App</string>
+    <string name="no_soy_cliente_title">░ No sos Cliente?</string>
+    <string name="crear_cuenta_title"><![CDATA[Crear Cuenta]]></string>
+    <string name="olvidaste_contrasenia_title">░ Olvidaste tu contraseña?</string>
+    <string name="presione_aqui_title"><![CDATA[Recuperar Contraseña]]></string>
 </resources>

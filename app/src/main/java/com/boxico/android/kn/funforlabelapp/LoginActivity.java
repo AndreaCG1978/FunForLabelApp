@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
@@ -41,6 +42,8 @@ public class LoginActivity extends FragmentActivity {
     private EditText userEntry = null;
     private EditText passEntry = null;
     private Button buttonLogin = null;
+    private TextView crearCuentaText = null;
+    private TextView recuperarContrasenia = null;
     private CustomerService customerService = null;
     private String pswText;
     private String usrText;
@@ -76,8 +79,22 @@ public class LoginActivity extends FragmentActivity {
                 finish();
             }
         });
+        crearCuentaText = findViewById(R.id.crearCuentaText);
+        recuperarContrasenia = findViewById(R.id.recuperarContrasenia);
+        crearCuentaText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAlertDialog("En proceso de construcción", getResources().getString(R.string.atencion));
+            }
+        });
+        recuperarContrasenia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAlertDialog("En proceso de construcción", getResources().getString(R.string.atencion));
+            }
+        });
         saveLogin = findViewById(R.id.checkSaveLogin);
-        hiddeShowPass = findViewById(R.id.imagenShowPassword);
+   /*     hiddeShowPass = findViewById(R.id.imagenShowPassword);
         hiddeShowPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +108,7 @@ public class LoginActivity extends FragmentActivity {
                     hiddeShowPass.setBackgroundResource(R.drawable.hidepass);
                 }
             }
-        });
+        });*/
         userEntry.setText("acgrassano1978@gmail.com");
         passEntry.setText("andrea");
     }
@@ -102,8 +119,7 @@ public class LoginActivity extends FragmentActivity {
         pswText = passEntry.getText().toString();
 
         if (!usrText.equals("") && (!pswText.equals(""))) {
-            buttonLogin.setEnabled(false);
-            buttonLogin.setTextColor(Color.GRAY);
+
             new LoginCustomerTask().execute();
         } else {
             createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion));
@@ -150,7 +166,6 @@ public class LoginActivity extends FragmentActivity {
                 createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
                 ConstantsAdmin.mensaje = null;
                 buttonLogin.setEnabled(true);
-                buttonLogin.setTextColor(Color.WHITE);
 
             }
             dialog.cancel();
@@ -262,6 +277,5 @@ public class LoginActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         buttonLogin.setEnabled(true);
-        buttonLogin.setTextColor(Color.WHITE);
     }
 }
