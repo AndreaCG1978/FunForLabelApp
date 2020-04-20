@@ -2,257 +2,279 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/bg_body">
 
 
-    <ImageView
-        android:layout_width="320dp"
-        android:layout_height="100dp"
-        android:src="@drawable/store_logo"
-        android:gravity="center_horizontal"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/color_gris_oscuro"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:text="@string/bienvenido_title"
-        android:textSize="17sp"
-        android:fontFamily="sans-serif-smallcaps"
-        android:background="@android:color/white"
-        />
-
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:layout_marginTop="25dp">
-
-        <TextView
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_blue_dark"
-            android:gravity="left"
-            android:textStyle="bold"
-            android:text="@string/soy_cliente_title"
-            android:textSize="15sp"
-            android:background="@android:color/white"
-            />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@drawable/bg_body">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            >
+            <ImageView
+                android:layout_width="320dp"
+                android:layout_height="100dp"
+                android:src="@drawable/store_logo"
+                android:gravity="center_horizontal"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:textSize="12sp"
                 android:textColor="@color/color_gris_oscuro"
-                android:fontFamily="sans-serif"
-                android:text="@string/usuario"
-                android:background="@android:color/white"/>
-
-            <EditText
-                android:id="@+id/usrEntry"
-                android:layout_width="247dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="5dp"
-                android:background="@android:color/white"
-                android:hint="@string/usuarioHint"
-                android:backgroundTint="@color/color_blanco"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLength="80"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:textSize="12sp"
-                android:textColor="@color/color_gris_oscuro"
-                android:fontFamily="sans-serif"
-                android:text="@string/contrasenia"
-                android:background="@android:color/white"/>
-
-            <EditText
-                android:id="@+id/passEntry"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/contraseniaHint"
-                android:backgroundTint="@color/color_blanco"
-                android:layout_marginStart="5dp"
-                android:textColor="@color/color_gris_oscuro"
-                android:textSize="14sp"
-                android:inputType="textPassword"
-                android:maxLength="30"
-                android:importantForAutofill="no"
-                android:background="@android:color/white"/>
-
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp">
-
-            <CheckBox
-                android:id="@+id/checkSaveLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/recordarPsw"
-                android:textSize="13sp"
-                android:background="@color/color_blanco"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="@string/bienvenido_title"
+                android:textSize="17sp"
                 android:fontFamily="sans-serif-smallcaps"
-                android:textColor="@color/color_gris_oscuro"/>
+                android:background="@android:color/white"
+                />
 
 
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="@string/soy_cliente_title"
+                    android:textSize="15sp"
+                    android:background="@android:color/white"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_gris_oscuro"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/usuario"
+                        android:background="@android:color/white"/>
+
+                    <EditText
+                        android:id="@+id/usrEntry"
+                        android:layout_width="247dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="5dp"
+                        android:background="@android:color/white"
+                        android:hint="@string/usuarioHint"
+                        android:backgroundTint="@color/color_blanco"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLength="80"
+                        android:focusedByDefault="false"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical|clip_vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_gris_oscuro"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/contrasenia"
+                        android:background="@android:color/white"/>
+
+                    <EditText
+                        android:id="@+id/passEntry"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/contraseniaHint"
+                        android:focusedByDefault="false"
+                        android:backgroundTint="@color/color_blanco"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/color_gris_oscuro"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:maxLength="30"
+                        android:importantForAutofill="no"
+                        android:background="@android:color/white"/>
+
+                    <ImageButton android:id="@+id/imagenShowPassword"
+                        android:background="@drawable/hidepass"
+                        android:layout_height="45dp" android:layout_width="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="imagenShowPassword" />
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp">
+
+                    <CheckBox
+                        android:id="@+id/checkSaveLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recordarPsw"
+                        android:textSize="13sp"
+                        android:background="@color/color_blanco"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:textColor="@color/color_gris_oscuro"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                >
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:text="@string/cancelar"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:padding="3dp"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_marginEnd="20dp"
+                   />
+
+                <Button
+                    android:id="@+id/buttonLogin"
+                    android:layout_width="wrap_content"
+                    android:text="@string/loginLabel"
+                    android:layout_height="33dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="15dp"
+                    android:padding="3dp"
+                    android:textStyle="bold"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/holo_red_dark"
+
+
+                    />
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="start"
+                android:padding="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textStyle="bold"
+                android:text="@string/no_soy_cliente_title"
+                android:textSize="15sp"
+                android:background="@android:color/white"
+                android:layout_marginBottom="7dp"
+                />
+
+            <TextView
+                android:id="@+id/crearCuentaText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold"
+                android:text="@string/crear_cuenta_title"
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/white"
+                android:fontFamily="sans-serif-smallcaps"
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="start"
+                android:padding="5dp"
+                android:layout_marginStart="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:textStyle="bold"
+                    android:text="@string/olvidaste_contrasenia_title"
+                    android:textSize="15sp"
+                    android:background="@android:color/white"
+                    android:layout_marginBottom="7dp"
+                    />
+
+                <TextView
+                    android:id="@+id/recuperarContrasenia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/presione_aqui_title"
+                    android:textSize="15sp"
+                    android:background="@android:color/white"
+                    android:fontFamily="sans-serif-smallcaps"
+                    />
+            </LinearLayout>
         </LinearLayout>
-
-
-    </LinearLayout>
-
-
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        >
-
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="@string/cancelar"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:padding="3dp"
-            android:background="@drawable/custom_button"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginEnd="20dp"
-           />
-
-        <Button
-            android:id="@+id/buttonLogin"
-            android:layout_width="wrap_content"
-            android:text="@string/loginLabel"
-            android:layout_height="35dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textSize="15dp"
-            android:padding="3dp"
-            android:textStyle="bold"
-            android:background="@drawable/custom_button"
-            android:textColor="@android:color/holo_red_dark"
-
-
-            />
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="start"
-        android:padding="5dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="55dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textStyle="bold"
-        android:text="@string/no_soy_cliente_title"
-        android:textSize="15sp"
-        android:background="@android:color/white"
-        android:layout_marginBottom="10dp"
-        />
-
-    <TextView
-        android:id="@+id/crearCuentaText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/holo_red_dark"
-        android:textStyle="bold"
-        android:text="@string/crear_cuenta_title"
-        android:textSize="15sp"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/white"
-        android:fontFamily="sans-serif-smallcaps"
-        />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="start"
-        android:padding="5dp"
-        android:layout_marginStart="15dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"
-            android:text="@string/olvidaste_contrasenia_title"
-            android:textSize="15sp"
-            android:background="@android:color/white"
-            android:layout_marginBottom="10dp"
-            />
-
-        <TextView
-            android:id="@+id/recuperarContrasenia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_dark"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/presione_aqui_title"
-            android:textSize="15sp"
-            android:background="@android:color/white"
-            android:fontFamily="sans-serif-smallcaps"
-            />
-    </LinearLayout>
-
-
+    </ScrollView>
 
 </LinearLayout>
 

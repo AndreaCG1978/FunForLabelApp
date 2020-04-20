@@ -27,6 +27,8 @@ public class Customer implements Serializable {
     @Expose
     private String password;
 
+    private String notEncriptedPassword;
+
 
     public long getId() {
         return id;
@@ -66,6 +68,14 @@ public class Customer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNotEncriptedPassword() {
+        return notEncriptedPassword;
+    }
+
+    public void setNotEncriptedPassword(String notEncriptedPassword) {
+        this.notEncriptedPassword = notEncriptedPassword;
     }
 
     @Override

@@ -10,12 +10,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
@@ -60,6 +62,27 @@ public class LoginActivity extends FragmentActivity {
         me = this;
         this.configureWidgets();
         this.initializeService();
+        this.initializeDataBase();
+        this.initializeLogin();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    }
+
+
+    private void initializeDataBase(){
+        DataBaseManager mDBManager = DataBaseManager.getInstance(this);
+        ConstantsAdmin.inicializarBD(mDBManager);
+        ConstantsAdmin.createBD(mDBManager);
+        ConstantsAdmin.finalizarBD(mDBManager);
+    }
+
+    private void initializeLogin() {
+        Customer temp = ConstantsAdmin.getLogin(this);
+        if(temp != null){
+            userEntry.setText(temp.getEmail());
+            passEntry.setText(temp.getNotEncriptedPassword());
+            saveLogin.setChecked(true);
+        }
+
     }
 
     private void configureWidgets() {
@@ -94,7 +117,7 @@ public class LoginActivity extends FragmentActivity {
             }
         });
         saveLogin = findViewById(R.id.checkSaveLogin);
-   /*     hiddeShowPass = findViewById(R.id.imagenShowPassword);
+        hiddeShowPass = findViewById(R.id.imagenShowPassword);
         hiddeShowPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,9 +131,9 @@ public class LoginActivity extends FragmentActivity {
                     hiddeShowPass.setBackgroundResource(R.drawable.hidepass);
                 }
             }
-        });*/
-        userEntry.setText("acgrassano1978@gmail.com");
-        passEntry.setText("andrea");
+        });
+    /*    userEntry.setText("acgrassano1978@gmail.com");
+        passEntry.setText("andrea");*/
     }
 
     private void loginCustomer() {
@@ -193,6 +216,7 @@ public class LoginActivity extends FragmentActivity {
                     Intent intent = new Intent(me, MainActivity.class);
                     intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
                     if(saveLogin.isChecked()){
+                        currentCustomer.setNotEncriptedPassword(pswText);
                         ConstantsAdmin.createLogin(currentCustomer,me);
                     }else{
                         ConstantsAdmin.deleteLogin(me);
