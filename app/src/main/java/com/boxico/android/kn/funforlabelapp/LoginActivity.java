@@ -4,8 +4,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,11 +21,11 @@ import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.KNMail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +54,9 @@ public class LoginActivity extends FragmentActivity {
     private ImageButton hiddeShowPass;
     private boolean isShowingPass = false;
     private ProgressDialog dialog = null;
+    private Customer currentCustomer;
+    private String nuevaContraseña;
+    private String mailExistente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +79,10 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void initializeLogin() {
-        Customer temp = ConstantsAdmin.getLogin(this);
-        if(temp != null){
-            userEntry.setText(temp.getEmail());
-            passEntry.setText(temp.getNotEncriptedPassword());
+        currentCustomer = ConstantsAdmin.getLogin(this);
+        if(currentCustomer != null){
+            userEntry.setText(currentCustomer.getEmail());
+            passEntry.setText(currentCustomer.getNotEncriptedPassword());
             saveLogin.setChecked(true);
         }
 
@@ -110,12 +113,7 @@ public class LoginActivity extends FragmentActivity {
                 createAlertDialog("En proceso de construcción", getResources().getString(R.string.atencion));
             }
         });
-        recuperarContrasenia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAlertDialog("En proceso de construcción", getResources().getString(R.string.atencion));
-            }
-        });
+        this.configurarReenviarPass();
         saveLogin = findViewById(R.id.checkSaveLogin);
         hiddeShowPass = findViewById(R.id.imagenShowPassword);
         hiddeShowPass.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +132,106 @@ public class LoginActivity extends FragmentActivity {
         });
     /*    userEntry.setText("acgrassano1978@gmail.com");
         passEntry.setText("andrea");*/
+    }
+
+    private void configurarReenviarPass(){
+        recuperarContrasenia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                nuevaContraseña = me.crearNuevaContrasenia();
+                mailExistente = me.recuperarMailUsr();
+
+
+                if(nuevaContraseña != null){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(me);
+                    builder.setMessage(me.getString(R.string.mensaje_enviar_contrasenia) + mailExistente + me.getString(R.string.mensaje_desea_continuar))
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Long[] params = new Long[1];
+                                    params[0] = 1L;
+                                    new SendMail().execute(params);
+
+
+                                }
+                            })
+                            .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    builder.show();
+                }else{
+                    createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
+                }
+
+
+            }
+        });
+    }
+
+
+    private boolean reenviarContrasenia(){
+        boolean okSend = false;
+        KNMail m = new KNMail(ConstantsAdmin.FFL_MAIL, ConstantsAdmin.FFL_PASSWORD);
+        //String[] toArr = {ConstantsAdmin.contrasenia.getMail()};
+        if(mailExistente != null){
+            String[] toArr = {mailExistente};
+            m.setTo(toArr);
+            m.setFrom(ConstantsAdmin.FFL_MAIL);
+            m.setSubject(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia));
+
+            m.setBody(this.getString(R.string.contrasenia) + ": " + nuevaContraseña);
+
+            try {
+                okSend = m.send();
+                if(okSend){
+                    ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + mailExistente;
+                }
+            } catch(Exception e) {
+                //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
+            }
+        }
+
+        return okSend;
+
+    }
+
+    private class SendMail extends AsyncTask<Long, Integer, Integer> {
+
+        boolean okSend = false;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            okSend = reenviarContrasenia();
+            return null;
+        }
+
+        protected void onPreExecute() {
+            //called before doInBackground() is started
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            createAlertDialog(ConstantsAdmin.mensaje,"");
+        }
+    }
+
+
+    private String crearNuevaContrasenia() {
+        String temp = "temporal";
+        return temp;
+    }
+
+    private String recuperarMailUsr() {
+        String temp = null;
+        if(userEntry.getText() != null && !userEntry.getText().toString().equals("")) {
+            temp = userEntry.getText().toString();
+        }
+        return temp;
     }
 
     private void loginCustomer() {
@@ -212,7 +310,7 @@ public class LoginActivity extends FragmentActivity {
             if(response.body() != null){
                 customers = new ArrayList<>(response.body());
                 if(customers.size() == 1){
-                    Customer currentCustomer = customers.get(0);
+                    currentCustomer = customers.get(0);
                     Intent intent = new Intent(me, MainActivity.class);
                     intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
                     if(saveLogin.isChecked()){

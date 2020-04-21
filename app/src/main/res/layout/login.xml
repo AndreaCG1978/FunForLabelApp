@@ -64,7 +64,6 @@
                     android:textStyle="bold"
                     android:text="@string/soy_cliente_title"
                     android:textSize="15sp"
-                    android:background="@android:color/white"
                     />
 
 
@@ -84,6 +83,7 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif"
                         android:text="@string/usuario"
+                        android:textStyle="bold"
                         android:background="@android:color/white"/>
 
                     <EditText
@@ -121,6 +121,7 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif"
                         android:text="@string/contrasenia"
+                        android:textStyle="bold"
                         android:background="@android:color/white"/>
 
                     <EditText
@@ -241,7 +242,6 @@
                 android:textStyle="bold"
                 android:text="@string/no_soy_cliente_title"
                 android:textSize="13sp"
-                android:background="@android:color/white"
                 android:layout_marginBottom="7dp"
                 />
 
@@ -274,7 +274,6 @@
                     android:textStyle="bold"
                     android:text="@string/olvidaste_contrasenia_title"
                     android:textSize="13sp"
-                    android:background="@android:color/white"
                     android:layout_marginBottom="7dp"
                     />
 

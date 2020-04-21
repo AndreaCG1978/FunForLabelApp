@@ -18,4 +18,12 @@
     <string name="crear_cuenta_title"><![CDATA[Crear Cuenta]]></string>
     <string name="olvidaste_contrasenia_title">░ Olvidaste tu contraseña?</string>
     <string name="presione_aqui_title"><![CDATA[Recuperar Contraseña]]></string>
+    <string name="title_nueva_contrasenia">Nueva Contraseña</string>
+    <string name="send_mail_error">No es posible mandar el mail con la nueva contraseña.</string>
+    <string name="send_mail_succes">La nueva contraseña fue envía a la cuenta:</string>
+    <string name="mensaje_enviar_contrasenia">Se enviará una nueva contraseña a la cuenta de mail:</string>
+    <string name="usuario_inexistente">"No existe usuario registrado con esta cuenta de mail en nuestro sitio. "</string>
+    <string name="label_si">SI</string>
+    <string name="label_no">NO</string>
+    <string name="mensaje_desea_continuar">Desea continuar?</string>
 </resources>

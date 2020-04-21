@@ -11,6 +11,11 @@ public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
     public static final long tokenFFL = 27029085;
+    public static final String SMTP_SERVER ="smtp.gmail.com";
+    public static final String SMTP_PORT = "465";
+    public static final String SMTP_SOCKETPORT = "465";
+    public static final String FFL_MAIL = "info@funforlabels.com";
+    public static final String FFL_PASSWORD = "ceciyguille2011";
     public static String mensaje = null;
     public static String currentCustomer = "CurrentCustomer";
     public static final String TAG = "DataBaseManager";
