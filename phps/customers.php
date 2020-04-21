@@ -36,7 +36,19 @@
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
 			
-		}else{
+		}else if(isset($_GET['email']) && !isset($_GET['psw'])){
+			$email_address = tep_db_prepare_input($_GET['email']);
+			$consulta = "SELECT * FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			if($resultado != null){
+				echo json_encode([$resultado],JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+		}else
+		{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}
 		exit();

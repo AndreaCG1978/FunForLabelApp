@@ -22,6 +22,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNMail;
+import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -56,7 +58,7 @@ public class LoginActivity extends FragmentActivity {
     private ProgressDialog dialog = null;
     private Customer currentCustomer;
     private String nuevaContraseña;
-    private String mailExistente;
+    private Customer customerTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,32 +141,7 @@ public class LoginActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                nuevaContraseña = me.crearNuevaContrasenia();
-                mailExistente = me.recuperarMailUsr();
-
-
-                if(nuevaContraseña != null){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(me);
-                    builder.setMessage(me.getString(R.string.mensaje_enviar_contrasenia) + mailExistente + me.getString(R.string.mensaje_desea_continuar))
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Long[] params = new Long[1];
-                                    params[0] = 1L;
-                                    new SendMail().execute(params);
-
-
-                                }
-                            })
-                            .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    builder.show();
-                }else{
-                    createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
-                }
+                getCustomer();
 
 
             }
@@ -176,8 +153,8 @@ public class LoginActivity extends FragmentActivity {
         boolean okSend = false;
         KNMail m = new KNMail(ConstantsAdmin.FFL_MAIL, ConstantsAdmin.FFL_PASSWORD);
         //String[] toArr = {ConstantsAdmin.contrasenia.getMail()};
-        if(mailExistente != null){
-            String[] toArr = {mailExistente};
+        if(customerTemp != null){
+            String[] toArr = {customerTemp.getEmail()};
             m.setTo(toArr);
             m.setFrom(ConstantsAdmin.FFL_MAIL);
             m.setSubject(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia));
@@ -187,7 +164,7 @@ public class LoginActivity extends FragmentActivity {
             try {
                 okSend = m.send();
                 if(okSend){
-                    ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + mailExistente;
+                    ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + customerTemp.getEmail();
                 }
             } catch(Exception e) {
                 //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
@@ -222,16 +199,23 @@ public class LoginActivity extends FragmentActivity {
 
 
     private String crearNuevaContrasenia() {
-        String temp = "temporal";
+
+        String temp = PasswordGenerator.getPassword(
+                PasswordGenerator.MINUSCULAS+
+                        PasswordGenerator.MAYUSCULAS+
+                        PasswordGenerator.ESPECIALES,6);
+
         return temp;
     }
 
-    private String recuperarMailUsr() {
-        String temp = null;
-        if(userEntry.getText() != null && !userEntry.getText().toString().equals("")) {
-            temp = userEntry.getText().toString();
+
+    private void getCustomer() {
+        usrText = userEntry.getText().toString();
+        if (!usrText.equals("")) {
+            customerTemp = null;
+            new GetCustomerTask().execute();
         }
-        return temp;
+
     }
 
     private void loginCustomer() {
@@ -295,6 +279,129 @@ public class LoginActivity extends FragmentActivity {
     }
 
 
+    private class UpdatePasswordTask extends AsyncTask<Long, Integer, Integer> {
+
+        @Override
+        protected Integer doInBackground(Long... params) {
+
+            try {
+                publishProgress(1);
+                saveNewPassword();
+
+
+            } catch (Exception e) {
+/*                String error;
+                error = e.getMessage() + "\n";
+                if(e.getCause() != null){
+                    error = error + e.getCause().toString();
+                }
+                for(int i=0; i< e.getStackTrace().length; i++){
+                    error = error +  e.getStackTrace()[i].toString()+ "\n";
+                }
+                ConstantsAdmin.mensaje = error;*/
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+            return 0;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.login_progress), true);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if(ConstantsAdmin.mensaje != null){
+                createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
+                ConstantsAdmin.mensaje = null;
+                buttonLogin.setEnabled(true);
+
+            }else{
+                Long[] params = new Long[1];
+                params[0] = 1L;
+                new SendMail().execute(params);
+            }
+            dialog.cancel();
+
+        }
+    }
+
+
+    private class GetCustomerTask extends AsyncTask<Long, Integer, Integer> {
+
+        @Override
+        protected Integer doInBackground(Long... params) {
+
+            try {
+                publishProgress(1);
+                getCustomerInfo();
+            } catch (Exception e) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+            return 0;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.login_progress), true);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if(customerTemp != null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(me);
+                builder.setMessage(me.getString(R.string.mensaje_enviar_contrasenia) + customerTemp.getEmail() + me.getString(R.string.mensaje_desea_continuar))
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Long[] params = new Long[1];
+                                params[0] = 1L;
+                                nuevaContraseña = me.crearNuevaContrasenia();
+                                new UpdatePasswordTask().execute(params);
+
+
+                            }
+                        })
+                        .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.show();
+            }else{
+                createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
+                ConstantsAdmin.mensaje = null;
+                buttonLogin.setEnabled(true);
+            }
+            dialog.cancel();
+        }
+    }
+
+    private boolean saveNewPassword(){
+        final LoginActivity me = this;
+        Call<ResponseBody>  call = null;
+        boolean exito = false;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContraseña, ConstantsAdmin.tokenFFL);
+            Response<ResponseBody> respuesta = call.execute();
+            if(respuesta != null && respuesta.body() != null){
+                exito = true;
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+        return exito;
+    }
+
+
     private void loadCustomerInfo() {
         final LoginActivity me = this;
         Call<List<Customer>> call = null;
@@ -355,6 +462,36 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
+
+    private void getCustomerInfo() {
+        final LoginActivity me = this;
+        Call<List<Customer>> call = null;
+        Response<List<Customer>> response;
+        ArrayList<Customer> customers;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = customerService.getCustomer(usrText, ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                customers = new ArrayList<>(response.body());
+                if(customers.size() == 1){
+                    customerTemp = customers.get(0);
+                }else{
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.customer_not_exists);
+
+                }
+            }else{
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
 
 
     private void initializeService(){

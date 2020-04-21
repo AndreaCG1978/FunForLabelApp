@@ -26,4 +26,5 @@
     <string name="label_si">SI</string>
     <string name="label_no">NO</string>
     <string name="mensaje_desea_continuar">Desea continuar?</string>
+    <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
 </resources>
