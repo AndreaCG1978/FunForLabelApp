@@ -21,10 +21,13 @@
     <string name="title_nueva_contrasenia">Nueva Contraseña</string>
     <string name="send_mail_error">No es posible mandar el mail con la nueva contraseña.</string>
     <string name="send_mail_succes">La nueva contraseña fue envía a la cuenta:</string>
-    <string name="mensaje_enviar_contrasenia">Se enviará una nueva contraseña a la cuenta de mail:</string>
-    <string name="usuario_inexistente">"No existe usuario registrado con esta cuenta de mail en nuestro sitio. "</string>
+    <string name="mensaje_enviar_contrasenia"><![CDATA[Se enviará una nueva contraseña a la cuenta de mail <]]></string>
+    <string name="usuario_inexistente">"No existe usuario registrado con esta cuenta de mail! "</string>
     <string name="label_si">SI</string>
     <string name="label_no">NO</string>
-    <string name="mensaje_desea_continuar">Desea continuar?</string>
+    <string name="mensaje_desea_continuar"><![CDATA[> Desea continuar?]]></string>
     <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
+    <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
+    <string name="body2_nueva_contrasenia">Recuerde modificarla al iniciar sesión.</string>
+    <string name="sending_mail_progress">Enviando contraseña a su cuenta de correo...</string>
 </resources>

@@ -27,6 +27,8 @@ public class ConstantsAdmin {
     public static final String KEY_NOT_ENCRIPTED_PASSWORD = "contraseniaSinEncriptar";
     public static final String KEY_ROWID = "rowId" ;
     public static final String KEY_NAME = "name";
+    public static final String ENTER = "\n";
+    public static final String TAB = "\t";
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);

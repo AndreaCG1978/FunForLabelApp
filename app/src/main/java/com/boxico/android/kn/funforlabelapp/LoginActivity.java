@@ -151,6 +151,7 @@ public class LoginActivity extends FragmentActivity {
 
     private boolean reenviarContrasenia(){
         boolean okSend = false;
+        String body = "";
         KNMail m = new KNMail(ConstantsAdmin.FFL_MAIL, ConstantsAdmin.FFL_PASSWORD);
         //String[] toArr = {ConstantsAdmin.contrasenia.getMail()};
         if(customerTemp != null){
@@ -158,8 +159,14 @@ public class LoginActivity extends FragmentActivity {
             m.setTo(toArr);
             m.setFrom(ConstantsAdmin.FFL_MAIL);
             m.setSubject(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia));
+            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
+            body = body + this.getString(R.string.body1_nueva_contrasenia);
+            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER + ConstantsAdmin.TAB;
+            body = body + this.getString(R.string.contrasenia) + nuevaContraseña;
+            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
+            body = body + this.getString(R.string.body2_nueva_contrasenia);
+            m.setBody(body);
 
-            m.setBody(this.getString(R.string.contrasenia) + ": " + nuevaContraseña);
 
             try {
                 okSend = m.send();
@@ -178,22 +185,18 @@ public class LoginActivity extends FragmentActivity {
 
     private class SendMail extends AsyncTask<Long, Integer, Integer> {
 
-        boolean okSend = false;
-
         @Override
         protected Integer doInBackground(Long... longs) {
-            okSend = reenviarContrasenia();
+            reenviarContrasenia();
             return null;
         }
 
-        protected void onPreExecute() {
-            //called before doInBackground() is started
-        }
 
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
             createAlertDialog(ConstantsAdmin.mensaje,"");
+            passEntry.setText("");
         }
     }
 
@@ -305,10 +308,6 @@ public class LoginActivity extends FragmentActivity {
 
         }
 
-        protected void onProgressUpdate(Integer... progress) {
-            dialog = ProgressDialog.show(me, "",
-                    getResources().getString(R.string.login_progress), true);
-        }
 
         @Override
         protected void onPostExecute(Integer result) {
@@ -322,7 +321,6 @@ public class LoginActivity extends FragmentActivity {
                 params[0] = 1L;
                 new SendMail().execute(params);
             }
-            dialog.cancel();
 
         }
     }
@@ -343,10 +341,6 @@ public class LoginActivity extends FragmentActivity {
 
         }
 
-        protected void onProgressUpdate(Integer... progress) {
-            dialog = ProgressDialog.show(me, "",
-                    getResources().getString(R.string.login_progress), true);
-        }
 
         @Override
         protected void onPostExecute(Integer result) {
@@ -375,7 +369,6 @@ public class LoginActivity extends FragmentActivity {
                 ConstantsAdmin.mensaje = null;
                 buttonLogin.setEnabled(true);
             }
-            dialog.cancel();
         }
     }
 

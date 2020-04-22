@@ -59,7 +59,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/holo_blue_dark"
+                    android:textColor="@color/color_turquesa"
                     android:gravity="left"
                     android:textStyle="bold"
                     android:text="@string/soy_cliente_title"
@@ -238,7 +238,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_blue_dark"
+                android:textColor="@color/color_turquesa"
                 android:textStyle="bold"
                 android:text="@string/no_soy_cliente_title"
                 android:textSize="13sp"
@@ -270,7 +270,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/holo_blue_dark"
+                    android:textColor="@color/color_turquesa"
                     android:textStyle="bold"
                     android:text="@string/olvidaste_contrasenia_title"
                     android:textSize="13sp"
