@@ -55,7 +55,6 @@ public class LoginActivity extends FragmentActivity {
     private CheckBox saveLogin = null;
     private ImageButton hiddeShowPass;
     private boolean isShowingPass = false;
-    private ProgressDialog dialog = null;
     private Customer currentCustomer;
     private String nuevaContraseña;
     private Customer customerTemp;
@@ -152,6 +151,7 @@ public class LoginActivity extends FragmentActivity {
     private boolean reenviarContrasenia(){
         boolean okSend = false;
         String body = "";
+        ProgressDialog dialog = null;
         KNMail m = new KNMail(ConstantsAdmin.FFL_MAIL, ConstantsAdmin.FFL_PASSWORD);
         //String[] toArr = {ConstantsAdmin.contrasenia.getMail()};
         if(customerTemp != null){
@@ -185,10 +185,19 @@ public class LoginActivity extends FragmentActivity {
 
     private class SendMail extends AsyncTask<Long, Integer, Integer> {
 
+
+        private ProgressDialog dialog = null;
+
         @Override
         protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
             reenviarContrasenia();
-            return null;
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.sending_mail_progress), true);
         }
 
 
@@ -197,6 +206,9 @@ public class LoginActivity extends FragmentActivity {
             super.onPostExecute(integer);
             createAlertDialog(ConstantsAdmin.mensaje,"");
             passEntry.setText("");
+            if(dialog != null) {
+                dialog.cancel();
+            }
         }
     }
 
@@ -238,7 +250,7 @@ public class LoginActivity extends FragmentActivity {
 
 
     private class LoginCustomerTask extends AsyncTask<Long, Integer, Integer> {
-
+        private ProgressDialog dialog = null;
         @Override
         protected Integer doInBackground(Long... params) {
 
@@ -283,15 +295,13 @@ public class LoginActivity extends FragmentActivity {
 
 
     private class UpdatePasswordTask extends AsyncTask<Long, Integer, Integer> {
+        private ProgressDialog dialog = null;
 
         @Override
         protected Integer doInBackground(Long... params) {
 
             try {
-                publishProgress(1);
                 saveNewPassword();
-
-
             } catch (Exception e) {
 /*                String error;
                 error = e.getMessage() + "\n";
@@ -321,6 +331,9 @@ public class LoginActivity extends FragmentActivity {
                 params[0] = 1L;
                 new SendMail().execute(params);
             }
+            if(dialog != null){
+                dialog.cancel();
+            }
 
         }
     }
@@ -332,7 +345,6 @@ public class LoginActivity extends FragmentActivity {
         protected Integer doInBackground(Long... params) {
 
             try {
-                publishProgress(1);
                 getCustomerInfo();
             } catch (Exception e) {
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
