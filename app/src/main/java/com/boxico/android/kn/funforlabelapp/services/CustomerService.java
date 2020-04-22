@@ -26,8 +26,8 @@ public interface CustomerService {
     @FormUrlEncoded
         //  @Headers("Content-Type: application/json")
     Call<ResponseBody> updatePasswordCustomer(@Field("email") String email,
-                                      @Field("password") String newPassword,
-                                      @Field("tokenIplan") long tokenIplan);
+                                      @Field("newPassword") String newPassword,
+                                      @Field("tokenFFL") long tokenIplan);
 /*
     @GET(API_ROUTE)
     Call< List<Inspector> > getInspectors(@Query("usr") String usr);
