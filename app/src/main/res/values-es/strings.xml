@@ -30,4 +30,16 @@
     <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
     <string name="body2_nueva_contrasenia">Recuerde modificarla al iniciar sesión.</string>
     <string name="sending_mail_progress">Enviando contraseña a su cuenta de correo...</string>
+    <string name="informacion_personal_title">░ Información Personal</string>
+    <string name="direccion_title">░ Dirección</string>
+    <string name="informacion_contacto_title">░ Información de Contacto</string>
+    <string name="contrasenia_title">░ Contraseña</string>
+    <string name="nombre">Nombre:</string>
+    <string name="apellido">Apellido:</string>
+    <string name="email">Email:</string>
+    <string name="masculino">Masculino</string>
+    <string name="femenino">Femenino</string>
+    <string name="direccion">Dirección:</string>
+    <string name="barrio">Barrio:</string>
+    <string name="codigo_postal">Código Postal:</string>
 </resources>

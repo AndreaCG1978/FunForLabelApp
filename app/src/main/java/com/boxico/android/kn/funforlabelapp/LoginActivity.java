@@ -111,7 +111,7 @@ public class LoginActivity extends FragmentActivity {
         crearCuentaText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAlertDialog("En proceso de construcción", getResources().getString(R.string.atencion));
+                configurarCrearCuenta();
             }
         });
         this.configurarReenviarPass();
@@ -145,6 +145,11 @@ public class LoginActivity extends FragmentActivity {
 
             }
         });
+    }
+
+    private void configurarCrearCuenta(){
+        Intent intent = new Intent(me, CustomerActivity.class);
+        startActivity(intent);
     }
 
 
