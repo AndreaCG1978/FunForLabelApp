@@ -17,7 +17,7 @@ public class LocationManager {
 
     private static List<Geoname> provincias;
     private static List<Geoname> ciudades;
-    private static String geoIdProvincia = null;
+    private static String geoIdProvincia = "0";
 
     public static List<Geoname> getProvincias() {
         return provincias;
@@ -56,14 +56,14 @@ public class LocationManager {
             GeoChilds pcias = responseCallProvincias.execute().body();
             if (pcias != null) {
                 provincias = pcias.getChilds();
-                Geoname child = pcias.getChilds().get(0);
+            /*    Geoname child = pcias.getChilds().get(0);
                 Call<GeoChilds> responseCallCiudades =
                             service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(child.getGeonameId()));
                     //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
                 GeoChilds cdades = responseCallCiudades.execute().body();
                   if(cdades != null){
                      ciudades = cdades.getChilds();
-                  }
+                  }*/
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,6 +71,24 @@ public class LocationManager {
 
     }
 
+
+    public static void recargarCiudades(){
+        //new GetProvinciasTask().execute();
+
+        try {
+            GeoService service = GeoApiClient.getClient().create(GeoService.class);
+            Call<GeoChilds> responseCallCiudades =
+                       service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdProvincia());
+                //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
+            GeoChilds cdades = responseCallCiudades.execute().body();
+            if(cdades != null){
+                ciudades = cdades.getChilds();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private static ContentValues childsToContentValues(Geoname child) {
         ContentValues cv = new ContentValues();

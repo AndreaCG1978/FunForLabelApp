@@ -1,6 +1,6 @@
 package com.boxico.android.kn.funforlabelapp.utils.location;
 
-public class Geoname {
+public class Geoname implements Comparable {
     public double lat;
     public double lng;
     public long geonameId;
@@ -118,5 +118,11 @@ public class Geoname {
 
     public void setFcode(String fcode) {
         this.fcode = fcode;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Geoname other = (Geoname) o;
+        return name.compareTo(other.getName());
     }
 }
