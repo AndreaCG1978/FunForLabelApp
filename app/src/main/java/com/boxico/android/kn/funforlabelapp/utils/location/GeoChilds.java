@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Provincias extends ApiResponse {
+public class GeoChilds extends ApiResponse {
 
     @SerializedName("geonames")
-    private List<Geoname> provincias;
+    private List<Geoname> childs;
 
-    public List<Geoname> getProvincias() {
-        return provincias;
+    public List<Geoname> getChilds() {
+        return childs;
     }
 }

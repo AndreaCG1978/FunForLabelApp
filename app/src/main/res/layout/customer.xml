@@ -206,15 +206,70 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:gravity="center_vertical|clip_vertical"
             android:layout_marginBottom="15dp"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp"
+                android:layout_gravity="center_horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_gris_oscuro"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/provincia"
+                    android:textStyle="bold"
+                    android:background="@android:color/white"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/state_spinner"
+                    android:background="@color/color_gris_muy_claro"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp"
+                android:gravity="center_vertical|clip_vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_gris_oscuro"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/ciudad"
+                    android:textStyle="bold"
+                    android:background="@android:color/white"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/city_spinner"
+                    android:background="@color/color_gris_muy_claro"
+                     />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:background="@color/color_blanco"
                 >
 
@@ -252,7 +307,7 @@
                 android:layout_marginTop="7dp"
                 android:orientation="horizontal"
                 android:background="@color/color_blanco"
-                android:gravity="center_vertical|clip_vertical">
+                android:gravity="center_horizontal">
 
 
                 <TextView
@@ -289,7 +344,7 @@
                 android:layout_marginTop="7dp"
                 android:orientation="horizontal"
                 android:background="@color/color_blanco"
-                android:gravity="center_vertical|clip_vertical">
+                android:gravity="center_horizontal">
 
 
                 <TextView

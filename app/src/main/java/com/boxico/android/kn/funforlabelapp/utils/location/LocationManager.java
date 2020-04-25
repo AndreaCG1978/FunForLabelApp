@@ -1,67 +1,73 @@
 package com.boxico.android.kn.funforlabelapp.utils.location;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 
-import com.boxico.android.kn.funforlabelapp.LoginActivity;
-import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.services.GeoService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import retrofit2.Call;
 
 
 public class LocationManager {
 
+    private static List<Geoname> provincias;
+    private static List<Geoname> ciudades;
+    private static String geoIdProvincia = null;
 
-    private static class GetLocationTask extends AsyncTask<Long, Integer, Integer> {
+    public static List<Geoname> getProvincias() {
+        return provincias;
+    }
 
-        @Override
-        protected Integer doInBackground(Long... params) {
+    public static void setProvincias(List<Geoname> provincias) {
+        LocationManager.provincias = provincias;
+    }
 
-            try {
-                GeoService service = GeoApiClient.getClient().create(GeoService.class);
+    public static List<Geoname> getCiudades() {
+        return ciudades;
+    }
 
-                Call<Paises> responseCallPais = service.getPaises(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, ConstantsAdmin.GEOCODIGOARGENTINA);
-                Paises paises = responseCallPais.execute().body();
-                Call<Provincias> responseCallProvincias =
-                        service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(paises.getPaises().get(0).getGeonameId()));
-                Provincias provincias = responseCallProvincias.execute().body();
-                if (provincias != null) {
-                    ContentValues[] contentValues = new ContentValues[provincias.getProvincias().size()];
-                    for (int i = 0; i < provincias.getProvincias().size(); i++) {
-                        contentValues[i] = childsToContentValues(provincias.getProvincias().get(i));
-                    }
-                    //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return 0;
+    public static void setCiudades(List<Geoname> ciudades) {
+        LocationManager.ciudades = ciudades;
+    }
 
-        }
+    public static String getGeoIdProvincia() {
+        return geoIdProvincia;
+    }
 
-
-        @Override
-        protected void onPostExecute(Integer result) {
-
-        }
+    public static void setGeoIdProvincia(String geoIdProvincia) {
+        LocationManager.geoIdProvincia = geoIdProvincia;
     }
 
 
     public static void initialize(){
-        new GetLocationTask().execute();
+        //new GetProvinciasTask().execute();
+
+        try {
+            GeoService service = GeoApiClient.getClient().create(GeoService.class);
+            Call<Paises> responseCallPais = service.getPaises(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, ConstantsAdmin.GEOCODIGOARGENTINA);
+            Paises paises = responseCallPais.execute().body();
+            Call<GeoChilds> responseCallProvincias =
+                    service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(paises.getPaises().get(0).getGeonameId()));
+            GeoChilds pcias = responseCallProvincias.execute().body();
+            if (pcias != null) {
+                provincias = pcias.getChilds();
+                Geoname child = pcias.getChilds().get(0);
+                Call<GeoChilds> responseCallCiudades =
+                            service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(child.getGeonameId()));
+                    //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
+                GeoChilds cdades = responseCallCiudades.execute().body();
+                  if(cdades != null){
+                     ciudades = cdades.getChilds();
+                  }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
