@@ -33,6 +33,7 @@ public class ConstantsAdmin {
     public static final String GEOAPIURL = "http://api.geonames.org/";
     public static final String GEOCODIGOARGENTINA = "AR";
     public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
+    public static final String GEOIDCAPITALFEDERAL = "3433955";
 
 
 

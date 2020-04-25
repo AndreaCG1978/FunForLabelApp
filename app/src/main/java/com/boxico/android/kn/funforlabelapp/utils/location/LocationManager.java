@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import com.boxico.android.kn.funforlabelapp.services.GeoService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,7 +19,25 @@ public class LocationManager {
 
     private static List<Geoname> provincias;
     private static List<Geoname> ciudades;
+    private static List<Geoname> barrios;
     private static String geoIdProvincia = "0";
+    private static String geoIdCiudad = "0";
+
+    public static String getGeoIdCiudad() {
+        return geoIdCiudad;
+    }
+
+    public static void setGeoIdCiudad(String geoIdCiudad) {
+        LocationManager.geoIdCiudad = geoIdCiudad;
+    }
+
+    public static List<Geoname> getBarrios() {
+        return barrios;
+    }
+
+    public static void setBarrios(List<Geoname> barrios) {
+        LocationManager.barrios = barrios;
+    }
 
     public static List<Geoname> getProvincias() {
         return provincias;
@@ -77,12 +97,53 @@ public class LocationManager {
 
         try {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
-            Call<GeoChilds> responseCallCiudades =
-                       service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdProvincia());
-                //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
+            Call<GeoChilds> responseCallCiudades = null;
+            Call<GeoChilds> responseCallBarrios = null;
+            responseCallCiudades =
+                    service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdProvincia());
             GeoChilds cdades = responseCallCiudades.execute().body();
-            if(cdades != null){
-                ciudades = cdades.getChilds();
+            if(!getGeoIdProvincia().equals(ConstantsAdmin.GEOIDCAPITALFEDERAL)){
+                if(cdades != null){
+                    ciudades = cdades.getChilds();
+                }
+                responseCallBarrios =
+                        service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdCiudad());
+                GeoChilds brios = responseCallBarrios.execute().body();
+                if(brios != null){
+                    barrios = brios.getChilds();
+                }
+            }else{
+                Iterator<Geoname> it = cdades.getChilds().iterator();
+                ArrayList<Geoname> temp = new ArrayList<>();
+                Geoname geoTemp = null;
+                while (it.hasNext()){
+                    geoTemp = it.next();
+                    responseCallBarrios =
+                            service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(geoTemp.getGeonameId()));
+                    GeoChilds brios = responseCallBarrios.execute().body();
+                    if(brios != null){
+                        temp.addAll(brios.getChilds());
+                    }
+                }
+                ciudades = temp;
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void recargarBarrios(){
+        try {
+            GeoService service = GeoApiClient.getClient().create(GeoService.class);
+            Call<GeoChilds> responseCallBarrios =
+                    service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdCiudad());
+            GeoChilds brios = responseCallBarrios.execute().body();
+            if(brios != null){
+                barrios = brios.getChilds();
             }
         } catch (Exception e) {
             e.printStackTrace();
