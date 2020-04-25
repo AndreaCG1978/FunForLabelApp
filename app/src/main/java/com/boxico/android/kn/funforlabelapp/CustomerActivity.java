@@ -6,7 +6,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import com.boxico.android.kn.funforlabelapp.utils.FileContentLoader;
+import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
 
 public class CustomerActivity extends FragmentActivity {
 
@@ -14,8 +14,7 @@ public class CustomerActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer);
-        FileContentLoader fcl = new FileContentLoader();
-        fcl.loadFileContent(this);
+        LocationManager.initialize();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     }
 }

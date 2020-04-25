@@ -29,6 +29,12 @@ public class ConstantsAdmin {
     public static final String KEY_NAME = "name";
     public static final String ENTER = "\n";
     public static final String TAB = "\t";
+    public static final String GEOUSERNAME = "andreacg1978";
+    public static final String GEOAPIURL = "http://api.geonames.org/";
+    public static final String GEOCODIGOARGENTINA = "AR";
+    public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
+
+
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
