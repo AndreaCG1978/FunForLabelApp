@@ -22,6 +22,7 @@ public class LocationManager {
     private static List<Geoname> barrios;
     private static String geoIdProvincia = "0";
     private static String geoIdCiudad = "0";
+    public static boolean failed = false;
 
     public static String getGeoIdCiudad() {
         return geoIdCiudad;
@@ -76,17 +77,13 @@ public class LocationManager {
             GeoChilds pcias = responseCallProvincias.execute().body();
             if (pcias != null) {
                 provincias = pcias.getChilds();
-            /*    Geoname child = pcias.getChilds().get(0);
-                Call<GeoChilds> responseCallCiudades =
-                            service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(child.getGeonameId()));
-                    //inserted = getContentResolver().bulkInsert(CountriesEntry.CONTENT_URI, contentValues);
-                GeoChilds cdades = responseCallCiudades.execute().body();
-                  if(cdades != null){
-                     ciudades = cdades.getChilds();
-                  }*/
+                failed = false;
+            }else{
+                failed = true;
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            failed = true;
         }
 
     }
@@ -99,65 +96,83 @@ public class LocationManager {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<GeoChilds> responseCallCiudades = null;
             Call<GeoChilds> responseCallBarrios = null;
+            failed = false;
             responseCallCiudades =
                     service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdProvincia());
             GeoChilds cdades = responseCallCiudades.execute().body();
             if(!getGeoIdProvincia().equals(ConstantsAdmin.GEOIDCAPITALFEDERAL)){
                 if(cdades != null){
                     ciudades = cdades.getChilds();
+                 }else{
+                    failed = true;
                 }
-                responseCallBarrios =
-                        service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdCiudad());
-                GeoChilds brios = responseCallBarrios.execute().body();
-                if(brios != null){
-                    barrios = brios.getChilds();
+                if(!failed){
+                    if(getGeoIdCiudad().equals("0")){
+                        setGeoIdCiudad(String.valueOf(ciudades.get(0).getGeonameId()));
+                    }
+                    responseCallBarrios =
+                            service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdCiudad());
+                    GeoChilds brios = responseCallBarrios.execute().body();
+                    if(brios != null){
+                        barrios = brios.getChilds();
+                    }else{
+                        failed = true;
+                    }
                 }
             }else{
                 Iterator<Geoname> it = cdades.getChilds().iterator();
                 ArrayList<Geoname> temp = new ArrayList<>();
                 Geoname geoTemp = null;
-                while (it.hasNext()){
+                while (it.hasNext() && !failed){
                     geoTemp = it.next();
                     responseCallBarrios =
                             service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(geoTemp.getGeonameId()));
                     GeoChilds brios = responseCallBarrios.execute().body();
                     if(brios != null){
                         temp.addAll(brios.getChilds());
+                    }else{
+                        failed = true;
                     }
                 }
-                ciudades = temp;
+                if(!failed) {
+                    ciudades = temp;
+                }
 
             }
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            failed = true;
         }
 
     }
 
     public static void recargarBarrios(){
         try {
+            failed = false;
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<GeoChilds> responseCallBarrios =
                     service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, getGeoIdCiudad());
             GeoChilds brios = responseCallBarrios.execute().body();
             if(brios != null){
                 barrios = brios.getChilds();
+            }else{
+                failed = true;
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            failed = true;
         }
 
     }
-
+/*
     private static ContentValues childsToContentValues(Geoname child) {
         ContentValues cv = new ContentValues();
         cv.put("Nombre",  child.name);
         cv.put("Id", child.geonameId);
         return cv;
     }
-
+*/
 /*
 
     private OkHttpClient createOkHttpClient() {

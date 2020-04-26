@@ -23,6 +23,8 @@ public class Geoname implements Comparable {
         String result = name;
         if(name.contains("Partido de")){
             result = name.replaceAll("Partido de","");
+        }else if(name.contains("Departamento de")){
+            result = name.replaceAll("Departamento de","");
         }
 
         return result;

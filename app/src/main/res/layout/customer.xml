@@ -81,7 +81,7 @@
                         android:textColor="@android:color/black"
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:importantForAutofill="no"
-                        android:inputType="text"
+                        android:inputType="textPersonName"
                         android:maxLength="80"
                         android:background="@android:color/white"
                         android:textSize="14sp" />
@@ -118,7 +118,7 @@
                         android:textColor="@android:color/black"
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:textSize="14sp"
-                        android:inputType="textPassword"
+                        android:inputType="textPersonName"
                         android:maxLength="30"
                         android:importantForAutofill="no"
                         android:background="@android:color/white"/>
@@ -155,7 +155,7 @@
                         android:textColor="@android:color/black"
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:textSize="14sp"
-                        android:inputType="textPassword"
+                        android:inputType="textEmailAddress"
                         android:maxLength="30"
                         android:importantForAutofill="no"
                         android:background="@android:color/white"/>
@@ -207,7 +207,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_vertical|clip_vertical"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
             >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -235,7 +235,26 @@
                     android:background="@color/color_gris_muy_claro"
                     />
 
+                <EditText
+                    android:id="@+id/entryProvincia"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:textSize="14sp"
+                    android:inputType="textCapWords"
+                    android:maxLength="30"
+                    android:visibility="gone"
+                    android:importantForAutofill="no"
+                    android:background="@android:color/white"/>
+
             </LinearLayout>
+
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -245,13 +264,14 @@
                 >
 
                 <TextView
+                    android:id="@+id/tvPartido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:textSize="12sp"
                     android:textColor="@color/color_gris_oscuro"
                     android:fontFamily="sans-serif"
-                    android:text="@string/ciudad"
+                    android:text="@string/partido"
                     android:textStyle="bold"
                     android:background="@android:color/white"/>
 
@@ -259,28 +279,58 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/city_spinner"
-                    android:background="@color/color_gris_muy_claro"
-                     />
+                    android:background="@color/color_gris_muy_claro"/>
+
+                <EditText
+                    android:id="@+id/entryCiudad"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:textSize="14sp"
+                    android:maxLength="30"
+                    android:inputType="textCapWords"
+                    android:visibility="gone"
+                    android:importantForAutofill="no"
+                    android:background="@android:color/white"/>
 
             </LinearLayout>
 
+
+
             <LinearLayout
+                android:id="@+id/layoutBarrio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="10dp"
-                android:gravity="center_vertical|clip_vertical"
-                >
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/barrio_spinner"
                 android:visibility="gone"
-                android:background="@color/color_gris_muy_claro"
-                />
+                android:gravity="center_vertical|clip_vertical"
 
-        </LinearLayout>
+                >
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_gris_oscuro"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/localidad"
+                    android:textStyle="bold"
+                    android:background="@android:color/white"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/barrio_spinner"
+
+                    android:background="@color/color_gris_muy_claro"
+                    />
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -312,47 +362,10 @@
                     android:textColor="@android:color/black"
                     android:backgroundTint="@color/color_gris_muy_claro"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="textPostalAddress"
                     android:maxLength="80"
                     android:background="@android:color/white"
                     android:textSize="14sp" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:orientation="horizontal"
-                android:background="@color/color_blanco"
-                android:gravity="center_horizontal">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:textSize="12sp"
-                    android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/barrio"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
-
-                <EditText
-                    android:id="@+id/entryBarrio"
-                    android:layout_width="145dp"
-                    android:layout_height="27dp"
-                    android:layout_marginStart="5dp"
-                    android:paddingStart="5dp"
-                    android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
-                    android:textSize="14sp"
-                    android:inputType="textPassword"
-                    android:maxLength="30"
-                    android:importantForAutofill="no"
-                    android:background="@android:color/white"/>
 
             </LinearLayout>
 
@@ -386,13 +399,215 @@
                     android:textColor="@android:color/black"
                     android:backgroundTint="@color/color_gris_muy_claro"
                     android:textSize="14sp"
-                    android:inputType="textPassword"
+                    android:inputType="textPostalAddress"
                     android:maxLength="30"
                     android:importantForAutofill="no"
                     android:background="@android:color/white"/>
 
             </LinearLayout>
         </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_turquesa"
+            android:gravity="left"
+            android:textStyle="bold"
+            android:text="@string/informacion_contacto_title"
+            android:textSize="15sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_line" />
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical|clip_vertical"
+            android:layout_marginTop="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal"
+                android:background="@color/color_blanco"
+                android:gravity="center_horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_gris_oscuro"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/telefono"
+                    android:textStyle="bold"
+                    android:background="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/entryTelefono"
+                    android:layout_width="145dp"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:textSize="14sp"
+                    android:inputType="phone"
+                    android:maxLength="30"
+                    android:importantForAutofill="no"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal"
+                android:background="@color/color_blanco"
+                android:gravity="center_horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_gris_oscuro"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/fax"
+                    android:textStyle="bold"
+                    android:background="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/entryFax"
+                    android:layout_width="145dp"
+                    android:layout_height="27dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:textSize="14sp"
+                    android:inputType="phone"
+                    android:maxLength="30"
+                    android:importantForAutofill="no"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_turquesa"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:text="@string/contrasenia_title"
+                android:textSize="15sp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/custom_line" />
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical|clip_vertical"
+                android:layout_marginTop="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:background="@color/color_blanco"
+                    android:gravity="center_horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_gris_oscuro"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/contrasenia"
+                        android:textStyle="bold"
+                        android:background="@android:color/white"/>
+
+                    <EditText
+                        android:id="@+id/entryContrasenia"
+                        android:layout_width="145dp"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="5dp"
+                        android:paddingStart="5dp"
+                        android:textColor="@android:color/black"
+                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:maxLength="30"
+                        android:importantForAutofill="no"
+                        android:background="@android:color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:background="@color/color_blanco"
+                    android:gravity="center_horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_gris_oscuro"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/confirmacion"
+                        android:textStyle="bold"
+                        android:background="@android:color/white"/>
+
+                    <EditText
+                        android:id="@+id/entryConfirmacion"
+                        android:layout_width="145dp"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="5dp"
+                        android:paddingStart="5dp"
+                        android:textColor="@android:color/black"
+                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:maxLength="30"
+                        android:importantForAutofill="no"
+                        android:background="@android:color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
