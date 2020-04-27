@@ -49,4 +49,7 @@
     <string name="telefono">Teléfono:</string>
     <string name="fax">Fax:</string>
     <string name="confirmacion">Confirmación:</string>
+    <string name="newsletter">Newsletter:</string>
+    <string name="registrarLabel">Guardar</string>
+    <string name="campoRequerido">**</string>
 </resources>

@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,6 +36,23 @@ public class CustomerActivity extends FragmentActivity {
     private EditText ciudadEntry;
     private LinearLayout layoutBarrio;
     private TextView tvPartidos;
+    private Button btnGuardar;
+    private Button btnCancel;
+    private EditText entryNombre;
+    private EditText entryApellido;
+    private EditText entryMail;
+    private EditText entryDireccion;
+    private EditText entryCP;
+    private EditText entryTel;
+    private EditText entryFax;
+    private CheckBox checkNewsletter;
+    private EditText entryContrasenia;
+    private EditText entryConfirmacion;
+    private RadioButton radioFemenino;
+    private RadioButton radioMasculino;
+    private EditText entryProvincia;
+    private EditText entryCiudad;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +97,6 @@ public class CustomerActivity extends FragmentActivity {
         protected void onPostExecute(Integer result) {
             configureWidgets();
             if(!LocationManager.failed) {
-
                 bloquearLocation(false);
             }else{
                 bloquearLocation(true);
@@ -166,6 +185,35 @@ public class CustomerActivity extends FragmentActivity {
         ciudadEntry = (EditText)this.findViewById(R.id.entryCiudad);
         layoutBarrio = (LinearLayout) this.findViewById(R.id.layoutBarrio);
         tvPartidos = (TextView)this.findViewById(R.id.tvPartido);
+        entryNombre = (EditText) this.findViewById(R.id.entryNombre);
+        entryApellido = (EditText) this.findViewById(R.id.entryApellido);
+        entryMail = (EditText) this.findViewById(R.id.entryEmail);
+        entryProvincia = (EditText) this.findViewById(R.id.entryProvincia);
+        entryCiudad = (EditText) this.findViewById(R.id.entryCiudad);
+        entryDireccion = (EditText) this.findViewById(R.id.entryDireccion);
+        entryCP = (EditText) this.findViewById(R.id.entryCodigoPostal);
+        entryTel = (EditText) this.findViewById(R.id.entryTelefono);
+        entryFax = (EditText) this.findViewById(R.id.entryFax);
+        entryContrasenia = (EditText) this.findViewById(R.id.entryContrasenia);
+        entryConfirmacion = (EditText) this.findViewById(R.id.entryConfirmacion);
+        checkNewsletter = (CheckBox) this.findViewById(R.id.checkNewsletter);
+        radioFemenino = (RadioButton) this.findViewById(R.id.radio_femenino);
+        radioMasculino = (RadioButton) this.findViewById(R.id.radio_masculino);
+        btnCancel = (Button) this.findViewById(R.id.buttonCancel);
+        btnGuardar = (Button) this.findViewById(R.id.buttonGuardar);
+        entryNombre.clearFocus();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guardarCustomer();
+            }
+        });
         provincias_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -208,6 +256,51 @@ public class CustomerActivity extends FragmentActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
+    }
+
+    private void guardarCustomer() {
+        if(validarCustomer()){
+            this.guardarCustomerEnBD();
+        }
+    }
+
+    private void guardarCustomerEnBD() {
+    }
+
+    private boolean validarCustomer() {
+        boolean esValido = true;
+        if(esValido && entryNombre.getText().length()==0){
+            esValido = false;
+            entryNombre.requestFocus();
+        }else if(esValido && entryApellido.getText().length()==0){
+            esValido = false;
+            entryApellido.requestFocus();
+        }else if(esValido && entryMail.getText().length()==0){
+            esValido = false;
+            entryMail.requestFocus();
+        }else if(esValido && entryProvincia.getText().length()==0 && LocationManager.failed){
+            esValido = false;
+            entryProvincia.requestFocus();
+        }else if(esValido && entryCiudad.getText().length()==0 && LocationManager.failed){
+            esValido = false;
+            entryCiudad.requestFocus();
+        }else if(esValido && entryDireccion.getText().length()==0){
+            esValido = false;
+            entryDireccion.requestFocus();
+        }else if(esValido && entryCP.getText().length()==0){
+            esValido = false;
+            entryCP.requestFocus();
+        }else if(esValido && entryTel.getText().length()==0){
+            esValido = false;
+            entryTel.requestFocus();
+        }else if(esValido && entryContrasenia.getText().length()==0){
+            esValido = false;
+            entryContrasenia.requestFocus();
+        }else if(esValido && entryConfirmacion.getText().length()==0){
+            esValido = false;
+            entryConfirmacion.requestFocus();
+        }
+        return esValido;
     }
 
 
