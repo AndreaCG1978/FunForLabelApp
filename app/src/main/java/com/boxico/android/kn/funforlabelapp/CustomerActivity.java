@@ -325,7 +325,8 @@ public class CustomerActivity extends FragmentActivity {
 
     private void guardarCustomer() {
         if(validarCustomer()){
-            this.guardarCustomerEnBD();
+           // this.guardarCustomerEnBD();
+            new CreateCustomerTask().execute();
         }else{
             if(ConstantsAdmin.mensaje != null){
                 createAlertDialog(ConstantsAdmin.mensaje, getString(R.string.atencion));
@@ -346,7 +347,7 @@ public class CustomerActivity extends FragmentActivity {
         customer.setFirstName(entryNombre.getText().toString());
         customer.setPassword(entryContrasenia.getText().toString());
         customer.setEmail(entryMail.getText().toString());
-        if (!LocationManager.failed) {
+        if (LocationManager.failed) {
             customer.setCiudad(entryCiudad.getText().toString());
             customer.setSuburbio(entryCiudad.getText().toString());
             customer.setProvincia(entryProvincia.getText().toString());
@@ -371,6 +372,35 @@ public class CustomerActivity extends FragmentActivity {
         }
         customer.setTelephone(entryTel.getText().toString());
     }
+
+    private class CreateCustomerTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            guardarCustomerEnBD();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.creating_customer_progress), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+             if(dialog != null) {
+                dialog.cancel();
+            }
+        }
+    }
+
+
 
     private boolean guardarCustomerEnBD() {
         loadInfoCustomer();

@@ -46,7 +46,7 @@ public interface CustomerService {
                                  @Field("customers_telephone") String telephone,
                                  @Field("customers_fax") String fax,
                                  @Field("customers_newsletter") String newsletter,
-                                 @Field("tokenIplan") long tokenIplan);
+                                 @Field("tokenFFL") long tokenFFL);
 /*
     @GET(API_ROUTE)
     Call< List<Inspector> > getInspectors(@Query("usr") String usr);

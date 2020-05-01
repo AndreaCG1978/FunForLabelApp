@@ -54,4 +54,5 @@
     <string name="campoRequerido">**</string>
     <string name="password_not_equal_error">La Contraseña y la Confirmación no coinciden!</string>
     <string name="info_required_hint">Dato Requerido</string>
+    <string name="creating_customer_progress">Creando nueva Cuenta...</string>
 </resources>

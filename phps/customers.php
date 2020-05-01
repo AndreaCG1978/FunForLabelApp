@@ -11,7 +11,8 @@
 	include $_SERVER['DOCUMENT_ROOT']."/includes/functions/database.php";
 	include $_SERVER['DOCUMENT_ROOT']."/includes/database_tables.php";
     include $_SERVER['DOCUMENT_ROOT']."/includes/functions/general.php";
-    include $_SERVER['DOCUMENT_ROOT']."/includes/classes/passwordhash.php";
+	include $_SERVER['DOCUMENT_ROOT']."/includes/classes/passwordhash.php";
+	
     if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['tokenFFL'])&& $_GET['tokenFFL'] == $tokenFFL)
     {
         
@@ -53,8 +54,33 @@
 		}
 		exit();
 		 
-    }
-   
+	}
+	
+	// Crear cuenta
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['tokenFFL'])&& $_POST['tokenFFL'] == $tokenFFL)
+    {
+		echo("ENTRO AL POST");
+		// OBTENGO EL ID DE ARGENTINA
+		$sqlGetIdCountry = "SELECT countries_id FROM countries where countries_iso_code_3 = 'ARG'";
+		$statement = $dbConn->prepare($sqlGetIdCountry);
+		$statement->execute();
+		$idCountry = $statement->fetch();
+		echo("EL ID DE ARGENTINA ES".$idCountry[0]);
+
+		// OBTENGO EL ID DE LA ZONA SELECCIONADA
+		$sqlGetIdZone = "SELECT zone_id FROM zones where zone_country_id = ".$idCountry[0]." and zone_name = '".$_POST['customers_provincia']."'";
+		$statement = $dbConn->prepare($sqlGetIdZone);
+		$statement->execute();
+		$idZone = $statement->fetch();
+		echo("EL ID DE LA ZONA SELECCIONADA ES".$idZone[0]);
+
+
+		$sqlInsertAddressBook = "INSERT INTO address_book(customers_id,entry_gender, entry_company, entry_firstname, entry_lastname, 
+							entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id)
+							VALUES(:customers_id, :customers_gender, :customers_company, :customers_firstname, :customers_lastname,
+							:customers_direccion, :customers_suburbio, :customers_cp, :customers_ciudad, :customers_provincia, :customers_country_id,:customers_zone_id)";
+		exit();
+	}
 
 	//Actualizar
     if ($_SERVER['REQUEST_METHOD'] == 'PUT')
