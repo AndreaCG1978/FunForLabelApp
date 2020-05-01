@@ -539,7 +539,6 @@ public class LoginActivity extends FragmentActivity {
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     @Override

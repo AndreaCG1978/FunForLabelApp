@@ -1,6 +1,8 @@
 package com.boxico.android.kn.funforlabelapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -19,12 +21,27 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.location.Geoname;
 import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CustomerActivity extends FragmentActivity {
 
@@ -52,6 +69,11 @@ public class CustomerActivity extends FragmentActivity {
     private RadioButton radioMasculino;
     private EditText entryProvincia;
     private EditText entryCiudad;
+    private Customer customer;
+    private String provinciaSeleccionada;
+    private String ciudadSeleccionada;
+    private String barrioSeleccionado;
+    private CustomerService customerService;
 
 
     @Override
@@ -62,7 +84,34 @@ public class CustomerActivity extends FragmentActivity {
         me = this;
         new InitializeLocationTask().execute();
 
+    }
 
+    private void initializeService(){
+        GsonBuilder gsonB = new GsonBuilder();
+        gsonB.setLenient();
+        Gson gson = gsonB.create();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.level(HttpLoggingInterceptor.Level.BODY);
+
+        Interceptor interceptor2 = new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException
+            {
+                okhttp3.Request.Builder ongoing = chain.request().newBuilder();
+                ongoing.addHeader("Content-Type", "application/x-www-form-urlencoded");
+                ongoing.addHeader("Accept", "application/json");
+
+                return chain.proceed(ongoing.build());
+            }
+        };
+
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(interceptor2).connectTimeout(100, TimeUnit.SECONDS).readTimeout(100,TimeUnit.SECONDS).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ConstantsAdmin.URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        customerService = retrofit.create(CustomerService.class);
     }
 
 
@@ -219,6 +268,7 @@ public class CustomerActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Geoname pcia = null;
                 pcia = (Geoname) parent.getAdapter().getItem(position);
+                provinciaSeleccionada = pcia.getName();
                 LocationManager.setGeoIdProvincia(String.valueOf(pcia.getGeonameId()));
                 new ReloadCiudadesTask().execute();
 
@@ -234,9 +284,24 @@ public class CustomerActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Geoname cdad = null;
                 cdad = (Geoname) parent.getAdapter().getItem(position);
+                ciudadSeleccionada = cdad.getName();
                 LocationManager.setGeoIdCiudad(String.valueOf(cdad.getGeonameId()));
                 new ReloadBarriosTask().execute();
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        barrio_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Geoname barrio = null;
+                barrio = (Geoname) parent.getAdapter().getItem(position);
+                barrioSeleccionado = barrio.getName();
             }
 
             @Override
@@ -261,44 +326,123 @@ public class CustomerActivity extends FragmentActivity {
     private void guardarCustomer() {
         if(validarCustomer()){
             this.guardarCustomerEnBD();
+        }else{
+            if(ConstantsAdmin.mensaje != null){
+                createAlertDialog(ConstantsAdmin.mensaje, getString(R.string.atencion));
+            }
         }
     }
 
-    private void guardarCustomerEnBD() {
+    private void createAlertDialog(String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message).setTitle(title);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void loadInfoCustomer() {
+        customer = new Customer();
+        customer.setFirstName(entryNombre.getText().toString());
+        customer.setPassword(entryContrasenia.getText().toString());
+        customer.setEmail(entryMail.getText().toString());
+        if (!LocationManager.failed) {
+            customer.setCiudad(entryCiudad.getText().toString());
+            customer.setSuburbio(entryCiudad.getText().toString());
+            customer.setProvincia(entryProvincia.getText().toString());
+        } else {
+            customer.setSuburbio(barrioSeleccionado);
+            customer.setCiudad(ciudadSeleccionada);
+            customer.setProvincia(provinciaSeleccionada);
+        }
+        customer.setCp(entryCP.getText().toString());
+        customer.setDireccion(entryDireccion.getText().toString());
+        customer.setFax(entryFax.getText().toString());
+        if (radioFemenino.isChecked()) {
+            customer.setGender("F");
+        } else {
+            customer.setGender("M");
+        }
+        customer.setLastName(entryApellido.getText().toString());
+        if (checkNewsletter.isChecked()) {
+            customer.setNewsletter("1");
+        } else {
+            customer.setNewsletter("0");
+        }
+        customer.setTelephone(entryTel.getText().toString());
+    }
+
+    private boolean guardarCustomerEnBD() {
+        loadInfoCustomer();
+        boolean exito = false;
+        Call<Customer>  callInsert;
+        Response<Customer> resp;
+
+        try {
+            this.initializeService();
+            callInsert = customerService.createAccount(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword(), customer.getGender(), customer.getCiudad(), customer.getProvincia(), customer.getSuburbio(), customer.getDireccion(), customer.getCp(), customer.getTelephone(), customer.getFax(), customer.getNewsletter(), ConstantsAdmin.tokenFFL);
+            resp = callInsert.execute();
+            if(resp != null){
+                Customer c = resp.body();
+                //selectedArtefact.setIdRemoteDB(a.getId());
+                exito = true;
+            }
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+
+        return exito;
     }
 
     private boolean validarCustomer() {
         boolean esValido = true;
+        ConstantsAdmin.mensaje = null;
         if(esValido && entryNombre.getText().length()==0){
             esValido = false;
             entryNombre.requestFocus();
+            entryNombre.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryApellido.getText().length()==0){
             esValido = false;
             entryApellido.requestFocus();
+            entryApellido.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryMail.getText().length()==0){
             esValido = false;
             entryMail.requestFocus();
+            entryMail.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryProvincia.getText().length()==0 && LocationManager.failed){
             esValido = false;
             entryProvincia.requestFocus();
+            entryProvincia.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryCiudad.getText().length()==0 && LocationManager.failed){
             esValido = false;
             entryCiudad.requestFocus();
+            entryCiudad.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryDireccion.getText().length()==0){
             esValido = false;
             entryDireccion.requestFocus();
+            entryDireccion.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryCP.getText().length()==0){
             esValido = false;
             entryCP.requestFocus();
+            entryCP.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryTel.getText().length()==0){
             esValido = false;
             entryTel.requestFocus();
+            entryTel.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryContrasenia.getText().length()==0){
             esValido = false;
             entryContrasenia.requestFocus();
+            entryContrasenia.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryConfirmacion.getText().length()==0){
             esValido = false;
             entryConfirmacion.requestFocus();
+            entryConfirmacion.setHint(getString(R.string.info_required_hint));
+        }
+        if(esValido && entryContrasenia.getText().length() > 0 && entryConfirmacion.getText().length() > 0
+                && !(entryContrasenia.getText().toString().equals(entryConfirmacion.getText().toString()))){
+            esValido = false;
+            ConstantsAdmin.mensaje = getString(R.string.password_not_equal_error);
+
         }
         return esValido;
     }

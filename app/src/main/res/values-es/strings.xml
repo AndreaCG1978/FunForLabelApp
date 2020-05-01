@@ -52,4 +52,6 @@
     <string name="newsletter">Newsletter:</string>
     <string name="registrarLabel">Guardar</string>
     <string name="campoRequerido">**</string>
+    <string name="password_not_equal_error">La Contraseña y la Confirmación no coinciden!</string>
+    <string name="info_required_hint">Dato Requerido</string>
 </resources>

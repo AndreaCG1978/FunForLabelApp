@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
@@ -27,7 +28,25 @@ public interface CustomerService {
         //  @Headers("Content-Type: application/json")
     Call<ResponseBody> updatePasswordCustomer(@Field("email") String email,
                                       @Field("newPassword") String newPassword,
-                                      @Field("tokenFFL") long tokenIplan);
+                                      @Field("tokenFFL") long tokenFFL);
+
+    @POST(API_ROUTE)
+    @FormUrlEncoded
+        //  @Headers("Content-Type: application/json")
+    Call<Customer> createAccount(@Field("customers_firstname") String firstname,
+                                 @Field("customers_lastname") String lastname,
+                                 @Field("customers_email_address") String email_address,
+                                 @Field("customers_password") String password,
+                                 @Field("customers_gender") String gender,
+                                 @Field("customers_ciudad") String ciudad,
+                                 @Field("customers_provincia") String provincia,
+                                 @Field("customers_suburbio") String suburbio,
+                                 @Field("customers_direccion") String direccion,
+                                 @Field("customers_cp") String codigopostal,
+                                 @Field("customers_telephone") String telephone,
+                                 @Field("customers_fax") String fax,
+                                 @Field("customers_newsletter") String newsletter,
+                                 @Field("tokenIplan") long tokenIplan);
 /*
     @GET(API_ROUTE)
     Call< List<Inspector> > getInspectors(@Query("usr") String usr);
