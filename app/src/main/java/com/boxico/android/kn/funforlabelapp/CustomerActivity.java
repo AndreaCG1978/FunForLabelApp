@@ -2,7 +2,6 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,13 +28,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -360,9 +358,9 @@ public class CustomerActivity extends FragmentActivity {
         customer.setDireccion(entryDireccion.getText().toString());
         customer.setFax(entryFax.getText().toString());
         if (radioFemenino.isChecked()) {
-            customer.setGender("F");
+            customer.setGender("f");
         } else {
-            customer.setGender("M");
+            customer.setGender("m");
         }
         customer.setLastName(entryApellido.getText().toString());
         if (checkNewsletter.isChecked()) {
@@ -377,11 +375,12 @@ public class CustomerActivity extends FragmentActivity {
 
 
         private ProgressDialog dialog = null;
+        private int resultado = -1;
 
         @Override
         protected Integer doInBackground(Long... longs) {
             publishProgress(1);
-            guardarCustomerEnBD();
+            resultado = guardarCustomerEnBD();
             return 0;
         }
 
@@ -394,7 +393,20 @@ public class CustomerActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-             if(dialog != null) {
+            String mensaje = "";
+            switch (resultado){
+                case 1:
+                    mensaje = getString(R.string.create_customer_success);
+                    break;
+                case 2:
+                    mensaje = getString(R.string.exists_customer);
+                    break;
+                case 3:
+                    mensaje = getString(R.string.create_customer_error);
+                    break;
+            }
+            createAlertDialog(mensaje,"");
+            if(dialog != null) {
                 dialog.cancel();
             }
         }
@@ -402,27 +414,32 @@ public class CustomerActivity extends FragmentActivity {
 
 
 
-    private boolean guardarCustomerEnBD() {
+    private int guardarCustomerEnBD() {
         loadInfoCustomer();
-        boolean exito = false;
-        Call<Customer>  callInsert;
-        Response<Customer> resp;
+        int codigoExito = 1;// CREACION CON EXITO
+        Call<List<Customer>> callInsert;
+        Response<List<Customer>> resp;
 
         try {
             this.initializeService();
             callInsert = customerService.createAccount(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword(), customer.getGender(), customer.getCiudad(), customer.getProvincia(), customer.getSuburbio(), customer.getDireccion(), customer.getCp(), customer.getTelephone(), customer.getFax(), customer.getNewsletter(), ConstantsAdmin.tokenFFL);
             resp = callInsert.execute();
-            if(resp != null){
-                Customer c = resp.body();
+            ArrayList<Customer> customers = new ArrayList<>(resp.body());
+            if (customers.size() == 1) {//DEVUELVE EL CLIENTE RECIEN CREADO
+                Customer c = resp.body().get(0);
                 //selectedArtefact.setIdRemoteDB(a.getId());
-                exito = true;
+
+            }else{// SIGNIFICA QUE YA EXISTE UN CLIENTE CON EL MAIL INGRESADO
+                codigoExito = 2;
+
             }
-        }catch(Exception exc){
-            exc.printStackTrace();
+        } catch (Exception exc) {
+            codigoExito = 3;
         }
 
-        return exito;
+        return codigoExito;
     }
+
 
     private boolean validarCustomer() {
         boolean esValido = true;

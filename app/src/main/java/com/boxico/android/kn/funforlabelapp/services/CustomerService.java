@@ -33,7 +33,7 @@ public interface CustomerService {
     @POST(API_ROUTE)
     @FormUrlEncoded
         //  @Headers("Content-Type: application/json")
-    Call<Customer> createAccount(@Field("customers_firstname") String firstname,
+    Call<List<Customer>> createAccount(@Field("customers_firstname") String firstname,
                                  @Field("customers_lastname") String lastname,
                                  @Field("customers_email_address") String email_address,
                                  @Field("customers_password") String password,
