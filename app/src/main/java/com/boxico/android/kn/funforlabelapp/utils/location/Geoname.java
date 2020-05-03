@@ -1,5 +1,7 @@
 package com.boxico.android.kn.funforlabelapp.utils.location;
 
+import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+
 public class Geoname implements Comparable {
     public double lat;
     public double lng;
@@ -25,6 +27,9 @@ public class Geoname implements Comparable {
             result = name.replaceAll("Partido de","");
         }else if(name.contains("Departamento de")){
             result = name.replaceAll("Departamento de","");
+        }
+        if(geonameId == Long.valueOf(ConstantsAdmin.GEOIDCAPITALFEDERAL)){
+            result = ConstantsAdmin.CAPITAL_FEDERAL;
         }
 
         return result;

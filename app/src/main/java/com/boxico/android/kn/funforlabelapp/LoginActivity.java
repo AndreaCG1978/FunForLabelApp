@@ -55,7 +55,7 @@ public class LoginActivity extends FragmentActivity {
     private CheckBox saveLogin = null;
     private ImageButton hiddeShowPass;
     private boolean isShowingPass = false;
-    private Customer currentCustomer;
+    //private Customer currentCustomer;
     private String nuevaContraseña;
     private Customer customerTemp;
 
@@ -80,10 +80,10 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void initializeLogin() {
-        currentCustomer = ConstantsAdmin.getLogin(this);
-        if(currentCustomer != null){
-            userEntry.setText(currentCustomer.getEmail());
-            passEntry.setText(currentCustomer.getNotEncriptedPassword());
+        ConstantsAdmin.currentCustomer = ConstantsAdmin.getLogin(this);
+        if(ConstantsAdmin.currentCustomer != null){
+            userEntry.setText(ConstantsAdmin.currentCustomer.getEmail());
+            passEntry.setText(ConstantsAdmin.currentCustomer.getNotEncriptedPassword());
             saveLogin.setChecked(true);
         }
 
@@ -427,15 +427,17 @@ public class LoginActivity extends FragmentActivity {
             if(response.body() != null){
                 customers = new ArrayList<>(response.body());
                 if(customers.size() == 1){
-                    currentCustomer = customers.get(0);
+                    ConstantsAdmin.currentCustomer = customers.get(0);
                     Intent intent = new Intent(me, MainActivity.class);
-                    intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+              //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                    ConstantsAdmin.currentCustomer = ConstantsAdmin.currentCustomer;
                     if(saveLogin.isChecked()){
-                        currentCustomer.setNotEncriptedPassword(pswText);
-                        ConstantsAdmin.createLogin(currentCustomer,me);
+                        ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                        ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
                     }else{
                         ConstantsAdmin.deleteLogin(me);
                     }
+                    ConstantsAdmin.customerJustCreated = false;
                     startActivity(intent);
                 }else{
                     //createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion) );
@@ -545,5 +547,12 @@ public class LoginActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         buttonLogin.setEnabled(true);
+        if(ConstantsAdmin.currentCustomer != null && ConstantsAdmin.customerJustCreated){
+            userEntry.setText(ConstantsAdmin.currentCustomer.getEmail());
+            passEntry.setText("");
+            saveLogin.setChecked(false);
+            createAlertDialog(ConstantsAdmin.mensaje,"");
+            ConstantsAdmin.mensaje = null;
+        }
     }
 }

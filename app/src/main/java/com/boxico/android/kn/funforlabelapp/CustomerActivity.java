@@ -72,6 +72,7 @@ public class CustomerActivity extends FragmentActivity {
     private String ciudadSeleccionada;
     private String barrioSeleccionado;
     private CustomerService customerService;
+    private long geoIdProvinciaSeleccionada;
 
 
     @Override
@@ -267,6 +268,7 @@ public class CustomerActivity extends FragmentActivity {
                 Geoname pcia = null;
                 pcia = (Geoname) parent.getAdapter().getItem(position);
                 provinciaSeleccionada = pcia.getName();
+                geoIdProvinciaSeleccionada = pcia.getGeonameId();
                 LocationManager.setGeoIdProvincia(String.valueOf(pcia.getGeonameId()));
                 new ReloadCiudadesTask().execute();
 
@@ -350,9 +352,15 @@ public class CustomerActivity extends FragmentActivity {
             customer.setSuburbio(entryCiudad.getText().toString());
             customer.setProvincia(entryProvincia.getText().toString());
         } else {
-            customer.setSuburbio(barrioSeleccionado);
+
             customer.setCiudad(ciudadSeleccionada);
-            customer.setProvincia(provinciaSeleccionada);
+            if(geoIdProvinciaSeleccionada != Long.valueOf(ConstantsAdmin.GEOIDCAPITALFEDERAL)) {
+                customer.setProvincia(provinciaSeleccionada);
+                customer.setSuburbio(barrioSeleccionado);
+            }else{
+                customer.setProvincia(ConstantsAdmin.CAPITAL_FEDERAL);
+                customer.setSuburbio("");
+            }
         }
         customer.setCp(entryCP.getText().toString());
         customer.setDireccion(entryDireccion.getText().toString());
@@ -427,6 +435,10 @@ public class CustomerActivity extends FragmentActivity {
             ArrayList<Customer> customers = new ArrayList<>(resp.body());
             if (customers.size() == 1) {//DEVUELVE EL CLIENTE RECIEN CREADO
                 Customer c = resp.body().get(0);
+                ConstantsAdmin.currentCustomer = c;
+                ConstantsAdmin.customerJustCreated = true;
+                ConstantsAdmin.mensaje = getString(R.string.create_customer_success);
+                finish();
                 //selectedArtefact.setIdRemoteDB(a.getId());
 
             }else{// SIGNIFICA QUE YA EXISTE UN CLIENTE CON EL MAIL INGRESADO

@@ -16,8 +16,8 @@ public class ConstantsAdmin {
     public static final String SMTP_SOCKETPORT = "465";
     public static final String FFL_MAIL = "info@funforlabels.com";
     public static final String FFL_PASSWORD = "ceciyguille2011";
+    public static final String CAPITAL_FEDERAL = "Capital Federal" ;
     public static String mensaje = null;
-    public static String currentCustomer = "CurrentCustomer";
     public static final String TAG = "DataBaseManager";
     public static final String DATABASE_NAME = "FunForLabelsAppDB";
     public static final int DATABASE_VERSION = 1;
@@ -34,7 +34,8 @@ public class ConstantsAdmin {
     public static final String GEOCODIGOARGENTINA = "AR";
     public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
     public static final String GEOIDCAPITALFEDERAL = "3433955";
-
+    public static Customer currentCustomer = null;
+    public static boolean customerJustCreated = false;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
