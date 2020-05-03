@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class Customer implements Serializable {
 
@@ -62,6 +63,31 @@ public class Customer implements Serializable {
     @SerializedName("customers_newsletter")
     @Expose
     private String newsletter;
+
+
+    @SerializedName("customers_dob")
+    @Expose
+    private Date dob;
+
+    @SerializedName("customers_default_address_id")
+    @Expose
+    private long default_address_id;
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public long getDefault_address_id() {
+        return default_address_id;
+    }
+
+    public void setDefault_address_id(long default_address_id) {
+        this.default_address_id = default_address_id;
+    }
 
     private String notEncriptedPassword;
 
