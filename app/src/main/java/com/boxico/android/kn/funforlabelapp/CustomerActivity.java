@@ -78,7 +78,6 @@ public class CustomerActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.customer);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         me = this;
         new InitializeLocationTask().execute();
@@ -143,6 +142,7 @@ public class CustomerActivity extends FragmentActivity {
 
         @Override
         protected void onPostExecute(Integer result) {
+            setContentView(R.layout.customer);
             configureWidgets();
             if(!LocationManager.failed) {
                 bloquearLocation(false);
@@ -180,6 +180,7 @@ public class CustomerActivity extends FragmentActivity {
             }else{
                 bloquearLocation(true);
             }
+
             dialog.cancel();
         }
     }

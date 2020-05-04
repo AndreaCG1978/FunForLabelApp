@@ -44,14 +44,14 @@
     <string name="codigo_postal">Código Postal:</string>
     <string name="provincia">Provincia:</string>
     <string name="localidad">Localidad:</string>
-    <string name="search_location_progress">Buscando...</string>
+    <string name="search_location_progress">Buscando localidades...</string>
     <string name="partido">Partido:</string>
     <string name="telefono">Teléfono:</string>
     <string name="fax">Fax:</string>
     <string name="confirmacion">Confirmación:</string>
     <string name="newsletter">Newsletter:</string>
     <string name="registrarLabel">Guardar</string>
-    <string name="campoRequerido">**</string>
+    <string name="campoRequerido">*</string>
     <string name="password_not_equal_error">La Contraseña y la Confirmación no coinciden!</string>
     <string name="info_required_hint">Dato Requerido</string>
     <string name="creating_customer_progress">Creando nueva Cuenta...</string>
