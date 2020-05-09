@@ -78,7 +78,7 @@ public class CustomerActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    //    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         me = this;
         new InitializeLocationTask().execute();
 
@@ -320,7 +320,8 @@ public class CustomerActivity extends FragmentActivity {
       //  LocationManager.cargarCiudades(String.valueOf(provincias.get(0).getGeonameId()));
 
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+      //  getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
