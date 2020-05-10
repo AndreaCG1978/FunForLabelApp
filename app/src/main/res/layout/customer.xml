@@ -63,7 +63,6 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
                     android:gravity="end"
-                    android:background="@color/color_blanco"
                     >
 
                     <TextView
@@ -84,8 +83,8 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif-smallcaps"
                         android:text="@string/nombre"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+
+                        />
 
                     <EditText
                         android:id="@+id/entryNombre"
@@ -112,7 +111,6 @@
                     android:layout_marginTop="14dp"
                     android:orientation="horizontal"
                     android:gravity="end"
-                    android:background="@color/color_blanco"
                     >
 
                     <TextView
@@ -133,8 +131,8 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif-smallcaps"
                         android:text="@string/apellido"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+
+                        />
 
                     <EditText
                         android:id="@+id/entryApellido"
@@ -159,7 +157,6 @@
                     android:layout_marginTop="14dp"
                     android:orientation="horizontal"
                     android:gravity="end"
-                    android:background="@color/color_blanco"
                     >
 
                     <TextView
@@ -180,8 +177,8 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif-smallcaps"
                         android:text="@string/email"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+
+                        />
 
                     <EditText
                         android:id="@+id/entryEmail"
@@ -212,13 +209,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:fontFamily="sans-serif-smallcaps"
                         android:layout_marginRight="17dp"
                         android:text="@string/femenino" />
                     <RadioButton
                         android:id="@+id/radio_masculino"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        android:fontFamily="sans-serif-smallcaps"
                         android:checked="false"
                         android:text="@string/masculino" />
                 </RadioGroup>
@@ -233,7 +231,6 @@
                 android:textStyle="bold"
                 android:text="@string/direccion_title"
                 android:textSize="15sp"
-                android:layout_marginTop="15dp"
                 />
 
             <View
@@ -254,7 +251,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:gravity="end"
                 >
 
@@ -274,12 +271,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
                     android:text="@string/provincia"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+
+                    />
 
                 <Spinner
                     android:layout_width="210dp"
@@ -312,7 +309,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:gravity="end"
                 >
 
@@ -333,12 +330,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
                     android:text="@string/partido"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+
+                    />
 
                 <Spinner
                     android:layout_width="210dp"
@@ -370,7 +367,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:visibility="gone"
                 android:gravity="end"
 
@@ -392,12 +389,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:text="@string/localidad"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+
+                    />
 
                 <Spinner
                     android:layout_width="210dp"
@@ -413,7 +410,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:gravity="end"
                 >
 
@@ -433,12 +430,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
                     android:text="@string/direccion"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+                    android:fontFamily="sans-serif-smallcaps"
+                    />
 
                 <EditText
                     android:id="@+id/entryDireccion"
@@ -468,9 +464,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal"
-                android:background="@color/color_blanco"
                 android:gravity="end">
 
 
@@ -490,12 +485,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:text="@string/codigo_postal"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+                     />
 
                 <EditText
                     android:id="@+id/entryCodigoPostal"
@@ -538,15 +532,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_vertical|clip_vertical"
-            android:layout_marginTop="15dp">
+            android:layout_marginEnd="25dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal"
-                android:background="@color/color_blanco"
-                android:gravity="center_horizontal">
+                android:gravity="end">
 
 
                 <TextView
@@ -556,23 +549,23 @@
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical"
                     android:text="@string/campoRequerido"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:text="@string/telefono"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+
+                    />
 
                 <EditText
                     android:id="@+id/entryTelefono"
-                    android:layout_width="145dp"
+                    android:layout_width="150dp"
                     android:layout_height="27dp"
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
@@ -589,26 +582,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal"
-                android:background="@color/color_blanco"
-                android:gravity="center_horizontal">
+                android:gravity="end">
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/color_gris_oscuro"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-smallcaps"
                     android:text="@string/fax"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"/>
+
+                    />
 
                 <EditText
                     android:id="@+id/entryFax"
-                    android:layout_width="145dp"
+                    android:layout_width="150dp"
                     android:layout_height="27dp"
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
@@ -629,15 +621,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="14dp">
 
                 <CheckBox
                     android:id="@+id/checkNewsletter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/newsletter"
-                    android:textSize="13sp"
-                    android:background="@color/color_blanco"
+                    android:textSize="14sp"
                     android:fontFamily="sans-serif-smallcaps"
                     android:textColor="@color/color_gris_oscuro"/>
 
@@ -668,15 +659,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_vertical|clip_vertical"
-                android:layout_marginTop="15dp">
+                android:layout_marginEnd="20dp"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="14dp"
                     android:orientation="horizontal"
-                    android:background="@color/color_blanco"
-                    android:gravity="center_horizontal">
+                    android:gravity="end">
 
 
                     <TextView
@@ -686,7 +677,7 @@
                         android:textStyle="bold"
                         android:layout_gravity="center_vertical"
                         android:text="@string/campoRequerido"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         />
 
 
@@ -694,16 +685,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-smallcaps"
                         android:textColor="@color/color_gris_oscuro"
-                        android:fontFamily="sans-serif"
-                        android:text="@string/contrasenia"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+                        android:text="@string/contraseñaLabel"
+                         />
 
                     <EditText
                         android:id="@+id/entryContrasenia"
-                        android:layout_width="145dp"
+                        android:layout_width="150dp"
                         android:layout_height="27dp"
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
@@ -720,10 +710,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="14dp"
                     android:orientation="horizontal"
-                    android:background="@color/color_blanco"
-                    android:gravity="center_horizontal">
+                    android:gravity="end">
 
 
                     <TextView
@@ -733,7 +722,7 @@
                         android:textStyle="bold"
                         android:layout_gravity="center_vertical"
                         android:text="@string/campoRequerido"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         />
 
 
@@ -741,16 +730,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="@color/color_gris_oscuro"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="sans-serif-smallcaps"
                         android:text="@string/confirmacion"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+
+                        />
 
                     <EditText
                         android:id="@+id/entryConfirmacion"
-                        android:layout_width="145dp"
+                        android:layout_width="150dp"
                         android:layout_height="27dp"
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
@@ -772,7 +761,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:layout_margin="15dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
                 >
 
                 <Button

@@ -458,18 +458,35 @@ public class CustomerActivity extends FragmentActivity {
     private boolean validarCustomer() {
         boolean esValido = true;
         ConstantsAdmin.mensaje = null;
-        if(esValido && entryNombre.getText().length()==0){
+        if(esValido && entryNombre.getText().length()<2){
             esValido = false;
             entryNombre.requestFocus();
-            entryNombre.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryApellido.getText().length()==0){
+            if(entryNombre.getText().length()== 0) {
+                entryNombre.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryApellido.getText().length()<2){
             esValido = false;
             entryApellido.requestFocus();
-            entryApellido.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryMail.getText().length()==0){
+            if(entryApellido.getText().length()== 0) {
+                entryApellido.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryMail.getText().length()<5){
             esValido = false;
             entryMail.requestFocus();
-            entryMail.setHint(getString(R.string.info_required_hint));
+            if(entryMail.getText().length()== 0) {
+                entryMail.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mail_no_valido),"");
+            }
+        }else if(esValido && !entryMail.getText().toString().contains("@")&& !entryMail.getText().toString().contains(".")){
+            esValido = false;
+            createAlertDialog(getString(R.string.campo_mail_no_valido),"");
+            entryMail.requestFocus();
+
         }else if(esValido && entryProvincia.getText().length()==0 && LocationManager.failed){
             esValido = false;
             entryProvincia.requestFocus();
@@ -478,26 +495,46 @@ public class CustomerActivity extends FragmentActivity {
             esValido = false;
             entryCiudad.requestFocus();
             entryCiudad.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryDireccion.getText().length()==0){
+        }else if(esValido && entryDireccion.getText().length()<2){
             esValido = false;
             entryDireccion.requestFocus();
-            entryDireccion.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryCP.getText().length()==0){
+            if(entryDireccion.getText().length()== 0) {
+                entryDireccion.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryCP.getText().length()<2){
             esValido = false;
             entryCP.requestFocus();
-            entryCP.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryTel.getText().length()==0){
+            if(entryCP.getText().length()== 0) {
+                entryCP.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryTel.getText().length()<2){
             esValido = false;
             entryTel.requestFocus();
-            entryTel.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryContrasenia.getText().length()==0){
+            if(entryTel.getText().length()== 0) {
+                entryTel.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryContrasenia.getText().length()<2){
             esValido = false;
             entryContrasenia.requestFocus();
-            entryContrasenia.setHint(getString(R.string.info_required_hint));
-        }else if(esValido && entryConfirmacion.getText().length()==0){
+            if(entryContrasenia.getText().length()== 0) {
+                entryContrasenia.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
+        }else if(esValido && entryConfirmacion.getText().length()<2){
             esValido = false;
             entryConfirmacion.requestFocus();
-            entryConfirmacion.setHint(getString(R.string.info_required_hint));
+            if(entryConfirmacion.getText().length()== 0) {
+                entryConfirmacion.setHint(getString(R.string.info_required_hint));
+            }else{
+                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+            }
         }
         if(esValido && entryContrasenia.getText().length() > 0 && entryConfirmacion.getText().length() > 0
                 && !(entryContrasenia.getText().toString().equals(entryConfirmacion.getText().toString()))){

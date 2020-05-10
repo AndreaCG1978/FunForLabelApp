@@ -49,7 +49,8 @@
     <string name="telefono">Teléfono:</string>
     <string name="fax">Fax:</string>
     <string name="confirmacion">Confirmación:</string>
-    <string name="newsletter">Newsletter:</string>
+    <string name="contraseñaLabel">Contraseña:</string>
+    <string name="newsletter">Newsletter</string>
     <string name="registrarLabel">Guardar</string>
     <string name="campoRequerido">*</string>
     <string name="password_not_equal_error">La Contraseña y la Confirmación no coinciden!</string>
@@ -58,4 +59,6 @@
     <string name="exists_customer">Ya existe un Cliente asociado a la cuenta de mail ingresada!</string>
     <string name="create_customer_success">Se creó el Cliente con éxito!</string>
     <string name="create_customer_error">Problemas al registrar la cuenta del Cliente</string>
+    <string name="campo_mayor_dos_requerido">Este campo requiere al menos dos caracteres!</string>
+    <string name="campo_mail_no_valido">El mail ingresado no es de un formato válido!</string>
 </resources>
