@@ -2,6 +2,7 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -73,6 +74,7 @@ public class CustomerActivity extends FragmentActivity {
     private String barrioSeleccionado;
     private CustomerService customerService;
     private long geoIdProvinciaSeleccionada;
+    private View currentFocusedWidget;
 
 
     @Override
@@ -329,6 +331,7 @@ public class CustomerActivity extends FragmentActivity {
         if(validarCustomer()){
            // this.guardarCustomerEnBD();
             new CreateCustomerTask().execute();
+
         }else{
             if(ConstantsAdmin.mensaje != null){
                 createAlertDialog(ConstantsAdmin.mensaje, getString(R.string.atencion));
@@ -342,7 +345,21 @@ public class CustomerActivity extends FragmentActivity {
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+               // setFocusOnWidget();
+                if(currentFocusedWidget!= null){
+                    currentFocusedWidget.clearFocus();
+                    currentFocusedWidget.requestFocus();
+                    currentFocusedWidget = null;
+                }
+            }
+        });
+       // dialog.setOnCancelListener(this);
     }
+
+
 
     private void loadInfoCustomer() {
         customer = new Customer();
@@ -410,6 +427,7 @@ public class CustomerActivity extends FragmentActivity {
                     break;
                 case 2:
                     mensaje = getString(R.string.exists_customer);
+                    currentFocusedWidget = entryMail;
                     break;
                 case 3:
                     mensaje = getString(R.string.create_customer_error);
@@ -460,32 +478,37 @@ public class CustomerActivity extends FragmentActivity {
         ConstantsAdmin.mensaje = null;
         if(esValido && entryNombre.getText().length()<2){
             esValido = false;
-            entryNombre.requestFocus();
             if(entryNombre.getText().length()== 0) {
+                entryNombre.requestFocus();
                 entryNombre.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryNombre;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryApellido.getText().length()<2){
             esValido = false;
-            entryApellido.requestFocus();
+
             if(entryApellido.getText().length()== 0) {
+                entryApellido.requestFocus();
                 entryApellido.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryApellido;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryMail.getText().length()<5){
             esValido = false;
-            entryMail.requestFocus();
             if(entryMail.getText().length()== 0) {
+                entryMail.requestFocus();
                 entryMail.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryMail;
                 createAlertDialog(getString(R.string.campo_mail_no_valido),"");
             }
         }else if(esValido && !entryMail.getText().toString().contains("@")&& !entryMail.getText().toString().contains(".")){
             esValido = false;
+            currentFocusedWidget = entryMail;
             createAlertDialog(getString(R.string.campo_mail_no_valido),"");
-            entryMail.requestFocus();
+
 
         }else if(esValido && entryProvincia.getText().length()==0 && LocationManager.failed){
             esValido = false;
@@ -497,50 +520,60 @@ public class CustomerActivity extends FragmentActivity {
             entryCiudad.setHint(getString(R.string.info_required_hint));
         }else if(esValido && entryDireccion.getText().length()<2){
             esValido = false;
-            entryDireccion.requestFocus();
+
             if(entryDireccion.getText().length()== 0) {
+                entryDireccion.requestFocus();
                 entryDireccion.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryDireccion;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryCP.getText().length()<2){
             esValido = false;
-            entryCP.requestFocus();
+
             if(entryCP.getText().length()== 0) {
+                entryCP.requestFocus();
                 entryCP.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryCP;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryTel.getText().length()<2){
             esValido = false;
-            entryTel.requestFocus();
+
             if(entryTel.getText().length()== 0) {
+                entryTel.requestFocus();
                 entryTel.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryTel;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryContrasenia.getText().length()<2){
             esValido = false;
-            entryContrasenia.requestFocus();
+
             if(entryContrasenia.getText().length()== 0) {
+                entryContrasenia.requestFocus();
                 entryContrasenia.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryContrasenia;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }else if(esValido && entryConfirmacion.getText().length()<2){
             esValido = false;
-            entryConfirmacion.requestFocus();
+
             if(entryConfirmacion.getText().length()== 0) {
+                entryConfirmacion.requestFocus();
                 entryConfirmacion.setHint(getString(R.string.info_required_hint));
             }else{
+                currentFocusedWidget = entryConfirmacion;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
         }
         if(esValido && entryContrasenia.getText().length() > 0 && entryConfirmacion.getText().length() > 0
                 && !(entryContrasenia.getText().toString().equals(entryConfirmacion.getText().toString()))){
             esValido = false;
-            ConstantsAdmin.mensaje = getString(R.string.password_not_equal_error);
-
+            currentFocusedWidget = entryContrasenia;
+            createAlertDialog(getString(R.string.password_not_equal_error),"");
         }
         return esValido;
     }
