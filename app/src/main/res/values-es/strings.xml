@@ -61,4 +61,5 @@
     <string name="create_customer_error">Problemas al registrar la cuenta del Cliente</string>
     <string name="campo_mayor_dos_requerido">Este campo requiere al menos dos caracteres!</string>
     <string name="campo_mail_no_valido">El mail ingresado no es de un formato válido!</string>
+    <string name="campo_mayor_cinco_requerido">Este campo requiere al menos 5 caracteres!</string>
 </resources>

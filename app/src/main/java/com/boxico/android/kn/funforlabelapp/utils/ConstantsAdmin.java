@@ -3,7 +3,7 @@ package com.boxico.android.kn.funforlabelapp.utils;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.boxico.android.kn.funforlabelapp.LoginActivity;
+
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 

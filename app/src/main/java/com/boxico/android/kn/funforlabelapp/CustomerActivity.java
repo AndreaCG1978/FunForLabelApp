@@ -548,7 +548,7 @@ public class CustomerActivity extends FragmentActivity {
                 currentFocusedWidget = entryTel;
                 createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
             }
-        }else if(esValido && entryContrasenia.getText().length()<2){
+        }else if(esValido && entryContrasenia.getText().length()<5){
             esValido = false;
 
             if(entryContrasenia.getText().length()== 0) {
@@ -556,9 +556,9 @@ public class CustomerActivity extends FragmentActivity {
                 entryContrasenia.setHint(getString(R.string.info_required_hint));
             }else{
                 currentFocusedWidget = entryContrasenia;
-                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+                createAlertDialog(getString(R.string.campo_mayor_cinco_requerido),"");
             }
-        }else if(esValido && entryConfirmacion.getText().length()<2){
+        }else if(esValido && entryConfirmacion.getText().length()<5){
             esValido = false;
 
             if(entryConfirmacion.getText().length()== 0) {
@@ -566,7 +566,7 @@ public class CustomerActivity extends FragmentActivity {
                 entryConfirmacion.setHint(getString(R.string.info_required_hint));
             }else{
                 currentFocusedWidget = entryConfirmacion;
-                createAlertDialog(getString(R.string.campo_mayor_dos_requerido),"");
+                createAlertDialog(getString(R.string.campo_mayor_cinco_requerido),"");
             }
         }
         if(esValido && entryContrasenia.getText().length() > 0 && entryConfirmacion.getText().length() > 0

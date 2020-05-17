@@ -98,7 +98,7 @@
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:importantForAutofill="no"
                         android:inputType="textPersonName"
-                        android:maxLength="80"
+                        android:maxLength="50"
                         android:background="@android:color/white"
                         android:textSize="14sp" />
 
@@ -146,7 +146,7 @@
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:textSize="14sp"
                         android:inputType="textPersonName"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:importantForAutofill="no"
                         android:background="@android:color/white"/>
 
@@ -192,7 +192,7 @@
                         android:backgroundTint="@color/color_gris_muy_claro"
                         android:textSize="14sp"
                         android:inputType="textEmailAddress"
-                        android:maxLength="30"
+                        android:maxLength="70"
                         android:importantForAutofill="no"
                         android:background="@android:color/white"/>
 
@@ -298,7 +298,7 @@
                     android:backgroundTint="@color/color_gris_muy_claro"
                     android:textSize="14sp"
                     android:inputType="textCapWords"
-                    android:maxLength="30"
+                    android:maxLength="50"
                     android:visibility="gone"
                     android:importantForAutofill="no"
                     android:background="@android:color/white"/>
@@ -355,7 +355,7 @@
                     android:textColor="@android:color/black"
                     android:backgroundTint="@color/color_gris_muy_claro"
                     android:textSize="14sp"
-                    android:maxLength="30"
+                    android:maxLength="50"
                     android:inputType="textCapWords"
                     android:visibility="gone"
                     android:importantForAutofill="no"
@@ -451,7 +451,7 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:background="@android:color/white"
                     android:textSize="14sp"
-                    android:maxLength="150"
+                    android:maxLength="200"
                     android:gravity="top|start"
                     android:lines="3"
                     android:singleLine="false"
