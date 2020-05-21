@@ -1,26 +1,27 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.fragment.app.FragmentActivity;
 
+import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+
 public class MainActivity extends FragmentActivity {
+
+    TextView textWellcomeUsr = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-      /*  Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }*/
+        this.configureWidgets();
 
     }
+
+    private void configureWidgets() {
+        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+    }
+
 }
