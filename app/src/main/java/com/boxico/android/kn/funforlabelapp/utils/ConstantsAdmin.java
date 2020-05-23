@@ -36,6 +36,7 @@ public class ConstantsAdmin {
     public static final String GEOIDCAPITALFEDERAL = "3433955";
     public static Customer currentCustomer = null;
     public static boolean customerJustCreated = false;
+    public static long[] categories = {46};
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
