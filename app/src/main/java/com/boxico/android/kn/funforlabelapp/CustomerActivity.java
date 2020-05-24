@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -167,7 +166,7 @@ public class CustomerActivity extends FragmentActivity {
 
         protected void onProgressUpdate(Integer... progress) {
             dialog = ProgressDialog.show(me, "",
-                    getResources().getString(R.string.search_location_progress), true);
+                    getResources().getString(R.string.loading_data), true);
         }
 
 
@@ -200,7 +199,7 @@ public class CustomerActivity extends FragmentActivity {
 
         protected void onProgressUpdate(Integer... progress) {
             dialog = ProgressDialog.show(me, "",
-                    getResources().getString(R.string.search_location_progress), true);
+                    getResources().getString(R.string.loading_data), true);
         }
 
         @Override

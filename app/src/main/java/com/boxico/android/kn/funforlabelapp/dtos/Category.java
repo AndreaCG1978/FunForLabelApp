@@ -3,7 +3,7 @@ package com.boxico.android.kn.funforlabelapp.dtos;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Categories {
+public class Category {
 
     @SerializedName("categories_id")
     @Expose

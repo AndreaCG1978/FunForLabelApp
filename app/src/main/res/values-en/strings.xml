@@ -44,7 +44,7 @@
     <string name="codigo_postal">CP:</string>
     <string name="provincia">Provincia:</string>
     <string name="localidad">Localidad:</string>
-    <string name="search_location_progress">Buscando Localidades...</string>
+    <string name="loading_data">Cargando datos...</string>
     <string name="partido">Partido:</string>
     <string name="telefono">Teléfono:</string>
     <string name="fax">Fax:</string>
