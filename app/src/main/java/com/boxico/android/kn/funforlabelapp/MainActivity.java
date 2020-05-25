@@ -3,8 +3,11 @@ package com.boxico.android.kn.funforlabelapp;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -17,34 +20,54 @@ import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Callback;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_IMAGES;
+
 public class MainActivity extends FragmentActivity {
 
     TextView textWellcomeUsr = null;
     MainActivity me;
     CategoriesProductsService categoriesProductsService = null;
+    ArrayList<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me = this;
         setContentView(R.layout.main);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         this.initializeService();
+        this.initializeLang();
         this.configureWidgets();
         this.loadCategories();
 
+    }
+
+    private void initializeLang() {
+        if(Locale.getDefault().getDisplayLanguage().equalsIgnoreCase("es")){
+            ConstantsAdmin.currentLanguage = 2;
+        }else{
+            ConstantsAdmin.currentLanguage = 1;
+        }
     }
 
     private void loadCategories() {
@@ -87,17 +110,57 @@ public class MainActivity extends FragmentActivity {
                 ConstantsAdmin.mensaje = null;
             }
             dialog.cancel();
+            if(categories != null && categories.size()>0) {
+                try {
+                    loadImageForCategories();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
     }
 
+    private void loadImageForCategories() throws IOException {
+        Iterator<Category> it = categories.iterator();
+        Category cat;
+        String url;
+        Bitmap b;
+        while (it.hasNext()){
+            cat = it.next();
+            url = URL_IMAGES + cat.getImageString();
+            b = this.getImageFromURL(url);
+            cat.setImage(b);
+        }
+    }
+
+    private Bitmap getImageFromURL(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Bitmap bmp = null;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        okhttp3.Response responses = null;
+        responses = client.newCall(request).execute();
+        int responseCode = 0;
+
+        // Make the request
+        if ((responseCode = responses.code()) == 200) {
+            bmp = BitmapFactory.decodeStream(responses.body().byteStream());
+        }
+        return bmp;
+
+    }
+
+
     private void privateLoadCategories() {
         Call<List<Category>> call = null;
         Response<List<Category>> response;
-        ArrayList<Category> categories;
+
         try {
             ConstantsAdmin.mensaje = null;
-            call = categoriesProductsService.getCategories(ConstantsAdmin.categories[0],ConstantsAdmin.tokenFFL);
+            call = categoriesProductsService.getCategories(ConstantsAdmin.categories[0], ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 categories = new ArrayList<>(response.body());

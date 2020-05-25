@@ -13,7 +13,7 @@ public interface CategoriesProductsService {
     String API_ROUTE = "/funforlabelsApp/categories_products.php";
 
     @GET(API_ROUTE)
-    Call< List<Category>> getCategories(@Query("parentId") long parentId, @Query("tokenFFL") long tokenFFL);
+    Call< List<Category>> getCategories(@Query("parentId") long parentId, @Query("currentLang") long currentLang,@Query("tokenFFL") long tokenFFL);
 
 
 

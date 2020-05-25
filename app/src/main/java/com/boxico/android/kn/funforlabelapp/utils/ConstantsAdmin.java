@@ -10,6 +10,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
+    public static final String URL_IMAGES = "http://test.funforlabels.com/images/";
     public static final long tokenFFL = 27029085;
     public static final String SMTP_SERVER ="smtp.gmail.com";
     public static final String SMTP_PORT = "465";
@@ -37,6 +38,7 @@ public class ConstantsAdmin {
     public static Customer currentCustomer = null;
     public static boolean customerJustCreated = false;
     public static long[] categories = {46};
+    public static long currentLanguage;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {

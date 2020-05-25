@@ -16,16 +16,17 @@
     if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['tokenFFL'])&& $_GET['tokenFFL'] == $tokenFFL)
     {
         
-		if (isset($_GET['parentId']) && isset($_GET['parentId']))
+		if (isset($_GET['parentId']) && isset($_GET['currentLang']))
 		{
 			$parent_id = tep_db_prepare_input($_GET['parentId']);
-			$consulta = "SELECT ". TABLE_CATEGORIES . ".categories_id, categories_name, categories_image, sort_order FROM ". TABLE_CATEGORIES . ", ". TABLE_CATEGORIES_DESCRIPTION . " where parent_id = ".$parent_id." and ". TABLE_CATEGORIES . ".categories_id = ". TABLE_CATEGORIES_DESCRIPTION . ".categories_id and language_id = 2";
+			$current_lang = tep_db_prepare_input($_GET['currentLang']);
+			$consulta = "SELECT ". TABLE_CATEGORIES . ".categories_id, categories_name, categories_image, sort_order FROM ". TABLE_CATEGORIES . ", ". TABLE_CATEGORIES_DESCRIPTION . " where parent_id = ".$parent_id." and ". TABLE_CATEGORIES . ".categories_id = ". TABLE_CATEGORIES_DESCRIPTION . ".categories_id and language_id = ".$current_lang;
 			$sql = $dbConn->prepare($consulta);
 			$sql->execute();
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 			if($resultado != null){
                 header("HTTP/1.1 200 OK");
-                echo json_encode([$resultado],JSON_UNESCAPED_UNICODE);
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
