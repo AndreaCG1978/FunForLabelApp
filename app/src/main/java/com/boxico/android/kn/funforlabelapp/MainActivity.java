@@ -8,19 +8,20 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
-import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
-import com.boxico.android.kn.funforlabelapp.services.CustomerService;
+
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Callback;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,6 +44,7 @@ import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_IMAG
 public class MainActivity extends FragmentActivity {
 
     TextView textWellcomeUsr = null;
+    LinearLayout linearCategories = null;
     MainActivity me;
     CategoriesProductsService categoriesProductsService = null;
     ArrayList<Category> categories;
@@ -76,6 +77,7 @@ public class MainActivity extends FragmentActivity {
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        linearCategories = findViewById(R.id.linearCategories);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
     }
 
@@ -131,7 +133,28 @@ public class MainActivity extends FragmentActivity {
             url = URL_IMAGES + cat.getImageString();
             b = this.getImageFromURL(url);
             cat.setImage(b);
+            this.addCategoryInView(cat);
         }
+    }
+
+    private void addCategoryInView(Category cat) {
+        ImageView iv = new ImageView(getApplicationContext());
+
+        // Set an image for ImageView
+        iv.setImageBitmap(cat.getImage());
+
+        // Create layout parameters for ImageView
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        // Add rule to layout parameters
+        // Add the ImageView below to Button
+       // lp.addRule(RelativeLayout.BELOW, btn.getId());
+
+        // Add layout parameters to ImageView
+        iv.setLayoutParams(lp);
+
+        // Finally, add the ImageView to layout
+        linearCategories.addView(iv);
     }
 
     private Bitmap getImageFromURL(String url) throws IOException {

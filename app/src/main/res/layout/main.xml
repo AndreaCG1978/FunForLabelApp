@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:background="@drawable/bg_body">
+            >
 
         <ImageView
             android:layout_width="320dp"
@@ -43,6 +43,16 @@
             android:layout_height="3dp"
             android:layout_margin="15dp"
             android:background="@drawable/custom_line" />
+
+        <LinearLayout
+            android:id="@+id/linearCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+
+        </LinearLayout>
 
         </LinearLayout>
 
