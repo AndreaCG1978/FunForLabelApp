@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initializeLang() {
-        if(Locale.getDefault().getDisplayLanguage().equalsIgnoreCase("es")){
+        if(Locale.getDefault().getLanguage().equalsIgnoreCase("es")){
             ConstantsAdmin.currentLanguage = 2;
         }else{
             ConstantsAdmin.currentLanguage = 1;
@@ -139,22 +139,24 @@ public class MainActivity extends FragmentActivity {
 
     private void addCategoryInView(Category cat) {
         ImageView iv = new ImageView(getApplicationContext());
-
-        // Set an image for ImageView
         iv.setImageBitmap(cat.getImage());
-
-        // Create layout parameters for ImageView
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        // Add rule to layout parameters
-        // Add the ImageView below to Button
-       // lp.addRule(RelativeLayout.BELOW, btn.getId());
-
-        // Add layout parameters to ImageView
         iv.setLayoutParams(lp);
 
-        // Finally, add the ImageView to layout
-        linearCategories.addView(iv);
+        TextView tv1 = new TextView(this);
+        tv1.setText(cat.getName());
+
+        LinearLayout parent = new LinearLayout(this);
+        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        parent.setOrientation(LinearLayout.VERTICAL);
+
+
+        parent.addView(tv1);
+        parent.addView(iv);
+
+
+
+        linearCategories.addView(parent);
     }
 
     private Bitmap getImageFromURL(String url) throws IOException {
