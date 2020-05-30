@@ -15,8 +15,8 @@
 	
     if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['tokenFFL'])&& $_GET['tokenFFL'] == $tokenFFL)
     {
-        
-		if (isset($_GET['parentId']) && isset($_GET['currentLang']))
+
+		if (isset($_GET['parentId']) && isset($_GET['currentLang']))// SE PIDE LAS CATEGORIAS
 		{
 			$parent_id = tep_db_prepare_input($_GET['parentId']);
 			$current_lang = tep_db_prepare_input($_GET['currentLang']);
@@ -30,8 +30,21 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
-		}else
-		{
+		}elseif (isset($_GET['categoryId']) && isset($_GET['currentLang']))
+		{// SE PIDEN LOS PRODUCTOS DE UNA CATEGORIA
+			$categoryId = tep_db_prepare_input($_GET['categoryId']);
+			$current_lang = tep_db_prepare_input($_GET['currentLang']);
+			$consulta = "SELECT ". TABLE_PRODUCTS . ".products_id, products_name, products_description, products_quantity, products_model, products_image, products_price FROM ". TABLE_PRODUCTS . ", ". TABLE_PRODUCTS_TO_CATEGORIES . ", ". TABLE_PRODUCTS_DESCRIPTION . " where categories_id = ".$categoryId." and ". TABLE_PRODUCTS . ".products_id = ". TABLE_PRODUCTS_TO_CATEGORIES . ".products_id and ". TABLE_PRODUCTS . ".products_id = ". TABLE_PRODUCTS_DESCRIPTION . ".products_id and products_status = 1 and language_id = ".$current_lang;
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+			if($resultado != null){
+                header("HTTP/1.1 200 OK");
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+		}else{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}
 		exit();

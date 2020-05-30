@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp.services;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
+import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
 import java.util.List;
 
@@ -15,7 +16,8 @@ public interface CategoriesProductsService {
     @GET(API_ROUTE)
     Call< List<Category>> getCategories(@Query("parentId") long parentId, @Query("currentLang") long currentLang,@Query("tokenFFL") long tokenFFL);
 
-
+    @GET(API_ROUTE)
+    Call< List<Product>> getProductsFromCategory(@Query("categoryId") long categoryId, @Query("currentLang") long currentLang, @Query("tokenFFL") long tokenFFL);
 
 
 

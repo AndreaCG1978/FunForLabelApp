@@ -4,13 +4,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -131,7 +130,7 @@ public class MainActivity extends FragmentActivity {
         while (it.hasNext()){
             cat = it.next();
             url = URL_IMAGES + cat.getImageString();
-            b = this.getImageFromURL(url);
+            b = ConstantsAdmin.getImageFromURL(url);
             cat.setImage(b);
             this.addCategoryInView(cat);
         }
@@ -140,6 +139,15 @@ public class MainActivity extends FragmentActivity {
     private void addCategoryInView(Category cat) {
         ImageView iv = new ImageView(getApplicationContext());
         iv.setImageBitmap(cat.getImage());
+        iv.setTag(cat.getId());
+
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView img = (ImageView) v;
+                goToProductsList((long)img.getTag());
+            }
+        });
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         iv.setLayoutParams(lp);
 
@@ -153,30 +161,16 @@ public class MainActivity extends FragmentActivity {
 
         parent.addView(tv1);
         parent.addView(iv);
-
-
-
         linearCategories.addView(parent);
     }
 
-    private Bitmap getImageFromURL(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Bitmap bmp = null;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        okhttp3.Response responses = null;
-        responses = client.newCall(request).execute();
-        int responseCode = 0;
-
-        // Make the request
-        if ((responseCode = responses.code()) == 200) {
-            bmp = BitmapFactory.decodeStream(responses.body().byteStream());
-        }
-        return bmp;
-
+    private void goToProductsList(long cateogyId) {
+        ConstantsAdmin.currentCategory = cateogyId;
+        Intent intent = new Intent(me, ProductsListActivity.class);
+        startActivity(intent);
     }
+
+
 
 
     private void privateLoadCategories() {
@@ -189,9 +183,7 @@ public class MainActivity extends FragmentActivity {
             response = call.execute();
             if(response.body() != null){
                 categories = new ArrayList<>(response.body());
-                if(categories.size() > 0){
-
-                }else{
+                if(categories.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
             }else{

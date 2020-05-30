@@ -2,10 +2,17 @@ package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class ConstantsAdmin {
 
@@ -39,6 +46,7 @@ public class ConstantsAdmin {
     public static boolean customerJustCreated = false;
     public static long[] categories = {46};
     public static long currentLanguage;
+    public static long currentCategory;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
@@ -46,6 +54,25 @@ public class ConstantsAdmin {
         dbm.open();
         dbm.createLogin(currentCustomer);
         dbm.close();
+    }
+
+    public static Bitmap getImageFromURL(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Bitmap bmp = null;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        okhttp3.Response responses = null;
+        responses = client.newCall(request).execute();
+        int responseCode = 0;
+
+        // Make the request
+        if ((responseCode = responses.code()) == 200) {
+            bmp = BitmapFactory.decodeStream(responses.body().byteStream());
+        }
+        return bmp;
+
     }
 
     public static void deleteLogin(Context ctx) {
