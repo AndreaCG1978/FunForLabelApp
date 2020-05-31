@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
+import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class ConstantsAdmin {
     public static boolean customerJustCreated = false;
     public static long[] categories = {46};
     public static long currentLanguage;
-    public static long currentCategory;
+    public static Category currentCategory;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {

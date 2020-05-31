@@ -63,4 +63,8 @@
     <string name="campo_mail_no_valido">El mail ingresado no es de un formato válido!</string>
     <string name="campo_mayor_cinco_requerido">Este campo requiere al menos 5 caracteres!</string>
     <string name="wellcomeUser">Bienvenid@</string>
+    <string name="diseniosPrearmadosTitle">Nuestros diseños prearmados!</string>
+    <string name="price">$</string>
+    <string name="quantity">Cantidad:</string>
+    <string name="per_pack"> por pack</string>
 </resources>

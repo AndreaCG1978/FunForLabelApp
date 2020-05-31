@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -139,33 +143,51 @@ public class MainActivity extends FragmentActivity {
     private void addCategoryInView(Category cat) {
         ImageView iv = new ImageView(getApplicationContext());
         iv.setImageBitmap(cat.getImage());
-        iv.setTag(cat.getId());
+        iv.setTag(cat);
 
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImageView img = (ImageView) v;
-                goToProductsList((long)img.getTag());
+                goToProductsList((Category) img.getTag());
             }
         });
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(7, 7, 7, 7);
         iv.setLayoutParams(lp);
+
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(0xFFFFFFFF); //white background
+        border.setStroke(10, Color.GRAY); //black border with full opacity
+      //  iv.setBackground(border);
 
         TextView tv1 = new TextView(this);
         tv1.setText(cat.getName());
+        tv1.setLayoutParams(lp);
+        tv1.setTextColor(Color.DKGRAY);
+        tv1.setTypeface(Typeface.SANS_SERIF);
 
         LinearLayout parent = new LinearLayout(this);
-        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(25, 10, 25, 20);
+        parent.setLayoutParams(layoutParams);
         parent.setOrientation(LinearLayout.VERTICAL);
-
-
-        parent.addView(tv1);
         parent.addView(iv);
+        parent.addView(tv1);
+
+        border = new GradientDrawable();
+        border.setColor(0xFFFFFFFF); //white background
+        border.setStroke(3, Color.RED); //black border with full opacity
+        parent.setBackground(border);
+
+
+
+
         linearCategories.addView(parent);
     }
 
-    private void goToProductsList(long cateogyId) {
-        ConstantsAdmin.currentCategory = cateogyId;
+    private void goToProductsList(Category cateogy) {
+        ConstantsAdmin.currentCategory = cateogy;
         Intent intent = new Intent(me, ProductsListActivity.class);
         startActivity(intent);
     }

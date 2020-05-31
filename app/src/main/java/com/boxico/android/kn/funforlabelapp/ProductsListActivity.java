@@ -3,6 +3,9 @@ package com.boxico.android.kn.funforlabelapp;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +46,8 @@ public class ProductsListActivity extends FragmentActivity {
     ArrayList<Product> products;
     LinearLayout linearProducts = null;
     TextView textWellcomeUsr = null;
+    TextView textCategorySelected = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,7 @@ public class ProductsListActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
+            textCategorySelected.setText(ConstantsAdmin.currentCategory.getName());
 
         }
     }
@@ -130,7 +136,7 @@ public class ProductsListActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = categoriesProductsService.getProductsFromCategory(ConstantsAdmin.currentCategory, ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call = categoriesProductsService.getProductsFromCategory(ConstantsAdmin.currentCategory.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 products = new ArrayList<>(response.body());
@@ -173,6 +179,8 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void addProductInView(Product p) {
+
+        // SE CREA EL PRIMER LAYOUT QUE MUESTRA LA IMAGEN Y EL MODELO
         ImageView iv = new ImageView(getApplicationContext());
         iv.setImageBitmap(p.getImage());
         iv.setTag(p.getId());
@@ -184,19 +192,96 @@ public class ProductsListActivity extends FragmentActivity {
              //   goToProductsList((long)img.getTag());
             }
         });
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(10, 10, 10, 10);
         iv.setLayoutParams(lp);
 
         TextView tv1 = new TextView(this);
-        tv1.setText(p.getName());
+        tv1.setText(p.getModel());
+        tv1.setLayoutParams(lp);
+        tv1.setTextSize(11);
+        tv1.setTextColor(Color.DKGRAY);
+        tv1.setTypeface(Typeface.SANS_SERIF);
+
+
+        LinearLayout l1 = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 10, 10, 10);
+        l1.setLayoutParams(layoutParams);
+        l1.setOrientation(LinearLayout.VERTICAL);
+
+        l1.addView(iv);
+        l1.addView(tv1);
+
+        // SE CREA EL SEGUNDO LAYOUT QUE MUESTRA NOMBRE, DESC, PRECIO Y CANTIDAD
+
+        TextView nombreEtiqueta = new TextView(this);
+        nombreEtiqueta.setText(p.getName());
+        nombreEtiqueta.setLayoutParams(lp);
+        nombreEtiqueta.setTextSize(14);
+        nombreEtiqueta.setTextColor(Color.BLACK);
+        nombreEtiqueta.setTypeface(Typeface.SANS_SERIF);
+
+        TextView descEtiqueta = new TextView(this);
+        descEtiqueta.setText(p.getDescription());
+        descEtiqueta.setLayoutParams(lp);
+        descEtiqueta.setTextSize(11);
+        descEtiqueta.setTextColor(Color.DKGRAY);
+        descEtiqueta.setTypeface(Typeface.SANS_SERIF);
+
+        TextView precioEtiqueta = new TextView(this);
+        precioEtiqueta.setText(getString(R.string.price) + p.getPrice());
+        precioEtiqueta.setLayoutParams(lp);
+        precioEtiqueta.setTextSize(14);
+        precioEtiqueta.setTextColor(Color.BLACK);
+        precioEtiqueta.setTypeface(Typeface.SANS_SERIF);
+
+        TextView cantidadEtiqueta = new TextView(this);
+        cantidadEtiqueta.setText(getString(R.string.quantity) + p.getQuantity() + " " + getString(R.string.per_pack));
+        cantidadEtiqueta.setLayoutParams(lp);
+        cantidadEtiqueta.setTextSize(12);
+        cantidadEtiqueta.setTextColor(Color.BLACK);
+        cantidadEtiqueta.setTypeface(Typeface.SANS_SERIF);
+
+
+        LinearLayout l2 = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams2.setMargins(10, 10, 10, 10);
+        l2.setLayoutParams(layoutParams2);
+        l2.setOrientation(LinearLayout.VERTICAL);
+
+        l2.addView(nombreEtiqueta);
+    //    l2.addView(descEtiqueta);
+        l2.addView(precioEtiqueta);
+        l2.addView(cantidadEtiqueta);
+
+
+        LinearLayout l3 = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams3.setMargins(10, 10, 10, 10);
+        l3.setLayoutParams(layoutParams2);
+        l3.setOrientation(LinearLayout.HORIZONTAL);
+
+        l3.addView(l1);
+        //    l2.addView(descEtiqueta);
+        l3.addView(l2);
+
 
         LinearLayout parent = new LinearLayout(this);
-        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams paramsParent = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramsParent.setMargins(25, 10, 25, 20);
+        parent.setLayoutParams(paramsParent);
         parent.setOrientation(LinearLayout.VERTICAL);
+        parent.addView(l3);
+        parent.addView(descEtiqueta);
 
 
-        parent.addView(tv1);
-        parent.addView(iv);
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(0xFFFFFFFF); //white background
+        border.setStroke(3, Color.RED); //black border with full opacity
+        parent.setBackground(border);
+
         linearProducts.addView(parent);
     }
 
@@ -204,6 +289,8 @@ public class ProductsListActivity extends FragmentActivity {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearProducts = findViewById(R.id.linearProducts);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        textCategorySelected = findViewById(R.id.textCategorySelected);
+        //textCategorySelected.setText(getString(R.string.c));
     }
 
     private void loadProducts(){
