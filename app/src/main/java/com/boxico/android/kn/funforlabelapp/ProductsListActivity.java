@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,7 +62,18 @@ public class ProductsListActivity extends FragmentActivity {
         this.configureWidgets();
         this.loadProducts();
         getActionBar().setDisplayHomeAsUpEnabled(true);
-   }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initializeService(){
         GsonBuilder gsonB = new GsonBuilder();

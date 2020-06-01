@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -167,17 +168,28 @@ public class MainActivity extends FragmentActivity {
             }
         });
         LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lpImage.setMargins(10, 10, 10, 10);
+        lpImage.setMargins(40, 10, 40, 20);
         iv.setLayoutParams(lpImage);
 
 
+
         LinearLayout.LayoutParams lpText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lpText.setMargins(10, 10, 10, 10);
+        lpText.setMargins(40, 20, 40, 10);
+        lpText.width = cat.getImage().getWidth() + 20;
         TextView tv1 = new TextView(this);
         tv1.setText(cat.getName());
+
         tv1.setLayoutParams(lpText);
-        tv1.setTextColor(Color.DKGRAY);
+        tv1.setTextColor(Color.BLACK);
         tv1.setGravity(Gravity.CENTER);
+        tv1.setTag(cat);
+        tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView txt = (TextView) v;
+                goToProductsList((Category) txt.getTag());
+            }
+        });
         tv1.setTypeface(Typeface.create("sans-serif-smallcaps", Typeface.NORMAL));
 
         LinearLayout parent = new LinearLayout(this);
@@ -185,9 +197,17 @@ public class MainActivity extends FragmentActivity {
         layoutParams.setMargins(15, 15, 15, 15);
         parent.setLayoutParams(layoutParams);
         parent.setOrientation(LinearLayout.VERTICAL);
-        parent.addView(iv);
         parent.addView(tv1);
+        parent.addView(iv);
         parent.setGravity(Gravity.CENTER);
+        parent.setTag(cat);
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout l = (LinearLayout) v;
+                goToProductsList((Category) l.getTag());
+            }
+        });
 
         GradientDrawable border = new GradientDrawable();
         border.setColor(0xFFFFFFFF); //white background
@@ -195,6 +215,17 @@ public class MainActivity extends FragmentActivity {
         parent.setBackground(border);
 
         return parent;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void addCategoryInView(Category cat1, Category cat2) {
