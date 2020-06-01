@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,6 +64,7 @@ public class MainActivity extends FragmentActivity {
         this.initializeLang();
         this.configureWidgets();
         this.loadCategories();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -118,6 +120,17 @@ public class MainActivity extends FragmentActivity {
             if(categories != null && categories.size()>0) {
                 try {
                     loadImageForCategories();
+                    Iterator<Category> it = categories.iterator();
+                    Category cat1 = null;
+                    Category cat2 = null;
+                    while(it.hasNext()){
+                        cat2 = null;
+                        cat1 = it.next();
+                        if(it.hasNext()){
+                            cat2 = it.next();
+                        }
+                        addCategoryInView(cat1, cat2);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -136,11 +149,12 @@ public class MainActivity extends FragmentActivity {
             url = URL_IMAGES + cat.getImageString();
             b = ConstantsAdmin.getImageFromURL(url);
             cat.setImage(b);
-            this.addCategoryInView(cat);
+         //   this.addCategoryInView(cat);
         }
     }
 
-    private void addCategoryInView(Category cat) {
+
+    private LinearLayout createLinearLayoutToCategory(Category cat){
         ImageView iv = new ImageView(getApplicationContext());
         iv.setImageBitmap(cat.getImage());
         iv.setTag(cat);
@@ -152,36 +166,54 @@ public class MainActivity extends FragmentActivity {
                 goToProductsList((Category) img.getTag());
             }
         });
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(7, 7, 7, 7);
-        iv.setLayoutParams(lp);
+        LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpImage.setMargins(10, 10, 10, 10);
+        iv.setLayoutParams(lpImage);
 
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(0xFFFFFFFF); //white background
-        border.setStroke(10, Color.GRAY); //black border with full opacity
-      //  iv.setBackground(border);
 
+        LinearLayout.LayoutParams lpText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpText.setMargins(10, 10, 10, 10);
         TextView tv1 = new TextView(this);
         tv1.setText(cat.getName());
-        tv1.setLayoutParams(lp);
+        tv1.setLayoutParams(lpText);
         tv1.setTextColor(Color.DKGRAY);
-        tv1.setTypeface(Typeface.SANS_SERIF);
+        tv1.setGravity(Gravity.CENTER);
+        tv1.setTypeface(Typeface.create("sans-serif-smallcaps", Typeface.NORMAL));
 
         LinearLayout parent = new LinearLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(25, 10, 25, 20);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(15, 15, 15, 15);
         parent.setLayoutParams(layoutParams);
         parent.setOrientation(LinearLayout.VERTICAL);
         parent.addView(iv);
         parent.addView(tv1);
+        parent.setGravity(Gravity.CENTER);
 
-        border = new GradientDrawable();
+        GradientDrawable border = new GradientDrawable();
         border.setColor(0xFFFFFFFF); //white background
         border.setStroke(3, Color.RED); //black border with full opacity
         parent.setBackground(border);
 
+        return parent;
+    }
 
+    private void addCategoryInView(Category cat1, Category cat2) {
+        LinearLayout l1 = null;
+        LinearLayout l2 = null;
 
+        LinearLayout parent = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(15, 15, 15, 15);
+        parent.setLayoutParams(layoutParams);
+        parent.setOrientation(LinearLayout.HORIZONTAL);
+        parent.setGravity(Gravity.CENTER);
+
+        l1 = createLinearLayoutToCategory(cat1);
+        parent.addView(l1);
+        if(cat2 != null){
+           l2 = createLinearLayoutToCategory(cat2);
+           parent.addView(l2);
+        }
 
         linearCategories.addView(parent);
     }

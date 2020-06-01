@@ -7,7 +7,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +60,7 @@ public class ProductsListActivity extends FragmentActivity {
         this.initializeService();
         this.configureWidgets();
         this.loadProducts();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
    }
 
     private void initializeService(){
@@ -193,14 +197,26 @@ public class ProductsListActivity extends FragmentActivity {
             }
         });
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 10, 10, 10);
-        iv.setLayoutParams(lp);
+        LinearLayout.LayoutParams lpImagen = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpImagen.setMargins(10, 10, 10, 10);
+        iv.setLayoutParams(lpImagen);
+        lpImagen.width = 250;
+        lpImagen.height = 250;
+
+        iv.requestLayout();
+
+        LinearLayout.LayoutParams lpText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpText.setMargins(15, 10, 15, 10);
+
+        LinearLayout.LayoutParams lpModel = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lpModel.setMargins(10, 1, 10, 3);
+
 
         TextView tv1 = new TextView(this);
         tv1.setText(p.getModel());
-        tv1.setLayoutParams(lp);
+        tv1.setLayoutParams(lpModel);
         tv1.setTextSize(11);
+        tv1.setGravity(Gravity.CENTER);
         tv1.setTextColor(Color.DKGRAY);
         tv1.setTypeface(Typeface.SANS_SERIF);
 
@@ -209,6 +225,7 @@ public class ProductsListActivity extends FragmentActivity {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(10, 10, 10, 10);
         l1.setLayoutParams(layoutParams);
+        l1.setGravity(Gravity.CENTER);
         l1.setOrientation(LinearLayout.VERTICAL);
 
         l1.addView(iv);
@@ -218,28 +235,33 @@ public class ProductsListActivity extends FragmentActivity {
 
         TextView nombreEtiqueta = new TextView(this);
         nombreEtiqueta.setText(p.getName());
-        nombreEtiqueta.setLayoutParams(lp);
-        nombreEtiqueta.setTextSize(14);
+        nombreEtiqueta.setLayoutParams(lpText);
+        nombreEtiqueta.setTextSize(15);
+        nombreEtiqueta.setTypeface(Typeface.create("sans-serif-smallcaps", Typeface.NORMAL));
         nombreEtiqueta.setTextColor(Color.BLACK);
-        nombreEtiqueta.setTypeface(Typeface.SANS_SERIF);
 
         TextView descEtiqueta = new TextView(this);
-        descEtiqueta.setText(p.getDescription());
-        descEtiqueta.setLayoutParams(lp);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            descEtiqueta.setText(Html.fromHtml(p.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            descEtiqueta.setText(Html.fromHtml(p.getDescription()));
+        }
+        descEtiqueta.setLayoutParams(lpText);
         descEtiqueta.setTextSize(11);
         descEtiqueta.setTextColor(Color.DKGRAY);
         descEtiqueta.setTypeface(Typeface.SANS_SERIF);
 
         TextView precioEtiqueta = new TextView(this);
         precioEtiqueta.setText(getString(R.string.price) + p.getPrice());
-        precioEtiqueta.setLayoutParams(lp);
+        precioEtiqueta.setLayoutParams(lpText);
         precioEtiqueta.setTextSize(14);
         precioEtiqueta.setTextColor(Color.BLACK);
         precioEtiqueta.setTypeface(Typeface.SANS_SERIF);
 
         TextView cantidadEtiqueta = new TextView(this);
-        cantidadEtiqueta.setText(getString(R.string.quantity) + p.getQuantity() + " " + getString(R.string.per_pack));
-        cantidadEtiqueta.setLayoutParams(lp);
+        cantidadEtiqueta.setText(getString(R.string.quantity) + " " + p.getQuantity() + " " + getString(R.string.per_pack));
+        cantidadEtiqueta.setLayoutParams(lpText);
         cantidadEtiqueta.setTextSize(12);
         cantidadEtiqueta.setTextColor(Color.BLACK);
         cantidadEtiqueta.setTypeface(Typeface.SANS_SERIF);
@@ -250,6 +272,7 @@ public class ProductsListActivity extends FragmentActivity {
         layoutParams2.setMargins(10, 10, 10, 10);
         l2.setLayoutParams(layoutParams2);
         l2.setOrientation(LinearLayout.VERTICAL);
+        l2.setGravity(Gravity.LEFT);
 
         l2.addView(nombreEtiqueta);
     //    l2.addView(descEtiqueta);
@@ -262,6 +285,7 @@ public class ProductsListActivity extends FragmentActivity {
         layoutParams3.setMargins(10, 10, 10, 10);
         l3.setLayoutParams(layoutParams2);
         l3.setOrientation(LinearLayout.HORIZONTAL);
+        l3.setGravity(Gravity.CENTER);
 
         l3.addView(l1);
         //    l2.addView(descEtiqueta);
