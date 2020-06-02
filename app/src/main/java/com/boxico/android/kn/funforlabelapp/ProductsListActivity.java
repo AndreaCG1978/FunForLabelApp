@@ -2,6 +2,7 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.boxico.android.kn.funforlabelapp.dtos.Category;
+
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
@@ -133,7 +134,7 @@ public class ProductsListActivity extends FragmentActivity {
                 createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
                 ConstantsAdmin.mensaje = null;
             }
-            dialog.cancel();
+
             if(products != null && products.size()>0) {
                 try {
                     loadImageForProducts();
@@ -142,6 +143,7 @@ public class ProductsListActivity extends FragmentActivity {
                 }
             }
             textCategorySelected.setText(ConstantsAdmin.currentCategory.getName());
+            dialog.cancel();
 
         }
     }
@@ -199,21 +201,21 @@ public class ProductsListActivity extends FragmentActivity {
         // SE CREA EL PRIMER LAYOUT QUE MUESTRA LA IMAGEN Y EL MODELO
         ImageView iv = new ImageView(getApplicationContext());
         iv.setImageBitmap(p.getImage());
-        iv.setTag(p.getId());
+        iv.setTag(p);
 
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImageView img = (ImageView) v;
-             //   goToProductsList((long)img.getTag());
+                goToTagCreator((Product)img.getTag());
             }
         });
 
         LinearLayout.LayoutParams lpImagen = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lpImagen.setMargins(10, 10, 10, 10);
         iv.setLayoutParams(lpImagen);
-        lpImagen.width = 250;
-        lpImagen.height = 250;
+        lpImagen.width = 300;
+        lpImagen.height = 300;
 
         iv.requestLayout();
 
@@ -265,7 +267,8 @@ public class ProductsListActivity extends FragmentActivity {
         descEtiqueta.setTypeface(Typeface.SANS_SERIF);
 
         TextView precioEtiqueta = new TextView(this);
-        precioEtiqueta.setText(getString(R.string.price) + p.getPrice());
+        String newPrice = p.getPrice().substring(0, p.getPrice().length() - 2);
+        precioEtiqueta.setText(getString(R.string.price) + newPrice);
         precioEtiqueta.setLayoutParams(lpText);
         precioEtiqueta.setTextSize(14);
         precioEtiqueta.setTextColor(Color.BLACK);
@@ -319,6 +322,12 @@ public class ProductsListActivity extends FragmentActivity {
         parent.setBackground(border);
 
         linearProducts.addView(parent);
+    }
+
+    private void goToTagCreator(Product prod) {
+        ConstantsAdmin.currentProduct = prod;
+        Intent intent = new Intent(me, TagCreatorActivity.class);
+        startActivity(intent);
     }
 
     private void configureWidgets() {

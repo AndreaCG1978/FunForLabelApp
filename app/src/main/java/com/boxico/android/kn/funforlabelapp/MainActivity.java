@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
@@ -117,7 +116,7 @@ public class MainActivity extends FragmentActivity {
                 createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
                 ConstantsAdmin.mensaje = null;
             }
-            dialog.cancel();
+
             if(categories != null && categories.size()>0) {
                 try {
                     loadImageForCategories();
@@ -136,6 +135,7 @@ public class MainActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
+            dialog.cancel();
 
         }
     }
