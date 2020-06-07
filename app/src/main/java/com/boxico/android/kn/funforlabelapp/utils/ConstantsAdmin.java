@@ -20,6 +20,7 @@ public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
     public static final String URL_IMAGES = "http://test.funforlabels.com/images/";
+    public static final String URL_LABEL_IMAGES = "http://test.funforlabels.com/images/tcm/files/";
     public static final long tokenFFL = 27029085;
     public static final String SMTP_SERVER ="smtp.gmail.com";
     public static final String SMTP_PORT = "465";

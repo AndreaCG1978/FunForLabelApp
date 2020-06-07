@@ -57,13 +57,18 @@
             />
 
         <LinearLayout
-            android:id="@+id/linearCategories"
-            android:layout_width="match_parent"
+            android:id="@+id/linearTag"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="left"
+            android:gravity="center"
             android:layout_margin="10dp"
             >
+
+            <EditText
+                android:id="@+id/textTag"
+                android:layout_width="100dp"
+                android:layout_height="65dp" />
 
         </LinearLayout>
 
