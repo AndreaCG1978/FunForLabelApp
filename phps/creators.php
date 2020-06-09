@@ -44,11 +44,21 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
-		}
-		
-		
-		
-		
+		}elseif (isset($_GET['creatorId']) && isset($_GET['getLabelAttributes']) && $_GET['getLabelAttributes'])// SE PIDEN LOS ATRIBUTOS DE LA ETIQUETA
+		{
+			$creatorId = tep_db_prepare_input($_GET['creatorId']);
+			$consulta = "SELECT "."*". " FROM ". TCM_TEXT_AREAS . " where creators_id = ".$creatorId;
+			//echo ($consulta);
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			if($resultado != null){
+                header("HTTP/1.1 200 OK");
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+		}		
 		else{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}

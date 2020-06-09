@@ -24,7 +24,7 @@ public interface CreatorService {
     Call<List<LabelImage>> getImages(@Query("creatorId") long creatorId, @Query("getImages") boolean getImages, @Query("tokenFFL") long tokenFFL);
 
     @GET(API_ROUTE)
-    Call<List<LabelAttributes>> getLabelAttributes(@Query("creatorId") long creatorId, @Query("getLabelAttributes") boolean getImages, @Query("tokenFFL") long tokenFFL);
+    Call<LabelAttributes> getLabelAttributes(@Query("creatorId") long creatorId, @Query("getLabelAttributes") boolean getImages, @Query("tokenFFL") long tokenFFL);
 
 
 }

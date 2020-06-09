@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
@@ -48,6 +49,7 @@ public class TagCreatorActivity extends FragmentActivity {
     private CreatorService creatorService;
     private Creator currentCreator;
     private List<LabelImage> images;
+    private LabelAttributes labelAttributes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,8 @@ public class TagCreatorActivity extends FragmentActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
-            new LoadImagesTask().execute();
+         //   new LoadImagesTask().execute();
+            new LoadAttributesTask().execute();
         }
     }
 
@@ -122,6 +125,35 @@ public class TagCreatorActivity extends FragmentActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
+        }
+    }
+
+    private class LoadAttributesTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            privateLoadAttributes();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            if(dialog != null) {
+                dialog.cancel();
+            }
+            new LoadImagesTask().execute();
         }
     }
 
@@ -195,6 +227,29 @@ public class TagCreatorActivity extends FragmentActivity {
 
         }
     }
+
+    private void privateLoadAttributes() {
+        Call<LabelAttributes> call = null;
+        Response<LabelAttributes> response;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = creatorService.getLabelAttributes(currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                labelAttributes = response.body();
+            }else{
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
 
 
     private void initializeService(){
