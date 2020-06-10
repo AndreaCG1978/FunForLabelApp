@@ -2,10 +2,13 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -162,6 +165,20 @@ public class TagCreatorActivity extends FragmentActivity {
         Drawable d = new BitmapDrawable(getResources(), firstBitmap);
         linearTag.setBackground(d);
         textTag.setHint(R.string.your_name_here);
+       // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(-1, labelAttributes.getFromY(), labelAttributes.getFromX(),-1);
+
+        textTag.setLayoutParams(layoutParams);
+        linearTag.addView(textTag);
+
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(0xFFFFFFFF); //white background
+        border.setStroke(3, Color.RED); //black border with full opacity
+        //linearTag.
+
+        textTag.setBackground(border);
+
     }
 
     private void loadImagesForCreator() throws IOException {
@@ -286,6 +303,6 @@ public class TagCreatorActivity extends FragmentActivity {
         textProductSelected = findViewById(R.id.textProductSelected);
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-        textTag = findViewById(R.id.textTag);
+        textTag = new EditText(this);
     }
 }
