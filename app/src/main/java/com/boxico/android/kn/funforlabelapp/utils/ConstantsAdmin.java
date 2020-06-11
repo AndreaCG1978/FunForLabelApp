@@ -51,6 +51,7 @@ public class ConstantsAdmin {
     public static long currentLanguage;
     public static Category currentCategory;
     public static Product currentProduct;
+    public static double MILLS_TO_PXL = 3.7795275591;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {

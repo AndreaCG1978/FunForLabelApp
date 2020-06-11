@@ -2,12 +2,14 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -162,12 +164,37 @@ public class TagCreatorActivity extends FragmentActivity {
 
     private void initializeCreator() {
         Bitmap firstBitmap = images.get(0).getImage();
-        Drawable d = new BitmapDrawable(getResources(), firstBitmap);
+        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+                getResources().getDisplayMetrics());
+        int realWidthImage = (int)temp;
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+                getResources().getDisplayMetrics());
+        int realHeightImage = (int)temp;
+        Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
+     //   firstBitmap.setWidth(realWidthImage);
+     //   firstBitmap.setHeight(realHeightImage);
+        Drawable d = new BitmapDrawable(getResources(), b);
         linearTag.setBackground(d);
         textTag.setHint(R.string.your_name_here);
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth(),
+                getResources().getDisplayMetrics());
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(-1, labelAttributes.getFromY(), labelAttributes.getFromX(),-1);
+        int w = (int)temp;
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight(),
+                getResources().getDisplayMetrics());
+        int h = (int)temp;
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w, h);
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY(),
+                getResources().getDisplayMetrics());
+        int fromY = (int)temp;
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX(),
+                getResources().getDisplayMetrics());
+        int fromX = (int)temp;
+        layoutParams.setMargins(fromX, fromY, -1,-1);
 
         textTag.setLayoutParams(layoutParams);
         linearTag.addView(textTag);
