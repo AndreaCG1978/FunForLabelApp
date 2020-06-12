@@ -81,13 +81,11 @@
 
             <EditText
                 android:id="@+id/entryTextTag"
-                android:layout_width="wrap_content"
+                android:imeOptions="actionDone"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_gris_oscuro"
-                android:textStyle="bold"
                 android:textSize="14sp"
-                android:text="@string/your_name_here"
-                android:fontFamily="sans-serif-smallcaps"
                 android:background="@android:color/white"
                 />
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
@@ -11,7 +12,14 @@ import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,6 +28,7 @@ public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
     public static final String URL_IMAGES = "http://test.funforlabels.com/images/";
+    public static final String URL_FONTS = "http://test.funforlabels.com/images/tcm/fonts/";
     public static final String URL_LABEL_IMAGES = "http://test.funforlabels.com/images/tcm/files/";
     public static final long tokenFFL = 27029085;
     public static final String SMTP_SERVER ="smtp.gmail.com";
@@ -78,6 +87,68 @@ public class ConstantsAdmin {
             bmp = BitmapFactory.decodeStream(responses.body().byteStream());
         }
         return bmp;
+
+    }
+
+    public static File getFile(String filename){
+        String completeFilename = Environment
+                .getExternalStorageDirectory().toString() +"/"
+                + filename;
+        File f = new File(completeFilename);
+        return f;
+    }
+
+    public static void copyFileFromUrl(String urlPath, String fontFilename){
+        int count;
+        try {
+            String filename = Environment
+                    .getExternalStorageDirectory().toString() +"/"
+                    + fontFilename;
+            File f = new File(filename);
+            if(!f.exists()) {
+                java.net.URL url = new URL(urlPath);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = connection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+
+                // Output stream
+                OutputStream output = new FileOutputStream(filename);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    //  publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 

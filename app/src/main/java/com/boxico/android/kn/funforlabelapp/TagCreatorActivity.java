@@ -1,22 +1,37 @@
 package com.boxico.android.kn.funforlabelapp;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
@@ -27,9 +42,11 @@ import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.location.Geoname;
+import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,16 +79,57 @@ public class TagCreatorActivity extends FragmentActivity {
     private LabelAttributes labelAttributes;
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
+    private EditText entryTextTag;
+
+    private final int PERMISSIONS_WRITE_STORAGE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me = this;
         setContentView(R.layout.tag_creator);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         this.initializeService();
         this.configureWidgets();
-        this.loadCreator();
+        this.askForWriteStoragePermission();
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        //   mCameraPermissionGranted = false;
+
+
+        if (requestCode == PERMISSIONS_WRITE_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                this.loadCreator();
+            }
+        }
+
+
+    }
+
+    private void askForWriteStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSIONS_WRITE_STORAGE);
+
+
+            } else {//Ya tiene el permiso...
+                this.loadCreator();
+            }
+        } else {
+            this.loadCreator();
+        }
+
+
     }
 
     private void loadCreator() {
@@ -204,6 +262,46 @@ public class TagCreatorActivity extends FragmentActivity {
         layoutParams.setMargins(fromX, fromY, -1,-1);
 
         textTag.setLayoutParams(layoutParams);
+        //textTag.setTypeface(Typeface.);
+
+
+        File fileFont = ConstantsAdmin.getFile(fonts.get(0).getBasename());
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);
+        entryTextTag.setTypeface(face);
+/*
+        entryTextTag.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                textTag.setText(entryTextTag.getText());
+                return true;
+            }
+        });*/
+
+
+
+
+
+
+
+        spinnerFontSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String fontSize = null;
+                fontSize = (String) parent.getAdapter().getItem(position);
+                textTag.setTextSize(Float.valueOf(fontSize));
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
         linearTag.addView(textTag);
 
         GradientDrawable border = new GradientDrawable();
@@ -255,9 +353,53 @@ public class TagCreatorActivity extends FragmentActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
+            //new LoadImagesTask().execute();
+            new GetFontFilesTask().execute();
+        }
+    }
+
+    private class GetFontFilesTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            privateGetFontFiles();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            if(dialog != null) {
+                dialog.cancel();
+            }
             new LoadImagesTask().execute();
         }
     }
+
+    private void privateGetFontFiles() {
+        LabelFont lf;
+        Iterator<LabelFont> it = fonts.iterator();
+        String temp;
+        while(it.hasNext()){
+            lf = it.next();
+            temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
+            temp = temp + "-Regular.ttf";
+            lf.setBasename(temp);
+            ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL_FONTS + temp, temp);
+        }
+    }
+
 
     private void privateLoadCreator() {
         Call<Creator> call = null;
@@ -392,5 +534,27 @@ public class TagCreatorActivity extends FragmentActivity {
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerFontSizes.setAdapter(new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ConstantsAdmin.FONT_SIZES));
+        entryTextTag = findViewById(R.id.entryTextTag);
+
+
+        entryTextTag.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+//                if(cs.toString().length() == 0) {
+                    textTag.setText(entryTextTag.getText());
+  //              }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+            @Override
+            public void afterTextChanged(Editable arg0) { }
+
+        });
+
+
+
     }
 }
