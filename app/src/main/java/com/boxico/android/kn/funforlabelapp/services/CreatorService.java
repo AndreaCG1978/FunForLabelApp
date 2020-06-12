@@ -3,6 +3,7 @@ package com.boxico.android.kn.funforlabelapp.services;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
@@ -25,6 +26,10 @@ public interface CreatorService {
 
     @GET(API_ROUTE)
     Call<LabelAttributes> getLabelAttributes(@Query("creatorId") long creatorId, @Query("getLabelAttributes") boolean getImages, @Query("tokenFFL") long tokenFFL);
+
+    @GET(API_ROUTE)
+    Call<List<LabelFont>> getFonts(@Query("textAreasId") long textAreaId, @Query("getFonts") boolean getFonts, @Query("tokenFFL") long tokenFFL);
+
 
 
 }

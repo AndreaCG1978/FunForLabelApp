@@ -58,7 +58,21 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
-		}		
+		}elseif (isset($_GET['textAreasId']) && isset($_GET['getFonts']) && $_GET['getFonts'])// SE PIDEN LOS ATRIBUTOS DE LA ETIQUETA
+		{
+			$textAreasId = tep_db_prepare_input($_GET['textAreasId']);
+			$consulta = "SELECT " . TCM_FONTS . ".* FROM ". TCM_FONTS . ", ". TCM_TEXT_AREAS_HAS_FONTS . " where " . TCM_FONTS . ".fonts_id = " . TCM_TEXT_AREAS_HAS_FONTS . ".fonts_id and " . TCM_TEXT_AREAS_HAS_FONTS . ".text_areas_id = " . $textAreasId;
+			//echo ($consulta);
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+			if($resultado != null){
+                header("HTTP/1.1 200 OK");
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+		}				
 		else{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}

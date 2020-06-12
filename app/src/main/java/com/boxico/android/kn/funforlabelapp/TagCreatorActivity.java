@@ -11,18 +11,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.location.Geoname;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -54,7 +58,10 @@ public class TagCreatorActivity extends FragmentActivity {
     private CreatorService creatorService;
     private Creator currentCreator;
     private List<LabelImage> images;
+    private List<LabelFont> fonts;
     private LabelAttributes labelAttributes;
+    private Spinner spinnerFontSizes;
+    private Spinner spinnerFonts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +165,7 @@ public class TagCreatorActivity extends FragmentActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
-            new LoadImagesTask().execute();
+            new LoadFontsTask().execute();
         }
     }
 
@@ -175,7 +182,7 @@ public class TagCreatorActivity extends FragmentActivity {
      //   firstBitmap.setHeight(realHeightImage);
         Drawable d = new BitmapDrawable(getResources(), b);
         linearTag.setBackground(d);
-        textTag.setHint(R.string.your_name_here);
+       // textTag.setHint(R.string.your_name_here);
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth(),
                 getResources().getDisplayMetrics());
@@ -205,6 +212,7 @@ public class TagCreatorActivity extends FragmentActivity {
         //linearTag.
 
         textTag.setBackground(border);
+        spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
 
     }
 
@@ -219,6 +227,35 @@ public class TagCreatorActivity extends FragmentActivity {
             b = ConstantsAdmin.getImageFromURL(url);
             li.setImage(b);
             //this.addProductInView(p);
+        }
+    }
+
+    private class LoadFontsTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            privateLoadFonts();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            if(dialog != null) {
+                dialog.cancel();
+            }
+            new LoadImagesTask().execute();
         }
     }
 
@@ -262,6 +299,27 @@ public class TagCreatorActivity extends FragmentActivity {
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
+    private void privateLoadFonts() {
+        Call<List<LabelFont>> call = null;
+        Response<List<LabelFont>> response;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = creatorService.getFonts(labelAttributes.getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                fonts = new ArrayList<>(response.body());
+
             }
         }catch(Exception exc){
             ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -331,5 +389,8 @@ public class TagCreatorActivity extends FragmentActivity {
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
         textTag = new EditText(this);
+        spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
+        spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
+        spinnerFontSizes.setAdapter(new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ConstantsAdmin.FONT_SIZES));
     }
 }
