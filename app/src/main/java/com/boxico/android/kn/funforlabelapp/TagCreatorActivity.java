@@ -2,6 +2,7 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -228,13 +230,38 @@ public class TagCreatorActivity extends FragmentActivity {
         }
     }
 
+    public float pxToMm(float px, Context context)
+    {
+        final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return px / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
+    }
+
     private void initializeCreator() {
+        boolean acotar = false;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        //int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        float screenWidthMM = pxToMm((float) width, this);
+
+        if(screenWidthMM < currentCreator.getWidth()){
+            acotar = true;
+        }
         Bitmap firstBitmap = images.get(0).getImage();
+
         float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
                 getResources().getDisplayMetrics());
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
         int realWidthImage = (int)temp;
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
                 getResources().getDisplayMetrics());
+
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
         int realHeightImage = (int)temp;
         Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
      //   firstBitmap.setWidth(realWidthImage);
@@ -245,20 +272,32 @@ public class TagCreatorActivity extends FragmentActivity {
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() + 1,
                 getResources().getDisplayMetrics());
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
-        int w = (int)temp;
+        int w = (int)(temp);
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1,
                 getResources().getDisplayMetrics());
-        int h = (int)temp;
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
+        int h = (int)(temp);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w, h);
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY(),
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
                 getResources().getDisplayMetrics());
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
         int fromY = (int)temp;
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX() - 1,
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX() ,
                 getResources().getDisplayMetrics());
+        if(acotar){
+            temp = temp - temp * 3/20;
+        }
         int fromX = (int)temp;
         layoutParams.setMargins(fromX, fromY, -1,-1);
 
@@ -270,19 +309,24 @@ public class TagCreatorActivity extends FragmentActivity {
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);*/
         textTag.setGravity(Gravity.CENTER);
-        textTag.setPadding(0,0,0,0);
+        textTag.setPadding(7,0,7,0);
         textTag.setBackgroundColor(Color.TRANSPARENT);
 //        textTag.setBackgroundResource(android.R.color.transparent);
 
 
-
+        final boolean needToAcot = acotar;
         spinnerFontSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String fontSize = null;
                 fontSize = (String) parent.getAdapter().getItem(position);
                 float size = Float.valueOf(fontSize);
-               // size = size * ((float)1.0);
+                if(needToAcot){
+                    size = size * ((float)0.85);
+                }else{
+                    size = size * ((float)1.007);
+                }
+                // size = size * ((float)1.0);
 
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
 
@@ -294,6 +338,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
             }
         });
+        spinnerFontSizes.setSelection(1);
 
 
         spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
