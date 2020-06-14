@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -229,10 +230,10 @@ public class TagCreatorActivity extends FragmentActivity {
 
     private void initializeCreator() {
         Bitmap firstBitmap = images.get(0).getImage();
-        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
                 getResources().getDisplayMetrics());
         int realWidthImage = (int)temp;
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
                 getResources().getDisplayMetrics());
         int realHeightImage = (int)temp;
         Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
@@ -242,11 +243,11 @@ public class TagCreatorActivity extends FragmentActivity {
         linearTag.setBackground(d);
        // textTag.setHint(R.string.your_name_here);
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth(),
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() + 1,
                 getResources().getDisplayMetrics());
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)temp;
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight(),
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1,
                 getResources().getDisplayMetrics());
         int h = (int)temp;
 
@@ -256,7 +257,7 @@ public class TagCreatorActivity extends FragmentActivity {
                 getResources().getDisplayMetrics());
         int fromY = (int)temp;
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX(),
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX() - 1,
                 getResources().getDisplayMetrics());
         int fromX = (int)temp;
         layoutParams.setMargins(fromX, fromY, -1,-1);
@@ -264,23 +265,14 @@ public class TagCreatorActivity extends FragmentActivity {
         textTag.setLayoutParams(layoutParams);
         //textTag.setTypeface(Typeface.);
 
-
+/*
         File fileFont = ConstantsAdmin.getFile(fonts.get(0).getBasename());
         Typeface face = Typeface.createFromFile(fileFont);
-        textTag.setTypeface(face);
-        entryTextTag.setTypeface(face);
-/*
-        entryTextTag.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                textTag.setText(entryTextTag.getText());
-                return true;
-            }
-        });*/
-
-
-
-
+        textTag.setTypeface(face);*/
+        textTag.setGravity(Gravity.CENTER);
+        textTag.setPadding(0,0,0,0);
+        textTag.setBackgroundColor(Color.TRANSPARENT);
+//        textTag.setBackgroundResource(android.R.color.transparent);
 
 
 
@@ -289,7 +281,11 @@ public class TagCreatorActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String fontSize = null;
                 fontSize = (String) parent.getAdapter().getItem(position);
-                textTag.setTextSize(Float.valueOf(fontSize));
+                float size = Float.valueOf(fontSize);
+               // size = size * ((float)1.0);
+
+                textTag.setTextSize(TypedValue.TYPE_STRING, size);
+
 
             }
 
@@ -300,16 +296,34 @@ public class TagCreatorActivity extends FragmentActivity {
         });
 
 
+        spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                LabelFont lf = null;
+                lf = (LabelFont) parent.getAdapter().getItem(position);
+                File fileFont = ConstantsAdmin.getFile(lf.getBasename());
+                Typeface face = Typeface.createFromFile(fileFont);
+                textTag.setTypeface(face);
+                entryTextTag.setTypeface(face);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
 
         linearTag.addView(textTag);
 
         GradientDrawable border = new GradientDrawable();
-        border.setColor(0xFFFFFFFF); //white background
+        border.setColor(Color.TRANSPARENT); //white background
         border.setStroke(3, Color.RED); //black border with full opacity
         //linearTag.
 
         textTag.setBackground(border);
+        textTag.setEllipsize(TextUtils.TruncateAt.END);
         spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
 
     }
@@ -390,11 +404,12 @@ public class TagCreatorActivity extends FragmentActivity {
     private void privateGetFontFiles() {
         LabelFont lf;
         Iterator<LabelFont> it = fonts.iterator();
-        String temp;
+        String temp, extension;
         while(it.hasNext()){
             lf = it.next();
+            extension = lf.getBasename().substring(lf.getBasename().length() - 4,lf.getBasename().length());
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
-            temp = temp + "-Regular.ttf";
+            temp = temp + "-Regular" + extension;
             lf.setBasename(temp);
             ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL_FONTS + temp, temp);
         }
