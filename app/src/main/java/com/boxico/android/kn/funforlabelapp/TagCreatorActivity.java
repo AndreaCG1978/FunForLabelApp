@@ -272,21 +272,21 @@ public class TagCreatorActivity extends FragmentActivity {
         linearTag.setBackground(d);
        // textTag.setHint(R.string.your_name_here);
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() + 1,
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() ,
                 getResources().getDisplayMetrics());
         if(acotar){
             temp = temp - temp * 3/20;
         }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)(temp);
-        int wEntry = (int)(temp * (float)1.25);
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1,
+        int wEntry = (int)(temp * (float)1.26);
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1 ,
                 getResources().getDisplayMetrics());
         if(acotar){
             temp = temp - temp * 3/20;
         }
         int h = (int)(temp);
-        int hEntry = (int)(temp * (float)1.25);
+        int hEntry = (int)(temp * (float)1.26);
 
         LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
         LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(wEntry, hEntry);
@@ -316,13 +316,16 @@ public class TagCreatorActivity extends FragmentActivity {
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);*/
         textTag.setGravity(Gravity.CENTER);
-        textTag.setPadding(5,0,5,0);
+        textTag.setPadding(2,0,2,0);
         textTag.setBackgroundColor(Color.TRANSPARENT);
         textTag.setTextColor(Color.BLACK);
+        textTag.setEllipsize(TextUtils.TruncateAt.END);
       //  textTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
      //   entryTextTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        entryTextTag.setPadding(5,0,5,0);
+        entryTextTag.setPadding(2,0,2,0);
         entryTextTag.setGravity(Gravity.CENTER);
+        entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
+
 
 //        textTag.setBackgroundResource(android.R.color.transparent);
 
@@ -337,12 +340,12 @@ public class TagCreatorActivity extends FragmentActivity {
                 if(needToAcot){
                     size = size * ((float)0.87);
                 }else{
-                    size = size * ((float)1.007);
+                    size = size * ((float)1.0062);
                 }
                 float sizeEntry = size;
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
                 // size = size * ((float)1.0);
-                sizeEntry = sizeEntry * (float)2.2;
+                sizeEntry = sizeEntry * (float)2.24;
                 entryTextTag.setTextSize(sizeEntry);
 
 
@@ -382,8 +385,7 @@ public class TagCreatorActivity extends FragmentActivity {
         border.setStroke(3, Color.RED); //black border with full opacity
         //linearTag.
 
-        textTag.setBackground(border);
-        textTag.setEllipsize(TextUtils.TruncateAt.END);
+      //  textTag.setBackground(border);
         spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
 
     }
