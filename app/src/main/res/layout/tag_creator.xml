@@ -77,16 +77,18 @@
                 android:text="@string/your_name_here"
                 android:fontFamily="sans-serif-smallcaps"
                 android:background="@android:color/white"
+                android:layout_margin="10dp"
                 />
 
             <EditText
                 android:id="@+id/entryTextTag"
                 android:imeOptions="actionDone"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_gris_oscuro"
-                android:textSize="14sp"
-                android:background="@android:color/white"
+                android:background="@color/color_gris_claro"
+                android:layout_margin="10dp"
+
                 />
 
         <LinearLayout
@@ -95,17 +97,19 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:id="@+id/spinnerFonts"
-                android:background="@color/color_gris_muy_claro"
+                android:background="@color/color_gris_claro"
+                android:layout_margin="10dp"
                 />
 
             <Spinner
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:id="@+id/spinnerFontSize"
-                android:background="@color/color_gris_muy_claro"
+                android:background="@color/color_gris_claro"
+                android:layout_margin="10dp"
                 />
 
 

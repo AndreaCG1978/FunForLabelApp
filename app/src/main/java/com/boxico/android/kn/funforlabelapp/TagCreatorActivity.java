@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
@@ -73,7 +75,7 @@ public class TagCreatorActivity extends FragmentActivity {
     TextView textWellcomeUsr = null;
     TextView textProductSelected = null;
     LinearLayout linearTag = null;
-    EditText textTag = null;
+    TextView textTag = null;
     List<Bitmap> listImages = null;
     private CreatorService creatorService;
     private Creator currentCreator;
@@ -277,14 +279,18 @@ public class TagCreatorActivity extends FragmentActivity {
         }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)(temp);
+        int wEntry = (int)(temp * (float)1.25);
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1,
                 getResources().getDisplayMetrics());
         if(acotar){
             temp = temp - temp * 3/20;
         }
         int h = (int)(temp);
+        int hEntry = (int)(temp * (float)1.25);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w, h);
+        LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
+        LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(wEntry, hEntry);
+        entryTextTag.setLayoutParams(layoutParamsEntryTextTag);
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
                 getResources().getDisplayMetrics());
@@ -299,9 +305,10 @@ public class TagCreatorActivity extends FragmentActivity {
             temp = temp - temp * 3/20;
         }
         int fromX = (int)temp;
-        layoutParams.setMargins(fromX, fromY, -1,-1);
+        layoutParamsTextTag.setMargins(fromX, fromY, -1,-1);
 
-        textTag.setLayoutParams(layoutParams);
+        textTag.setLayoutParams(layoutParamsTextTag);
+
         //textTag.setTypeface(Typeface.);
 
 /*
@@ -309,8 +316,14 @@ public class TagCreatorActivity extends FragmentActivity {
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);*/
         textTag.setGravity(Gravity.CENTER);
-        textTag.setPadding(7,0,7,0);
+        textTag.setPadding(5,0,5,0);
         textTag.setBackgroundColor(Color.TRANSPARENT);
+        textTag.setTextColor(Color.BLACK);
+      //  textTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+     //   entryTextTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        entryTextTag.setPadding(5,0,5,0);
+        entryTextTag.setGravity(Gravity.CENTER);
+
 //        textTag.setBackgroundResource(android.R.color.transparent);
 
 
@@ -322,13 +335,15 @@ public class TagCreatorActivity extends FragmentActivity {
                 fontSize = (String) parent.getAdapter().getItem(position);
                 float size = Float.valueOf(fontSize);
                 if(needToAcot){
-                    size = size * ((float)0.85);
+                    size = size * ((float)0.87);
                 }else{
                     size = size * ((float)1.007);
                 }
-                // size = size * ((float)1.0);
-
+                float sizeEntry = size;
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
+                // size = size * ((float)1.0);
+                sizeEntry = sizeEntry * (float)2.2;
+                entryTextTag.setTextSize(sizeEntry);
 
 
             }
@@ -590,7 +605,7 @@ public class TagCreatorActivity extends FragmentActivity {
         textProductSelected = findViewById(R.id.textProductSelected);
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-        textTag = new EditText(this);
+        textTag = new TextView(this);
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerFontSizes.setAdapter(new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ConstantsAdmin.FONT_SIZES));
