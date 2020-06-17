@@ -6,7 +6,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -238,6 +244,20 @@ public class TagCreatorActivity extends FragmentActivity {
         return px / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
     }
 
+    public Bitmap getRoundedCornerBitmap(Bitmap bitmap,int roundPixelSize) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = roundPixelSize;
+        paint.setAntiAlias(true);
+        canvas.drawRoundRect(rectF,roundPx,roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
     private void initializeCreator() {
         boolean acotar = false;
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -266,10 +286,14 @@ public class TagCreatorActivity extends FragmentActivity {
         }
         int realHeightImage = (int)temp;
         Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
+        if(currentCreator.getRounded()==1){
+            b = getRoundedCornerBitmap(b,currentCreator.getRound());
+        }
      //   firstBitmap.setWidth(realWidthImage);
      //   firstBitmap.setHeight(realHeightImage);
         Drawable d = new BitmapDrawable(getResources(), b);
         linearTag.setBackground(d);
+
        // textTag.setHint(R.string.your_name_here);
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() ,
@@ -279,14 +303,14 @@ public class TagCreatorActivity extends FragmentActivity {
         }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)(temp);
-        int wEntry = (int)(temp * (float)1.26);
+        int wEntry = (int)(temp * (float)1.24);
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1 ,
                 getResources().getDisplayMetrics());
         if(acotar){
             temp = temp - temp * 3/20;
         }
         int h = (int)(temp);
-        int hEntry = (int)(temp * (float)1.26);
+        int hEntry = (int)(temp * (float)1.24);
 
         LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
         LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(wEntry, hEntry);
@@ -316,15 +340,23 @@ public class TagCreatorActivity extends FragmentActivity {
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);*/
         textTag.setGravity(Gravity.CENTER);
-        textTag.setPadding(2,0,2,0);
+        textTag.setPadding(0,0,0,0);
         textTag.setBackgroundColor(Color.TRANSPARENT);
         textTag.setTextColor(Color.BLACK);
         textTag.setEllipsize(TextUtils.TruncateAt.END);
       //  textTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
      //   entryTextTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        entryTextTag.setPadding(2,0,2,0);
+        entryTextTag.setPadding(0,0,0,0);
         entryTextTag.setGravity(Gravity.CENTER);
         entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
+
+        if(labelAttributes.getMultiline() == 0){
+            entryTextTag.setSingleLine(true);
+            textTag.setSingleLine(true);
+            entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
+            textTag.setEllipsize(TextUtils.TruncateAt.END);
+
+        }
 
 
 //        textTag.setBackgroundResource(android.R.color.transparent);
@@ -340,12 +372,12 @@ public class TagCreatorActivity extends FragmentActivity {
                 if(needToAcot){
                     size = size * ((float)0.87);
                 }else{
-                    size = size * ((float)1.0062);
+                    size = size * ((float)1.0069);
                 }
                 float sizeEntry = size;
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
                 // size = size * ((float)1.0);
-                sizeEntry = sizeEntry * (float)2.24;
+                sizeEntry = sizeEntry * (float)2.213;
                 entryTextTag.setTextSize(sizeEntry);
 
 
@@ -385,7 +417,8 @@ public class TagCreatorActivity extends FragmentActivity {
         border.setStroke(3, Color.RED); //black border with full opacity
         //linearTag.
 
-      //  textTag.setBackground(border);
+        textTag.setBackground(border);
+
         spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
 
     }
