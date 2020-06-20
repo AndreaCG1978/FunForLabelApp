@@ -303,17 +303,17 @@ public class TagCreatorActivity extends FragmentActivity {
         }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)(temp);
-        int wEntry = (int)(temp * (float)1.50);
+        int wEntry = (int)(temp * (float)1.6);
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1 ,
                 getResources().getDisplayMetrics());
         if(acotar){
             temp = temp - temp * 3/20;
         }
         int h = (int)(temp);
-        int hEntry = (int)(temp * (float)1.50);
+        int hEntry = (int)(temp * (float)1.6);
 
         LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
-        LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(wEntry, hEntry);
+        LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(w, h);
         entryTextTag.setLayoutParams(layoutParamsEntryTextTag);
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
@@ -377,8 +377,8 @@ public class TagCreatorActivity extends FragmentActivity {
                 float sizeEntry = size;
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
                 // size = size * ((float)1.0);
-                sizeEntry = sizeEntry * (float)1.5;
-                entryTextTag.setTextSize(TypedValue.TYPE_STRING,sizeEntry);
+                sizeEntry = sizeEntry * (float)1.61;
+                entryTextTag.setTextSize(TypedValue.TYPE_STRING,size);
 
 
             }
