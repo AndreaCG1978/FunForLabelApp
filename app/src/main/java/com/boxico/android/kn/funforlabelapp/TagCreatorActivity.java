@@ -372,7 +372,7 @@ public class TagCreatorActivity extends FragmentActivity {
                 if(needToAcot){
                     size = size * ((float)0.87);
                 }else{
-                    size = size * ((float)1.0069);
+                    size = size * ((float)1.04);
                 }
                 float sizeEntry = size;
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
