@@ -112,6 +112,16 @@
                 android:layout_margin="10dp"
                 />
 
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerBackgrounds"
+                android:background="@color/color_gris_claro"
+                android:layout_margin="10dp"
+                />
+
+
+
 
 
 

@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,18 +19,14 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -42,24 +37,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
-import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.boxico.android.kn.funforlabelapp.utils.location.Geoname;
-import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +65,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_IMAGES;
 import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_LABEL_IMAGES;
 
 public class TagCreatorActivity extends FragmentActivity {
@@ -85,13 +77,14 @@ public class TagCreatorActivity extends FragmentActivity {
     List<Bitmap> listImages = null;
     private CreatorService creatorService;
     private Creator currentCreator;
-    private List<LabelImage> images;
+    private LabelImage[] images;
     private List<LabelFont> fonts;
     private LabelAttributes labelAttributes;
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
+    private Spinner spinnerBackgrounds;
     private EditText entryTextTag;
-
+    boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
 
     @Override
@@ -259,7 +252,7 @@ public class TagCreatorActivity extends FragmentActivity {
     }
 
     private void initializeCreator() {
-        boolean acotar = false;
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         //int height = displayMetrics.heightPixels;
@@ -270,7 +263,7 @@ public class TagCreatorActivity extends FragmentActivity {
         if(screenWidthMM < currentCreator.getWidth()){
             acotar = true;
         }
-        Bitmap firstBitmap = images.get(0).getImage();
+        Bitmap firstBitmap = images[0].getImage();
 
         float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
                 getResources().getDisplayMetrics());
@@ -408,7 +401,41 @@ public class TagCreatorActivity extends FragmentActivity {
             }
         });
 
+        spinnerBackgrounds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                LabelImage selectedImage = null;
+                selectedImage = (LabelImage) parent.getAdapter().getItem(position);
+                float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
+                        getResources().getDisplayMetrics());
+                if(acotar){
+                    temp = temp - temp * 3/20;
+                }
+                int realWidthImage = (int)temp;
+                temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
+                        getResources().getDisplayMetrics());
 
+                if(acotar){
+                    temp = temp - temp * 3/20;
+                }
+                int realHeightImage = (int)temp;
+                Bitmap b =Bitmap.createScaledBitmap(selectedImage.getImage(), realWidthImage, realHeightImage, false);
+                if(currentCreator.getRounded()==1){
+                    b = getRoundedCornerBitmap(b,currentCreator.getRound());
+                }
+                //   firstBitmap.setWidth(realWidthImage);
+                //   firstBitmap.setHeight(realHeightImage);
+                Drawable d = new BitmapDrawable(getResources(), b);
+                linearTag.setBackground(d);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         linearTag.addView(textTag);
 
@@ -420,21 +447,20 @@ public class TagCreatorActivity extends FragmentActivity {
         textTag.setBackground(border);
 
         spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
+        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.background_item,R.id.rowValor, images));
 
     }
 
     private void loadImagesForCreator() throws IOException {
-        Iterator<LabelImage> it = images.iterator();
-        LabelImage li;
         String url;
         Bitmap b;
-        while (it.hasNext()){
-            li = it.next();
+        for (LabelImage li: images) {
             url = URL_LABEL_IMAGES + li.getUniquename();
             b = ConstantsAdmin.getImageFromURL(url);
             li.setImage(b);
-            //this.addProductInView(p);
         }
+
+
     }
 
     private class LoadFontsTask extends AsyncTask<Long, Integer, Integer> {
@@ -539,15 +565,18 @@ public class TagCreatorActivity extends FragmentActivity {
     private void privateLoadImages() {
         Call<List<LabelImage>> call = null;
         Response<List<LabelImage>> response;
+        ArrayList temp;
 
         try {
             ConstantsAdmin.mensaje = null;
             call = creatorService.getImages(currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                images = new ArrayList<>(response.body());
-                if(images.size() == 0){
+                temp = new ArrayList<>(response.body());
+                if(temp.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }else{
+                    images = (LabelImage[]) temp.toArray(new LabelImage[temp.size()]);
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -643,6 +672,7 @@ public class TagCreatorActivity extends FragmentActivity {
         textTag = new TextView(this);
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
+        spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
         spinnerFontSizes.setAdapter(new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ConstantsAdmin.FONT_SIZES));
         entryTextTag = findViewById(R.id.entryTextTag);
 

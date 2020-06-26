@@ -19,6 +19,8 @@ public class LabelImage {
     @Expose
     private String uniquename;
 
+
+
     @SerializedName("info")
     @Expose
     private String info;
