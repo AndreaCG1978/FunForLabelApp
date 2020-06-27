@@ -67,5 +67,5 @@
     <string name="price">$</string>
     <string name="quantity">Cantidad:</string>
     <string name="per_pack"> por pack</string>
-    <string name="your_name_here">Su nombre aquí</string>
+    <string name="your_name_here">Ingrese un Texto</string>
 </resources>

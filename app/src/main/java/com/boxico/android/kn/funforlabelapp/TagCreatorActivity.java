@@ -46,13 +46,13 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -73,12 +73,12 @@ public class TagCreatorActivity extends FragmentActivity {
     TextView textWellcomeUsr = null;
     TextView textProductSelected = null;
     LinearLayout linearTag = null;
-    TextView textTag = null;
+    EditText textTag = null;
     List<Bitmap> listImages = null;
     private CreatorService creatorService;
     private Creator currentCreator;
     private LabelImage[] images;
-    private List<LabelFont> fonts;
+    private LabelFont[] fonts;
     private LabelAttributes labelAttributes;
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
@@ -446,8 +446,10 @@ public class TagCreatorActivity extends FragmentActivity {
 
         textTag.setBackground(border);
 
-        spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
-        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.background_item,R.id.rowValor, images));
+       // spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
+        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
+        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
+        entryTextTag.setVisibility(View.GONE);
 
     }
 
@@ -523,11 +525,18 @@ public class TagCreatorActivity extends FragmentActivity {
     }
 
     private void privateGetFontFiles() {
-        LabelFont lf;
-        Iterator<LabelFont> it = fonts.iterator();
+
         String temp, extension;
-        while(it.hasNext()){
+     /*   while(it.hasNext()){
             lf = it.next();
+            extension = lf.getBasename().substring(lf.getBasename().length() - 4,lf.getBasename().length());
+            temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
+            temp = temp + "-Regular" + extension;
+            lf.setBasename(temp);
+            ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL_FONTS + temp, temp);
+        }
+*/
+        for (LabelFont lf: fonts) {
             extension = lf.getBasename().substring(lf.getBasename().length() - 4,lf.getBasename().length());
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
             temp = temp + "-Regular" + extension;
@@ -593,13 +602,15 @@ public class TagCreatorActivity extends FragmentActivity {
     private void privateLoadFonts() {
         Call<List<LabelFont>> call = null;
         Response<List<LabelFont>> response;
+        List<LabelFont> temp;
 
         try {
             ConstantsAdmin.mensaje = null;
             call = creatorService.getFonts(labelAttributes.getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                fonts = new ArrayList<>(response.body());
+                temp = new ArrayList<>(response.body());
+                fonts = (LabelFont[]) temp.toArray(new LabelFont[temp.size()]);
 
             }
         }catch(Exception exc){
@@ -669,7 +680,8 @@ public class TagCreatorActivity extends FragmentActivity {
         textProductSelected = findViewById(R.id.textProductSelected);
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-        textTag = new TextView(this);
+        textTag = new EditText(this);
+        textTag.setHint(R.string.your_name_here);
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);

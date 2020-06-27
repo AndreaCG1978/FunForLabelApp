@@ -27,6 +27,10 @@ public class LabelImage {
 
     private Bitmap image;
 
+    @Override
+    public String toString() {
+        return "";
+    }
 
     public long getFillsTexturedId() {
         return fillsTexturedId;

@@ -67,18 +67,13 @@
 
 
         </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_gris_oscuro"
-                android:textStyle="bold"
-                android:gravity="left"
-                android:textSize="14sp"
-                android:text="@string/your_name_here"
-                android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"
-                android:layout_margin="10dp"
-                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/custom_line" />
+
 
             <EditText
                 android:id="@+id/entryTextTag"
@@ -94,38 +89,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <Spinner
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/spinnerFonts"
-                android:background="@color/color_gris_claro"
-                android:layout_margin="10dp"
-                />
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:id="@+id/spinnerFontSize"
-                android:background="@color/color_gris_claro"
+                android:background="@color/color_blanco"
                 android:layout_margin="10dp"
                 />
 
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerBackgrounds"
-                android:background="@color/color_gris_claro"
+                android:id="@+id/spinnerFontSize"
+                android:background="@color/color_blanco"
                 android:layout_margin="10dp"
                 />
 
 
 
 
-
-
         </LinearLayout>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerBackgrounds"
+                android:background="@color/color_blanco"
+                android:layout_margin="10dp"
+                />
+
         </LinearLayout>
 
     </ScrollView>

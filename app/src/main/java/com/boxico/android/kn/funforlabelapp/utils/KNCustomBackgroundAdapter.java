@@ -30,7 +30,36 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
 		LabelImage li = (LabelImage) getItem(position);
-		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), 100,100, false);
+
+		int srcWidth = li.getImage().getWidth();
+		int srcHeight = li.getImage().getHeight();
+		int dstWidth = (int)(srcWidth*0.35f);
+		int dstHeight = (int)(srcHeight*0.35f);
+	//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
+		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), dstWidth,dstHeight, false);
+	//	Bitmap b =Bitmap.createScaledBitmap
+		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
+		txt.setCompoundDrawablesWithIntrinsicBounds(null, null, icon,null);
+		return view;
+	}
+
+
+	@Override
+	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+		/*if (null == convertView) {
+			LayoutInflater inflater = (LayoutInflater) localContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.stagerow, null);
+		}
+*/
+		final View view = super.getView(position, convertView, parent);
+		TextView txt = view.findViewById(R.id.rowValor);
+		LabelImage li = (LabelImage) getItem(position);
+		int srcWidth = li.getImage().getWidth();
+		int srcHeight = li.getImage().getHeight();
+		int dstWidth = (int)(srcWidth*0.35f);
+		int dstHeight = (int)(srcHeight*0.35f);
+		//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
+		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), dstWidth,dstHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
 		txt.setCompoundDrawablesWithIntrinsicBounds(null, null, icon,null);
 		return view;
