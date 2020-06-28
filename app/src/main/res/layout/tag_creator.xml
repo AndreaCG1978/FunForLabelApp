@@ -44,6 +44,8 @@
             android:layout_margin="15dp"
             android:background="@drawable/custom_line" />
 
+
+
         <TextView
             android:id="@+id/textProductSelected"
             android:layout_width="wrap_content"
@@ -56,17 +58,19 @@
             android:background="@android:color/white"
             />
 
-        <LinearLayout
-            android:id="@+id/linearTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-
-            >
 
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+
+                >
+
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -86,6 +90,18 @@
 
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_font_style"
+                android:layout_margin="10dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,16 +112,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerFonts"
-                android:background="@color/color_blanco"
                 android:layout_margin="10dp"
+                android:background="@android:drawable/btn_dropdown"
                 />
 
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerFontSize"
-                android:background="@color/color_blanco"
+                android:background="@android:drawable/btn_dropdown"
                 android:layout_margin="10dp"
+
                 />
 
 
@@ -113,12 +130,26 @@
 
         </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_tag_style"
+                android:layout_margin="10dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
+
+
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerBackgrounds"
-                android:background="@color/color_blanco"
+                android:background="@android:drawable/btn_dropdown"
                 android:layout_margin="10dp"
+                android:layout_gravity="center"
                 />
 
         </LinearLayout>

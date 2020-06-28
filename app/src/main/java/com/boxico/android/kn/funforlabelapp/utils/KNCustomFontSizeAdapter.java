@@ -1,10 +1,8 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,15 @@ import androidx.annotation.NonNull;
 
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
-import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 
 import java.io.File;
 
 
-public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
+public class KNCustomFontSizeAdapter extends ArrayAdapter<String> {
 
 	Context myContext;
 
-	public KNCustomFontTypeAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull LabelFont[] objects) {
+	public KNCustomFontSizeAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull String[] objects) {
 		super(context, resource, textViewResourceId, objects);
 	}
 
@@ -33,14 +30,10 @@ public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		txt.setTextSize(20);
-		LabelFont li = (LabelFont) getItem(position);
-		File fileFont = ConstantsAdmin.getFile(li.getBasename());
-		Typeface face = Typeface.createFromFile(fileFont);
-		txt.setTypeface(face);
+		txt.setTextSize(18);
+		txt.setTextColor(Color.BLACK);
 		return view;
 	}
-
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -51,18 +44,17 @@ public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
 */
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		LabelFont li = (LabelFont) getItem(position);
 		txt.setTextSize(24);
-		File fileFont = ConstantsAdmin.getFile(li.getBasename());
-		Typeface face = Typeface.createFromFile(fileFont);
-		txt.setTypeface(face);
 		GradientDrawable border = new GradientDrawable();
 		border.setColor(Color.TRANSPARENT); //white background
 		border.setStroke(2, Color.DKGRAY); //black border with full opacity
 		//linearTag.
 
 		view.setBackground(border);
-		view.setPadding(10,10,10,10);
+		view.setPadding(15,15,15,15);
 		return view;
 	}
+
+
+
 }

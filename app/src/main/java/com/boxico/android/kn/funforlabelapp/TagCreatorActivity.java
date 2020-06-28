@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -26,9 +27,12 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -46,6 +50,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -86,6 +91,7 @@ public class TagCreatorActivity extends FragmentActivity {
     private EditText entryTextTag;
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
+    private Button btn_showTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,7 @@ public class TagCreatorActivity extends FragmentActivity {
         this.configureWidgets();
         this.askForWriteStoragePermission();
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
     }
 
@@ -251,6 +258,102 @@ public class TagCreatorActivity extends FragmentActivity {
         return output;
     }
 
+    private void drawTag(LinearLayout linearL){
+        TextView textTagTemp = new TextView(this);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        boolean acotarTemp = false;
+
+        float screenWidthMM = pxToMm((float) width, this);
+
+        if(screenWidthMM < currentCreator.getWidth()){
+            acotarTemp = true;
+        }
+        Bitmap firstBitmap = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
+
+        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
+                getResources().getDisplayMetrics());
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        int realWidthImage = (int)temp;
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
+                getResources().getDisplayMetrics());
+
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        int realHeightImage = (int)temp;
+        Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
+        if(currentCreator.getRounded()==1){
+            b = getRoundedCornerBitmap(b,currentCreator.getRound());
+        }
+        //   firstBitmap.setWidth(realWidthImage);
+        //   firstBitmap.setHeight(realHeightImage);
+        Drawable d = new BitmapDrawable(getResources(), b);
+        linearL.setBackground(d);
+
+        // textTag.setHint(R.string.your_name_here);
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() ,
+                getResources().getDisplayMetrics());
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
+        int w = (int)(temp);
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1 ,
+                getResources().getDisplayMetrics());
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        int h = (int)(temp);
+
+        LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
+                getResources().getDisplayMetrics());
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        int fromY = (int)temp;
+
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX() ,
+                getResources().getDisplayMetrics());
+        if(acotarTemp){
+            temp = temp - temp * 3/20;
+        }
+        int fromX = (int)temp;
+        layoutParamsTextTag.setMargins(fromX, fromY, -1,-1);
+
+        textTagTemp.setLayoutParams(layoutParamsTextTag);
+
+        //textTag.setTypeface(Typeface.);
+
+/*
+        File fileFont = ConstantsAdmin.getFile(fonts.get(0).getBasename());
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);*/
+        textTagTemp.setGravity(Gravity.CENTER);
+        textTagTemp.setPadding(0,0,0,0);
+        textTagTemp.setBackgroundColor(Color.TRANSPARENT);
+        textTagTemp.setTextColor(Color.BLACK);
+        textTagTemp.setEllipsize(TextUtils.TruncateAt.END);
+
+        if(labelAttributes.getMultiline() == 0){
+            textTagTemp.setSingleLine(true);
+            textTagTemp.setEllipsize(TextUtils.TruncateAt.END);
+        }
+        textTagTemp.setTextColor(textTag.getTextColors());
+        textTagTemp.setText(textTag.getText());
+        textTagTemp.setTextSize(textTag.getTextSize());
+        textTagTemp.setTypeface(textTag.getTypeface());
+        linearL.addView(textTagTemp);
+
+    }
+
     private void initializeCreator() {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -268,14 +371,14 @@ public class TagCreatorActivity extends FragmentActivity {
         float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
                 getResources().getDisplayMetrics());
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/19;
         }
         int realWidthImage = (int)temp;
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
                 getResources().getDisplayMetrics());
 
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/19;
         }
         int realHeightImage = (int)temp;
         Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
@@ -292,7 +395,7 @@ public class TagCreatorActivity extends FragmentActivity {
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getWidth() ,
                 getResources().getDisplayMetrics());
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/18;
         }
        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
         int w = (int)(temp);
@@ -300,7 +403,7 @@ public class TagCreatorActivity extends FragmentActivity {
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getHeight() + 1 ,
                 getResources().getDisplayMetrics());
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/19;
         }
         int h = (int)(temp);
         int hEntry = (int)(temp * (float)1.6);
@@ -312,14 +415,14 @@ public class TagCreatorActivity extends FragmentActivity {
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
                 getResources().getDisplayMetrics());
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/19;
         }
         int fromY = (int)temp;
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromX() ,
                 getResources().getDisplayMetrics());
         if(acotar){
-            temp = temp - temp * 3/20;
+            temp = temp - temp * 3/22;
         }
         int fromX = (int)temp;
         layoutParamsTextTag.setMargins(fromX, fromY, -1,-1);
@@ -363,7 +466,7 @@ public class TagCreatorActivity extends FragmentActivity {
                 fontSize = (String) parent.getAdapter().getItem(position);
                 float size = Float.valueOf(fontSize);
                 if(needToAcot){
-                    size = size * ((float)0.87);
+                    size = size * ((float)0.884);
                 }else{
                     size = size * ((float)1.04);
                 }
@@ -444,10 +547,11 @@ public class TagCreatorActivity extends FragmentActivity {
         border.setStroke(3, Color.RED); //black border with full opacity
         //linearTag.
 
-        textTag.setBackground(border);
+      //  textTag.setBackground(border);
 
        // spinnerFonts.setAdapter(new ArrayAdapter<LabelFont>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fonts));
         spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
+        spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
         spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
         entryTextTag.setVisibility(View.GONE);
 
@@ -674,18 +778,60 @@ public class TagCreatorActivity extends FragmentActivity {
         creatorService = retrofit.create(CreatorService.class);
     }
 
+
+    private View initPopupView()
+    {
+        View popupView = null;
+        LayoutInflater layoutInflater = LayoutInflater.from(TagCreatorActivity.this);
+        popupView = layoutInflater.inflate(R.layout.tag_view, null);
+        LinearLayout ll = popupView.findViewById(R.id.tagView);
+        drawTag(ll);
+
+        return popupView;
+
+    }
+
+
+    private void openTagView() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TagCreatorActivity.this);
+        View popupView = initPopupView();
+        alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
+        alertDialogBuilder.setCancelable(true);
+
+
+        // Set the inflated layout view object to the AlertDialog builder.
+        alertDialogBuilder.setView(popupView);
+
+        // Create AlertDialog and show.
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    /*    cancelFormButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });*/
+    }
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         textProductSelected = findViewById(R.id.textProductSelected);
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
+    //    btn_showTag = findViewById(R.id.btn_showTag);
         textTag = new EditText(this);
         textTag.setHint(R.string.your_name_here);
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
-        spinnerFontSizes.setAdapter(new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ConstantsAdmin.FONT_SIZES));
+/*
+        btn_showTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTagView();
+            }
+        });*/
         entryTextTag = findViewById(R.id.entryTextTag);
 
 

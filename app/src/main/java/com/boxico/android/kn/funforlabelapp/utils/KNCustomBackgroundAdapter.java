@@ -2,7 +2,9 @@ package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -33,8 +35,8 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();
-		int dstWidth = (int)(srcWidth*0.35f);
-		int dstHeight = (int)(srcHeight*0.35f);
+		int dstWidth = (int)(srcWidth*0.25f);
+		int dstHeight = (int)(srcHeight*0.25f);
 	//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
 		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), dstWidth,dstHeight, false);
 	//	Bitmap b =Bitmap.createScaledBitmap
@@ -56,12 +58,19 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 		LabelImage li = (LabelImage) getItem(position);
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();
-		int dstWidth = (int)(srcWidth*0.35f);
-		int dstHeight = (int)(srcHeight*0.35f);
+		int dstWidth = (int)(srcWidth*0.50f);
+		int dstHeight = (int)(srcHeight*0.50f);
 		//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
 		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), dstWidth,dstHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
 		txt.setCompoundDrawablesWithIntrinsicBounds(null, null, icon,null);
+		GradientDrawable border = new GradientDrawable();
+		border.setColor(Color.TRANSPARENT); //white background
+		border.setStroke(2, Color.DKGRAY); //black border with full opacity
+		//linearTag.
+
+		view.setBackground(border);
+		view.setPadding(10,10,10,10);
 		return view;
 	}
 }
