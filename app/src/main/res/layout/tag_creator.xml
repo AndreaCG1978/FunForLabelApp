@@ -112,29 +112,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerFonts"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:background="@android:drawable/btn_dropdown"
                 />
+
+
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerFontSize"
                 android:background="@android:drawable/btn_dropdown"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
 
                 />
 
-
-
-
+            <Button android:id="@+id/pickColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="░"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:background="@android:drawable/btn_dropdown"
+                />
         </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_tag_style"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
                 android:layout_gravity="left"

@@ -48,6 +48,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
+import com.boxico.android.kn.funforlabelapp.utils.ColorPickerDialog;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
@@ -69,6 +70,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_LABEL_IMAGES;
 
@@ -92,6 +94,8 @@ public class TagCreatorActivity extends FragmentActivity {
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
     private Button btn_showTag;
+    private Paint mPaint;
+    private Button pickColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +150,14 @@ public class TagCreatorActivity extends FragmentActivity {
     private void loadCreator() {
         new LoadCreatorTask().execute();
     }
+/*
+    @Override
+    public void colorChanged(int color) {
 
+        textTag.setTextColor(color);
+        pickColor.setTextColor(color);
+    }
+*/
     private class LoadCreatorTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -355,6 +366,7 @@ public class TagCreatorActivity extends FragmentActivity {
     }
 
     private void initializeCreator() {
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -826,6 +838,15 @@ public class TagCreatorActivity extends FragmentActivity {
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
+        mPaint = new Paint();
+        pickColor = (Button) this.findViewById(R.id.pickColor);
+        pickColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // new ColorPickerDialog(me, me, mPaint.getColor()).show();
+                openColorPicker();
+            }
+        });
 /*
         btn_showTag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -855,5 +876,21 @@ public class TagCreatorActivity extends FragmentActivity {
 
 
 
+    }
+
+    private void openColorPicker() {
+        AmbilWarnaDialog myColorPicker = new AmbilWarnaDialog(this, Color.BLACK, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                textTag.setTextColor(color);
+                pickColor.setTextColor(color);
+            }
+        });
+        myColorPicker.show();
     }
 }
