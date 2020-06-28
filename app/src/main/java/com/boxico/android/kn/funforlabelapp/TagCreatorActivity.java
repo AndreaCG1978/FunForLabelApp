@@ -822,6 +822,7 @@ public class TagCreatorActivity extends FragmentActivity {
     //    btn_showTag = findViewById(R.id.btn_showTag);
         textTag = new EditText(this);
         textTag.setHint(R.string.your_name_here);
+        textTag.setHintTextColor(Color.GRAY);
         spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);

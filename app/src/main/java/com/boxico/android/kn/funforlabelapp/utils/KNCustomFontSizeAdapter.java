@@ -45,8 +45,9 @@ public class KNCustomFontSizeAdapter extends ArrayAdapter<String> {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
 		txt.setTextSize(24);
+
 		GradientDrawable border = new GradientDrawable();
-		border.setColor(Color.TRANSPARENT); //white background
+		border.setColor(Color.WHITE); //white background
 		border.setStroke(2, Color.DKGRAY); //black border with full opacity
 		//linearTag.
 

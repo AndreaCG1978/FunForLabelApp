@@ -56,8 +56,9 @@ public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
 		File fileFont = ConstantsAdmin.getFile(li.getBasename());
 		Typeface face = Typeface.createFromFile(fileFont);
 		txt.setTypeface(face);
+
 		GradientDrawable border = new GradientDrawable();
-		border.setColor(Color.TRANSPARENT); //white background
+		border.setColor(Color.WHITE); //white background
 		border.setStroke(2, Color.DKGRAY); //black border with full opacity
 		//linearTag.
 
