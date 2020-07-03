@@ -31,7 +31,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
     implementation 'org.conscrypt:conscrypt-android:2.2.1'
     implementation 'com.sun.mail:android-mail:1.6.2'
-    implementation 'com.sun.mail:android-activation:1.6.2'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
+    implementation 'com.sun.mail:android-activation:1.6.2'
+
+
 
 }
