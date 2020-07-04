@@ -51,7 +51,7 @@
 			//echo ($consulta);
 			$sql = $dbConn->prepare($consulta);
 			$sql->execute();
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 			if($resultado != null){
                 header("HTTP/1.1 200 OK");
                 echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
