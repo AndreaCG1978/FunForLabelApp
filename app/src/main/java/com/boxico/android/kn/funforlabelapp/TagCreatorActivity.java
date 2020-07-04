@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -90,7 +91,7 @@ public class TagCreatorActivity extends FragmentActivity {
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
     private Spinner spinnerBackgrounds;
-    private EditText entryTextTag;
+ //   private EditText entryTextTag;
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
     private Button btn_showTag;
@@ -107,8 +108,8 @@ public class TagCreatorActivity extends FragmentActivity {
         this.initializeService();
         this.configureWidgets();
         this.askForWriteStoragePermission();
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -421,8 +422,8 @@ public class TagCreatorActivity extends FragmentActivity {
         int hEntry = (int)(temp * (float)1.6);
 
         LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
-        LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(w, h);
-        entryTextTag.setLayoutParams(layoutParamsEntryTextTag);
+      //  LinearLayout.LayoutParams layoutParamsEntryTextTag = new LinearLayout.LayoutParams(w, h);
+        //entryTextTag.setLayoutParams(layoutParamsEntryTextTag);
 
         temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, labelAttributes.getFromY() ,
                 getResources().getDisplayMetrics());
@@ -441,6 +442,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
         textTag.setLayoutParams(layoutParamsTextTag);
 
+
         //textTag.setTypeface(Typeface.);
 
 /*
@@ -454,17 +456,21 @@ public class TagCreatorActivity extends FragmentActivity {
         textTag.setEllipsize(TextUtils.TruncateAt.END);
       //  textTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
      //   entryTextTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        entryTextTag.setPadding(0,0,0,0);
-        entryTextTag.setGravity(Gravity.CENTER);
-        entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
+       // entryTextTag.setPadding(0,0,0,0);
+     //   entryTextTag.setGravity(Gravity.CENTER);
+     //   entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
 
         if(labelAttributes.getMultiline() == 0){
-            entryTextTag.setSingleLine(true);
+      //      entryTextTag.setSingleLine(true);
             textTag.setSingleLine(true);
-            entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
+     //       entryTextTag.setEllipsize(TextUtils.TruncateAt.END);
             textTag.setEllipsize(TextUtils.TruncateAt.END);
-
+            textTag.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }else{
+            textTag.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE|InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            textTag.setSingleLine(false);
         }
+
 
 
 //        textTag.setBackgroundResource(android.R.color.transparent);
@@ -486,7 +492,7 @@ public class TagCreatorActivity extends FragmentActivity {
                 textTag.setTextSize(TypedValue.TYPE_STRING, size);
                 // size = size * ((float)1.0);
                 sizeEntry = sizeEntry * (float)1.61;
-                entryTextTag.setTextSize(TypedValue.TYPE_STRING,size);
+       //         entryTextTag.setTextSize(TypedValue.TYPE_STRING,size);
 
 
             }
@@ -507,7 +513,7 @@ public class TagCreatorActivity extends FragmentActivity {
                 File fileFont = ConstantsAdmin.getFile(lf.getBasename());
                 Typeface face = Typeface.createFromFile(fileFont);
                 textTag.setTypeface(face);
-                entryTextTag.setTypeface(face);
+         //       entryTextTag.setTypeface(face);
             }
 
             @Override
@@ -565,7 +571,7 @@ public class TagCreatorActivity extends FragmentActivity {
         spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
         spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
         spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
-        entryTextTag.setVisibility(View.GONE);
+        //entryTextTag.setVisibility(View.GONE);
 
     }
 
@@ -831,11 +837,11 @@ public class TagCreatorActivity extends FragmentActivity {
         textProductSelected = findViewById(R.id.textProductSelected);
         textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-    //    btn_showTag = findViewById(R.id.btn_showTag);
+        //    btn_showTag = findViewById(R.id.btn_showTag);
         textTag = new EditText(this);
         textTag.setHint(R.string.your_name_here);
         textTag.setHintTextColor(Color.GRAY);
-        spinnerFonts =  (Spinner) this.findViewById(R.id.spinnerFonts);
+        spinnerFonts = (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
         mPaint = new Paint();
@@ -843,10 +849,11 @@ public class TagCreatorActivity extends FragmentActivity {
         pickColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // new ColorPickerDialog(me, me, mPaint.getColor()).show();
+                // new ColorPickerDialog(me, me, mPaint.getColor()).show();
                 openColorPicker();
             }
         });
+    }
 /*
         btn_showTag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -854,16 +861,16 @@ public class TagCreatorActivity extends FragmentActivity {
                 openTagView();
             }
         });*/
-        entryTextTag = findViewById(R.id.entryTextTag);
+     //   entryTextTag = findViewById(R.id.entryTextTag);
 
 
-        entryTextTag.addTextChangedListener(new TextWatcher() {
+     /*  entryTextTag.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-//                if(cs.toString().length() == 0) {
+
                     textTag.setText(entryTextTag.getText());
-  //              }
+
             }
 
             @Override
@@ -877,7 +884,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
 
     }
-
+*/
     private void openColorPicker() {
         AmbilWarnaDialog myColorPicker = new AmbilWarnaDialog(this, Color.BLACK, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
