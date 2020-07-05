@@ -46,9 +46,9 @@ public class KNMail extends Authenticator {
 
     public KNMail() {
       //  _host = "smtp.gmail.com"; // default smtp server
-        _host = ConstantsAdmin.SMTP_SERVER; // default smtp server
-        _port = ConstantsAdmin.SMTP_PORT; // default smtp port
-        _sport = ConstantsAdmin.SMTP_SOCKETPORT; // default socketfactory port
+        _host = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_SMTP_SERVER); // default smtp server
+        _port = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_SMTP_PORT); // default smtp port
+        _sport = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_SMTP_SOCKETPORT); // default socketfactory port
         //_port = "465"; // default smtp port
       //  _sport = "465"; // default socketfactory port
 

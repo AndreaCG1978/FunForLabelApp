@@ -1,13 +1,20 @@
 package com.boxico.android.kn.funforlabelapp;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,9 +33,14 @@ import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -58,6 +70,7 @@ public class LoginActivity extends FragmentActivity {
     //private Customer currentCustomer;
     private String nuevaContraseña;
     private Customer customerTemp;
+    private final int PERMISSIONS_WRITE_STORAGE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +81,83 @@ public class LoginActivity extends FragmentActivity {
         this.initializeService();
         this.initializeDataBase();
         this.initializeLogin();
+      //  this.loadProperties();
+        this.askForWriteStoragePermission();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        //   mCameraPermissionGranted = false;
+
+
+        if (requestCode == PERMISSIONS_WRITE_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                this.loadProperties();
+            }
+        }
+
+
+    }
+
+    private void askForWriteStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSIONS_WRITE_STORAGE);
+
+
+            } else {//Ya tiene el permiso...
+                this.loadProperties();
+            }
+        } else {
+            this.loadProperties();
+        }
+
+
+    }
+
+    private void privateLoadProperties(){
+        Properties properties;
+        InputStream inputStream = null;
+        ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL + ConstantsAdmin.PROPERTIES_FILE, ConstantsAdmin.PROPERTIES_FILE);
+        properties = new Properties();
+        try {
+            String filename = Environment
+                    .getExternalStorageDirectory().toString() +"/"
+                    + ConstantsAdmin.PROPERTIES_FILE;
+            inputStream = new FileInputStream(filename);
+            properties.load(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(inputStream != null){
+                try {
+                    inputStream.close();
+                    String filename = Environment
+                            .getExternalStorageDirectory().toString() +"/"
+                            + ConstantsAdmin.PROPERTIES_FILE;
+                    File f = new File(filename);
+                    if(f.exists()) {
+                        f.delete();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        ConstantsAdmin.fflProperties = properties;
+    }
+
+
+    private void loadProperties() {
+        new LoadPropertiesTask().execute();
     }
 
 
@@ -157,12 +246,14 @@ public class LoginActivity extends FragmentActivity {
         boolean okSend = false;
         String body = "";
         ProgressDialog dialog = null;
-        KNMail m = new KNMail(ConstantsAdmin.FFL_MAIL, ConstantsAdmin.FFL_PASSWORD);
-        //String[] toArr = {ConstantsAdmin.contrasenia.getMail()};
+        //KNMail m = new KNMail(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL), ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_PASSWORD));
+
+        KNMail m = new KNMail("info@funforlabels.com", "ceciyguille2011");
         if(customerTemp != null){
             String[] toArr = {customerTemp.getEmail()};
             m.setTo(toArr);
-            m.setFrom(ConstantsAdmin.FFL_MAIL);
+        //    m.setFrom(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL));
+            m.setFrom("info@funforlabels.com");
             m.setSubject(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia));
             body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
             body = body + this.getString(R.string.body1_nueva_contrasenia);
@@ -216,6 +307,34 @@ public class LoginActivity extends FragmentActivity {
             }
         }
     }
+
+    private class LoadPropertiesTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            privateLoadProperties();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(dialog != null) {
+                dialog.cancel();
+            }
+        }
+    }
+
 
 
     private String crearNuevaContrasenia() {

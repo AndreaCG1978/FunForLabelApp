@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Properties;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,16 +28,18 @@ import okhttp3.Request;
 public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
-    public static final String URL_IMAGES = "http://test.funforlabels.com/images/";
-    public static final String URL_FONTS = "http://test.funforlabels.com/images/tcm/fonts/";
-    public static final String URL_LABEL_IMAGES = "http://test.funforlabels.com/images/tcm/files/";
+    public static final String PROPERTIES_FILE = "funforlabels.properties";
+    public static final String ATR_URL_IMAGES = "URL_IMAGES";
+    public static final String ATR_URL_FONTS = "URL_FONTS";
+    public static final String ATR_URL_LABEL_IMAGES = "URL_LABEL_IMAGES";
     public static final long tokenFFL = 27029085;
-    public static final String SMTP_SERVER ="smtp.gmail.com";
-    public static final String SMTP_PORT = "465";
-    public static final String SMTP_SOCKETPORT = "465";
-    public static final String FFL_MAIL = "info@funforlabels.com";
-    public static final String FFL_PASSWORD = "ceciyguille2011";
+    public static final String ATR_SMTP_SERVER ="SMTP_SERVER";
+    public static final String ATR_SMTP_PORT = "SMTP_PORT";
+    public static final String ATR_SMTP_SOCKETPORT = "SMTP_SOCKETPORT";
+    public static final String ATR_FFL_MAIL = "FFL_MAIL";
+    public static final String ATR_FFL_PASSWORD = "FFL_PASSWORD";
     public static final String CAPITAL_FEDERAL = "Capital Federal" ;
+    public static final float PARAM_TO_INCREASE = 1.465f;
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
     public static final String DATABASE_NAME = "FunForLabelsAppDB";
@@ -62,6 +65,8 @@ public class ConstantsAdmin {
     public static Product currentProduct;
     public static double MILLS_TO_PXL = 3.7795275591;
     public static String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
+    public static long ID_CREATOR_MINICIRCULARES = 59;
+    public static Properties fflProperties;
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
@@ -112,7 +117,7 @@ public class ConstantsAdmin {
 
                 // this will be useful so that you can show a tipical 0-100%
                 // progress bar
-                int lenghtOfFile = connection.getContentLength();
+            //    int lenghtOfFile = connection.getContentLength();
 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(),

@@ -42,7 +42,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_IMAGES;
+
 
 public class ProductsListActivity extends FragmentActivity {
 
@@ -189,7 +189,7 @@ public class ProductsListActivity extends FragmentActivity {
         Bitmap b;
         while (it.hasNext()){
             p = it.next();
-            url = URL_IMAGES + p.getImageString();
+            url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_IMAGES) + p.getImageString();
             b = ConstantsAdmin.getImageFromURL(url);
             p.setImage(b);
             this.addProductInView(p);

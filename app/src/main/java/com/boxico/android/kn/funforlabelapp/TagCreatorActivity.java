@@ -75,7 +75,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_LABEL_IMAGES;
+//import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_LABEL_IMAGES;
 
 public class TagCreatorActivity extends FragmentActivity {
 
@@ -102,10 +102,10 @@ public class TagCreatorActivity extends FragmentActivity {
     private Button pickColor;
     private int selectedPosFontText = -1;
     private int selectedPosFontSizeText = -1;
-    private int selectedTextColor = -1;
+    private int selectedTextColor = Color.BLACK;
     private int selectedPosFontTitle = -1;
     private int selectedPosFontSizeTitle = -1;
-    private int selectedTitleColor = -1;
+    private int selectedTitleColor = Color.BLACK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -382,37 +382,62 @@ public class TagCreatorActivity extends FragmentActivity {
         //EditText ta = new EditText(this);
         ta.setHint(hint);
         ta.setHintTextColor(Color.GRAY);
-        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
-                getResources().getDisplayMetrics());
-        if (acotar) {
-            temp = temp - temp * 3 / 18;
-        }
-        int w = (int) (temp);
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight() + 1,
-                getResources().getDisplayMetrics());
-        if (acotar) {
-            temp = temp - temp * 3 / 19;
-        }
-        int h = (int) (temp);
+        float temp = 0;
+        int w, h = 0;
+        if (currentCreator.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 18;
+            }
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight() + 1,
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            ta.setY(temp);
 
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 22;
+            }
+            ta.setX(temp);
+        }else{
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth() ,
+                    getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight(),
+                    getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
+                    getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            ta.setY(temp);
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
+                    getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            ta.setX(temp);
+        }
         ViewGroup.LayoutParams layoutParamsTextTag = new ViewGroup.LayoutParams(w, h);
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
-                getResources().getDisplayMetrics());
-        if (acotar) {
-            temp = temp - temp * 3 / 19;
-        }
-        ta.setY(temp);
-        int fromY = (int) temp;
 
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
-                getResources().getDisplayMetrics());
-        if (acotar) {
-            temp = temp - temp * 3 / 22;
-        }
-        ta.setX(temp);
 
-        int fromX = (int) temp;
+
         //ta.setLeft(fromX);
 
         ta.setLayoutParams(layoutParamsTextTag);
@@ -437,13 +462,53 @@ public class TagCreatorActivity extends FragmentActivity {
         border.setColor(Color.TRANSPARENT); //white background
         border.setStroke(3, Color.RED); //black border with full opacity
 
-        ta.setBackground(border);
+    //    ta.setBackground(border);
 
     //    LinearLayout.MarginLayoutParams lparams = new LinearLayout.LayoutParams(w, h);
      //   lparams.setMargins(fromX, fromY, -1,-1);
 
         linearTag.addView(ta);
         return ta;
+
+    }
+
+
+    private void customizeBackground(Bitmap img) {
+        int realWidthImage = 0;
+        int realHeightImage = 0;
+        if (currentCreator.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+                    getResources().getDisplayMetrics());
+
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            realHeightImage = (int) temp;
+        } else {
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+                    getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+                    getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            realHeightImage = (int) temp;
+        }
+        Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
+        if (currentCreator.getRounded() == 1) {
+            b = getRoundedCornerBitmap(b, currentCreator.getRound());
+        }
+
+        Drawable d = new BitmapDrawable(getResources(), b);
+        linearTag.setBackground(d);
 
     }
 
@@ -467,20 +532,35 @@ public class TagCreatorActivity extends FragmentActivity {
             acotar = true;
         }
         Bitmap firstBitmap = images[0].getImage();
+        this.customizeBackground(firstBitmap);
+    /*    int realWidthImage = 0;
+        int realHeightImage = 0;
+        if(currentCreator.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+                    getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+                    getResources().getDisplayMetrics());
 
-        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
-                getResources().getDisplayMetrics());
-        if(acotar){
-            temp = temp - temp * 3/19;
-        }
-        int realWidthImage = (int)temp;
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
-                getResources().getDisplayMetrics());
+            if (acotar) {
+                temp = temp - temp * 3 / 19;
+            }
+            realHeightImage = (int) temp;
+        }else{
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+                    getResources().getDisplayMetrics());
 
-        if(acotar){
-            temp = temp - temp * 3/19;
+            temp = temp * 1.3f;
+
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+                    getResources().getDisplayMetrics());
+            temp = temp * 1.3f;
+            realHeightImage = (int) temp;
         }
-        int realHeightImage = (int)temp;
         Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
         if(currentCreator.getRounded()==1){
             b = getRoundedCornerBitmap(b,currentCreator.getRound());
@@ -488,7 +568,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
         Drawable d = new BitmapDrawable(getResources(), b);
         linearTag.setBackground(d);
-
+*/
 
        // CONFIGURACION DE UN AREA DE TEXTO
 
@@ -644,26 +724,7 @@ public class TagCreatorActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LabelImage selectedImage = null;
                 selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
-                        getResources().getDisplayMetrics());
-                if(acotar){
-                    temp = temp - temp * 3/20;
-                }
-                int realWidthImage = (int)temp;
-                temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
-                        getResources().getDisplayMetrics());
-
-                if(acotar){
-                    temp = temp - temp * 3/20;
-                }
-                int realHeightImage = (int)temp;
-                Bitmap b =Bitmap.createScaledBitmap(selectedImage.getImage(), realWidthImage, realHeightImage, false);
-                if(currentCreator.getRounded()==1){
-                    b = getRoundedCornerBitmap(b,currentCreator.getRound());
-                }
-                Drawable d = new BitmapDrawable(getResources(), b);
-                linearTag.setBackground(d);
-
+                customizeBackground(selectedImage.getImage());
 
             }
 
@@ -708,7 +769,7 @@ public class TagCreatorActivity extends FragmentActivity {
         String url;
         Bitmap b;
         for (LabelImage li: images) {
-            url = URL_LABEL_IMAGES + li.getUniquename();
+            url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
             b = ConstantsAdmin.getImageFromURL(url);
             li.setImage(b);
         }
@@ -792,7 +853,7 @@ public class TagCreatorActivity extends FragmentActivity {
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
             temp = temp + "-Regular" + extension;
             lf.setBasename(temp);
-            ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL_FONTS + temp, temp);
+            ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + temp, temp);
         }
     }
 
