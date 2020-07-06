@@ -1,15 +1,36 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
+import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
 import java.io.BufferedInputStream;
@@ -67,6 +88,153 @@ public class ConstantsAdmin {
     public static String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
     public static long ID_CREATOR_MINICIRCULARES = 59;
     public static Properties fflProperties;
+    public static Bitmap selectedBackground;
+    public static String selectedTitleFontSize;
+    public static int selectedTitleFontColor;
+    public static String selectedTitleFont;
+    public static int selectedTextFontColor;
+    public static String selectedTextFontSize;
+    public static String selectedTextFont;
+    public static LabelAttributes selectedLabelAttrbText;
+    public static LabelAttributes selectedLabelAttrbTitle;
+    public static Creator currentCreator;
+
+    public static float pxToMm(float px, Context context){
+        final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return px / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
+    }
+
+    private static Bitmap getRoundedCornerBitmap(Bitmap bitmap,int roundPixelSize) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = roundPixelSize;
+        paint.setAntiAlias(true);
+        canvas.drawRoundRect(rectF,roundPx,roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+    public static EditText createTextArea(EditText ta, LabelAttributes la, String hint, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
+        //EditText ta = new EditText(this);
+        ta.setHint(hint);
+        ta.setHintTextColor(Color.GRAY);
+        float temp = 0;
+        int w, h = 0;
+        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 18;
+            }
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight() + 1,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            ta.setY(temp);
+
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 22;
+            }
+            ta.setX(temp);
+        }else{
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth() ,
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight(),
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            ta.setY(temp);
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
+                    context.getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            ta.setX(temp);
+        }
+        ViewGroup.LayoutParams layoutParamsTextTag = new ViewGroup.LayoutParams(w, h);
+        ta.setLayoutParams(layoutParamsTextTag);
+        ta.setGravity(Gravity.CENTER);
+        ta.setPadding(0, 0, 0, 0);
+        ta.setBackgroundColor(Color.TRANSPARENT);
+        ta.setTextColor(Color.BLACK);
+        ta.setEllipsize(TextUtils.TruncateAt.END);
+        if (la.getMultiline() == 0) {
+            ta.setSingleLine(true);
+            ta.setEllipsize(TextUtils.TruncateAt.END);
+            ta.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            ta.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            ta.setSingleLine(false);
+        }
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(Color.TRANSPARENT); //white background
+        border.setStroke(3, Color.RED); //black border with full opacity
+
+        rl.addView(ta);
+        return ta;
+    }
+
+
+    public static void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
+        int realWidthImage = 0;
+        int realHeightImage = 0;
+        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
+                    context.getResources().getDisplayMetrics());
+
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            realHeightImage = (int) temp;
+        } else {
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
+                    context.getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            realHeightImage = (int) temp;
+        }
+        Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
+        if (currentC.getRounded() == 1) {
+            b = getRoundedCornerBitmap(b, currentC.getRound());
+        }
+
+        Drawable d = new BitmapDrawable(context.getResources(), b);
+        rl.setBackground(d);
+
+    }
 
 
     public static void createLogin(Customer currentCustomer, Context ctx) {

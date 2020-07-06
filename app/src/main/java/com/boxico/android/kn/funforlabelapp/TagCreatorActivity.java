@@ -97,7 +97,7 @@ public class TagCreatorActivity extends FragmentActivity {
  //   private EditText entryTextTag;
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
-    private Button btn_showTag;
+    private Button btnReadyToGo;
     private Paint mPaint;
     private Button pickColor;
     private int selectedPosFontText = -1;
@@ -259,13 +259,9 @@ public class TagCreatorActivity extends FragmentActivity {
         }
     }
 
-    public float pxToMm(float px, Context context)
-    {
-        final DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        return px / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
-    }
 
-    public Bitmap getRoundedCornerBitmap(Bitmap bitmap,int roundPixelSize) {
+
+ /*   public Bitmap getRoundedCornerBitmap(Bitmap bitmap,int roundPixelSize) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         final Paint paint = new Paint();
@@ -278,128 +274,30 @@ public class TagCreatorActivity extends FragmentActivity {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
-
-    private void drawTag(LinearLayout linearL){
-        TextView textTagTemp = new TextView(this);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        boolean acotarTemp = false;
-        LabelAttributes la1, la2;
-
-        float screenWidthMM = pxToMm((float) width, this);
-
-        if(screenWidthMM < currentCreator.getWidth()){
-            acotarTemp = true;
-        }
-        Bitmap firstBitmap = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
-
-        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth() ,
-                getResources().getDisplayMetrics());
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        int realWidthImage = (int)temp;
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight() ,
-                getResources().getDisplayMetrics());
-
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        int realHeightImage = (int)temp;
-        Bitmap b =Bitmap.createScaledBitmap(firstBitmap, realWidthImage, realHeightImage, false);
-        if(currentCreator.getRounded()==1){
-            b = getRoundedCornerBitmap(b,currentCreator.getRound());
-        }
-        //   firstBitmap.setWidth(realWidthImage);
-        //   firstBitmap.setHeight(realHeightImage);
-        Drawable d = new BitmapDrawable(getResources(), b);
-        linearL.setBackground(d);
-
-        // textTag.setHint(R.string.your_name_here);
-
-        la1 = labelAttributes[0];
-
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la1.getWidth() ,
-                getResources().getDisplayMetrics());
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(labelAttributes.getWidth(), labelAttributes.getHeight());
-        int w = (int)(temp);
-
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la1.getHeight() + 1 ,
-                getResources().getDisplayMetrics());
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        int h = (int)(temp);
-
-        LinearLayout.LayoutParams layoutParamsTextTag = new LinearLayout.LayoutParams(w, h);
-
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la1.getFromY() ,
-                getResources().getDisplayMetrics());
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        int fromY = (int)temp;
-
-        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la1.getFromX() ,
-                getResources().getDisplayMetrics());
-        if(acotarTemp){
-            temp = temp - temp * 3/20;
-        }
-        int fromX = (int)temp;
-        layoutParamsTextTag.setMargins(fromX, fromY, -1,-1);
-
-        textTagTemp.setLayoutParams(layoutParamsTextTag);
-
-        //textTag.setTypeface(Typeface.);
-
+*/
 /*
-        File fileFont = ConstantsAdmin.getFile(fonts.get(0).getBasename());
-        Typeface face = Typeface.createFromFile(fileFont);
-        textTag.setTypeface(face);*/
-        textTagTemp.setGravity(Gravity.CENTER);
-        textTagTemp.setPadding(0,0,0,0);
-        textTagTemp.setBackgroundColor(Color.TRANSPARENT);
-        textTagTemp.setTextColor(Color.BLACK);
-        textTagTemp.setEllipsize(TextUtils.TruncateAt.END);
-
-        if(la1.getMultiline() == 0){
-            textTagTemp.setSingleLine(true);
-            textTagTemp.setEllipsize(TextUtils.TruncateAt.END);
-        }
-        textTagTemp.setTextColor(textTag.getTextColors());
-        textTagTemp.setText(textTag.getText());
-        textTagTemp.setTextSize(textTag.getTextSize());
-        textTagTemp.setTypeface(textTag.getTypeface());
-        linearL.addView(textTagTemp);
-
-    }
-
-    private EditText createTextArea(EditText ta, LabelAttributes la, String hint) {
+    private EditText createTextArea(EditText ta, LabelAttributes la, String hint, Creator currentC, boolean acot, RelativeLayout rl) {
         //EditText ta = new EditText(this);
         ta.setHint(hint);
         ta.setHintTextColor(Color.GRAY);
         float temp = 0;
         int w, h = 0;
-        if (currentCreator.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
                     getResources().getDisplayMetrics());
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 18;
             }
             w = (int) (temp);
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getHeight() + 1,
                     getResources().getDisplayMetrics());
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 19;
             }
             h = (int) (temp);
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromY(),
                     getResources().getDisplayMetrics());
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 19;
             }
             ta.setY(temp);
@@ -407,7 +305,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getFromX(),
                     getResources().getDisplayMetrics());
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 22;
             }
             ta.setX(temp);
@@ -464,54 +362,51 @@ public class TagCreatorActivity extends FragmentActivity {
 
     //    ta.setBackground(border);
 
-    //    LinearLayout.MarginLayoutParams lparams = new LinearLayout.LayoutParams(w, h);
-     //   lparams.setMargins(fromX, fromY, -1,-1);
-
-        linearTag.addView(ta);
+        rl.addView(ta);
         return ta;
 
     }
-
-
-    private void customizeBackground(Bitmap img) {
+*/
+/*
+    private void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl) {
         int realWidthImage = 0;
         int realHeightImage = 0;
-        if (currentCreator.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
-            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
                     getResources().getDisplayMetrics());
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 19;
             }
             realWidthImage = (int) temp;
-            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
                     getResources().getDisplayMetrics());
 
-            if (acotar) {
+            if (acot) {
                 temp = temp - temp * 3 / 19;
             }
             realHeightImage = (int) temp;
         } else {
-            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getWidth(),
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
                     getResources().getDisplayMetrics());
 
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
 
             realWidthImage = (int) temp;
-            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentCreator.getHeight(),
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
                     getResources().getDisplayMetrics());
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
             realHeightImage = (int) temp;
         }
         Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
-        if (currentCreator.getRounded() == 1) {
-            b = getRoundedCornerBitmap(b, currentCreator.getRound());
+        if (currentC.getRounded() == 1) {
+            b = getRoundedCornerBitmap(b, currentC.getRound());
         }
 
         Drawable d = new BitmapDrawable(getResources(), b);
-        linearTag.setBackground(d);
+        rl.setBackground(d);
 
     }
-
+*/
 
     private void initializeCreator() {
 
@@ -526,27 +421,27 @@ public class TagCreatorActivity extends FragmentActivity {
         //int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        float screenWidthMM = pxToMm((float) width, this);
+        float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
 
         if(screenWidthMM < currentCreator.getWidth()){
             acotar = true;
         }
         Bitmap firstBitmap = images[0].getImage();
-        this.customizeBackground(firstBitmap);
+        ConstantsAdmin.customizeBackground(firstBitmap,currentCreator, acotar, linearTag, this);
 
 
        // CONFIGURACION DE UN AREA DE TEXTO
 
         if(la1.getIsTitle()==0) {
-            textTag = this.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here));
+            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),currentCreator, acotar, linearTag,me);
         }else{
-            titleTag = this.createTextArea(new EditText(this), la1, this.getString(R.string.your_title));
+            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title),currentCreator, acotar, linearTag,me);
         }
         if(la2 != null) {
             if(la2.getIsTitle()==0){
-                textTag = this.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here));
+                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here),currentCreator, acotar, linearTag,me);
             }else {
-                titleTag = this.createTextArea(new EditText(this), la2, this.getString(R.string.your_title));
+                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title),currentCreator, acotar, linearTag,me);
             }
         }
 
@@ -633,7 +528,7 @@ public class TagCreatorActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LabelImage selectedImage = null;
                 selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                customizeBackground(selectedImage.getImage());
+                ConstantsAdmin.customizeBackground(selectedImage.getImage(),currentCreator, acotar, linearTag, me);
 
             }
 
@@ -902,11 +797,11 @@ public class TagCreatorActivity extends FragmentActivity {
     private View initPopupView()
     {
         View popupView = null;
-        LayoutInflater layoutInflater = LayoutInflater.from(TagCreatorActivity.this);
+      /*  LayoutInflater layoutInflater = LayoutInflater.from(TagCreatorActivity.this);
         popupView = layoutInflater.inflate(R.layout.tag_view, null);
         LinearLayout ll = popupView.findViewById(R.id.tagView);
         drawTag(ll);
-
+*/
         return popupView;
 
     }
@@ -937,8 +832,8 @@ public class TagCreatorActivity extends FragmentActivity {
         spinnerFonts = (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
-        mPaint = new Paint();
         pickColor = (Button) this.findViewById(R.id.pickColor);
+        btnReadyToGo = (Button) this.findViewById(R.id.btnReadyToGo);
         pickColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -946,7 +841,31 @@ public class TagCreatorActivity extends FragmentActivity {
                 openColorPicker();
             }
         });
+        btnReadyToGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // new ColorPickerDialog(me, me, mPaint.getColor()).show();
+                openCulminarTag();
+            }
+        });
     }
+
+    private void openCulminarTag() {
+        ConstantsAdmin.selectedTextFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText)).getBasename();
+        ConstantsAdmin.selectedTextFontSize = (String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText);
+        ConstantsAdmin.selectedTextFontColor = selectedTextColor;
+        ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
+        if(labelAttributes.length > 1){//ES UN TAG CON TITULO
+            ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
+            ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
+            ConstantsAdmin.selectedTitleFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle)).getBasename();
+            ConstantsAdmin.selectedTitleFontSize = (String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle);
+        }
+        ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
+        ConstantsAdmin.currentCreator = currentCreator;
+
+    }
+
     private void openColorPicker() {
         AmbilWarnaDialog myColorPicker = new AmbilWarnaDialog(this, Color.BLACK, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
