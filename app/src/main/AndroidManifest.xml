@@ -32,9 +32,16 @@
         </activity>
 
         <activity
-            android:name=".TagCreatorActivity"
+            android:name=".TagReadyToGoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".TagCreatorActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             </intent-filter>

@@ -37,6 +37,38 @@
             android:fontFamily="sans-serif-smallcaps"
             android:background="@android:color/white"
             />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/custom_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+
+            <RelativeLayout
+                android:id="@+id/linearTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+            </RelativeLayout>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerBackgrounds"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_margin="10dp"
+                android:layout_gravity="right|bottom"
+                />
+
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -46,50 +78,6 @@
 
 
 
-        <TextView
-            android:id="@+id/textProductSelected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_gris_oscuro"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="17sp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"
-            />
-
-
-
-            <RelativeLayout
-                android:id="@+id/linearTag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-
-                >
-
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/custom_line" />
-
-
-            <EditText
-                android:id="@+id/entryTextTag"
-                android:imeOptions="actionDone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_gris_oscuro"
-                android:background="@color/color_gris_claro"
-                android:layout_margin="10dp"
-
-                />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,7 +86,7 @@
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
                 android:layout_gravity="left"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:background="@android:color/white"/>
 
@@ -116,18 +104,6 @@
                 android:background="@android:drawable/btn_dropdown"
                 />
 
-
-
-
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,32 +118,12 @@
                 android:layout_height="wrap_content"
                 android:text="░"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:background="@android:drawable/btn_dropdown"
                 />
         </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/select_tag_style"
-                android:layout_margin="5dp"
-                android:textColor="@color/color_gris_oscuro"
-                android:textStyle="bold"
-                android:layout_gravity="left"
-                android:textSize="17sp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"/>
 
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinnerBackgrounds"
-                android:background="@android:drawable/btn_dropdown"
-                android:layout_margin="10dp"
-                android:layout_gravity="center"
-                />
 
         </LinearLayout>
 
