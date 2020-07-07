@@ -1,21 +1,27 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+
+import java.io.File;
 
 import androidx.fragment.app.FragmentActivity;
 
 public class TagReadyToGoActivity extends FragmentActivity {
 
     private TagReadyToGoActivity me;
+    TextView textWellcomeUsr = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +64,35 @@ public class TagReadyToGoActivity extends FragmentActivity {
 
         // CONFIGURACION DE UN AREA DE TEXTO
 
-        EditText textTag;
-        EditText titleTag;
+        EditText textTag = null;
+        EditText titleTag = null;
         if(la1.getIsTitle()==0) {
-            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
+            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
         }else{
-            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
+            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1,"",ConstantsAdmin.currentCreator, acotar, linearTag,me);
         }
         if(la2 != null) {
             if(la2.getIsTitle()==0){
-                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
+                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
             }else {
-                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
+                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
             }
         }
+        textTag.setText(ConstantsAdmin.textEntered);
+        textTag.setTextColor(ConstantsAdmin.selectedTextFontColor);
+        textTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTextFontSize);
+        File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont);
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);
+        if(titleTag != null){
+            titleTag.setText(ConstantsAdmin.titleEntered);
+            titleTag.setTextColor(ConstantsAdmin.selectedTitleFontColor);
+            titleTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTitleFontSize);
+            fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTitleFont);
+            face = Typeface.createFromFile(fileFont);
+            titleTag.setTypeface(face);
+        }
+
 
 
     }
@@ -81,6 +102,8 @@ public class TagReadyToGoActivity extends FragmentActivity {
     }
 
     private void configureWidgets() {
+        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
     }
 
     private void initializeService() {

@@ -66,28 +66,48 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"
-
-                >
+                android:layout_marginBottom="15dp">
 
 
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/custom_line" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_comment"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
 
             <EditText
                 android:id="@+id/entryCommentTag"
-                android:imeOptions="actionDone"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="3"
+                android:maxLines="3"
+                android:gravity="left|top"
+                android:padding="4dp"
                 android:textColor="@color/color_gris_oscuro"
-                android:background="@color/color_gris_claro"
-                android:layout_margin="10dp"
+                android:background="@color/color_gris_muy_claro"
+                android:layout_margin="15dp"
 
+                />
+
+            <Button android:id="@+id/btnAgregarACarrito"
+                android:layout_width="wrap_content"
+                android:text="@string/agregar_tag_acarrito"
+                android:layout_height="30dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="15dp"
+                android:padding="7dp"
+                android:layout_margin="15dp"
+                android:textStyle="bold"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/holo_red_dark"
                 />
 
 

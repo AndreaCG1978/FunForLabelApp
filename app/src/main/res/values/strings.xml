@@ -71,5 +71,7 @@
     <string name="select_font_style">Elija su letra...</string>
     <string name="select_tag_style">Elija su estilo...</string>
     <string name="your_title">Ingrese un título</string>
-    <string name="culminarTag">Agregar al carrito...</string>
+    <string name="culminarTag">Agregar al carrito</string>
+    <string name="enter_comment">Ingrese un comentario...</string>
+    <string name="agregar_tag_acarrito">Agregar</string>
 </resources>

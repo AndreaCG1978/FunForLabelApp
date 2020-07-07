@@ -89,15 +89,17 @@ public class ConstantsAdmin {
     public static long ID_CREATOR_MINICIRCULARES = 59;
     public static Properties fflProperties;
     public static Bitmap selectedBackground;
-    public static String selectedTitleFontSize;
+    public static float selectedTitleFontSize;
     public static int selectedTitleFontColor;
     public static String selectedTitleFont;
     public static int selectedTextFontColor;
-    public static String selectedTextFontSize;
+    public static float selectedTextFontSize;
     public static String selectedTextFont;
     public static LabelAttributes selectedLabelAttrbText;
     public static LabelAttributes selectedLabelAttrbTitle;
     public static Creator currentCreator;
+    public static String textEntered;
+    public static String titleEntered;
 
     public static float pxToMm(float px, Context context){
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();

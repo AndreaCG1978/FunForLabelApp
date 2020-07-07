@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -852,18 +853,23 @@ public class TagCreatorActivity extends FragmentActivity {
 
     private void openCulminarTag() {
         ConstantsAdmin.selectedTextFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText)).getBasename();
-        ConstantsAdmin.selectedTextFontSize = (String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText);
+        ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
         ConstantsAdmin.selectedTextFontColor = selectedTextColor;
         ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
         if(labelAttributes.length > 1){//ES UN TAG CON TITULO
             ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
             ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
             ConstantsAdmin.selectedTitleFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle)).getBasename();
-            ConstantsAdmin.selectedTitleFontSize = (String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle);
+            ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
         }
         ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
         ConstantsAdmin.currentCreator = currentCreator;
-
+        ConstantsAdmin.textEntered = textTag.getText().toString();
+        if(titleTag != null){
+            ConstantsAdmin.titleEntered = titleTag.getText().toString();
+        }
+        Intent intent = new Intent(me, TagReadyToGoActivity.class);
+        startActivity(intent);
     }
 
     private void openColorPicker() {
