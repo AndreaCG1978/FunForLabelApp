@@ -84,7 +84,9 @@ public class TagReadyToGoActivity extends FragmentActivity {
         File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont);
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);
+        textTag.setEnabled(false);
         if(titleTag != null){
+            titleTag.setEnabled(false);
             titleTag.setText(ConstantsAdmin.titleEntered);
             titleTag.setTextColor(ConstantsAdmin.selectedTitleFontColor);
             titleTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTitleFontSize);
