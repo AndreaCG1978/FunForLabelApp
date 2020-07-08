@@ -32,6 +32,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
+import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -41,6 +42,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 import okhttp3.OkHttpClient;
@@ -61,15 +65,35 @@ public class ConstantsAdmin {
     public static final String ATR_FFL_PASSWORD = "FFL_PASSWORD";
     public static final String CAPITAL_FEDERAL = "Capital Federal" ;
     public static final float PARAM_TO_INCREASE = 1.465f;
+    public static final String KEY_USER = "usuario";
+    public static final String KEY_PASSWORD = "contrasenia";
+    public static final String KEY_NOT_ENCRIPTED_PASSWORD = "contraseniaSinEncriptar";
+    public static final String KEY_ROWID = "rowId" ;
+
+    public static final String KEY_TEXTO = "texto";
+    public static final String KEY_TITULO = "titulo" ;
+    public static final String KEY_TITULO_TAMANIO = "tituloSize";
+    public static final String KEY_TEXTO_TAMANIO = "textoSize";
+    public static final String KEY_TITULO_FUENTE = "tituloFuente";
+    public static final String KEY_TEXTO_FUENTE = "textoFuente";
+    public static final String KEY_TITULO_COLOR = "tituloColor";
+    public static final String KEY_TEXTO_COLOR = "textoColor";
+    public static final String KEY_BACKGROUND_FILENAME = "backgroundFilename";
+    public static final String KEY_ID_CREATOR = "idCreador";
+    public static final String KEY_ID_AREA_TITULO = "idAreaTitulo";
+    public static final String KEY_ID_AREA_TEXTO = "idAreaTexto";
+    public static final String KEY_COMENTARIO_USR = "comentarioUsr";
+    public static final String KEY_TIENE_TITULO = "tieneTitulo" ;
+
+
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
     public static final String DATABASE_NAME = "FunForLabelsAppDB";
     public static final int DATABASE_VERSION = 1;
-    public static final String KEY_USER = "usuario";
+
     public static final String TABLE_LOGIN = "tabla_login";
-    public static final String KEY_PASSWORD = "contrasenia";
-    public static final String KEY_NOT_ENCRIPTED_PASSWORD = "contraseniaSinEncriptar";
-    public static final String KEY_ROWID = "rowId" ;
+    public static final String TABLE_PRODUCTO_CARRITO = "tabla_producto_carrito";
+
     public static final String KEY_NAME = "name";
     public static final String ENTER = "\n";
     public static final String TAB = "\t";
@@ -100,6 +124,11 @@ public class ConstantsAdmin {
     public static Creator currentCreator;
     public static String textEntered;
     public static String titleEntered;
+    public static boolean finalizarHastaMenuPrincipal;
+    public static String selectedBackgroundFilename;
+    public static List<ProductoCarrito> productosDelCarrito = new ArrayList<ProductoCarrito>();
+
+
 
     public static float pxToMm(float px, Context context){
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -246,6 +275,13 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
+    public static void createProductoCarrito(ProductoCarrito pc, Context ctx) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.createProductoCarrito(pc);
+        dbm.close();
+    }
+
     public static Bitmap getImageFromURL(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Bitmap bmp = null;
@@ -273,6 +309,25 @@ public class ConstantsAdmin {
         return f;
     }
 
+    public static void copyBitmapInStorage(Bitmap bmp, String filename){
+       // String root = Environment.getExternalStorageDirectory().toString();
+        String completeFilename = Environment
+                .getExternalStorageDirectory().toString() +"/"
+                + filename;
+        File newFile = new File(completeFilename);
+        if (newFile.exists())
+            newFile.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(newFile);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void copyFileFromUrl(String urlPath, String fontFilename){
         int count;
         try {
@@ -284,37 +339,19 @@ public class ConstantsAdmin {
                 java.net.URL url = new URL(urlPath);
                 URLConnection connection = url.openConnection();
                 connection.connect();
-
-                // this will be useful so that you can show a tipical 0-100%
-                // progress bar
-            //    int lenghtOfFile = connection.getContentLength();
-
-                // download the file
                 InputStream input = new BufferedInputStream(url.openStream(),
                         8192);
 
 
                 // Output stream
                 OutputStream output = new FileOutputStream(filename);
-
                 byte data[] = new byte[1024];
-
                 long total = 0;
-
                 while ((count = input.read(data)) != -1) {
                     total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    //  publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-
-                    // writing data to file
                     output.write(data, 0, count);
                 }
-
-                // flushing output
                 output.flush();
-
-                // closing streams
                 output.close();
                 input.close();
             }
@@ -331,6 +368,13 @@ public class ConstantsAdmin {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
         dbm.deleteLogin();
+        dbm.close();
+    }
+
+    public static void deleteProductoCarrito(Context ctx, ProductoCarrito pc) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.deleteProductoCarrito(pc);
         dbm.close();
     }
 
@@ -361,6 +405,73 @@ public class ConstantsAdmin {
         return item;
     }
 
+    public static ArrayList<ProductoCarrito> getCarrito(Context ctx) {
+        ArrayList<ProductoCarrito> listaProductos = new ArrayList<ProductoCarrito>();
+        int itemId;
+        String texto;
+        String titulo;
+        String textoFuente;
+        String tituloFuente;
+        String textoSize;
+        String tituloSize;
+        int textoColor;
+        int tituloColor;
+        int tieneTitulo;
+        String backgroundFilename;
+        String comentario;
+        int idCreador;
+        int idAreaTitulo;
+        int idAreaTexto;
+        ProductoCarrito item = null;
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        Cursor cursor = dbm.cursorProductoCarrito();
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            item = new ProductoCarrito();
+            itemId = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ROWID));
+            tieneTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TIENE_TITULO));
+            if(tieneTitulo == 1){
+                item.setTieneTitulo(true);
+                titulo = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO));
+                tituloFuente = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO_FUENTE));
+                tituloSize = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO_TAMANIO));
+                tituloColor = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO_COLOR));
+                idAreaTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_AREA_TITULO));
+                item.setTitulo(titulo);
+                item.setTitleFontName(tituloFuente);
+                item.setTitleFontSize(Float.valueOf(tituloSize));
+                item.setFontTitleColor(tituloColor);
+                item.setIdAreaTitulo(idAreaTitulo);
+            }else{
+                item.setTieneTitulo(false);
+            }
+            texto = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO));
+            textoFuente = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO_FUENTE));
+            textoSize = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO_TAMANIO));
+            textoColor = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO_COLOR));
+            idAreaTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_AREA_TEXTO));
+            item.setTexto(texto);
+            item.setTextFontName(textoFuente);
+            item.setTextFontSize(Float.valueOf(textoSize));
+            item.setFontTextColor(textoColor);
+            item.setIdAreaTexto(idAreaTexto);
+            backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
+            comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
+            idCreador = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_CREATOR));
+            item.setBackgroundFilename(backgroundFilename);
+            item.setComentarioUsr(comentario);
+            item.setIdCreador(idCreador);
+            item.setId(itemId);
+            listaProductos.add(item);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        dbm.close();
+        return listaProductos;
+    }
+
+
 
     public static void inicializarBD(DataBaseManager mDBManager){
         mDBManager.open();
@@ -378,6 +489,13 @@ public class ConstantsAdmin {
         if(mDBManager != null){
             mDBManager.close();
         }
+    }
+
+    public static void agregarProductoAlCarrito(ProductoCarrito pc) {
+        if(productosDelCarrito == null){
+            productosDelCarrito = new ArrayList<ProductoCarrito>();
+        }
+        productosDelCarrito.add(pc);
     }
 
 }

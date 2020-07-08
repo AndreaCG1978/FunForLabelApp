@@ -664,6 +664,15 @@ public class TagCreatorActivity extends FragmentActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
+    }
+
     private void privateLoadCreator() {
         Call<Creator> call = null;
         Response<Creator> response;
@@ -863,6 +872,7 @@ public class TagCreatorActivity extends FragmentActivity {
             ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
         }
         ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
+        ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
         ConstantsAdmin.currentCreator = currentCreator;
         ConstantsAdmin.textEntered = textTag.getText().toString();
         if(titleTag != null){

@@ -13,16 +13,21 @@ import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
+import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomCarritoAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -52,6 +57,9 @@ public class MainActivity extends FragmentActivity {
     MainActivity me;
     CategoriesProductsService categoriesProductsService = null;
     ArrayList<Category> categories;
+    TextView verCarrito = null;
+    private ImageButton imagenVerCarrito = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +70,16 @@ public class MainActivity extends FragmentActivity {
         StrictMode.setThreadPolicy(policy);
         this.initializeService();
         this.initializeLang();
+        this.initializeCarrito();
         this.configureWidgets();
         this.loadCategories();
+        
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void initializeCarrito() {
+        ConstantsAdmin.productosDelCarrito = ConstantsAdmin.getCarrito(this);
     }
 
     private void initializeLang() {
@@ -84,6 +98,34 @@ public class MainActivity extends FragmentActivity {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearCategories = findViewById(R.id.linearCategories);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        verCarrito = findViewById(R.id.verCarrito);
+        if(ConstantsAdmin.productosDelCarrito.size() > 0){
+            verCarrito.setVisibility(View.VISIBLE);
+            verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
+        }else{
+            verCarrito.setVisibility(View.GONE);
+        }
+
+        verCarrito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openVerCarrito();
+            }
+        });
+        imagenVerCarrito = findViewById(R.id.imagenVerCarrito);
+        imagenVerCarrito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openVerCarrito();
+            }
+        });
+
+
+    }
+
+    private void openVerCarrito() {
+        Intent intent = new Intent(me, CarritoActivity.class);
+        startActivity(intent);
     }
 
     private class LoadCategoriesTask extends AsyncTask<Long, Integer, Integer> {
@@ -318,6 +360,21 @@ public class MainActivity extends FragmentActivity {
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onStart() {
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            ConstantsAdmin.finalizarHastaMenuPrincipal = false;
+        }
+        super.onStart();
+        if(ConstantsAdmin.productosDelCarrito.size() > 0){
+            verCarrito.setVisibility(View.VISIBLE);
+            verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
+        }else{
+            verCarrito.setVisibility(View.GONE);
+        }
+
     }
 
 }

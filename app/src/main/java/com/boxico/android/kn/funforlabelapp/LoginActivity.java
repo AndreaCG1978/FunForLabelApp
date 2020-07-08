@@ -58,6 +58,7 @@ public class LoginActivity extends FragmentActivity {
     private EditText userEntry = null;
     private EditText passEntry = null;
     private Button buttonLogin = null;
+
     private TextView crearCuentaText = null;
     private TextView recuperarContrasenia = null;
     private CustomerService customerService = null;
@@ -220,6 +221,7 @@ public class LoginActivity extends FragmentActivity {
                 }
             }
         });
+
     /*    userEntry.setText("acgrassano1978@gmail.com");
         passEntry.setText("andrea");*/
     }

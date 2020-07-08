@@ -74,4 +74,7 @@
     <string name="culminarTag">Agregar al carrito</string>
     <string name="enter_comment">Ingrese un comentario...</string>
     <string name="agregar_tag_acarrito">Agregar</string>
+    <string name="tag_agregado_carrito">El producto fue agregado al carrito!</string>
+    <string name="su_carrito">Productos en su Carrito!</string>
+    <string name="confirmar_carrito">Comprar</string>
 </resources>

@@ -173,6 +173,16 @@ public class ProductsListActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
+
+    }
+
 
     private void createAlertDialog(String message, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(me);

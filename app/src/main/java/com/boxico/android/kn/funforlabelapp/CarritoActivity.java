@@ -1,7 +1,6 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -11,8 +10,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
@@ -20,64 +22,28 @@ import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.io.File;
 
-import androidx.fragment.app.FragmentActivity;
+public class CarritoActivity extends FragmentActivity {
 
-public class TagReadyToGoActivity extends FragmentActivity {
-
-    private TagReadyToGoActivity me;
+    private CarritoActivity me;
     TextView textWellcomeUsr = null;
-    Button agregarAlCarrito = null;
-    EditText comentarioUsr = null;
+    Button confirmarCarrito = null;
+    ListView listViewCarrito = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me = this;
-        setContentView(R.layout.tag_ready_to_go);
+        setContentView(R.layout.carrito);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         this.initializeService();
         this.configureWidgets();
         this.askForWriteStoragePermission();
-        this.initializeCreator();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+   //     this.initializeCreator();
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
-    private void agregarProductoAlCarrito() {
-        ProductoCarrito pc = new ProductoCarrito();
-        if(ConstantsAdmin.selectedLabelAttrbTitle != null){
-            pc.setAreaTitulo(ConstantsAdmin.selectedLabelAttrbTitle);
-            pc.setFontTitleColor(ConstantsAdmin.selectedTitleFontColor);
-            pc.setTitulo(ConstantsAdmin.titleEntered);
-            pc.setTitleFontName(ConstantsAdmin.selectedTitleFont);
-            pc.setTitleFontSize(ConstantsAdmin.selectedTitleFontSize);
-            pc.setTieneTitulo(true);
-            pc.setIdAreaTitulo((int)pc.getAreaTitulo().getTextAreasId());
-        }else{
-            pc.setTieneTitulo(false);
-        }
-
-        pc.setAreaTexto(ConstantsAdmin.selectedLabelAttrbText);
-        pc.setBackground(ConstantsAdmin.selectedBackground);
-        pc.setCreador(ConstantsAdmin.currentCreator);
-        pc.setFontTextColor(ConstantsAdmin.selectedTextFontColor);
-        pc.setTexto(ConstantsAdmin.textEntered);
-        pc.setTextFontName(ConstantsAdmin.selectedTextFont);
-        pc.setTextFontSize(ConstantsAdmin.selectedTextFontSize);
-        pc.setComentarioUsr(comentarioUsr.getText().toString());
-        pc.setBackgroundFilename(ConstantsAdmin.selectedBackgroundFilename);
-        pc.setIdAreaTexto((int)pc.getAreaTexto().getTextAreasId());
-        pc.setIdCreador((int)pc.getCreador().getId());
-        ConstantsAdmin.agregarProductoAlCarrito(pc);
-
-        createAlertDialog(getString(R.string.tag_agregado_carrito), "");
-        ConstantsAdmin.createProductoCarrito(pc, this);
-        ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
-        ConstantsAdmin.finalizarHastaMenuPrincipal = true;
-        finish();
-    }
 
     private void createAlertDialog(String message, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(me);
@@ -154,14 +120,18 @@ public class TagReadyToGoActivity extends FragmentActivity {
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
-        agregarAlCarrito = findViewById(R.id.btnAgregarACarrito);
-        comentarioUsr = findViewById(R.id.entryCommentTag);
-        agregarAlCarrito.setOnClickListener(new View.OnClickListener() {
+        confirmarCarrito = findViewById(R.id.btnConfirmarCarrito);
+        listViewCarrito = findViewById(R.id.listViewCarrito);
+
+        confirmarCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarProductoAlCarrito();
+                confirmarCompra();
             }
         });
+    }
+
+    private void confirmarCompra() {
     }
 
 
