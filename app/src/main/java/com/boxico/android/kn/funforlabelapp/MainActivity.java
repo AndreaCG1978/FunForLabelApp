@@ -99,12 +99,7 @@ public class MainActivity extends FragmentActivity {
         linearCategories = findViewById(R.id.linearCategories);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         verCarrito = findViewById(R.id.verCarrito);
-        if(ConstantsAdmin.productosDelCarrito.size() > 0){
-            verCarrito.setVisibility(View.VISIBLE);
-            verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
-        }else{
-            verCarrito.setVisibility(View.GONE);
-        }
+        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
 
         verCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -368,12 +363,7 @@ public class MainActivity extends FragmentActivity {
             ConstantsAdmin.finalizarHastaMenuPrincipal = false;
         }
         super.onStart();
-        if(ConstantsAdmin.productosDelCarrito.size() > 0){
-            verCarrito.setVisibility(View.VISIBLE);
-            verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
-        }else{
-            verCarrito.setVisibility(View.GONE);
-        }
+        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
 
     }
 
