@@ -23,6 +23,162 @@ public class ProductoCarrito {
     private int idAreaTitulo = -1;
     private int idAreaTexto = -1;
     private int idCreador = -1;
+    private int anchoTag = -1;
+    private int largoTag= -1;
+    private int round= -1;
+    private int largoAreaTexto= -1;
+    private int anchoAreaTexto= -1;
+    private int esMultilineaTexto= -1;
+    private int fromXTexto= -1;
+    private int fromYTexto= -1;
+    private int largoAreaTituto= -1;
+    private int anchoAreaTituto= -1;
+    private int esMultilineaTituto= -1;
+    private int fromXTituto= -1;
+    private int fromYTituto= -1;
+    private String nombre = null;
+    private String precio = null;
+    private String cantidad = null;
+    private String modelo = null;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
+
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public int getLargoAreaTexto() {
+        return largoAreaTexto;
+    }
+
+    public void setLargoAreaTexto(int largoAreaTexto) {
+        this.largoAreaTexto = largoAreaTexto;
+    }
+
+    public int getAnchoAreaTexto() {
+        return anchoAreaTexto;
+    }
+
+    public void setAnchoAreaTexto(int anchoAreaTexto) {
+        this.anchoAreaTexto = anchoAreaTexto;
+    }
+
+    public int getEsMultilineaTexto() {
+        return esMultilineaTexto;
+    }
+
+    public void setEsMultilineaTexto(int esMultilineaTexto) {
+        this.esMultilineaTexto = esMultilineaTexto;
+    }
+
+    public int getFromXTexto() {
+        return fromXTexto;
+    }
+
+    public void setFromXTexto(int fromXTexto) {
+        this.fromXTexto = fromXTexto;
+    }
+
+    public int getFromYTexto() {
+        return fromYTexto;
+    }
+
+    public void setFromYTexto(int fromYTexto) {
+        this.fromYTexto = fromYTexto;
+    }
+
+    public int getLargoAreaTituto() {
+        return largoAreaTituto;
+    }
+
+    public void setLargoAreaTituto(int largoAreaTituto) {
+        this.largoAreaTituto = largoAreaTituto;
+    }
+
+    public int getAnchoAreaTituto() {
+        return anchoAreaTituto;
+    }
+
+    public void setAnchoAreaTituto(int anchoAreaTituto) {
+        this.anchoAreaTituto = anchoAreaTituto;
+    }
+
+    public int getEsMultilineaTituto() {
+        return esMultilineaTituto;
+    }
+
+    public void setEsMultilineaTituto(int esMultilineaTituto) {
+        this.esMultilineaTituto = esMultilineaTituto;
+    }
+
+    public int getFromXTituto() {
+        return fromXTituto;
+    }
+
+    public void setFromXTituto(int fromXTituto) {
+        this.fromXTituto = fromXTituto;
+    }
+
+    public int getFromYTituto() {
+        return fromYTituto;
+    }
+
+    public void setFromYTituto(int fromYTituto) {
+        this.fromYTituto = fromYTituto;
+    }
+
+    public int getAnchoTag() {
+        return anchoTag;
+    }
+
+    public void setAnchoTag(int anchoTag) {
+        this.anchoTag = anchoTag;
+    }
+
+    public int getLargoTag() {
+        return largoTag;
+    }
+
+    public void setLargoTag(int largoTag) {
+        this.largoTag = largoTag;
+    }
+
+
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
 
     public int getIdCreador() {
         return idCreador;
@@ -176,5 +332,10 @@ public class ProductoCarrito {
 
     public void setFontTitleColor(int fontTitleColor) {
         this.fontTitleColor = fontTitleColor;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNombre();
     }
 }

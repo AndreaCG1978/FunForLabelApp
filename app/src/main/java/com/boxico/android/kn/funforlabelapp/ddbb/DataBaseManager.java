@@ -91,13 +91,31 @@ public class DataBaseManager {
 		initialValues.put(ConstantsAdmin.KEY_TEXTO, item.getTexto());
 		initialValues.put(ConstantsAdmin.KEY_ID_CREATOR, item.getCreador().getId());
 		initialValues.put(ConstantsAdmin.KEY_ID_AREA_TEXTO, item.getAreaTexto().getTextAreasId());
+		initialValues.put(ConstantsAdmin.KEY_WIDTH_TAG, item.getAnchoTag());
+		initialValues.put(ConstantsAdmin.KEY_HEIGHT_TAG, item.getLargoTag());
+		initialValues.put(ConstantsAdmin.KEY_ROUND, item.getRound());
+		initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TEXTO, item.getEsMultilineaTexto());
+		initialValues.put(ConstantsAdmin.KEY_FROM_X_TEXTO, item.getFromXTexto());
+		initialValues.put(ConstantsAdmin.KEY_FROM_Y_TEXTO, item.getFromYTexto());
+		initialValues.put(ConstantsAdmin.KEY_WIDTH_AREA_TEXTO, item.getAnchoAreaTexto());
+		initialValues.put(ConstantsAdmin.KEY_HEIGHT_AREA_TEXTO, item.getLargoAreaTexto());
+		initialValues.put(ConstantsAdmin.KEY_NOMBRE_PRODUCTO, item.getNombre());
+		initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
+		initialValues.put(ConstantsAdmin.KEY_PRECIO_PRODUCTO, item.getPrecio());
+		initialValues.put(ConstantsAdmin.KEY_MODELO_PRODUCTO, item.getModelo());
 		if(item.getAreaTitulo() != null) {
+			initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO, item.getEsMultilineaTituto());
 			initialValues.put(ConstantsAdmin.KEY_TITULO_FUENTE, item.getTitleFontName());
 			initialValues.put(ConstantsAdmin.KEY_TITULO_COLOR, item.getFontTitleColor());
 			initialValues.put(ConstantsAdmin.KEY_ID_AREA_TITULO, item.getAreaTitulo().getTextAreasId());
 			initialValues.put(ConstantsAdmin.KEY_TITULO, item.getTitulo());
 			initialValues.put(ConstantsAdmin.KEY_TITULO_TAMANIO, String.valueOf(item.getTitleFontSize()));
 			initialValues.put(ConstantsAdmin.KEY_TIENE_TITULO, 1);
+			initialValues.put(ConstantsAdmin.KEY_FROM_X_TITULO, item.getFromXTituto());
+			initialValues.put(ConstantsAdmin.KEY_FROM_Y_TITULO, item.getFromYTituto());
+			initialValues.put(ConstantsAdmin.KEY_WIDTH_AREA_TITULO, item.getAnchoAreaTituto());
+			initialValues.put(ConstantsAdmin.KEY_HEIGHT_AREA_TITULO, item.getLargoAreaTituto());
+
 		}else{
 			initialValues.put(ConstantsAdmin.KEY_TIENE_TITULO, 0);
 		}

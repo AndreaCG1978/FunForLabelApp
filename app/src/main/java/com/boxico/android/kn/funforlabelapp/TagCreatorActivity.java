@@ -88,7 +88,7 @@ public class TagCreatorActivity extends FragmentActivity {
     EditText titleTag = null;
     List<Bitmap> listImages = null;
     private CreatorService creatorService;
-    private Creator currentCreator;
+  //  private Creator currentCreator;
     private LabelImage[] images;
     private LabelFont[] fonts;
     private LabelAttributes[] labelAttributes;
@@ -424,25 +424,25 @@ public class TagCreatorActivity extends FragmentActivity {
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
 
-        if(screenWidthMM < currentCreator.getWidth()){
+        if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }
         Bitmap firstBitmap = images[0].getImage();
-        ConstantsAdmin.customizeBackground(firstBitmap,currentCreator, acotar, linearTag, this);
+        ConstantsAdmin.customizeBackground(firstBitmap,ConstantsAdmin.currentCreator, acotar, linearTag, this);
 
 
        // CONFIGURACION DE UN AREA DE TEXTO
 
         if(la1.getIsTitle()==0) {
-            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),currentCreator, acotar, linearTag,me);
+            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
         }else{
-            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title),currentCreator, acotar, linearTag,me);
+            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
         }
         if(la2 != null) {
             if(la2.getIsTitle()==0){
-                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here),currentCreator, acotar, linearTag,me);
+                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
             }else {
-                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title),currentCreator, acotar, linearTag,me);
+                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
             }
         }
 
@@ -529,7 +529,7 @@ public class TagCreatorActivity extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LabelImage selectedImage = null;
                 selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                ConstantsAdmin.customizeBackground(selectedImage.getImage(),currentCreator, acotar, linearTag, me);
+                ConstantsAdmin.customizeBackground(selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
             }
 
@@ -682,8 +682,8 @@ public class TagCreatorActivity extends FragmentActivity {
             call = creatorService.getCreator(ConstantsAdmin.currentProduct.getId(), true, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                currentCreator = response.body();
-                if(currentCreator == null){
+                ConstantsAdmin.currentCreator = response.body();
+                if(ConstantsAdmin.currentCreator == null){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
             }else{
@@ -705,7 +705,7 @@ public class TagCreatorActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = creatorService.getImages(currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+            call = creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
@@ -755,7 +755,7 @@ public class TagCreatorActivity extends FragmentActivity {
         List<LabelAttributes> temp;
         try {
             ConstantsAdmin.mensaje = null;
-            call = creatorService.getLabelAttributes(currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+            call = creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
@@ -873,7 +873,6 @@ public class TagCreatorActivity extends FragmentActivity {
         }
         ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
         ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
-        ConstantsAdmin.currentCreator = currentCreator;
         ConstantsAdmin.textEntered = textTag.getText().toString();
         if(titleTag != null){
             ConstantsAdmin.titleEntered = titleTag.getText().toString();

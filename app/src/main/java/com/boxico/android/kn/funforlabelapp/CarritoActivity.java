@@ -1,26 +1,21 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
+import com.boxico.android.kn.funforlabelapp.utils.KNCarritoAdapterListView;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
-import java.io.File;
+import java.util.Iterator;
 
 public class CarritoActivity extends FragmentActivity {
 
@@ -28,7 +23,17 @@ public class CarritoActivity extends FragmentActivity {
     TextView textWellcomeUsr = null;
     Button confirmarCarrito = null;
     ListView listViewCarrito = null;
-    
+    TextView totalPrecio = null;
+    private boolean terminoCargaListado = true;
+
+    public boolean isTerminoCargaListado() {
+        return terminoCargaListado;
+    }
+
+    public void setTerminoCargaListado(boolean terminoCargaListado) {
+        this.terminoCargaListado = terminoCargaListado;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +43,6 @@ public class CarritoActivity extends FragmentActivity {
         StrictMode.setThreadPolicy(policy);
         this.initializeService();
         this.configureWidgets();
-        this.askForWriteStoragePermission();
    //     this.initializeCreator();
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -53,82 +57,40 @@ public class CarritoActivity extends FragmentActivity {
         dialog.show();
     }
 
-    private void initializeCreator() {
 
-        LabelAttributes la1, la2 = null;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        la1 = ConstantsAdmin.selectedLabelAttrbText;
-        if(ConstantsAdmin.selectedLabelAttrbTitle != null){
-            la2 = ConstantsAdmin.selectedLabelAttrbTitle;
-        }
-        //int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-
-        float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
-        boolean acotar = false;
-        if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
-            acotar = true;
-        }
-
-        RelativeLayout linearTag = this.findViewById(R.id.relativeReadyToGoTag);
-        ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedBackground,ConstantsAdmin.currentCreator, acotar, linearTag, this);
-
-
-        // CONFIGURACION DE UN AREA DE TEXTO
-
-        EditText textTag = null;
-        EditText titleTag = null;
-        if(la1.getIsTitle()==0) {
-            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-        }else{
-            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1,"",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-        }
-        if(la2 != null) {
-            if(la2.getIsTitle()==0){
-                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-            }else {
-                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-            }
-        }
-        textTag.setText(ConstantsAdmin.textEntered);
-        textTag.setTextColor(ConstantsAdmin.selectedTextFontColor);
-        textTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTextFontSize);
-        File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont);
-        Typeface face = Typeface.createFromFile(fileFont);
-        textTag.setTypeface(face);
-        textTag.setEnabled(false);
-        if(titleTag != null){
-            titleTag.setEnabled(false);
-            titleTag.setText(ConstantsAdmin.titleEntered);
-            titleTag.setTextColor(ConstantsAdmin.selectedTitleFontColor);
-            titleTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTitleFontSize);
-            fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTitleFont);
-            face = Typeface.createFromFile(fileFont);
-            titleTag.setTypeface(face);
-        }
-
-
-
-    }
-
-    private void askForWriteStoragePermission() {
-        
-    }
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         confirmarCarrito = findViewById(R.id.btnConfirmarCarrito);
         listViewCarrito = findViewById(R.id.listViewCarrito);
+        KNCarritoAdapterListView customAdapter = new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito);
 
+        listViewCarrito.setAdapter(customAdapter);
         confirmarCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmarCompra();
             }
         });
+        totalPrecio = findViewById(R.id.totalPrecio);
+        String precioTotal = this.calcularPrecioTotal();
+        totalPrecio.setText("($" + precioTotal + ")");
+        configListView(listViewCarrito);
+    }
+
+    private String calcularPrecioTotal() {
+        String result = null;
+        float valor = 0;
+        ProductoCarrito pc = null;
+        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        while(it.hasNext()){
+            pc = it.next();
+            valor = valor + Float.valueOf(pc.getPrecio());
+        }
+        result = String.valueOf(valor);
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     private void confirmarCompra() {
@@ -138,4 +100,22 @@ public class CarritoActivity extends FragmentActivity {
     private void initializeService() {
     }
 
+    public void actualizarListaProductosCarrito() {
+        listViewCarrito.setAdapter(new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito));
+        String precioTotal = this.calcularPrecioTotal();
+        totalPrecio.setText("($" + precioTotal + ")");
+    }
+
+    private void configListView(ListView lv){
+        this.setTerminoCargaListado(false);
+
+
+        final ViewTreeObserver.OnDrawListener ol = new ViewTreeObserver.OnDrawListener() {
+            @Override
+            public void onDraw() {
+                setTerminoCargaListado(true);
+            }
+        };
+        lv.getViewTreeObserver().addOnDrawListener(ol);
+    }
 }

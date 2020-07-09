@@ -40,7 +40,7 @@ public class TagReadyToGoActivity extends FragmentActivity {
         this.configureWidgets();
         this.askForWriteStoragePermission();
         this.initializeCreator();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -55,10 +55,19 @@ public class TagReadyToGoActivity extends FragmentActivity {
             pc.setTitleFontSize(ConstantsAdmin.selectedTitleFontSize);
             pc.setTieneTitulo(true);
             pc.setIdAreaTitulo((int)pc.getAreaTitulo().getTextAreasId());
+            pc.setAnchoAreaTituto(ConstantsAdmin.selectedLabelAttrbTitle.getWidth());
+            pc.setLargoAreaTituto(ConstantsAdmin.selectedLabelAttrbTitle.getHeight());
+            pc.setEsMultilineaTituto(ConstantsAdmin.selectedLabelAttrbTitle.getMultiline());
+            pc.setFromXTituto(ConstantsAdmin.selectedLabelAttrbTitle.getFromX());
+            pc.setFromYTituto(ConstantsAdmin.selectedLabelAttrbTitle.getFromY());
         }else{
             pc.setTieneTitulo(false);
         }
-
+        pc.setAnchoAreaTexto(ConstantsAdmin.selectedLabelAttrbText.getWidth());
+        pc.setLargoAreaTexto(ConstantsAdmin.selectedLabelAttrbText.getHeight());
+        pc.setEsMultilineaTexto(ConstantsAdmin.selectedLabelAttrbText.getMultiline());
+        pc.setFromXTexto(ConstantsAdmin.selectedLabelAttrbText.getFromX());
+        pc.setFromYTexto(ConstantsAdmin.selectedLabelAttrbText.getFromY());
         pc.setAreaTexto(ConstantsAdmin.selectedLabelAttrbText);
         pc.setBackground(ConstantsAdmin.selectedBackground);
         pc.setCreador(ConstantsAdmin.currentCreator);
@@ -70,12 +79,20 @@ public class TagReadyToGoActivity extends FragmentActivity {
         pc.setBackgroundFilename(ConstantsAdmin.selectedBackgroundFilename);
         pc.setIdAreaTexto((int)pc.getAreaTexto().getTextAreasId());
         pc.setIdCreador((int)pc.getCreador().getId());
+        pc.setRound(ConstantsAdmin.currentCreator.getRound());
+        pc.setAnchoTag(ConstantsAdmin.currentCreator.getWidth());
+        pc.setLargoTag(ConstantsAdmin.currentCreator.getHeight());
+        pc.setNombre(ConstantsAdmin.currentProduct.getName());
+        pc.setCantidad(ConstantsAdmin.currentProduct.getQuantity());
+        pc.setModelo(ConstantsAdmin.currentProduct.getModel());
+        pc.setPrecio(ConstantsAdmin.currentProduct.getPrice());
         ConstantsAdmin.agregarProductoAlCarrito(pc);
 
-        createAlertDialog(getString(R.string.tag_agregado_carrito), "");
+      //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
         ConstantsAdmin.createProductoCarrito(pc, this);
         ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
         ConstantsAdmin.finalizarHastaMenuPrincipal = true;
+        ConstantsAdmin.clearSelections();
         finish();
     }
 

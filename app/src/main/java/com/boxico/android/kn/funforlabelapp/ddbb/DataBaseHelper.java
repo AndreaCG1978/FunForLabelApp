@@ -34,6 +34,23 @@ class DataBaseHelper extends SQLiteOpenHelper {
             + ConstantsAdmin.KEY_ID_CREATOR + " integer, "
             + ConstantsAdmin.KEY_TIENE_TITULO + " integer, "
             + ConstantsAdmin.KEY_ID_AREA_TITULO + " integer, "
+            + ConstantsAdmin.KEY_WIDTH_TAG + " integer, "
+            + ConstantsAdmin.KEY_HEIGHT_TAG + " integer, "
+            + ConstantsAdmin.KEY_ROUND + " integer, "
+            + ConstantsAdmin.KEY_WIDTH_AREA_TEXTO + " integer, "
+            + ConstantsAdmin.KEY_HEIGHT_AREA_TEXTO + " integer, "
+            + ConstantsAdmin.KEY_ES_MULTILINEA_TEXTO + " integer, "
+            + ConstantsAdmin.KEY_FROM_X_TEXTO + " integer, "
+            + ConstantsAdmin.KEY_FROM_Y_TEXTO + " integer, "
+            + ConstantsAdmin.KEY_WIDTH_AREA_TITULO + " integer, "
+            + ConstantsAdmin.KEY_HEIGHT_AREA_TITULO + " integer, "
+            + ConstantsAdmin.KEY_ES_MULTILINEA_TITULO + " integer, "
+            + ConstantsAdmin.KEY_FROM_X_TITULO + " integer, "
+            + ConstantsAdmin.KEY_FROM_Y_TITULO + " integer, "
+            + ConstantsAdmin.KEY_NOMBRE_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_PRECIO_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_MODELO_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_ID_AREA_TEXTO + " integer);";
 
 	public DataBaseHelper(Context context) {

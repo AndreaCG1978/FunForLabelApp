@@ -36,6 +36,8 @@ import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,6 +86,23 @@ public class ConstantsAdmin {
     public static final String KEY_ID_AREA_TEXTO = "idAreaTexto";
     public static final String KEY_COMENTARIO_USR = "comentarioUsr";
     public static final String KEY_TIENE_TITULO = "tieneTitulo" ;
+    public static final String KEY_WIDTH_TAG = "widthTag" ;
+    public static final String KEY_HEIGHT_TAG = "heightTag" ;
+    public static final String KEY_ROUND = "roundValor";
+    public static final String KEY_WIDTH_AREA_TEXTO = "widthAreaTexto" ;
+    public static final String KEY_HEIGHT_AREA_TEXTO = "heightAreaTexto";
+    public static final String KEY_ES_MULTILINEA_TEXTO = "esMultilineaTexto" ;
+    public static final String KEY_FROM_X_TEXTO = "fromXTexto";
+    public static final String KEY_FROM_Y_TEXTO = "fromYTexto";
+    public static final String KEY_WIDTH_AREA_TITULO = "widthAreaTitulo" ;
+    public static final String KEY_HEIGHT_AREA_TITULO = "heightAreaTitulo";
+    public static final String KEY_ES_MULTILINEA_TITULO = "esMultilineaTitulo" ;
+    public static final String KEY_FROM_X_TITULO = "fromXTitulo";
+    public static final String KEY_FROM_Y_TITULO = "fromYTitulo";
+    public static final String KEY_NOMBRE_PRODUCTO = "nombreProducto" ;
+    public static final String KEY_PRECIO_PRODUCTO = "precio" ;
+    public static final String KEY_CANTIDAD_PRODUCTO = "cantidad" ;
+    public static final String KEY_MODELO_PRODUCTO = "modelo" ;
 
 
     public static String mensaje = null;
@@ -102,16 +121,23 @@ public class ConstantsAdmin {
     public static final String GEOCODIGOARGENTINA = "AR";
     public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
     public static final String GEOIDCAPITALFEDERAL = "3433955";
-    public static Customer currentCustomer = null;
+
     public static boolean customerJustCreated = false;
     public static long[] categories = {46};
     public static long currentLanguage;
     public static Category currentCategory;
-    public static Product currentProduct;
+
     public static double MILLS_TO_PXL = 3.7795275591;
     public static String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
     public static long ID_CREATOR_MINICIRCULARES = 59;
     public static Properties fflProperties;
+
+    public static boolean finalizarHastaMenuPrincipal;
+    public static Customer currentCustomer = null;
+    public static List<ProductoCarrito> productosDelCarrito = new ArrayList<ProductoCarrito>();
+
+    public static Product currentProduct;
+    public static String selectedBackgroundFilename;
     public static Bitmap selectedBackground;
     public static float selectedTitleFontSize;
     public static int selectedTitleFontColor;
@@ -124,11 +150,6 @@ public class ConstantsAdmin {
     public static Creator currentCreator;
     public static String textEntered;
     public static String titleEntered;
-    public static boolean finalizarHastaMenuPrincipal;
-    public static String selectedBackgroundFilename;
-    public static List<ProductoCarrito> productosDelCarrito = new ArrayList<ProductoCarrito>();
-
-
 
     public static float pxToMm(float px, Context context){
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -228,6 +249,91 @@ public class ConstantsAdmin {
     }
 
 
+    public static EditText createTextArea(float achicar, EditText ta, String hint, int idCreator, int anchoArea, int altoArea, int fromX, int fromY, int esMultilinea, boolean acot, RelativeLayout rl, Activity context) {
+        //EditText ta = new EditText(this);
+        ta.setHint(hint);
+        ta.setHintTextColor(Color.GRAY);
+        float temp = 0;
+        int w, h = 0;
+        if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, anchoArea,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 18;
+            }
+            temp = temp * achicar;
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, altoArea + 1,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            temp = temp * achicar;
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, fromY,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            temp = temp * achicar;
+            ta.setY(temp);
+
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, fromX,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 22;
+            }
+            temp = temp * achicar;
+            ta.setX(temp);
+        }else{
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, anchoArea ,
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            w = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, altoArea,
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            h = (int) (temp);
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, fromY,
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            ta.setY(temp);
+
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, fromX,
+                    context.getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            ta.setX(temp);
+        }
+        ViewGroup.LayoutParams layoutParamsTextTag = new ViewGroup.LayoutParams(w, h);
+        ta.setLayoutParams(layoutParamsTextTag);
+        ta.setGravity(Gravity.CENTER);
+        ta.setPadding(0, 0, 0, 0);
+        ta.setBackgroundColor(Color.TRANSPARENT);
+        ta.setTextColor(Color.BLACK);
+        ta.setEllipsize(TextUtils.TruncateAt.END);
+        if (esMultilinea == 0) {
+            ta.setSingleLine(true);
+            ta.setEllipsize(TextUtils.TruncateAt.END);
+            ta.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            ta.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            ta.setSingleLine(false);
+        }
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(Color.TRANSPARENT); //white background
+        border.setStroke(3, Color.RED); //black border with full opacity
+
+        rl.addView(ta);
+        return ta;
+    }
+
+
     public static void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
         int realWidthImage = 0;
         int realHeightImage = 0;
@@ -267,6 +373,48 @@ public class ConstantsAdmin {
 
     }
 
+
+    public static void customizeBackground(float achicar, Bitmap img, int w, int h, long idCreator, int round, boolean acot, RelativeLayout rl, Activity context) {
+        int realWidthImage = 0;
+        int realHeightImage = 0;
+        if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
+                    context.getResources().getDisplayMetrics());
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            temp = temp * achicar;
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, h,
+                    context.getResources().getDisplayMetrics());
+
+            if (acot) {
+                temp = temp - temp * 3 / 19;
+            }
+            temp = temp * achicar;
+            realHeightImage = (int) temp;
+        } else {
+            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
+                    context.getResources().getDisplayMetrics());
+
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            realWidthImage = (int) temp;
+            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM,h,
+                    context.getResources().getDisplayMetrics());
+            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            temp = temp * achicar;
+            realHeightImage = (int) temp;
+        }
+        Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
+        if (round > 0) {
+            b = getRoundedCornerBitmap(b, round);
+        }
+
+        Drawable d = new BitmapDrawable(context.getResources(), b);
+        rl.setBackground(d);
+
+    }
 
     public static void createLogin(Customer currentCustomer, Context ctx) {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
@@ -422,6 +570,23 @@ public class ConstantsAdmin {
         int idCreador;
         int idAreaTitulo;
         int idAreaTexto;
+        int anchoTexto;
+        int largoTexto;
+        int fromXTexto;
+        int fromYTexto;
+        int esMultilineaTexto;
+        int anchoTitulo;
+        int largoTitulo;
+        int fromXTitulo;
+        int fromYTitulo;
+        int esMultilineaTitulo;
+        int anchoTag;
+        int largoTag;
+        int round;
+        String nombre;
+        String precio;
+        String cantidad;
+        String modelo;
         ProductoCarrito item = null;
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
@@ -438,11 +603,21 @@ public class ConstantsAdmin {
                 tituloSize = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO_TAMANIO));
                 tituloColor = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TITULO_COLOR));
                 idAreaTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_AREA_TITULO));
+                anchoTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_WIDTH_AREA_TITULO));
+                largoTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_HEIGHT_AREA_TITULO));
+                fromXTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_X_TITULO));
+                fromYTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_Y_TITULO));
+                esMultilineaTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO));
                 item.setTitulo(titulo);
                 item.setTitleFontName(tituloFuente);
                 item.setTitleFontSize(Float.valueOf(tituloSize));
                 item.setFontTitleColor(tituloColor);
                 item.setIdAreaTitulo(idAreaTitulo);
+                item.setAnchoAreaTituto(anchoTitulo);
+                item.setLargoAreaTituto(largoTitulo);
+                item.setFromXTituto(fromXTitulo);
+                item.setFromYTituto(fromYTitulo);
+                item.setEsMultilineaTituto(esMultilineaTitulo);
             }else{
                 item.setTieneTitulo(false);
             }
@@ -451,11 +626,35 @@ public class ConstantsAdmin {
             textoSize = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO_TAMANIO));
             textoColor = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_TEXTO_COLOR));
             idAreaTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_AREA_TEXTO));
+            anchoTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_WIDTH_AREA_TEXTO));
+            largoTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_HEIGHT_AREA_TEXTO));
+            fromXTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_X_TEXTO));
+            fromYTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_Y_TEXTO));
+            esMultilineaTexto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ES_MULTILINEA_TEXTO));
+            round = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ROUND));
+            anchoTag = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_WIDTH_TAG));
+            largoTag = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_HEIGHT_TAG));
+            nombre = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_NOMBRE_PRODUCTO));
+            modelo = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_MODELO_PRODUCTO));
+            precio = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_PRECIO_PRODUCTO));
+            cantidad = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO));
+            item.setRound(round);
+            item.setAnchoTag(anchoTag);
+            item.setLargoTag(largoTag);
             item.setTexto(texto);
             item.setTextFontName(textoFuente);
             item.setTextFontSize(Float.valueOf(textoSize));
             item.setFontTextColor(textoColor);
             item.setIdAreaTexto(idAreaTexto);
+            item.setAnchoAreaTexto(anchoTexto);
+            item.setLargoAreaTexto(largoTexto);
+            item.setFromXTexto(fromXTexto);
+            item.setFromYTexto(fromYTexto);
+            item.setEsMultilineaTexto(esMultilineaTexto);
+            item.setNombre(nombre);
+            item.setCantidad(cantidad);
+            item.setModelo(modelo);
+            item.setPrecio(precio);
             backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
             comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
             idCreador = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_CREATOR));
@@ -498,4 +697,32 @@ public class ConstantsAdmin {
         productosDelCarrito.add(pc);
     }
 
+    public static Bitmap getImageFromStorage(String backgroundFilename) {
+        Bitmap img = null;
+        File f = getFile(backgroundFilename);
+        try {
+            img = BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return img;
+    }
+
+    public static void clearSelections() {
+        currentProduct = null;
+        String selectedBackgroundFilename= null;
+        selectedBackground= null;
+        selectedTitleFontSize= 0;
+        selectedTitleFontColor= -1;
+        selectedTitleFont= null;
+        selectedTextFontColor= -1;
+        selectedTextFontSize= -1;
+        selectedTextFont= null;
+        selectedLabelAttrbText= null;
+        selectedLabelAttrbTitle= null;
+        currentCreator= null;
+        textEntered= null;
+        titleEntered= null;
+
+    }
 }
