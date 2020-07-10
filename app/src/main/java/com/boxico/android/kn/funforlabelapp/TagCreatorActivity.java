@@ -3,46 +3,30 @@ package com.boxico.android.kn.funforlabelapp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -52,7 +36,6 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
-import com.boxico.android.kn.funforlabelapp.utils.ColorPickerDialog;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
@@ -62,14 +45,16 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import petrov.kristiyan.colorpicker.ColorPal;
+import petrov.kristiyan.colorpicker.ColorPicker;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -78,7 +63,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 //import static com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin.URL_LABEL_IMAGES;
 
-public class TagCreatorActivity extends FragmentActivity {
+public class TagCreatorActivity extends AppCompatActivity {
 
     private TagCreatorActivity me;
     TextView textWellcomeUsr = null;
@@ -119,7 +104,7 @@ public class TagCreatorActivity extends FragmentActivity {
         this.configureWidgets();
         this.askForWriteStoragePermission();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
     }
 
@@ -880,8 +865,168 @@ public class TagCreatorActivity extends FragmentActivity {
         Intent intent = new Intent(me, TagReadyToGoActivity.class);
         startActivity(intent);
     }
+/*
+    private void openColorPicker(){
+        ColorPicker colorPicker = new ColorPicker(me);
+        colorPicker.show();
+        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+            @Override
+            public void onChooseColor(int position,int color) {
+                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                    textTag.setTextColor(color);
+                    if(titleTag != null){
+                        titleTag.setTextColor(color);
+                    }
+                }else {
+                    if (textTag.hasFocus()) {
+                        selectedTextColor = color;
+                        textTag.setTextColor(color);
+                    } else if (titleTag != null && titleTag.hasFocus()) {
+                        titleTag.setTextColor(color);
+                        selectedTitleColor = color;
+                    }
+                }
+                pickColor.setTextColor(color);
+            }
+
+            @Override
+            public void onCancel(){
+                // put code
+            }
+        });
+    }*/
+
 
     private void openColorPicker() {
+
+        ColorPicker colorPicker = new ColorPicker(me);
+        ArrayList<String> colorToHex = new ArrayList<>();
+        colorToHex.add("#e8d4a9");
+        colorToHex.add("#984328");
+        colorToHex.add("#373049");
+        colorToHex.add("#bada55");
+        colorToHex.add("#4c7093");
+        colorToHex.add("#ee82ee");
+        colorToHex.add("#53d1ba");
+        colorToHex.add("#ffdab9");
+        colorToHex.add("#f2c273");
+        colorToHex.add("#73947d");
+        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+            @Override
+            public void onChooseColor(int position,int color) {
+                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                    textTag.setTextColor(color);
+                    if(titleTag != null){
+                        titleTag.setTextColor(color);
+                    }
+                }else {
+                    if (textTag.hasFocus()) {
+                        selectedTextColor = color;
+                        textTag.setTextColor(color);
+                    } else if (titleTag != null && titleTag.hasFocus()) {
+                        titleTag.setTextColor(color);
+                        selectedTitleColor = color;
+                    }
+                }
+                pickColor.setTextColor(color);
+            }
+
+            @Override
+            public void onCancel(){
+                // put code
+            }
+        });
+        colorPicker.setColors(colorToHex);
+        colorPicker.setColumns(5);
+        colorPicker.show();
+
+              /*
+                setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
+            @Override
+            public void setOnFastChooseColorListener(int position, int color) {
+                // put code
+                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                    textTag.setTextColor(color);
+                    if(titleTag != null){
+                        titleTag.setTextColor(color);
+                    }
+                }else {
+                    if (textTag.hasFocus()) {
+                        selectedTextColor = color;
+                        textTag.setTextColor(color);
+                    } else if (titleTag != null && titleTag.hasFocus()) {
+                        titleTag.setTextColor(color);
+                        selectedTitleColor = color;
+                    }
+                }
+                pickColor.setTextColor(color);
+            }
+
+            @Override
+            public void onCancel(){
+                // put code
+            }
+        }).setDefaultColorButton(Color.parseColor("#f84c44")).setColumns(5).setColors(colorToHex).show();
+*/
+     /*   ColorPicker colorPicker = new ColorPicker(me);
+        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+            @Override
+            public void onChooseColor(int position,int color) {
+                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                    textTag.setTextColor(color);
+                    if(titleTag != null){
+                        titleTag.setTextColor(color);
+                    }
+                }else {
+                    if (textTag.hasFocus()) {
+                        selectedTextColor = color;
+                        textTag.setTextColor(color);
+                    } else if (titleTag != null && titleTag.hasFocus()) {
+                        titleTag.setTextColor(color);
+                        selectedTitleColor = color;
+                    }
+                }
+                pickColor.setTextColor(color);
+            }
+
+            @Override
+            public void onCancel(){
+                // put code
+            }
+        });
+        colorPicker.show();*/
+
+        /*
+        colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
+            @Override
+            public void setOnFastChooseColorListener(int position, int color) {
+                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                    textTag.setTextColor(color);
+                    if(titleTag != null){
+                        titleTag.setTextColor(color);
+                    }
+                }else {
+                    if (textTag.hasFocus()) {
+                        selectedTextColor = color;
+                        textTag.setTextColor(color);
+                    } else if (titleTag != null && titleTag.hasFocus()) {
+                        titleTag.setTextColor(color);
+                        selectedTitleColor = color;
+                    }
+                }
+                pickColor.setTextColor(color);
+            }
+
+            @Override
+            public void onCancel(){
+                // put code
+            }
+        }).setDefaultColorButton(Color.parseColor("#f84c44")).setColumns(5).show();
+*/
+        /*
+
+
+
         AmbilWarnaDialog myColorPicker = new AmbilWarnaDialog(this, Color.BLACK, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
@@ -907,6 +1052,6 @@ public class TagCreatorActivity extends FragmentActivity {
                 pickColor.setTextColor(color);
             }
         });
-        myColorPicker.show();
+        myColorPicker.show();*/
     }
 }

@@ -21,6 +21,13 @@
             android:layout_margin="10dp"
             android:padding="3dp">
 
+            <ImageButton
+                android:id="@+id/verProductoCarrito"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/view_tag"
+                android:layout_gravity="right|top" />
+
               <RelativeLayout
                 android:id="@+id/relativeProductoCarrito"
                 android:layout_width="wrap_content"
@@ -96,13 +103,15 @@
 
     </LinearLayout>
 
+
+
       <ImageButton
           android:id="@+id/borrarProductoCarrito"
-          android:layout_width="28dp"
+          android:layout_width="30dp"
           android:layout_height="30dp"
           android:background="@drawable/delete"
           android:layout_gravity="right|top"
-          android:layout_marginRight="20dp"
+          android:layout_marginRight="10dp"
           android:layout_marginTop="10dp"/>
 
 

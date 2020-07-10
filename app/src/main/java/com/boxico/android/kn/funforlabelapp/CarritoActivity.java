@@ -24,7 +24,7 @@ public class CarritoActivity extends FragmentActivity {
     Button confirmarCarrito = null;
     ListView listViewCarrito = null;
     TextView totalPrecio = null;
-    private boolean terminoCargaListado = true;
+  /*  private boolean terminoCargaListado = true;
 
     public boolean isTerminoCargaListado() {
         return terminoCargaListado;
@@ -33,7 +33,7 @@ public class CarritoActivity extends FragmentActivity {
     public void setTerminoCargaListado(boolean terminoCargaListado) {
         this.terminoCargaListado = terminoCargaListado;
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +76,7 @@ public class CarritoActivity extends FragmentActivity {
         totalPrecio = findViewById(R.id.totalPrecio);
         String precioTotal = this.calcularPrecioTotal();
         totalPrecio.setText("($" + precioTotal + ")");
-        configListView(listViewCarrito);
+       // configListView(listViewCarrito);
     }
 
     private String calcularPrecioTotal() {
@@ -106,7 +106,7 @@ public class CarritoActivity extends FragmentActivity {
         totalPrecio.setText("($" + precioTotal + ")");
     }
 
-    private void configListView(ListView lv){
+  /*  private void configListView(ListView lv){
         this.setTerminoCargaListado(false);
 
 
@@ -117,5 +117,5 @@ public class CarritoActivity extends FragmentActivity {
             }
         };
         lv.getViewTreeObserver().addOnDrawListener(ol);
-    }
+    }*/
 }

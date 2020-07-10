@@ -28,6 +28,7 @@ import com.boxico.android.kn.funforlabelapp.CarritoActivity;
 import com.boxico.android.kn.funforlabelapp.LoginActivity;
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 import java.io.File;
@@ -81,7 +82,14 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
                 borrarProductoCarrito(pc);
             }
         });
-        mContext.setTerminoCargaListado(false);
+        ImageButton ver =  v.findViewById(R.id.verProductoCarrito);
+        ver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openViewTag(pc);
+            }
+        });
+     //   mContext.setTerminoCargaListado(false);
         v.refreshDrawableState();
         return v;
     }
@@ -112,9 +120,42 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
     }
 
 
-    private void initializeCreator(ProductoCarrito pc, RelativeLayout linearTag) {
+    private View initPopupViewTag(ProductoCarrito pc)
+    {
+        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        View popupInputDialogView = layoutInflater.inflate(R.layout.tag_view, null);
+        RelativeLayout rl = popupInputDialogView.findViewById(R.id.relativeTagView);
+        initializeCreatorFull(pc, rl);
+        return popupInputDialogView;
+    }
 
-        float achicar = 0.35f;
+    private void openViewTag(ProductoCarrito pc) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+        View v = initPopupViewTag(pc);
+        alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
+        alertDialogBuilder.setCancelable(true);
+
+
+        // Set the inflated layout view object to the AlertDialog builder.
+        alertDialogBuilder.setView(v);
+
+        // Create AlertDialog and show.
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+/*
+
+        cancelFormButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });*/
+    }
+
+    private void initializeCreatorFull(ProductoCarrito pc, RelativeLayout linearTag) {
+
+        float achicar = 0.70f;
 
         //int height = displayMetrics.heightPixels;
 
@@ -149,6 +190,47 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
             titleTag.setTypeface(face);
         }
 
+
+
+    }
+
+    private void initializeCreator(ProductoCarrito pc, RelativeLayout linearTag) {
+
+        float achicar = 0.35f;
+
+        //int height = displayMetrics.heightPixels;
+
+        boolean acotar = false;
+
+
+        Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
+        ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getIdCreador(), pc.getRound(), acotar, linearTag, mContext);
+
+        // CONFIGURACION DE UN AREA DE TEXTO
+/*
+        EditText textTag = null;
+        EditText titleTag = null;
+        textTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        if(pc.getIdAreaTitulo()!= -1) {
+            titleTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(),pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        }
+        textTag.setText(pc.getTexto());
+        textTag.setTextColor(pc.getFontTextColor());
+        textTag.setTextSize(TypedValue.TYPE_STRING, pc.getTextFontSize() * achicar);
+        File fileFont = ConstantsAdmin.getFile(pc.getTextFontName());
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);
+        textTag.setEnabled(false);
+        if(titleTag != null){
+            titleTag.setEnabled(false);
+            titleTag.setText(pc.getTitulo());
+            titleTag.setTextColor(pc.getFontTitleColor());
+            titleTag.setTextSize(TypedValue.TYPE_STRING, pc.getTitleFontSize() * achicar);
+            fileFont = ConstantsAdmin.getFile(pc.getTitleFontName());
+            face = Typeface.createFromFile(fileFont);
+            titleTag.setTypeface(face);
+        }
+*/
 
 
     }
