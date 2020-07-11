@@ -82,4 +82,5 @@
     <string name="direccion_envio_title">░ DIRECCION DE ENVIO</string>
     <string name="titulo_envio">INFORMACION DE ENVIO</string>
     <string name="metodo_envio_title">░ METODO DE ENVIO</string>
+    <string name="no_agrego_al_carrito">No agregaste ningún producto al carrito.</string>
 </resources>

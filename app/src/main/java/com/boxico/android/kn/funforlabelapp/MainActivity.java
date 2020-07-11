@@ -119,8 +119,12 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void openVerCarrito() {
-        Intent intent = new Intent(me, CarritoActivity.class);
-        startActivity(intent);
+        if(ConstantsAdmin.productosDelCarrito != null && ConstantsAdmin.productosDelCarrito.size() > 0){
+            Intent intent = new Intent(me, CarritoActivity.class);
+            startActivity(intent);
+        }else{
+            createAlertDialog(getString(R.string.no_agrego_al_carrito), getString(R.string.atencion));
+        }
     }
 
     private class LoadCategoriesTask extends AsyncTask<Long, Integer, Integer> {
