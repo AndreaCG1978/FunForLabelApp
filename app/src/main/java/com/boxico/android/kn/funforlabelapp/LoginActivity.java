@@ -38,6 +38,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -132,7 +134,8 @@ public class LoginActivity extends FragmentActivity {
                     .getExternalStorageDirectory().toString() +"/"
                     + ConstantsAdmin.PROPERTIES_FILE;
             inputStream = new FileInputStream(filename);
-            properties.load(inputStream);
+
+            properties.load(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

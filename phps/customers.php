@@ -48,6 +48,17 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
+		}else if(isset($_GET['idCustomer'])){
+			$idCustomer = tep_db_prepare_input($_GET['idCustomer']);
+			$consulta = "SELECT * FROM ". TABLE_ADDRESS_BOOK . " where customers_id = ".$idCustomer;
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			if($resultado != null){
+				echo json_encode([$resultado],JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
 		}else
 		{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);

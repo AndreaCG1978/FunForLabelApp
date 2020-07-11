@@ -901,16 +901,35 @@ public class TagCreatorActivity extends AppCompatActivity {
 
         ColorPicker colorPicker = new ColorPicker(me);
         ArrayList<String> colorToHex = new ArrayList<>();
-        colorToHex.add("#e8d4a9");
-        colorToHex.add("#984328");
-        colorToHex.add("#373049");
-        colorToHex.add("#bada55");
-        colorToHex.add("#4c7093");
-        colorToHex.add("#ee82ee");
-        colorToHex.add("#53d1ba");
-        colorToHex.add("#ffdab9");
-        colorToHex.add("#f2c273");
-        colorToHex.add("#73947d");
+        colorToHex.add("#FEFEFE");
+        colorToHex.add("#F69060");
+        colorToHex.add("#F3755C");
+        colorToHex.add("#F0573F");
+        colorToHex.add("#EF567E");
+
+        colorToHex.add("#96989A");
+        colorToHex.add("#F5A6C8");
+        colorToHex.add("#C8A2CB");
+        colorToHex.add("#35A27A");
+        colorToHex.add("#48887B");
+
+        colorToHex.add("#348164");
+        colorToHex.add("#285D48");
+        colorToHex.add("#4BC1BE");
+        colorToHex.add("#0077BD");
+        colorToHex.add("#599D9E");
+
+        colorToHex.add("#336D83");
+        colorToHex.add("#2C547E");
+        colorToHex.add("#4D3C78");
+        colorToHex.add("#73876F");
+        colorToHex.add("#373435");
+
+        colorToHex.add("#3E4095");
+        colorToHex.add("#00A859");
+        colorToHex.add("#ED3237");
+        colorToHex.add("#EC268F");
+        colorToHex.add("#A53692");
         colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
             @Override
             public void onChooseColor(int position,int color) {

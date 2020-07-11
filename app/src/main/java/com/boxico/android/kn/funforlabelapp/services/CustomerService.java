@@ -1,5 +1,6 @@
 package com.boxico.android.kn.funforlabelapp.services;
 
+import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public interface CustomerService {
 
     @GET(API_ROUTE)
     Call< List<Customer>> getCustomer(@Query("email") String usr, @Query("tokenFFL") long tokenFFL);
+
+    @GET(API_ROUTE)
+    Call< List<AddressBook>> getCustomerAddress(@Query("idCustomer") long idCustomer, @Query("tokenFFL") long tokenFFL);
 
     @PUT(API_ROUTE + "/{email}/")
     @FormUrlEncoded

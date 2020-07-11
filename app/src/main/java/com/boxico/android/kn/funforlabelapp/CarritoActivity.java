@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -94,6 +95,8 @@ public class CarritoActivity extends FragmentActivity {
     }
 
     private void confirmarCompra() {
+        Intent intent = new Intent(me, ConfigurarEnvioActivity.class);
+        startActivity(intent);
     }
 
 
