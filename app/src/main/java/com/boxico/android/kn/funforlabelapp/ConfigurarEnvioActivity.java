@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -39,6 +40,16 @@ public class ConfigurarEnvioActivity extends FragmentActivity {
     private TextView textDirEnvio;
     private CustomerService customerService;
     private AddressBook addressCustomer;
+    private RadioButton opcion1;
+    private RadioButton opcion2;
+    private RadioButton opcion3;
+    private RadioButton opcion4;
+    private RadioButton opcion5;
+    private TextView textRadio1;
+    private TextView textRadio2;
+    private TextView textRadio3;
+    private TextView textRadio4;
+    private TextView textRadio5;
 
 
     @Override
@@ -158,6 +169,47 @@ public class ConfigurarEnvioActivity extends FragmentActivity {
         textIntroEnvio = findViewById(R.id.textIntroEnvio);
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO));
+        if(ConstantsAdmin.fflProperties.containsKey(ConstantsAdmin.ENVIO1_TITULO)){
+            opcion1 = (RadioButton) findViewById(R.id.radio_opcion1);
+            textRadio1 = (TextView) findViewById(R.id.radio_opcion1_desc);
+            opcion1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO1_TITULO));
+            textRadio1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO1_DESC));
+            opcion1.setVisibility(View.VISIBLE);
+            textRadio1.setVisibility(View.VISIBLE);
+        }
+        if(ConstantsAdmin.fflProperties.containsKey(ConstantsAdmin.ENVIO2_TITULO)){
+            opcion2 = (RadioButton) findViewById(R.id.radio_opcion2);
+            textRadio2 = (TextView) findViewById(R.id.radio_opcion2_desc);
+            opcion2.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO2_TITULO));
+            textRadio2.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO2_DESC));
+            opcion2.setVisibility(View.VISIBLE);
+            textRadio2.setVisibility(View.VISIBLE);
+        }
+        if(ConstantsAdmin.fflProperties.containsKey(ConstantsAdmin.ENVIO3_TITULO)){
+            opcion3 = (RadioButton) findViewById(R.id.radio_opcion3);
+            textRadio3 = (TextView) findViewById(R.id.radio_opcion3_desc);
+            opcion3.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO3_TITULO));
+            textRadio3.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO3_DESC));
+            opcion3.setVisibility(View.VISIBLE);
+            textRadio3.setVisibility(View.VISIBLE);
+        }
+        if(ConstantsAdmin.fflProperties.containsKey(ConstantsAdmin.ENVIO4_TITULO)){
+            opcion4 = (RadioButton) findViewById(R.id.radio_opcion4);
+            textRadio4 = (TextView) findViewById(R.id.radio_opcion4_desc);
+            opcion4.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO4_TITULO));
+            textRadio4.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO4_DESC));
+            opcion4.setVisibility(View.VISIBLE);
+            textRadio4.setVisibility(View.VISIBLE);
+        }
+        if(ConstantsAdmin.fflProperties.containsKey(ConstantsAdmin.ENVIO5_TITULO)){
+            opcion5 = (RadioButton) findViewById(R.id.radio_opcion5);
+            textRadio5 = (TextView) findViewById(R.id.radio_opcion5_desc);
+            opcion5.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO5_TITULO));
+            textRadio5.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ENVIO5_DESC));
+            opcion5.setVisibility(View.VISIBLE);
+            textRadio5.setVisibility(View.VISIBLE);
+        }
+
 
 
 
