@@ -20,9 +20,10 @@ import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.io.File;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
-public class TagReadyToGoActivity extends FragmentActivity {
+public class TagReadyToGoActivity extends AppCompatActivity {
 
     private TagReadyToGoActivity me;
     TextView textWellcomeUsr = null;
@@ -40,8 +41,8 @@ public class TagReadyToGoActivity extends FragmentActivity {
         this.configureWidgets();
         this.askForWriteStoragePermission();
         this.initializeCreator();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

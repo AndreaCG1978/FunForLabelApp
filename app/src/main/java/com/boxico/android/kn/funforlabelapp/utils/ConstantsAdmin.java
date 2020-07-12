@@ -153,18 +153,6 @@ public class ConstantsAdmin {
     public static String titleEntered;
 
 
-    public static String ENVIO1_TITULO = "ENVIO1_TITULO";
-    public static String ENVIO2_TITULO = "ENVIO2_TITULO";
-    public static String ENVIO3_TITULO = "ENVIO3_TITULO";
-    public static String ENVIO4_TITULO = "ENVIO4_TITULO";
-    public static String ENVIO5_TITULO = "ENVIO5_TITULO";
-
-
-    public static String ENVIO1_DESC = "ENVIO1_DESC";
-    public static String ENVIO2_DESC = "ENVIO2_DESC";
-    public static String ENVIO3_DESC = "ENVIO3_DESC";
-    public static String ENVIO4_DESC = "ENVIO4_DESC";
-    public static String ENVIO5_DESC = "ENVIO5_DESC";
 
     public static float pxToMm(float px, Context context){
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();

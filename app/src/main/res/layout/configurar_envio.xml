@@ -4,12 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@drawable/bg_body"
     android:layout_marginBottom="20dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:isScrollContainer="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,8 +67,8 @@
             android:textColor="@color/color_negro"
             android:gravity="left"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:textSize="11sp"
+            android:layout_marginRight="10dp"
+            android:textSize="12sp"
             android:background="@android:color/white"
             />
 
@@ -90,151 +93,32 @@
             android:gravity="center"
             android:layout_margin="10dp"
             android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:background="@android:color/white"
             />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/metodo_envio_title"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/color_gris_oscuro"
-                android:textStyle="bold"
-                android:layout_gravity="left"
-                android:textSize="13sp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metodo_envio_title"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"/>
 
             <RadioGroup
                 android:id="@+id/opciones_envio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="left"
-                android:layout_margin="10dp"
+                android:layout_margin="15dp"
                 android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radio_opcion1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:visibility="gone"
-                    android:textColor="@color/color_negro"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:layout_marginTop="10dp"
-                    />
 
-                <TextView
-                    android:id="@+id/radio_opcion1_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:visibility="gone"
-                    android:textColor="@color/color_negro"
-                    android:textSize="13sp"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="35dp"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_opcion2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:visibility="gone"
-                    android:textColor="@color/color_negro"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:layout_marginTop="10dp"/>
-
-                <TextView
-                    android:id="@+id/radio_opcion2_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="@color/color_negro"
-                    android:textSize="13sp"
-                    android:visibility="gone"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="35dp"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_opcion3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:textColor="@color/color_negro"
-                    android:textSize="17sp"
-                    android:visibility="gone"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:layout_marginTop="10dp"/>
-
-                <TextView
-                    android:id="@+id/radio_opcion3_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="@color/color_negro"
-                    android:textSize="13sp"
-                    android:visibility="gone"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="35dp"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_opcion4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:textColor="@color/color_negro"
-                    android:textSize="17sp"
-                    android:visibility="gone"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:layout_marginTop="10dp"/>
-
-                <TextView
-                    android:id="@+id/radio_opcion4_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="@color/color_negro"
-                    android:textSize="13sp"
-                    android:visibility="gone"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="35dp"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_opcion5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:textColor="@color/color_negro"
-                    android:textSize="17sp"
-                    android:visibility="gone"
-                    android:textStyle="bold"
-                    android:background="@android:color/white"
-                    android:layout_marginTop="10dp"/>
-
-                <TextView
-                    android:id="@+id/radio_opcion5_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="@color/color_negro"
-                    android:textSize="13sp"
-                    android:visibility="gone"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="35dp"
-                    />
 
 
             </RadioGroup>
