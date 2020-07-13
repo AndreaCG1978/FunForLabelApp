@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
+import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
@@ -104,6 +105,7 @@ public class ConstantsAdmin {
     public static final String KEY_CANTIDAD_PRODUCTO = "cantidad" ;
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
+    public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
 
 
     public static String mensaje = null;
@@ -151,7 +153,7 @@ public class ConstantsAdmin {
     public static Creator currentCreator;
     public static String textEntered;
     public static String titleEntered;
-
+    public static AddressBook addressCustomer;
 
 
     public static float pxToMm(float px, Context context){

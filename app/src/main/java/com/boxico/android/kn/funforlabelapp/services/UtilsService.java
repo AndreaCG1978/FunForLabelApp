@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp.services;
 
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
+import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ public interface UtilsService {
 
     @GET(API_ROUTE)
     Call<List<MetodoEnvio>> getAllShippingMethod(@Query("getAllShippingMethod") boolean getAllShippingMethod, @Query("tokenFFL") long tokenFFL);
+
+    @GET(API_ROUTE)
+    Call<List<MetodoPago>> getAllPaymentMethod(@Query("getAllPaymentMethod") boolean getAllPaymentMethod, @Query("tokenFFL") long tokenFFL);
 
 
 

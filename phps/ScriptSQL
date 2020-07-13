@@ -14,3 +14,19 @@ INSERT INTO shipping_method VALUES(3,"OCA envíos","Con seguimiento, se abona al
 INSERT INTO shipping_method VALUES(4,"Mensajeria CABA","Se abona al recibir, ($150).","0");
 INSERT INTO shipping_method VALUES(5,"Retiro por congreso o microcentro","Sin costo AR : 3 lb(s).","0");
 
+
+DROP TABLE IF EXISTS payment_method; 
+
+CREATE TABLE payment_method(
+  id int(20) NOT NULL,
+  name varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  description varchar(250) COLLATE utf8_spanish_ci,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+INSERT INTO payment_method VALUES(1,"Transferencia Bancaria.","Solicita los datos por mail.");
+INSERT INTO payment_method VALUES(2,"PayU","Dinero Mail.");
+INSERT INTO payment_method VALUES(3,"Mercado Pago","");
+
+
+

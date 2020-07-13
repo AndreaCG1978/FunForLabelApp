@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/bg_body"
+    android:layout_marginBottom="20dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+
+        <ImageView
+            android:layout_width="320dp"
+            android:layout_height="100dp"
+            android:src="@drawable/store_logo"
+            android:gravity="center_horizontal"
+            />
+
+
+
+        <TextView
+            android:id="@+id/textWellcomeUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/custom_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/titulo_pago"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/textIntroPago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_negro"
+            android:gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:textSize="12sp"
+            android:background="@android:color/white"
+            />
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metodo_pago_title"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"/>
+
+            <RadioGroup
+                android:id="@+id/opciones_pago"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_margin="15dp"
+                android:orientation="vertical">
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_comment"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
+
+            <EditText
+                android:id="@+id/entryCommentPago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="3"
+                android:maxLines="3"
+                android:gravity="left|top"
+                android:padding="4dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:background="@color/color_gris_muy_claro"
+                android:layout_margin="15dp"
+
+                />
+
+            <Button android:id="@+id/btnConfirmarPago"
+                android:layout_width="wrap_content"
+                android:text="@string/confirmar_datos"
+                android:layout_height="30dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="17dp"
+                android:padding="7dp"
+                android:layout_margin="25dp"
+                android:textStyle="bold"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/holo_red_dark"
+                />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

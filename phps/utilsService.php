@@ -28,6 +28,18 @@
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
 			
+		}else if(isset($_GET['getAllPaymentMethod'])){
+
+			$consulta = "SELECT * FROM payment_method";
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+			if($resultado != null){
+				echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
+			
 		}else
 		{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
