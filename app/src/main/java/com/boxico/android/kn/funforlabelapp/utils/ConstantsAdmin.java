@@ -106,6 +106,9 @@ public class ConstantsAdmin {
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
     public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
+    public static final String TIPO_OT_TOTAL = "TIPO_OT_TOTAL";
+    public static final String TIPO_OT_SUBTOTAL = "TIPO_OT_SUBTOTAL";
+    public static final String TIPO_OT_SHIPPING = "TIPO_OT_SHIPPING";
 
 
     public static String mensaje = null;
