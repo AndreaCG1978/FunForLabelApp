@@ -22,6 +22,8 @@ import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,8 +47,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     EditText entryComentario;
     TextView textFormaPago;
     TextView textDirEnvio;
+    TextView textFormaEnvio;
     TextView textDetalleTags;
+    TextView textMontoSubtotal;
+    TextView textFormaEnvioDetalle;
+    TextView textMontoTotal;
     private float precioTotalTags;
+    private float precioTotalEnvio;
 
 
     @Override
@@ -93,7 +100,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     private void configureWidgets() {
         textFormaPago = (TextView) findViewById(R.id.textFormaPago);
         textDirEnvio = (TextView) findViewById(R.id.textDirEnvio);
+        textFormaEnvio = (TextView) findViewById(R.id.textFormaEnvio);
         textDetalleTags = (TextView) findViewById(R.id.textDetalleTags);
+        textMontoSubtotal = (TextView) findViewById(R.id.textMontoSubtotal);
+        textMontoTotal = (TextView) findViewById(R.id.textMontoTotal);
+        textFormaEnvioDetalle = (TextView) findViewById(R.id.textFormaEnvioDetalle);
         this.cargarDetalleTags();
         this.cargarDetalleEnvio();
         this.cargarDetallePago();
@@ -101,8 +112,14 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
 
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
+        String precioTotal = String.valueOf(precioTotalTags + precioTotalEnvio);
+        precioTotal = precioTotal.substring(0, precioTotal.length() - 2);
+        textMontoTotal.setText(getString(R.string.label_total) + " $" + precioTotal);
 
         entryComentario = (EditText) findViewById(R.id.entryCommentPago);
+        if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
+            entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
+        }
 
 
 
@@ -125,24 +142,37 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
         }
         temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
-        temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA + "\n\n";
-        temp = temp + ConstantsAdmin.selectedShippingMethod.getName() + ": $" + ConstantsAdmin.selectedShippingMethod.getPrice() +  "\n";
-        temp = temp + ConstantsAdmin.selectedShippingMethod.getDescription() + "\n";
+        temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
+
         textDirEnvio.setText(temp);
+        temp = ConstantsAdmin.selectedShippingMethod.getName() + ": $" + ConstantsAdmin.selectedShippingMethod.getPrice() +  "\n";
+        textFormaEnvio.setText(temp);
+        temp = ConstantsAdmin.selectedShippingMethod.getDescription();
+        textFormaEnvioDetalle.setText(temp);
+        precioTotalEnvio = Float.valueOf(ConstantsAdmin.selectedShippingMethod.getPrice());
+
+
+
     }
 
     private void cargarDetalleTags() {
         ProductoCarrito pc;
         String temp = "";
+        String precio;
         precioTotalTags = 0;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             pc = (ProductoCarrito) it.next();
-            temp = temp + pc.getNombre() + "\t" + "$" + pc.getPrecio() + "\n";
+            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + "-"+ pc.getNombre() + ": $" + precio + "\n";
             precioTotalTags = precioTotalTags + Float.valueOf(pc.getPrecio());
         }
+        textDetalleTags.setPadding(3,3,3,3);
         textDetalleTags.setText(temp);
-        
+        String precioText = String.valueOf(precioTotalTags);
+        precioText = precioText.substring(0, precioText.length() - 2);
+        textMontoSubtotal.setText(getString(R.string.label_total_etiquetas) + "$" + precioText);
+
     }
 
 }

@@ -89,4 +89,7 @@
     <string name="detalle_compra">DETALLE DE SU COMPRA</string>
     <string name="forma_pago_title">░ FORMA DE PAGO</string>
     <string name="finalizar_compra">Efectuar Compra</string>
+    <string name="forma_envio_title">░ FORMA DE ENVIO</string>
+    <string name="label_total_etiquetas">Total en etiquetas:</string>
+    <string name="label_total">Total a pagar:</string>
 </resources>

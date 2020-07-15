@@ -55,7 +55,7 @@
             android:textColor="@color/color_gris_oscuro"
             android:textStyle="bold"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:textSize="17sp"
             android:fontFamily="sans-serif-smallcaps"
             android:background="@android:color/white"/>
@@ -66,11 +66,24 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
             android:gravity="left"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:background="@android:color/white"
             />
+
+            <TextView
+                android:id="@+id/textMontoSubtotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:gravity="left"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="10dp"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:background="@android:color/white"
+                />
 
             <TextView
             android:layout_width="wrap_content"
@@ -93,7 +106,44 @@
                 android:gravity="center"
                 android:layout_margin="10dp"
                 android:textStyle="bold"
+                android:textSize="15sp"
+                android:background="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forma_envio_title"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/textFormaEnvio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_marginTop="25dp"
+                android:gravity="left"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="20dp"
+                android:textStyle="bold"
                 android:textSize="16sp"
+                android:background="@android:color/white" />
+
+            <TextView
+                android:id="@+id/textFormaEnvioDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_negro"
+                android:gravity="left"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="20dp"
+                android:textSize="14sp"
                 android:background="@android:color/white" />
 
             <TextView
@@ -114,17 +164,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
-                android:gravity="center"
-                android:layout_margin="10dp"
+                android:layout_marginTop="22dp"
+                android:gravity="left"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="10dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:background="@android:color/white" />
 
             <TextView
+                android:id="@+id/textMontoTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:background="@android:color/white"
+                />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/enter_comment"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
@@ -137,20 +201,22 @@
                 android:id="@+id/entryCommentPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="3"
-                android:maxLines="3"
+                android:lines="5"
+                android:maxLines="5"
                 android:gravity="left|top"
                 android:padding="4dp"
+                android:textSize="13sp"
                 android:textColor="@color/color_gris_oscuro"
                 android:background="@color/color_gris_muy_claro"
                 android:layout_margin="15dp"
+                android:maxLength="220"
 
                 />
 
             <Button android:id="@+id/btnFinalizar"
                 android:layout_width="wrap_content"
                 android:text="@string/finalizar_compra"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:textSize="17dp"
                 android:padding="7dp"

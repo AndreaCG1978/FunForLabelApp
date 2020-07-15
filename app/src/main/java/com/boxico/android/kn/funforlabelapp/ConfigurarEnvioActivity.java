@@ -290,6 +290,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
                 int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton) findViewById(selectedId);
                 ConstantsAdmin.selectedShippingMethod = (MetodoEnvio)radioButton.getTag();
+                ConstantsAdmin.comentarioIngresado = entryComentario.getText().toString();
                 Intent intent = new Intent(me, ConfigurarPagoActivity.class);
                 startActivity(intent);
             }

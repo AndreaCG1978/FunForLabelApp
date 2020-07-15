@@ -175,17 +175,20 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
             rb.setTag(m);
             if(m.getId()==1){
                 rb.setChecked(true);
-
             }
-            txt = new TextView(this);
-            txt.setText(m.getDescription());
-            txt.setTextColor(Color.DKGRAY);
-            txt.setTextSize(13);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(55, 0, 0, 15);
-            txt.setLayoutParams(lp);
             radioButtonsGroup.addView(rb);
-            radioButtonsGroup.addView(txt);
+            if(m.getDescription() != null && !m.getDescription().equals("")){
+                txt = new TextView(this);
+                txt.setText(m.getDescription());
+                txt.setTextColor(Color.DKGRAY);
+                txt.setTextSize(13);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(55, 0, 0, 15);
+                txt.setLayoutParams(lp);
+                radioButtonsGroup.addView(txt);
+            }
+
+
         }
 
 
@@ -199,6 +202,9 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO));
         entryComentario = (EditText) findViewById(R.id.entryCommentPago);
+        if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
+            entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
+        }
         btnGoToFinish = (Button) findViewById(R.id.btnConfirmarPago);
         btnGoToFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +212,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
                 int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton) findViewById(selectedId);
                 ConstantsAdmin.selectedPaymentMethod = (MetodoPago)radioButton.getTag();
+                ConstantsAdmin.comentarioIngresado = entryComentario.getText().toString();
                 Intent intent = new Intent(me, FinalizarCompraActivity.class);
                 startActivity(intent);
             }

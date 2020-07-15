@@ -161,6 +161,7 @@ public class ConstantsAdmin {
     public static AddressBook addressCustomer;
     public static MetodoPago selectedPaymentMethod;
     public static MetodoEnvio selectedShippingMethod;
+    public static String comentarioIngresado;
 
 
     public static float pxToMm(float px, Context context){
