@@ -1,10 +1,13 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -16,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
@@ -45,6 +49,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
     private List<MetodoPago> metodosPago;
     RadioGroup radioButtonsGroup;
     EditText entryComentario;
+    private Button btnGoToFinish;
 
 
     @Override
@@ -167,6 +172,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
             rb.setTextSize(15);
             rb.setBackgroundColor(Color.WHITE);
             rb.setId((int)m.getId());
+            rb.setTag(m);
             if(m.getId()==1){
                 rb.setChecked(true);
 
@@ -193,6 +199,17 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO));
         entryComentario = (EditText) findViewById(R.id.entryCommentPago);
+        btnGoToFinish = (Button) findViewById(R.id.btnConfirmarPago);
+        btnGoToFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+                ConstantsAdmin.selectedPaymentMethod = (MetodoPago)radioButton.getTag();
+                Intent intent = new Intent(me, FinalizarCompraActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 

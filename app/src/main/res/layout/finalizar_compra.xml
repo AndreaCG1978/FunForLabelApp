@@ -51,7 +51,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/titulo_pago"
+            android:text="@string/detalle_compra"
             android:textColor="@color/color_gris_oscuro"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -61,7 +61,7 @@
             android:background="@android:color/white"/>
 
         <TextView
-            android:id="@+id/textIntroPago"
+            android:id="@+id/textDetalleTags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
@@ -75,7 +75,7 @@
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/metodo_pago_title"
+            android:text="@string/direccion_envio_title"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/color_gris_oscuro"
@@ -85,21 +85,46 @@
             android:fontFamily="sans-serif-smallcaps"
             android:background="@android:color/white"/>
 
-            <RadioGroup
-                android:id="@+id/opciones_pago"
+            <TextView
+                android:id="@+id/textDirEnvio"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="left"
-                android:layout_margin="15dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_negro"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:background="@android:color/white" />
 
-            </RadioGroup>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forma_pago_title"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/color_gris_oscuro"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:background="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/textFormaPago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_negro"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:background="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/enter_comment"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
@@ -122,9 +147,9 @@
 
                 />
 
-            <Button android:id="@+id/btnConfirmarPago"
+            <Button android:id="@+id/btnFinalizar"
                 android:layout_width="wrap_content"
-                android:text="@string/confirmar_datos"
+                android:text="@string/finalizar_compra"
                 android:layout_height="30dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:textSize="17dp"

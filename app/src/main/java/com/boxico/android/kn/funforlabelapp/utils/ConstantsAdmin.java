@@ -32,6 +32,8 @@ import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
+import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
@@ -157,6 +159,8 @@ public class ConstantsAdmin {
     public static String textEntered;
     public static String titleEntered;
     public static AddressBook addressCustomer;
+    public static MetodoPago selectedPaymentMethod;
+    public static MetodoEnvio selectedShippingMethod;
 
 
     public static float pxToMm(float px, Context context){

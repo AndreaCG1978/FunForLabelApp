@@ -158,21 +158,25 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             super.onPostExecute(integer);
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             textDirEnvio = findViewById(R.id.textDirEnvio);
-            Customer c = ConstantsAdmin.currentCustomer;
-            String temp = c.getFirstName() + " " + c.getLastName() + "\n";
-            temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
-            if(ConstantsAdmin.addressCustomer.getSuburbio() != null && !ConstantsAdmin.addressCustomer.getSuburbio().equals("")){
-                temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
-            }
-            temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
-            temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
-            textDirEnvio.setText(temp);
+            cargarDireccionEnvio();
             if(dialog != null) {
                 dialog.cancel();
             }
             configureRadioButtonsShipping();
         }
 
+    }
+
+    private void cargarDireccionEnvio(){
+        Customer c = ConstantsAdmin.currentCustomer;
+        String temp = c.getFirstName() + " " + c.getLastName() + "\n";
+        temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
+        if(ConstantsAdmin.addressCustomer.getSuburbio() != null && !ConstantsAdmin.addressCustomer.getSuburbio().equals("")){
+            temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
+        }
+        temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
+        temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
+        textDirEnvio.setText(temp);
     }
 
     private void loadAddressBook() {
@@ -252,6 +256,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             rb.setTextSize(15);
             rb.setBackgroundColor(Color.WHITE);
             rb.setId((int)m.getId());
+            rb.setTag(m);
             if(m.getId()==1){
                 rb.setChecked(true);
 
@@ -282,6 +287,9 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         btnGoToPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+                ConstantsAdmin.selectedShippingMethod = (MetodoEnvio)radioButton.getTag();
                 Intent intent = new Intent(me, ConfigurarPagoActivity.class);
                 startActivity(intent);
             }

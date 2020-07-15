@@ -86,4 +86,7 @@
     <string name="titulo_pago">INFORMACION DE PAGO</string>
     <string name="metodo_pago_title">░ FORMAS DE PAGO</string>
     <string name="confirmar_datos">CONFIRMAR DATOS</string>
+    <string name="detalle_compra">DETALLE DE SU COMPRA</string>
+    <string name="forma_pago_title">░ FORMA DE PAGO</string>
+    <string name="finalizar_compra">Efectuar Compra</string>
 </resources>
