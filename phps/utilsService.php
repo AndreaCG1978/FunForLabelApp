@@ -7,11 +7,11 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-    include $_SERVER['DOCUMENT_ROOT']."/includes/functions/password_funcs.php";
+    
 	include $_SERVER['DOCUMENT_ROOT']."/includes/functions/database.php";
 	include $_SERVER['DOCUMENT_ROOT']."/includes/database_tables.php";
     include $_SERVER['DOCUMENT_ROOT']."/includes/functions/general.php";
-	include $_SERVER['DOCUMENT_ROOT']."/includes/classes/passwordhash.php";
+	
 	
     if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['tokenFFL'])&& $_GET['tokenFFL'] == $tokenFFL)
     {

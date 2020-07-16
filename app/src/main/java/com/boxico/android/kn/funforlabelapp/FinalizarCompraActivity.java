@@ -1,33 +1,31 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.view.View;
 
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
-import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
-import com.boxico.android.kn.funforlabelapp.services.UtilsService;
+import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -42,8 +40,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private FinalizarCompraActivity me;
     private TextView textWellcomeUsr;
- //   private TextView textIntroPago;
-    private UtilsService utilsService;
+    private OrdersService orderService;
     EditText entryComentario;
     TextView textFormaPago;
     TextView textDirEnvio;
@@ -52,8 +49,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     TextView textMontoSubtotal;
     TextView textFormaEnvioDetalle;
     TextView textMontoTotal;
+    Button btnFinalizar;
     private float precioTotalTags;
     private float precioTotalEnvio;
+    Integer idOrder = -1;
 
 
     @Override
@@ -92,7 +91,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        utilsService = retrofit.create(UtilsService.class);
+        orderService = retrofit.create(OrdersService.class);
 
     }
 
@@ -120,11 +119,104 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
             entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
         }
+        btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
+        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarCompra();
+            }
+        });
 
 
 
         // configListView(listViewCarrito);
     }
+
+    private void finalizarCompra() {
+        new InsertarOrderTask().execute();
+    }
+
+    private class InsertarOrderTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+        private int resultado = -1;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            insertarOrder();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(idOrder != -1){// PUDO INSERTAR EN ORDERS
+
+            }
+            if(dialog != null) {
+                dialog.cancel();
+            }
+        }
+    }
+
+    private void insertarOrder() {
+        Call<Integer> call = null;
+        Response<Integer> response = null;
+        Customer c = ConstantsAdmin.currentCustomer;
+        AddressBook ab = ConstantsAdmin.addressCustomer;
+        Date date= new Date();
+        //getTime() returns current time in milliseconds
+        long time = date.getTime();
+        //Passed the milliseconds to constructor of Timestamp class
+        Timestamp ts = new Timestamp(time);
+        String fecha = ts.toString();
+        Properties p =  ConstantsAdmin.fflProperties;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = orderService.insertOder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),c.getLastName() + " " + c.getFirstName(),
+                    ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
+                    ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getLastName() + " " + c.getFirstName(),
+                    ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
+                    c.getLastName() + " " + c.getFirstName(), ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
+                    ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")",
+                    fecha, null, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_PENDING_TRANSFERENCE)),
+                    p.getProperty(ConstantsAdmin.CURRENCY), Integer.valueOf(p.getProperty(ConstantsAdmin.CURRENCY_VALUE)));
+            response = call.execute();
+            if(response.body() != null){
+                idOrder = response.body();
+                this.insertOrderProducts();
+            }else{
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
+    private void insertOrderProducts() {
+        ProductoCarrito p;
+        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        while(it.hasNext()){
+            p = it.next();
+
+
+        }
+    }
+
 
     private void cargarDetallePago() {
         String temp = "";

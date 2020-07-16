@@ -69,6 +69,7 @@ public class ConstantsAdmin {
     public static final String ATR_FFL_MAIL = "FFL_MAIL";
     public static final String ATR_FFL_PASSWORD = "FFL_PASSWORD";
     public static final String CAPITAL_FEDERAL = "Capital Federal" ;
+    public static final String ARGENTINA = "Argentina" ;
     public static final float PARAM_TO_INCREASE = 1.465f;
     public static final String KEY_USER = "usuario";
     public static final String KEY_PASSWORD = "contrasenia";
@@ -162,6 +163,9 @@ public class ConstantsAdmin {
     public static MetodoPago selectedPaymentMethod;
     public static MetodoEnvio selectedShippingMethod;
     public static String comentarioIngresado;
+    public static String CURRENCY = "CURRENCY";
+    public static String CURRENCY_VALUE = "CURRENCY_VALUE";
+    public static String ORDER_STATUS_PENDING_TRANSFERENCE = "ORDER_STATUS_PENDING_TRANSFERENCE";
 
 
     public static float pxToMm(float px, Context context){
