@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
@@ -177,8 +178,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         long time = date.getTime();
         //Passed the milliseconds to constructor of Timestamp class
         Timestamp ts = new Timestamp(time);
-        String fecha = ts.toString();
         Properties p =  ConstantsAdmin.fflProperties;
+        MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
         try {
             ConstantsAdmin.mensaje = null;
@@ -188,8 +189,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
                     c.getLastName() + " " + c.getFirstName(), ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
                     ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")",
-                    fecha, null, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_PENDING_TRANSFERENCE)),
-                    p.getProperty(ConstantsAdmin.CURRENCY), Integer.valueOf(p.getProperty(ConstantsAdmin.CURRENCY_VALUE)));
+                    timeStamp, null, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_PENDING_TRANSFERENCE)),
+                    p.getProperty(ConstantsAdmin.CURRENCY), Integer.valueOf(p.getProperty(ConstantsAdmin.CURRENCY_VALUE)), me.getName() + "(" + me.getDescription() + ")",(int)(precioTotalTags + precioTotalEnvio),
+                    (int)precioTotalTags, (int)precioTotalEnvio,timeStamp,entryComentario.getText().toString());
             response = call.execute();
             if(response.body() != null){
                 idOrder = response.body();
@@ -208,6 +210,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void insertOrderProducts() {
+
         ProductoCarrito p;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){

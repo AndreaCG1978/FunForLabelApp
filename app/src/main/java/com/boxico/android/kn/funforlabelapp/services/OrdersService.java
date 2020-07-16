@@ -47,19 +47,42 @@ public interface OrdersService {
                              @Field("date_purchased") String date_purchased,
                              @Field("order_status") Integer order_status,
                              @Field("currency") String currency,
-                             @Field("currency_value") Integer currency_value);
+                             @Field("currency_value") Integer currency_value,
+                             // ORDERS_TOTAL
+                             @Field("ot_title_shipping") String ot_title_shipping,
+                             @Field("ot_value_total") Integer ot_value_total,
+                             @Field("ot_value_subtotal") Integer ot_value_subtotal,
+                             @Field("ot_value_shipping") Integer ot_value_shipping,
+
+                             // ORDERS_STATUS_HISTORY
+                             @Field("osh_date_added") String osh_date_added,
+                             @Field("osh_comments") String osh_comments);
 
     @POST(API_ROUTE)
     @FormUrlEncoded
-    Call<Integer> insertOderProduct(@Field("insertInOrderProduct") boolean insertInOrderProduct, @Field("tokenFFL") long tokenFFL,
+    Call<Integer> insertSingles(@Field("insertSingles") boolean insertSingles, @Field("tokenFFL") long tokenFFL,
                              @Field("orders_id") Integer orders_id,
-                             @Field("products_id") Integer products_id,
-                             @Field("products_model") String products_model,
-                             @Field("products_name") String products_name,
-                             @Field("products_price") String products_price,
-                             @Field("final_price") String final_price,
-                             @Field("products_tax") String products_tax,
-                             @Field("products_quantity") String products_quantity);
+                             // ORDERS_TOTAL
+                             @Field("ot_title_shipping") String ot_title_shipping,
+                             @Field("ot_value") Integer ot_value,
+
+                             // ORDERS_STATUS_HISTORY
+                             @Field("osh_date_added") Integer osh_date_added,
+                             @Field("osh_comments") String osh_comments);
+
+
+    @POST(API_ROUTE)
+    @FormUrlEncoded
+    Call<Integer> insertTag(@Field("insertTag") boolean insertTag, @Field("tokenFFL") long tokenFFL,
+                                @Field("orders_id") Integer orders_id,
+                                // ORDERS_PRODUCTS
+                                @Field("op_products_id") Integer op_products_id,
+                                @Field("op_products_model") String op_products_model,
+                                @Field("op_products_name") String op_products_name,
+                                @Field("op_products_price") String op_products_price,
+                                @Field("op_final_price") String op_final_price,
+                                @Field("op_products_tax") String op_products_tax,
+                                @Field("op_products_quantity") String op_products_quantity);
 
 
 }
