@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -40,17 +41,24 @@ import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -503,6 +511,108 @@ public class ConstantsAdmin {
 
     }
 
+    public static void saveBitmapInRemoteServer(Bitmap bitmap) throws IOException {
+        String attachmentName = "bitmap";
+        String attachmentFileName = "bitmap.bmp";
+        String crlf = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
+
+        HttpURLConnection httpUrlConnection = null;
+        URL url = new URL("http://example.com/server.cgi");
+        httpUrlConnection = (HttpURLConnection) url.openConnection();
+        httpUrlConnection.setUseCaches(false);
+        httpUrlConnection.setDoOutput(true);
+
+        httpUrlConnection.setRequestMethod("POST");
+        httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+        httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
+        httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+        DataOutputStream request = new DataOutputStream(
+                httpUrlConnection.getOutputStream());
+
+        request.writeBytes(twoHyphens + boundary + crlf);
+        request.writeBytes("Content-Disposition: form-data; name=\"" +
+                attachmentName + "\";filename=\"" +
+                attachmentFileName + "\"" + crlf);
+        request.writeBytes(crlf);
+
+//I want to send only 8 bit black & white bitmaps
+        byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
+        for (int i = 0; i < bitmap.getWidth(); ++i) {
+            for (int j = 0; j < bitmap.getHeight(); ++j) {
+                //we're interested only in the MSB of the first byte,
+                //since the other 3 bytes are identical for B&W images
+                pixels[i + j] = (byte) ((bitmap.getPixel(i, j) & 0x80) >> 7);
+            }
+        }
+
+        request.write(pixels);
+
+        request.writeBytes(crlf);
+        request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+
+        request.flush();
+        request.close();
+
+
+        InputStream responseStream = new
+                BufferedInputStream(httpUrlConnection.getInputStream());
+
+        BufferedReader responseStreamReader =
+                new BufferedReader(new InputStreamReader(responseStream));
+
+        String line = "";
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while ((line = responseStreamReader.readLine()) != null) {
+            stringBuilder.append(line).append("\n");
+        }
+        responseStreamReader.close();
+
+        String response = stringBuilder.toString();
+
+        responseStream.close();
+
+        httpUrlConnection.disconnect();
+
+        /*
+
+    PS: Of course I had to wrap the request in private class AsyncUploadBitmaps extends AsyncTask<Bitmap, Void, String>,
+    in order to make the Android platform happy, because it doesn't like to have network requests on the main thread.
+         */
+    }
+
+    public static Bitmap takeScreenshot(Activity context) {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        Bitmap bitmap = null;
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = context.getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
     public static void copyFileFromUrl(String urlPath, String fontFilename){
         int count;
         try {
@@ -534,9 +644,6 @@ public class ConstantsAdmin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     public static void deleteLogin(Context ctx) {

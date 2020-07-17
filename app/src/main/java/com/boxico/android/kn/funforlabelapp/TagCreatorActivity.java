@@ -862,6 +862,7 @@ public class TagCreatorActivity extends AppCompatActivity {
         }
         Intent intent = new Intent(me, TagReadyToGoActivity.class);
         startActivity(intent);
+
     }
 /*
     private void openColorPicker(){

@@ -120,22 +120,27 @@
             header("HTTP/1.1 200 OK");
             echo json_encode( $lastOrderId,JSON_UNESCAPED_UNICODE);
             exit();
-        }else if(isset($_POST['insertInOrderProduct'])){
+        }else if(isset($_POST['insertTag'])){
+            // SE INSERTA EN ORDERS_PRODUCTS
             $sql = "INSERT INTO ". TABLE_ORDERS_PRODUCTS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
                 VALUES(:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)";
             $statement = $dbConn->prepare($sql);
             $statement->bindParam (":orders_id",  $_POST['orders_id'] , PDO::PARAM_INT);
-            $statement->bindParam (":products_id",  $_POST['products_id'] , PDO::PARAM_INT);
-            $statement->bindParam (":products_model",  $_POST['products_model'] , PDO::PARAM_STR);
-            $statement->bindParam (":products_price",  $_POST['products_price'] , PDO::PARAM_STR);
-            $statement->bindParam (":final_price",  $_POST['final_price'] , PDO::PARAM_STR);
-            $statement->bindParam (":products_tax",  $_POST['products_tax'] , PDO::PARAM_STR);
-            $statement->bindParam (":products_quantity",  $_POST['products_quantity'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_id",  $_POST['op_products_id'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_model",  $_POST['op_products_model'] , PDO::PARAM_STR);
+            $statement->bindParam (":products_name",  $_POST['op_products_name'] , PDO::PARAM_STR);
+            $statement->bindParam (":final_price",  $_POST['op_final_price'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_price",  $_POST['op_products_price'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_tax",  $_POST['op_products_tax'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_quantity",  $_POST['op_products_quantity'] , PDO::PARAM_INT);
             $statement->execute();
-            $last_id = $dbConn->lastInsertId();
-         //   $statement = $dbConn->prepare("SELECT * FROM ". TABLE_ORDERS ." where id = ".$last_id);
-          //  $statement->execute();
-         //   $statement->setFetchMode(PDO::FETCH_ASSOC);
+            $idOrderProduct = $dbConn->lastInsertId();
+
+            // SE INSERTA TAGS
+            $sql = "INSERT INTO ". TCM_TAGS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
+            VALUES(:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)";
+
+
             header("HTTP/1.1 200 OK");
             echo json_encode( $last_id,JSON_UNESCAPED_UNICODE);
             exit();
