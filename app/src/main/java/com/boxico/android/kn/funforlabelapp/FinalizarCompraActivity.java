@@ -195,7 +195,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 idOrder = response.body();
-                this.insertOrderProducts();
+                this.insertarEtiquetas();
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
@@ -209,12 +209,14 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
     }
 
-    private void insertOrderProducts() {
-
+    private void insertarEtiquetas() {
+        Call<Integer> call = null;
+        Response<Integer> response = null;
         ProductoCarrito p;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             p = it.next();
+          //  call = orderService.insertTag(
 
 
         }

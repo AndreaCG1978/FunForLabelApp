@@ -16,6 +16,8 @@
     {
         // Crear tupla en orders
         if(isset($_POST['insertInOrders'])){
+
+            // SE INSERTA EN ORDERS
             $sql = "INSERT INTO ". TABLE_ORDERS ."(customers_id, customers_name, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, last_modified, date_purchased, orders_status, currency, currency_value)
                 VALUES(:customers_id, :customers_name, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :delivery_name, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :last_modified, :date_purchased, :order_status, :currency, :currency_value)";
             $statement = $dbConn->prepare($sql);
@@ -53,12 +55,70 @@
             $statement->bindParam (":currency",  $_POST['currency'] , PDO::PARAM_STR);
             $statement->bindParam (":currency_value",  $_POST['currency_value'] , PDO::PARAM_INT);            
             $statement->execute();
-            $last_id = $dbConn->lastInsertId();
+            $lastOrderId = $dbConn->lastInsertId();
          //   $statement = $dbConn->prepare("SELECT * FROM ". TABLE_ORDERS ." where id = ".$last_id);
           //  $statement->execute();
          //   $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            // SE INSERTA EN ORDERS_TOTAL:SUB_TOTAL
+            $sql = "INSERT INTO ". TABLE_ORDERS_TOTAL ."(orders_id, title, text, value, class, sort_order) VALUES(:orders_id, :title, :text, :value, :class, :sort_order)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":orders_id",$lastOrderId, PDO::PARAM_INT);
+            $temp1 = KN_LABEL_SUB_TOTAL;
+            $statement->bindParam (":title", $temp1, PDO::PARAM_STR);
+            $temp2 = "$".$_POST['ot_value_subtotal'].",00";
+            $statement->bindParam (":text",$temp2, PDO::PARAM_STR);
+            $statement->bindParam (":value", $_POST['ot_value_subtotal'], PDO::PARAM_STR);
+            $temp3 = KN_LABEL_CLASS_SUBTOTAL;
+            $statement->bindParam (":class",$temp3 , PDO::PARAM_STR);
+            $temp4 = KN_VALUE_SUBTOTAL;
+            $statement->bindParam (":sort_order",$temp4, PDO::PARAM_INT);
+            $statement->execute();
+
+            // SE INSERTA EN ORDERS_TOTAL:SHIPPING
+            $sql = "INSERT INTO ". TABLE_ORDERS_TOTAL ."(orders_id, title, text, value, class, sort_order) VALUES(:orders_id, :title, :text, :value, :class, :sort_order)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":orders_id",$lastOrderId, PDO::PARAM_INT);
+            $statement->bindParam (":title", $_POST['ot_title_shipping'], PDO::PARAM_STR);
+            $temp5 = "$".$_POST['ot_value_shipping'].",00";
+            $statement->bindParam (":text",$temp5, PDO::PARAM_STR);
+            $statement->bindParam (":value", $_POST['ot_value_shipping'], PDO::PARAM_STR);
+            $temp6 = KN_LABEL_CLASS_SHIPPING;
+            $statement->bindParam (":class", $temp6, PDO::PARAM_STR);
+            $temp7= KN_VALUE_SHIPPING;
+            $statement->bindParam (":sort_order",$temp7, PDO::PARAM_INT);
+            $statement->execute();
+
+            // SE INSERTA EN ORDERS_TOTAL:TOTAL
+            $sql = "INSERT INTO ". TABLE_ORDERS_TOTAL ."(orders_id, title, text, value, class, sort_order) VALUES(:orders_id, :title, :text, :value, :class, :sort_order)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":orders_id",$lastOrderId, PDO::PARAM_INT);
+            $temp8 = KN_LABEL_TOTAL;
+            $statement->bindParam (":title",$temp8, PDO::PARAM_STR);
+            $temp9 = "$".$_POST['ot_value_total'].",00";
+            $statement->bindParam (":text",$temp9, PDO::PARAM_STR);
+            $statement->bindParam (":value", $_POST['ot_value_total'], PDO::PARAM_STR);
+            $temp10 = KN_LABEL_CLASS_TOTAL;
+            $statement->bindParam (":class",$temp10, PDO::PARAM_STR);
+            $temp11 = KN_VALUE_TOTAL;
+            $statement->bindParam (":sort_order",$temp11, PDO::PARAM_INT);
+            $statement->execute();
+
+            // SE INSERTA EN ORDERS_STATUS_HISTORY
+            $sql = "INSERT INTO ". TABLE_ORDERS_STATUS_HISTORY ."(orders_id, orders_status_id, date_added, customer_notified, comments) 
+            VALUES(:orders_id, :orders_status_id, :date_added, :customer_notified, :comments)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":orders_id",$lastOrderId, PDO::PARAM_INT);
+            $temp12 = KN_ORDER_STATUS_ID;
+            $statement->bindParam (":orders_status_id",$temp12 , PDO::PARAM_INT);
+            $statement->bindParam (":date_added", $_POST['osh_date_added'], PDO::PARAM_STR);
+            $temp13 = KN_CUSTOMER_NOTIFIED;
+            $statement->bindParam (":customer_notified",$temp13, PDO::PARAM_INT);
+            $statement->bindParam (":comments",$_POST['osh_comments'], PDO::PARAM_STR);
+            $statement->execute();            
+
             header("HTTP/1.1 200 OK");
-            echo json_encode( $last_id,JSON_UNESCAPED_UNICODE);
+            echo json_encode( $lastOrderId,JSON_UNESCAPED_UNICODE);
             exit();
         }else if(isset($_POST['insertInOrderProduct'])){
             $sql = "INSERT INTO ". TABLE_ORDERS_PRODUCTS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
