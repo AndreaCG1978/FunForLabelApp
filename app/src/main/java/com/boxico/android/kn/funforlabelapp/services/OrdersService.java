@@ -79,10 +79,28 @@ public interface OrdersService {
                                 @Field("op_products_id") Integer op_products_id,
                                 @Field("op_products_model") String op_products_model,
                                 @Field("op_products_name") String op_products_name,
-                                @Field("op_products_price") String op_products_price,
-                                @Field("op_final_price") String op_final_price,
-                                @Field("op_products_tax") String op_products_tax,
-                                @Field("op_products_quantity") String op_products_quantity);
+                                @Field("op_products_price") Integer op_products_price,
+                                @Field("op_final_price") Integer op_final_price,
+                                @Field("op_products_tax") Integer op_products_tax,
+                                @Field("op_products_quantity") Integer op_products_quantity,
+                                // TAGS
+                                @Field("t_fills_textured_id") Integer t_fills_textured_id,
+                                @Field("t_comments") String osh_comments,
+                                @Field("t_tcm_tag") String t_tcm_tag,
+                                @Field("t_customers_id") Integer t_customers_id,
+                                @Field("t_products_id") Integer t_products_id,
+                                @Field("t_icon_width") Integer t_icon_width,
+                                @Field("t_preview") String t_preview,
+                                @Field("t_parent") Integer t_parent,
+                                // TAGS_TEXT_OPTIONS
+                                @Field("tto_size") Integer tto_size,
+                                @Field("tto_color") String tto_color,
+                                @Field("tto_effect_bold") Integer tto_effect_bold,
+                                @Field("tto_effect_italic") Integer tto_effect_italic,
+                                @Field("tto_fonts_id") Integer tto_fonts_id,
+                                // TAGS_LEGENDS
+                                @Field("tl_text") String tl_text,
+                                @Field("tl_type") String tl_type);
 
 
 }

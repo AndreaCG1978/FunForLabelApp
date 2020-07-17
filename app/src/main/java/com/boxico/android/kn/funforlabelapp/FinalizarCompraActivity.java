@@ -209,14 +209,32 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
     }
 
-    private void insertarEtiquetas() {
+    private void insertarEtiquetas() throws IOException {
         Call<Integer> call = null;
         Response<Integer> response = null;
         ProductoCarrito p;
+        Customer c = ConstantsAdmin.currentCustomer;
+        Properties prop = ConstantsAdmin.fflProperties;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             p = it.next();
-          //  call = orderService.insertTag(
+            if(!p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
+                call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
+                        p.getNombre(),Integer.valueOf(p.getPrecio()), Integer.valueOf(p.getPrecio()), 0, 1,
+                        p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
+                        "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
+            }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
+                call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
+                        p.getNombre(),Integer.valueOf(p.getPrecio()), Integer.valueOf(p.getPrecio()), 0, 1,
+                        p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
+                        "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
+            }
+            response = call.execute();
+            if(response.body() == null){
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
 
 
         }

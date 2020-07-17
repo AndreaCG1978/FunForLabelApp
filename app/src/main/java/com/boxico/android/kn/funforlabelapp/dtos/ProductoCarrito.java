@@ -40,6 +40,42 @@ public class ProductoCarrito {
     private String precio = null;
     private String cantidad = null;
     private String modelo = null;
+    private int idProduct = -1;
+    private int fillsTexturedId = -1;
+    private int fontTextId = -1;
+    private int fontTitleId = -1;
+
+    public int getFontTextId() {
+        return fontTextId;
+    }
+
+    public void setFontTextId(int fontTextId) {
+        this.fontTextId = fontTextId;
+    }
+
+    public int getFontTitleId() {
+        return fontTitleId;
+    }
+
+    public void setFontTitleId(int fontTitleId) {
+        this.fontTitleId = fontTitleId;
+    }
+
+    public int getFillsTexturedId() {
+        return fillsTexturedId;
+    }
+
+    public void setFillsTexturedId(int fillsTexturedId) {
+        this.fillsTexturedId = fillsTexturedId;
+    }
+
+    public int getIdProduct() {
+        return idProduct;
+    }
+
+    public void setIdProduct(int idProduct) {
+        this.idProduct = idProduct;
+    }
 
     public String getNombre() {
         return nombre;

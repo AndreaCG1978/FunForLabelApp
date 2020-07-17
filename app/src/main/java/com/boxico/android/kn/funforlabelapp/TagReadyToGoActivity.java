@@ -52,7 +52,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
             pc.setAreaTitulo(ConstantsAdmin.selectedLabelAttrbTitle);
             pc.setFontTitleColor(ConstantsAdmin.selectedTitleFontColor);
             pc.setTitulo(ConstantsAdmin.titleEntered);
-            pc.setTitleFontName(ConstantsAdmin.selectedTitleFont);
+            pc.setTitleFontName(ConstantsAdmin.selectedTitleFont.getBasename());
             pc.setTitleFontSize(ConstantsAdmin.selectedTitleFontSize);
             pc.setTieneTitulo(true);
             pc.setIdAreaTitulo((int)pc.getAreaTitulo().getTextAreasId());
@@ -61,6 +61,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
             pc.setEsMultilineaTituto(ConstantsAdmin.selectedLabelAttrbTitle.getMultiline());
             pc.setFromXTituto(ConstantsAdmin.selectedLabelAttrbTitle.getFromX());
             pc.setFromYTituto(ConstantsAdmin.selectedLabelAttrbTitle.getFromY());
+            pc.setFontTitleId((int)ConstantsAdmin.selectedTitleFont.getId());
         }else{
             pc.setTieneTitulo(false);
         }
@@ -74,7 +75,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         pc.setCreador(ConstantsAdmin.currentCreator);
         pc.setFontTextColor(ConstantsAdmin.selectedTextFontColor);
         pc.setTexto(ConstantsAdmin.textEntered);
-        pc.setTextFontName(ConstantsAdmin.selectedTextFont);
+        pc.setTextFontName(ConstantsAdmin.selectedTextFont.getBasename());
         pc.setTextFontSize(ConstantsAdmin.selectedTextFontSize);
         pc.setComentarioUsr(comentarioUsr.getText().toString());
         pc.setBackgroundFilename(ConstantsAdmin.selectedBackgroundFilename);
@@ -87,6 +88,11 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         pc.setCantidad(ConstantsAdmin.currentProduct.getQuantity());
         pc.setModelo(ConstantsAdmin.currentProduct.getModel());
         pc.setPrecio(ConstantsAdmin.currentProduct.getPrice());
+        pc.setIdProduct((int)ConstantsAdmin.currentProduct.getId());
+        pc.setFillsTexturedId((int)ConstantsAdmin.selectedImage.getFillsTexturedId());
+        pc.setFontTextId((int)ConstantsAdmin.selectedTextFont.getId());
+
+
         ConstantsAdmin.agregarProductoAlCarrito(pc);
 
       //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
@@ -147,7 +153,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         textTag.setText(ConstantsAdmin.textEntered);
         textTag.setTextColor(ConstantsAdmin.selectedTextFontColor);
         textTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTextFontSize);
-        File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont);
+        File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont.getBasename());
         Typeface face = Typeface.createFromFile(fileFont);
         textTag.setTypeface(face);
         textTag.setEnabled(false);
@@ -156,7 +162,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
             titleTag.setText(ConstantsAdmin.titleEntered);
             titleTag.setTextColor(ConstantsAdmin.selectedTitleFontColor);
             titleTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTitleFontSize);
-            fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTitleFont);
+            fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTitleFont.getBasename());
             face = Typeface.createFromFile(fileFont);
             titleTag.setTypeface(face);
         }

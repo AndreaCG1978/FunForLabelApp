@@ -43,5 +43,6 @@
        define('KN_VALUE_SUBTOTAL', 1);
        define('KN_ORDER_STATUS_ID', 6);
        define('KN_CUSTOMER_NOTIFIED', 1);
+       define('KN_ICON_WIDTH', 0);
 
      ?>

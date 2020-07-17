@@ -32,6 +32,8 @@ import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
@@ -150,10 +152,10 @@ public class ConstantsAdmin {
     public static Bitmap selectedBackground;
     public static float selectedTitleFontSize;
     public static int selectedTitleFontColor;
-    public static String selectedTitleFont;
+    public static LabelFont selectedTitleFont;
     public static int selectedTextFontColor;
     public static float selectedTextFontSize;
-    public static String selectedTextFont;
+    public static LabelFont selectedTextFont;
     public static LabelAttributes selectedLabelAttrbText;
     public static LabelAttributes selectedLabelAttrbTitle;
     public static Creator currentCreator;
@@ -166,7 +168,15 @@ public class ConstantsAdmin {
     public static String CURRENCY = "CURRENCY";
     public static String CURRENCY_VALUE = "CURRENCY_VALUE";
     public static String ORDER_STATUS_PENDING_TRANSFERENCE = "ORDER_STATUS_PENDING_TRANSFERENCE";
+    public static String TAG_LEGEND_TYPE_TEXT = "TAG_LEGEND_TYPE_TEXT";
+    public static String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
+    public static LabelImage selectedImage;
+    public static LabelFont selectedLabelFont;
 
+    public static String convertIntColorToHex(int color){
+        String hexColor = String.format("#%06X", (0xFFFFFF & color));
+        return hexColor;
+    }
 
     public static float pxToMm(float px, Context context){
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();

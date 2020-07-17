@@ -479,8 +479,7 @@ public class TagCreatorActivity extends AppCompatActivity {
         spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LabelFont lf = null;
-                lf = (LabelFont) parent.getAdapter().getItem(position);
+                LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
                 File fileFont = ConstantsAdmin.getFile(lf.getBasename());
                 Typeface face = Typeface.createFromFile(fileFont);
 
@@ -512,9 +511,8 @@ public class TagCreatorActivity extends AppCompatActivity {
         spinnerBackgrounds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LabelImage selectedImage = null;
-                selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                ConstantsAdmin.customizeBackground(selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
+                ConstantsAdmin.selectedImage = (LabelImage) parent.getAdapter().getItem(position);
+                ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
             }
 
@@ -846,14 +844,14 @@ public class TagCreatorActivity extends AppCompatActivity {
     }
 
     private void openCulminarTag() {
-        ConstantsAdmin.selectedTextFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText)).getBasename();
+        ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
         ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
         ConstantsAdmin.selectedTextFontColor = selectedTextColor;
         ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
         if(labelAttributes.length > 1){//ES UN TAG CON TITULO
             ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
             ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
-            ConstantsAdmin.selectedTitleFont = ((LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle)).getBasename();
+            ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
             ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
         }
         ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
