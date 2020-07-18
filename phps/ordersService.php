@@ -56,9 +56,7 @@
             $statement->bindParam (":currency_value",  $_POST['currency_value'] , PDO::PARAM_INT);            
             $statement->execute();
             $lastOrderId = $dbConn->lastInsertId();
-         //   $statement = $dbConn->prepare("SELECT * FROM ". TABLE_ORDERS ." where id = ".$last_id);
-          //  $statement->execute();
-         //   $statement->setFetchMode(PDO::FETCH_ASSOC);
+
 
             // SE INSERTA EN ORDERS_TOTAL:SUB_TOTAL
             $sql = "INSERT INTO ". TABLE_ORDERS_TOTAL ."(orders_id, title, text, value, class, sort_order) VALUES(:orders_id, :title, :text, :value, :class, :sort_order)";
@@ -137,15 +135,49 @@
             $idOrderProduct = $dbConn->lastInsertId();
 
             // SE INSERTA TAGS
-            $sql = "INSERT INTO ". TCM_TAGS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
-            VALUES(:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)";
+            $sql = "INSERT INTO ". TCM_TAGS ."(fills_textured_id, orders_products_id, comment, tcm_tag, customers_id, products_id, icon_width, preview, parent)
+            VALUES(:fills_textured_id, :orders_products_id, :comment, :tcm_tag, :customers_id, :products_id, :icon_width, :preview, :parent)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":fills_textured_id",$_POST['t_fills_textured_id'] , PDO::PARAM_INT);
+            $statement->bindParam (":orders_products_id",$idOrderProduct, PDO::PARAM_INT);
+            $statement->bindParam (":comment",  $_POST['t_comments'] , PDO::PARAM_STR);
+            $statement->bindParam (":tcm_tag",  $_POST['t_tcm_tag'] , PDO::PARAM_STR);
+            $statement->bindParam (":customers_id",$_POST['t_customers_id'], PDO::PARAM_INT);
+            $statement->bindParam (":products_id",$_POST['t_products_id'], PDO::PARAM_INT);
+            $statement->bindParam (":icon_width",$_POST['t_icon_width'], PDO::PARAM_INT);
+            $statement->bindParam (":preview",  $_POST['t_preview'] , PDO::PARAM_STR);
+            $statement->bindParam (":parent",$_POST['t_parent'], PDO::PARAM_INT);
+            $statement->execute();
+            $idTag = $dbConn->lastInsertId();
 
+            // SE INSERTA TAGS_TEXT_OPTIONS
+            $sql = "INSERT INTO ". TCM_TAG_TEXT_OPTIONS ."(size, color, effect_bold, effect_italic, fonts_id)
+            VALUES(:size, :color, :effect_bold, :effect_italic, :fonts_id)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":size",$_POST['tto_size'] , PDO::PARAM_INT);
+            $statement->bindParam (":color",  $_POST['tto_color'] , PDO::PARAM_STR);
+            $statement->bindParam (":effect_bold",$_POST['tto_effect_bold'] , PDO::PARAM_INT);
+            $statement->bindParam (":effect_italic",$_POST['tto_effect_italic'] , PDO::PARAM_INT);
+            $statement->bindParam (":fonts_id",$_POST['tto_fonts_id'] , PDO::PARAM_INT);
+            $statement->execute();
+            $idTagTextOptions = $dbConn->lastInsertId();
+
+            // SE INSERTA TCM_TAG_LEGENDS
+            $sql = "INSERT INTO ". TCM_TAG_LEGENDS ."(text, type, text_options_id, tags_id)
+            VALUES(:text, :type, :text_options_id, :tags_id)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":text",$_POST['tl_text'] , PDO::PARAM_STR);
+            $statement->bindParam (":type",  $_POST['tl_type'] , PDO::PARAM_STR);
+            $statement->bindParam (":text_options_id",$idTagTextOptions, PDO::PARAM_INT);
+            $statement->bindParam (":tags_id",$idTag, PDO::PARAM_INT);
+            $statement->execute();
+            $idTagLegend = $dbConn->lastInsertId();
 
             header("HTTP/1.1 200 OK");
-            echo json_encode( $last_id,JSON_UNESCAPED_UNICODE);
+            echo json_encode( $idTagLegend,JSON_UNESCAPED_UNICODE);
             exit();
         }else{
-            echo json_encode([],JSON_UNESCAPED_UNICODE);
+            echo json_encode(-1,JSON_UNESCAPED_UNICODE);
         }
     }
     exit();

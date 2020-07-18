@@ -103,7 +103,11 @@ public class DataBaseManager {
 		initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
 		initialValues.put(ConstantsAdmin.KEY_PRECIO_PRODUCTO, item.getPrecio());
 		initialValues.put(ConstantsAdmin.KEY_MODELO_PRODUCTO, item.getModelo());
+		initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, item.getIdProduct());
+		initialValues.put(ConstantsAdmin.KEY_ID_FONT_TEXT, item.getFontTextId());
+		initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
 		if(item.getAreaTitulo() != null) {
+			initialValues.put(ConstantsAdmin.KEY_ID_FONT_TITLE, item.getFontTitleId());
 			initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO, item.getEsMultilineaTituto());
 			initialValues.put(ConstantsAdmin.KEY_TITULO_FUENTE, item.getTitleFontName());
 			initialValues.put(ConstantsAdmin.KEY_TITULO_COLOR, item.getFontTitleColor());

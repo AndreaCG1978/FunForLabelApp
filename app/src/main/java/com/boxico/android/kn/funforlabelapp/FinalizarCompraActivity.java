@@ -218,15 +218,16 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             p = it.next();
+            String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
             if(!p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
-                        p.getNombre(),Integer.valueOf(p.getPrecio()), Integer.valueOf(p.getPrecio()), 0, 1,
+                        p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, 1,
                         p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
                         "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
-                        p.getNombre(),Integer.valueOf(p.getPrecio()), Integer.valueOf(p.getPrecio()), 0, 1,
+                        p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, 1,
                         p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
                         "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));

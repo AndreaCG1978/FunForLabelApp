@@ -95,8 +95,13 @@ public class CarritoActivity extends FragmentActivity {
     }
 
     private void confirmarCompra() {
-        Intent intent = new Intent(me, ConfigurarEnvioActivity.class);
-        startActivity(intent);
+        if(ConstantsAdmin.productosDelCarrito != null && ConstantsAdmin.productosDelCarrito.size() > 0){
+            Intent intent = new Intent(me, ConfigurarEnvioActivity.class);
+            startActivity(intent);
+        }else{
+            createAlertDialog(getString(R.string.no_agrego_al_carrito), getString(R.string.atencion));
+        }
+
     }
 
 

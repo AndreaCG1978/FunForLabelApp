@@ -85,7 +85,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         pc.setAnchoTag(ConstantsAdmin.currentCreator.getWidth());
         pc.setLargoTag(ConstantsAdmin.currentCreator.getHeight());
         pc.setNombre(ConstantsAdmin.currentProduct.getName());
-        pc.setCantidad(ConstantsAdmin.currentProduct.getQuantity());
+        pc.setCantidad("1");
         pc.setModelo(ConstantsAdmin.currentProduct.getModel());
         pc.setPrecio(ConstantsAdmin.currentProduct.getPrice());
         pc.setIdProduct((int)ConstantsAdmin.currentProduct.getId());

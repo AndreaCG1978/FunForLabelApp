@@ -97,6 +97,10 @@ public class ConstantsAdmin {
     public static final String KEY_BACKGROUND_FILENAME = "backgroundFilename";
     public static final String KEY_ID_CREATOR = "idCreador";
     public static final String KEY_ID_AREA_TITULO = "idAreaTitulo";
+    public static final String KEY_ID_PRODUCTO = "idProducto";
+    public static final String KEY_ID_FILLS_TEXTURED = "idFillsTextured";
+    public static final String KEY_ID_FONT_TEXT = "idFontText";
+    public static final String KEY_ID_FONT_TITLE = "idFontTitle";
     public static final String KEY_ID_AREA_TEXTO = "idAreaTexto";
     public static final String KEY_COMENTARIO_USR = "comentarioUsr";
     public static final String KEY_TIENE_TITULO = "tieneTitulo" ;
@@ -717,6 +721,10 @@ public class ConstantsAdmin {
         int anchoTag;
         int largoTag;
         int round;
+        int idProducto;
+        int idFillsTextured;
+        int idFontText;
+        int idFontTitle;
         String nombre;
         String precio;
         String cantidad;
@@ -742,6 +750,7 @@ public class ConstantsAdmin {
                 fromXTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_X_TITULO));
                 fromYTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_FROM_Y_TITULO));
                 esMultilineaTitulo = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO));
+                idFontTitle = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FONT_TITLE));
                 item.setTitulo(titulo);
                 item.setTitleFontName(tituloFuente);
                 item.setTitleFontSize(Float.valueOf(tituloSize));
@@ -752,6 +761,7 @@ public class ConstantsAdmin {
                 item.setFromXTituto(fromXTitulo);
                 item.setFromYTituto(fromYTitulo);
                 item.setEsMultilineaTituto(esMultilineaTitulo);
+                item.setFontTitleId(idFontTitle);
             }else{
                 item.setTieneTitulo(false);
             }
@@ -772,6 +782,9 @@ public class ConstantsAdmin {
             modelo = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_MODELO_PRODUCTO));
             precio = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_PRECIO_PRODUCTO));
             cantidad = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO));
+            idProducto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_PRODUCTO));
+            idFillsTextured = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FILLS_TEXTURED));
+            idFontText = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FONT_TEXT));
             item.setRound(round);
             item.setAnchoTag(anchoTag);
             item.setLargoTag(largoTag);
@@ -789,6 +802,9 @@ public class ConstantsAdmin {
             item.setCantidad(cantidad);
             item.setModelo(modelo);
             item.setPrecio(precio);
+            item.setIdProduct(idProducto);
+            item.setFillsTexturedId(idFillsTextured);
+            item.setFontTextId(idFontText);
             backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
             comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
             idCreador = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_CREATOR));
