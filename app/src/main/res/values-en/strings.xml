@@ -29,7 +29,7 @@
     <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
     <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
     <string name="body2_nueva_contrasenia">Recuerde modificarla al iniciar sesión.</string>
-    <string name="sending_mail_progress">Enviando contraseña a su cuenta de correo...</string>
+    <string name="sending_mail_progress">Enviando información a su cuenta de correo...</string>
     <string name="informacion_personal_title">░ Información Personal</string>
     <string name="direccion_title">░ Dirección</string>
     <string name="informacion_contacto_title">░ Información de Contacto</string>
@@ -92,4 +92,9 @@
     <string name="forma_envio_title">░ FORMA DE ENVIO</string>
     <string name="label_total_etiquetas">Total en etiquetas:</string>
     <string name="label_total">Total a pagar:</string>
+    <string name="volver">Volver</string>
+    <string name="enviar_mail">[Email]</string>
+    <string name="enviar_wsp" translatable="false">[Whatsapp]</string>
+    <string name="solicito_envio_cbu">Solicito envío CBU</string>
+    <string name="solicito_envio_cbu_detalle">Solicito que me envien su nro de CBU para poder efectivizar la compra. Gracias!</string>
 </resources>

@@ -3,6 +3,8 @@ package com.boxico.android.kn.funforlabelapp.utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -58,6 +61,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -125,9 +130,6 @@ public class ConstantsAdmin {
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
     public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
-    public static final String TIPO_OT_TOTAL = "TIPO_OT_TOTAL";
-    public static final String TIPO_OT_SUBTOTAL = "TIPO_OT_SUBTOTAL";
-    public static final String TIPO_OT_SHIPPING = "TIPO_OT_SHIPPING";
 
 
     public static String mensaje = null;
@@ -146,6 +148,7 @@ public class ConstantsAdmin {
     public static final String GEOCODIGOARGENTINA = "AR";
     public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
     public static final String GEOIDCAPITALFEDERAL = "3433955";
+
 
     public static boolean customerJustCreated = false;
     public static long[] categories = {46};
@@ -185,7 +188,24 @@ public class ConstantsAdmin {
     public static String TAG_LEGEND_TYPE_TEXT = "TAG_LEGEND_TYPE_TEXT";
     public static String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
     public static LabelImage selectedImage;
-    public static LabelFont selectedLabelFont;
+
+    public static String MENSAJE_EXITO_ORDEN_GENERADA="MENSAJE_EXITO_ORDEN_GENERADA";
+    public static String MAIL_PROCESO_ORDEN_SUBJECT="MAIL_PROCESO_ORDEN_SUBJECT";
+    public static String MAIL_PROCESO_ORDEN_NRO="MAIL_PROCESO_ORDEN_NRO";
+    public static String MAIL_PROCESO_ORDEN_FACTURA_DETALLE="MAIL_PROCESO_ORDEN_FACTURA_DETALLE";
+    public static String MAIL_PROCESO_ORDEN_FECHA="MAIL_PROCESO_ORDEN_FECHA";
+    public static String MAIL_PROCESO_ORDEN_COMENTARIO="MAIL_PROCESO_ORDEN_COMENTARIO";
+    public static String MAIL_PROCESO_ORDEN_PRODUCTOS="MAIL_PROCESO_ORDEN_PRODUCTOS";
+    public static String MAIL_PROCESO_ORDEN_SUBTOTAL="MAIL_PROCESO_ORDEN_SUBTOTAL";
+    public static String MAIL_PROCESO_ORDEN_TOTAL="MAIL_PROCESO_ORDEN_TOTAL";
+    public static String MAIL_PROCESO_ORDEN_DIR_ENTREGA="MAIL_PROCESO_ORDEN_DIR_ENTREGA";
+    public static String MAIL_PROCESO_ORDEN_DIR_FACTURACION="MAIL_PROCESO_ORDEN_DIR_FACTURACION";
+    public static String MAIL_PROCESO_ORDEN_METODO_PAGO="MAIL_PROCESO_ORDEN_METODO_PAGO";
+    public static String URL_DETALLE_ORDEN="URL_DETALLE_ORDEN";
+    public static final String url_whatsapp ="https://api.whatsapp.com/";
+    public static final String TEL_WSP ="TEL_FFLABEL";
+
+
 
     public static String convertIntColorToHex(int color){
         String hexColor = String.format("#%06X", (0xFFFFFF & color));
@@ -476,8 +496,36 @@ public class ConstantsAdmin {
         try {
             okSend = m.send();
         } catch(Exception e) {
+            e.printStackTrace();
         }
         return okSend;
+    }
+
+
+
+    public static void enviarMailGenerico(Activity activity, String emailaddress, String body, String subject) {
+        // TODO Auto-generated method stub
+
+        try {
+            String[] address = {emailaddress};
+            Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); //This is the email intent
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, address); // adds the address to the intent
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);//the subject
+            //emailIntent.setPackage("com.whatsapp");
+            emailIntent.setType("text/plain");
+            //	PackageManager pm = activity.getPackageManager();
+            //	PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+            //	emailIntent.setPackage("com.whatsapp");
+            if(body == null || body.equals("")){
+                body = "Hi!";
+            }
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body); //adds the body of the mail
+            activity.startActivity(Intent.createChooser(emailIntent, null));
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+        //activity.startActivity(emailIntent);
     }
 
     public static void createProductoCarrito(ProductoCarrito pc, Context ctx) {
@@ -891,6 +939,15 @@ public class ConstantsAdmin {
         currentCreator= null;
         textEntered= null;
         titleEntered= null;
+
+
+    }
+
+    public static String getFechaYHoraActual() {
+        String fecha = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        return formatter.format(date);
 
     }
 }

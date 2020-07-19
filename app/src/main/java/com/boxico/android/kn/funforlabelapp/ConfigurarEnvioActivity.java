@@ -302,4 +302,13 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         // configListView(listViewCarrito);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
+    }
+
 }

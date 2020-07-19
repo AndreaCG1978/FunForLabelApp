@@ -80,6 +80,15 @@ public class CarritoActivity extends FragmentActivity {
        // configListView(listViewCarrito);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
+    }
+
     private String calcularPrecioTotal() {
         String result = null;
         float valor = 0;

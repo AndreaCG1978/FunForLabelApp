@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -194,12 +195,68 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
+            Intent intent = new Intent(me, CompraFinalizadaActivity.class);
+            startActivity(intent);
+
         }
     }
 
 
 
     private void sendCustomerNotification() {
+        String body= "\n\n";
+        Properties p = ConstantsAdmin.fflProperties;
+        body = body + getString(R.string.app_name) + "\n" ;
+        body = body + "-----------------------------------------------" + "\n\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_NRO) + idOrder + "\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FACTURA_DETALLE) + p.getProperty(ConstantsAdmin.URL_DETALLE_ORDEN)+ idOrder + "\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FECHA) + ConstantsAdmin.getFechaYHoraActual() + "\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_COMENTARIO) + "\n";
+        body = body + entryComentario.getText().toString() +"\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_PRODUCTOS) + "\n";
+        body = body + "-----------------------------------------------" + "\n";
+        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ProductoCarrito pc = null;
+        while(it.hasNext()){
+            pc = it.next();
+            String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            body = body + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + precio + "\n";
+        }
+        body = body + "-----------------------------------------------" + "\n\n";
+        String precioText = String.valueOf(precioTotalTags);
+        precioText = precioText.substring(0, precioText.length() - 2);
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBTOTAL) + " $" + precioText + "\n";
+        precioText = String.valueOf(precioTotalEnvio);
+        if(precioTotalEnvio > 0){
+            precioText = precioText.substring(0, precioText.length() - 2);
+        }
+        body = body + ConstantsAdmin.selectedShippingMethod.getName() +"(" + ConstantsAdmin.selectedShippingMethod.getDescription() + "): $" + precioText + "\n";
+        precioText = String.valueOf(precioTotalTags + precioTotalEnvio);
+        precioText = precioText.substring(0, precioText.length() - 2);
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_TOTAL) + " $" + precioText + "\n" ;
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_ENTREGA) + "\n";
+        body = body + "-----------------------------------------------" + "\n";
+        body = body + getStringDirEnvio() + "\n\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_FACTURACION) + "\n";
+        body = body + "-----------------------------------------------" + "\n";
+        body = body + getStringDirEnvio() + "\n\n";
+        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_METODO_PAGO) + "\n";
+        body = body + "-----------------------------------------------" + "\n";
+        body = body + ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")";
+
+        String subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT);
+
+        String to = ConstantsAdmin.currentCustomer.getEmail();
+        ConstantsAdmin.enviarMail(subject, body, to);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
     }
 
     private void insertarOrder() {
@@ -257,16 +314,16 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, 1,
-                        p.getFillsTexturedId(),p.getComentarioUsr(),"",(int)c.getId(),p.getIdProduct(), 0,
-                        "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
+                        "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)p.getTitleFontSize(),
                         ConstantsAdmin.convertIntColorToHex(p.getFontTitleColor()),0,
                         0,p.getFontTitleId(),p.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, 1,
-                        p.getFillsTexturedId(),p.getComentarioUsr(),"",(int)c.getId(),p.getIdProduct(), 0,
-                        "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
+                        "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
             }
             response = call.execute();
@@ -289,24 +346,27 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void cargarDetalleEnvio() {
-        Customer c = ConstantsAdmin.currentCustomer;
-        String temp = c.getFirstName() + " " + c.getLastName() + "\n";
-        temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
-        if(ConstantsAdmin.addressCustomer.getSuburbio() != null && !ConstantsAdmin.addressCustomer.getSuburbio().equals("")){
-            temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
-        }
-        temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
-        temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
-
+        String temp = getStringDirEnvio();
         textDirEnvio.setText(temp);
         temp = ConstantsAdmin.selectedShippingMethod.getName() + ": $" + ConstantsAdmin.selectedShippingMethod.getPrice() +  "\n";
         textFormaEnvio.setText(temp);
         temp = ConstantsAdmin.selectedShippingMethod.getDescription();
         textFormaEnvioDetalle.setText(temp);
         precioTotalEnvio = Float.valueOf(ConstantsAdmin.selectedShippingMethod.getPrice());
+    }
 
 
-
+    private String getStringDirEnvio(){
+        String temp="";
+        Customer c = ConstantsAdmin.currentCustomer;
+        temp = c.getFirstName() + " " + c.getLastName() + "\n";
+        temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
+        if(ConstantsAdmin.addressCustomer.getSuburbio() != null && !ConstantsAdmin.addressCustomer.getSuburbio().equals("")){
+            temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
+        }
+        temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
+        temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
+        return temp;
     }
 
     private void cargarDetalleTags() {

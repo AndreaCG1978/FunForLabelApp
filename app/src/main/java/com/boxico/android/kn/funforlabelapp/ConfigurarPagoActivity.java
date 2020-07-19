@@ -194,6 +194,15 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(ConstantsAdmin.finalizarHastaMenuPrincipal){
+            finish();
+        }
+
+    }
+
     private void configureWidgets() {
 
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
