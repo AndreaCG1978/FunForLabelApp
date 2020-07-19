@@ -120,6 +120,7 @@
             exit();
         }else if(isset($_POST['insertTag'])){
             // SE INSERTA EN ORDERS_PRODUCTS
+
             $sql = "INSERT INTO ". TABLE_ORDERS_PRODUCTS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
                 VALUES(:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)";
             $statement = $dbConn->prepare($sql);
@@ -150,17 +151,38 @@
             $statement->execute();
             $idTag = $dbConn->lastInsertId();
 
-            // SE INSERTA TAGS_TEXT_OPTIONS
-            $sql = "INSERT INTO ". TCM_TAG_TEXT_OPTIONS ."(size, color, effect_bold, effect_italic, fonts_id)
-            VALUES(:size, :color, :effect_bold, :effect_italic, :fonts_id)";
-            $statement = $dbConn->prepare($sql);
-            $statement->bindParam (":size",$_POST['tto_size'] , PDO::PARAM_INT);
-            $statement->bindParam (":color",  $_POST['tto_color'] , PDO::PARAM_STR);
-            $statement->bindParam (":effect_bold",$_POST['tto_effect_bold'] , PDO::PARAM_INT);
-            $statement->bindParam (":effect_italic",$_POST['tto_effect_italic'] , PDO::PARAM_INT);
-            $statement->bindParam (":fonts_id",$_POST['tto_fonts_id'] , PDO::PARAM_INT);
-            $statement->execute();
-            $idTagTextOptions = $dbConn->lastInsertId();
+            // SE INSERTA TAGS_TEXT_OPTIONS, SI NO EXISTE. SI EXISTE, LO REUTILIZA
+            $tto_size = tep_db_prepare_input($_POST['tto_size']);
+            $tto_color = tep_db_prepare_input($_POST['tto_color']);
+            $tto_effect_bold = tep_db_prepare_input($_POST['tto_effect_bold']);
+            $tto_effect_italic = tep_db_prepare_input($_POST['tto_effect_italic']);
+            $tto_fonts_id = tep_db_prepare_input($_POST['tto_fonts_id']);
+            $sqlSearch = "SELECT * FROM ". TCM_TAG_TEXT_OPTIONS. " WHERE size =".$tto_size." AND color like '" .$tto_color. "' AND effect_bold=".$tto_effect_bold." AND effect_italic=".$tto_effect_italic. " AND fonts_id=" .$tto_fonts_id;
+            $statement1 = $dbConn->prepare($sqlSearch);
+            $statement1->execute();
+
+            $resultado = $statement1->fetch(PDO::FETCH_ASSOC);
+
+            if($resultado == null || $resultado== '' || $resultado ['tag_text_options_id']== null || $resultado ['tag_text_options_id'] == ''){
+
+                $sql = "INSERT INTO ". TCM_TAG_TEXT_OPTIONS ."(size, color, effect_bold, effect_italic, fonts_id)
+                VALUES(:size, :color, :effect_bold, :effect_italic, :fonts_id)";
+                $valorCero=0;
+                $statement2 = $dbConn->prepare($sql);
+                $statement2->bindParam (":size",$tto_size, PDO::PARAM_INT);
+                $statement2->bindParam (":color",$tto_color, PDO::PARAM_STR);
+                $statement2->bindParam (":effect_bold",$valorCero, PDO::PARAM_INT);
+                $statement2->bindParam (":effect_italic",$valorCero, PDO::PARAM_INT);
+                $statement2->bindParam (":fonts_id",$tto_fonts_id, PDO::PARAM_INT);
+
+                $statement2->execute();
+                $idTagTextOptions = $dbConn->lastInsertId();
+;
+            }else{
+
+                $idTagTextOptions = $resultado['tag_text_options_id'];
+            }
+
 
             // SE INSERTA TCM_TAG_LEGENDS
             $sql = "INSERT INTO ". TCM_TAG_LEGENDS ."(text, type, text_options_id, tags_id)
@@ -176,6 +198,7 @@
             header("HTTP/1.1 200 OK");
             echo json_encode( $idTagLegend,JSON_UNESCAPED_UNICODE);
             exit();
+
         }else{
             echo json_encode(-1,JSON_UNESCAPED_UNICODE);
         }

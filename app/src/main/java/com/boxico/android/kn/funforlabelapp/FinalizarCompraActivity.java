@@ -222,13 +222,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             if(!p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, 1,
-                        p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),"",(int)c.getId(),p.getIdProduct(), 0,
                         "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, 1,
-                        p.getFillsTexturedId(),entryComentario.getText().toString(),"",(int)c.getId(),p.getIdProduct(), 0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),"",(int)c.getId(),p.getIdProduct(), 0,
                         "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
             }
