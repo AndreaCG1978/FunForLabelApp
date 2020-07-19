@@ -93,7 +93,7 @@
             $statement->bindParam (":orders_id",$lastOrderId, PDO::PARAM_INT);
             $temp8 = KN_LABEL_TOTAL;
             $statement->bindParam (":title",$temp8, PDO::PARAM_STR);
-            $temp9 = "$".$_POST['ot_value_total'].",00";
+            $temp9 = "<strong>$".$_POST['ot_value_total'].",00</strong>";
             $statement->bindParam (":text",$temp9, PDO::PARAM_STR);
             $statement->bindParam (":value", $_POST['ot_value_total'], PDO::PARAM_STR);
             $temp10 = KN_LABEL_CLASS_TOTAL;
@@ -118,7 +118,7 @@
             header("HTTP/1.1 200 OK");
             echo json_encode( $lastOrderId,JSON_UNESCAPED_UNICODE);
             exit();
-        }else if(isset($_POST['insertTag'])){
+        }else if(isset($_POST['insertTag']) ||isset($_POST['insertTagWithTitle']) ){
             // SE INSERTA EN ORDERS_PRODUCTS
 
             $sql = "INSERT INTO ". TABLE_ORDERS_PRODUCTS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
@@ -177,7 +177,6 @@
 
                 $statement2->execute();
                 $idTagTextOptions = $dbConn->lastInsertId();
-;
             }else{
 
                 $idTagTextOptions = $resultado['tag_text_options_id'];
@@ -194,6 +193,54 @@
             $statement->bindParam (":tags_id",$idTag, PDO::PARAM_INT);
             $statement->execute();
             $idTagLegend = $dbConn->lastInsertId();
+
+
+            // COMPRUEBA SI TIENE QUE INSERTAR EL TITULO
+            if(isset($_POST['insertTagWithTitle']) ){
+                // SE INSERTA TAGS_TEXT_OPTIONS, SI NO EXISTE. SI EXISTE, LO REUTILIZA
+                $tto_size_title = tep_db_prepare_input($_POST['tto_size_title']);
+                $tto_color_title = tep_db_prepare_input($_POST['tto_color_title']);
+                $tto_effect_bold_title = tep_db_prepare_input($_POST['tto_effect_bold_title']);
+                $tto_effect_italic_title = tep_db_prepare_input($_POST['tto_effect_italic_title']);
+                $tto_fonts_id_title = tep_db_prepare_input($_POST['tto_fonts_id_title']);
+                $sqlSearch = "SELECT * FROM ". TCM_TAG_TEXT_OPTIONS. " WHERE size =".$tto_size_title." AND color like '" .$tto_color_title. "' AND effect_bold=".$tto_effect_bold_title." AND effect_italic=".$tto_effect_italic_title. " AND fonts_id=" .$tto_fonts_id_title;
+                $statement = $dbConn->prepare($sqlSearch);
+                $statement->execute();
+
+                $resultado = $statement->fetch(PDO::FETCH_ASSOC);
+
+                if($resultado == null || $resultado== '' || $resultado ['tag_text_options_id']== null || $resultado ['tag_text_options_id'] == ''){
+
+                    $sql = "INSERT INTO ". TCM_TAG_TEXT_OPTIONS ."(size, color, effect_bold, effect_italic, fonts_id)
+                    VALUES(:size, :color, :effect_bold, :effect_italic, :fonts_id)";
+                    $valorCero=0;
+                    $statement = $dbConn->prepare($sql);
+                    $statement->bindParam (":size",$tto_size_title, PDO::PARAM_INT);
+                    $statement->bindParam (":color",$tto_color_title, PDO::PARAM_STR);
+                    $statement->bindParam (":effect_bold",$valorCero, PDO::PARAM_INT);
+                    $statement->bindParam (":effect_italic",$valorCero, PDO::PARAM_INT);
+                    $statement->bindParam (":fonts_id",$tto_fonts_id_title, PDO::PARAM_INT);
+
+                    $statement->execute();
+                    $idTagTextOptionsTitle = $dbConn->lastInsertId();
+                }else{
+                    $idTagTextOptionsTitle = $resultado['tag_text_options_id'];
+                }
+
+
+                // SE INSERTA TCM_TAG_LEGENDS DEL TITLE
+                $sql = "INSERT INTO ". TCM_TAG_LEGENDS ."(text, type, text_options_id, tags_id)
+                VALUES(:text, :type, :text_options_id, :tags_id)";
+                $statement = $dbConn->prepare($sql);
+                $statement->bindParam (":text",$_POST['tl_text_title'] , PDO::PARAM_STR);
+                $statement->bindParam (":type",  $_POST['tl_type_title'] , PDO::PARAM_STR);
+                $statement->bindParam (":text_options_id",$idTagTextOptionsTitle, PDO::PARAM_INT);
+                $statement->bindParam (":tags_id",$idTag, PDO::PARAM_INT);
+                $statement->execute();
+                $idTagLegendTitle = $dbConn->lastInsertId();                
+
+            }
+
 
             header("HTTP/1.1 200 OK");
             echo json_encode( $idTagLegend,JSON_UNESCAPED_UNICODE);

@@ -54,6 +54,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     private float precioTotalTags;
     private float precioTotalEnvio;
     Integer idOrder = -1;
+    private boolean okInsert = true;
 
 
     @Override
@@ -159,13 +160,46 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-            if(idOrder != -1){// PUDO INSERTAR EN ORDERS
-
+            if(okInsert){// PUDO INSERTAR EN ORDERS
+                new SendCustomerNotificationTask().execute();
             }
             if(dialog != null) {
                 dialog.cancel();
             }
         }
+    }
+
+    private class SendCustomerNotificationTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+        private int resultado = -1;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            sendCustomerNotification();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.sending_mail_progress), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(dialog != null) {
+                dialog.cancel();
+            }
+        }
+    }
+
+
+
+    private void sendCustomerNotification() {
     }
 
     private void insertarOrder() {
@@ -183,11 +217,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
         try {
             ConstantsAdmin.mensaje = null;
-            call = orderService.insertOder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),c.getLastName() + " " + c.getFirstName(),
+            call = orderService.insertOder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
-                    ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getLastName() + " " + c.getFirstName(),
+                    ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
-                    c.getLastName() + " " + c.getFirstName(), ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
+                    c.getFirstName() + " " + c.getLastName(), ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
                     ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")",
                     timeStamp, null, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_PENDING_TRANSFERENCE)),
                     p.getProperty(ConstantsAdmin.CURRENCY), Integer.valueOf(p.getProperty(ConstantsAdmin.CURRENCY_VALUE)), me.getName() + "(" + me.getDescription() + ")",(int)(precioTotalTags + precioTotalEnvio),
@@ -197,11 +231,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 idOrder = response.body();
                 this.insertarEtiquetas();
             }else{
+                okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
         }catch(Exception exc){
             ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-
+            okInsert = false;
             if(call != null) {
                 call.cancel();
             }
@@ -216,15 +251,17 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Customer c = ConstantsAdmin.currentCustomer;
         Properties prop = ConstantsAdmin.fflProperties;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        while(it.hasNext()){
+        while(it.hasNext() && okInsert){
             p = it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
-            if(!p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
-                call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
+            if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
+                call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, 1,
                         p.getFillsTexturedId(),p.getComentarioUsr(),"",(int)c.getId(),p.getIdProduct(), 0,
                         "", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
-                        0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
+                        0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)p.getTitleFontSize(),
+                        ConstantsAdmin.convertIntColorToHex(p.getFontTitleColor()),0,
+                        0,p.getFontTitleId(),p.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, 1,
@@ -234,6 +271,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
             response = call.execute();
             if(response.body() == null){
+                okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
 

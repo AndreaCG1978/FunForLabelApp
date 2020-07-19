@@ -250,34 +250,20 @@ public class LoginActivity extends FragmentActivity {
     private boolean reenviarContrasenia(){
         boolean okSend = false;
         String body = "";
-        ProgressDialog dialog = null;
-        //KNMail m = new KNMail(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL), ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_PASSWORD));
-
-        KNMail m = new KNMail("info@funforlabels.com", "ceciyguille2011");
-        if(customerTemp != null){
-            String[] toArr = {customerTemp.getEmail()};
-            m.setTo(toArr);
-        //    m.setFrom(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL));
-            m.setFrom("info@funforlabels.com");
-            m.setSubject(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia));
-            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
-            body = body + this.getString(R.string.body1_nueva_contrasenia);
-            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER + ConstantsAdmin.TAB;
-            body = body + this.getString(R.string.contrasenia) + nuevaContraseña;
-            body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
-            body = body + this.getString(R.string.body2_nueva_contrasenia);
-            m.setBody(body);
-
-
-            try {
-                okSend = m.send();
-                if(okSend){
-                    ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + customerTemp.getEmail();
-                }
-            } catch(Exception e) {
-                //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-                ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
+        body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
+        body = body + this.getString(R.string.body1_nueva_contrasenia);
+        body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER + ConstantsAdmin.TAB;
+        body = body + this.getString(R.string.contrasenia) + nuevaContraseña;
+        body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
+        body = body + this.getString(R.string.body2_nueva_contrasenia);
+        try {
+            okSend =ConstantsAdmin.enviarMail(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia), body, customerTemp.getEmail());
+            if(okSend){
+                ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + customerTemp.getEmail();
             }
+        } catch(Exception e) {
+                //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+               ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
         }
 
         return okSend;

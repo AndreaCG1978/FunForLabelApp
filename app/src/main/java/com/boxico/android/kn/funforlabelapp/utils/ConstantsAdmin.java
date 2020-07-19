@@ -1,6 +1,7 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 
+import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
@@ -460,6 +462,22 @@ public class ConstantsAdmin {
         dbm.open();
         dbm.createLogin(currentCustomer);
         dbm.close();
+    }
+
+    public static boolean enviarMail(String subject, String body, String to){
+        boolean okSend = false;
+        KNMail m = new KNMail(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL), ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_PASSWORD));
+        String[] toArr = {to};
+        m.setTo(toArr);
+        m.setFrom(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL));
+            //    m.setFrom("info@funforlabels.com");
+        m.setSubject(subject);
+        m.setBody(body);
+        try {
+            okSend = m.send();
+        } catch(Exception e) {
+        }
+        return okSend;
     }
 
     public static void createProductoCarrito(ProductoCarrito pc, Context ctx) {
