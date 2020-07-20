@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
@@ -25,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
@@ -273,6 +275,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
         try {
+            this.generarBitmapsDeTags();
             ConstantsAdmin.mensaje = null;
             call = orderService.insertOder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
@@ -299,6 +302,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void generarBitmapsDeTags() {
     }
 
     private void insertarEtiquetas() throws IOException {

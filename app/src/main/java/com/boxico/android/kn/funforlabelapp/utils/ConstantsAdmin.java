@@ -78,6 +78,7 @@ public class ConstantsAdmin {
     public static final String PROPERTIES_FILE = "funforlabels.properties";
     public static final String ATR_URL_IMAGES = "URL_IMAGES";
     public static final String ATR_URL_FONTS = "URL_FONTS";
+    public static final String ATR_URL_LABEL_THUMBS = "URL_LABEL_THUMBS";
     public static final String ATR_URL_LABEL_IMAGES = "URL_LABEL_IMAGES";
     public static final long tokenFFL = 27029085;
     public static final String ATR_SMTP_SERVER ="SMTP_SERVER";
@@ -205,7 +206,14 @@ public class ConstantsAdmin {
     public static final String url_whatsapp ="https://api.whatsapp.com/";
     public static final String TEL_WSP ="TEL_FFLABEL";
 
+    private static ArrayList<LabelImage> capturas = null;
 
+    public static ArrayList<LabelImage> getCapturas() {
+        if(capturas == null){
+            capturas = new ArrayList<LabelImage>();
+        }
+        return capturas;
+    }
 
     public static String convertIntColorToHex(int color){
         String hexColor = String.format("#%06X", (0xFFFFFF & color));
@@ -581,15 +589,15 @@ public class ConstantsAdmin {
 
     }
 
-    public static void saveBitmapInRemoteServer(Bitmap bitmap) throws IOException {
-        String attachmentName = "bitmap";
-        String attachmentFileName = "bitmap.bmp";
+    public static void saveBitmapInRemoteServer(Bitmap bitmap, String attachmentName, String attachmentFileName) throws IOException {
+//        String attachmentName = "bitmap";
+//        String attachmentFileName = "bitmap.bmp";
         String crlf = "\r\n";
         String twoHyphens = "--";
         String boundary =  "*****";
 
         HttpURLConnection httpUrlConnection = null;
-        URL url = new URL("http://example.com/server.cgi");
+        URL url = new URL(fflProperties.getProperty(ATR_URL_LABEL_THUMBS));
         httpUrlConnection = (HttpURLConnection) url.openConnection();
         httpUrlConnection.setUseCaches(false);
         httpUrlConnection.setDoOutput(true);
@@ -656,11 +664,11 @@ public class ConstantsAdmin {
 
     public static Bitmap takeScreenshot(Activity context) {
         Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
         Bitmap bitmap = null;
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
 
             // create bitmap screen capture
             View v1 = context.getWindow().getDecorView().getRootView();
@@ -672,7 +680,7 @@ public class ConstantsAdmin {
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
 
