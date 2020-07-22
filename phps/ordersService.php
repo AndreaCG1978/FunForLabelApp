@@ -18,11 +18,13 @@
         if(isset($_POST['insertInOrders'])){
 
             // SE INSERTA EN ORDERS
-            $sql = "INSERT INTO ". TABLE_ORDERS ."(customers_id, customers_name, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, last_modified, date_purchased, orders_status, currency, currency_value)
-                VALUES(:customers_id, :customers_name, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :delivery_name, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :last_modified, :date_purchased, :order_status, :currency, :currency_value)";
+            $sql = "INSERT INTO ". TABLE_ORDERS ."(customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_company,delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner,cc_number,cc_expires,last_modified, date_purchased, orders_status, currency, currency_value)
+                VALUES(:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :cc_type, :cc_owner,:cc_number,:cc_expires, :last_modified, :date_purchased, :order_status, :currency, :currency_value)";
             $statement = $dbConn->prepare($sql);
+            $varBlanco='';
             $statement->bindParam (":customers_id",  $_POST['customers_id'] , PDO::PARAM_INT);
             $statement->bindParam (":customers_name",  $_POST['customers_name'] , PDO::PARAM_STR);
+            $statement->bindParam (":customers_company",  $varBlanco , PDO::PARAM_STR);
             $statement->bindParam (":customers_street_address",  $_POST['customers_street_address'] , PDO::PARAM_STR);
             $statement->bindParam (":customers_suburb",  $_POST['customers_suburb'] , PDO::PARAM_STR);
             $statement->bindParam (":customers_city",  $_POST['customers_city'] , PDO::PARAM_STR);
@@ -33,6 +35,7 @@
             $statement->bindParam (":customers_email_address",  $_POST['customers_email_address'] , PDO::PARAM_STR);
             $statement->bindParam (":customers_address_format_id",  $_POST['customers_address_format_id'] , PDO::PARAM_INT);
             $statement->bindParam (":delivery_name",  $_POST['delivery_name'] , PDO::PARAM_STR);            
+            $statement->bindParam (":delivery_company",  $varBlanco, PDO::PARAM_STR);            
             $statement->bindParam (":delivery_street_address",  $_POST['delivery_street_address'] , PDO::PARAM_STR);   
             $statement->bindParam (":delivery_suburb",  $_POST['delivery_suburb'] , PDO::PARAM_STR);   
             $statement->bindParam (":delivery_city",  $_POST['delivery_city'] , PDO::PARAM_STR);   
@@ -41,6 +44,7 @@
             $statement->bindParam (":delivery_country",  $_POST['delivery_country'] , PDO::PARAM_STR);  
             $statement->bindParam (":delivery_address_format_id",  $_POST['delivery_address_format_id'] , PDO::PARAM_INT);
             $statement->bindParam (":billing_name",  $_POST['billing_name'] , PDO::PARAM_STR);  
+            $statement->bindParam (":billing_company",  $varBlanco , PDO::PARAM_STR);  
             $statement->bindParam (":billing_street_address",  $_POST['billing_street_address'] , PDO::PARAM_STR);  
             $statement->bindParam (":billing_suburb",  $_POST['billing_suburb'] , PDO::PARAM_STR);  
             $statement->bindParam (":billing_city",  $_POST['billing_city'] , PDO::PARAM_STR);  
@@ -49,6 +53,10 @@
             $statement->bindParam (":billing_country",  $_POST['billing_country'] , PDO::PARAM_STR);  
             $statement->bindParam (":billing_address_format_id",  $_POST['billing_address_format_id'] , PDO::PARAM_INT);            
             $statement->bindParam (":payment_method",  $_POST['payment_method'] , PDO::PARAM_STR);  
+            $statement->bindParam (":cc_type",  $varBlanco, PDO::PARAM_STR);  
+            $statement->bindParam (":cc_owner",  $varBlanco, PDO::PARAM_STR);  
+            $statement->bindParam (":cc_number",  $varBlanco, PDO::PARAM_STR);  
+            $statement->bindParam (":cc_expires",  $varBlanco, PDO::PARAM_STR);  
             $statement->bindParam (":last_modified",  $_POST['last_modified'] , PDO::PARAM_STR);  
             $statement->bindParam (":date_purchased",  $_POST['date_purchased'] , PDO::PARAM_STR);
             $statement->bindParam (":order_status",  $_POST['order_status'] , PDO::PARAM_INT);
@@ -124,8 +132,9 @@
             $sql = "INSERT INTO ". TABLE_ORDERS_PRODUCTS ."(orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity)
                 VALUES(:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)";
             $statement = $dbConn->prepare($sql);
+            $valorCero = 0;
             $statement->bindParam (":orders_id",  $_POST['orders_id'] , PDO::PARAM_INT);
-            $statement->bindParam (":products_id",  $_POST['op_products_id'] , PDO::PARAM_INT);
+            $statement->bindParam (":products_id",  $valorCero , PDO::PARAM_INT);
             $statement->bindParam (":products_model",  $_POST['op_products_model'] , PDO::PARAM_STR);
             $statement->bindParam (":products_name",  $_POST['op_products_name'] , PDO::PARAM_STR);
             $statement->bindParam (":final_price",  $_POST['op_final_price'] , PDO::PARAM_INT);
