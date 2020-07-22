@@ -158,7 +158,7 @@ public class ConstantsAdmin {
 
     public static double MILLS_TO_PXL = 3.7795275591;
     public static String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
-    public static long ID_CREATOR_MINICIRCULARES = 59;
+  //  public static long ID_CREATOR_MINICIRCULARES = 59;
     public static Properties fflProperties;
 
     public static boolean finalizarHastaMenuPrincipal;
@@ -245,7 +245,7 @@ public class ConstantsAdmin {
         ta.setHintTextColor(Color.GRAY);
         float temp = 0;
         int w, h = 0;
-        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+     //   if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
                     context.getResources().getDisplayMetrics());
             if (acot) {
@@ -272,7 +272,7 @@ public class ConstantsAdmin {
                 temp = temp - temp * 3 / 22;
             }
             ta.setX(temp);
-        }else{
+     /*   }else{
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth() ,
                     context.getResources().getDisplayMetrics());
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
@@ -293,7 +293,7 @@ public class ConstantsAdmin {
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
 
             ta.setX(temp);
-        }
+        }*/
         ViewGroup.LayoutParams layoutParamsTextTag = new ViewGroup.LayoutParams(w, h);
         ta.setLayoutParams(layoutParamsTextTag);
         ta.setGravity(Gravity.CENTER);
@@ -324,7 +324,7 @@ public class ConstantsAdmin {
         ta.setHintTextColor(Color.GRAY);
         float temp = 0;
         int w, h = 0;
-        if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
+      //  if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, anchoArea,
                     context.getResources().getDisplayMetrics());
             if (acot) {
@@ -355,7 +355,7 @@ public class ConstantsAdmin {
             }
             temp = temp * achicar;
             ta.setX(temp);
-        }else{
+     /*   }else{
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, anchoArea ,
                     context.getResources().getDisplayMetrics());
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
@@ -378,7 +378,7 @@ public class ConstantsAdmin {
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
             temp = temp * achicar;
             ta.setX(temp);
-        }
+        }*/
         ViewGroup.LayoutParams layoutParamsTextTag = new ViewGroup.LayoutParams(w, h);
         ta.setLayoutParams(layoutParamsTextTag);
         ta.setGravity(Gravity.CENTER);
@@ -406,7 +406,7 @@ public class ConstantsAdmin {
     public static void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
         int realWidthImage = 0;
         int realHeightImage = 0;
-        if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+      //  if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
                     context.getResources().getDisplayMetrics());
             if (acot) {
@@ -420,7 +420,7 @@ public class ConstantsAdmin {
                 temp = temp - temp * 3 / 19;
             }
             realHeightImage = (int) temp;
-        } else {
+     /*   } else {
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
                     context.getResources().getDisplayMetrics());
 
@@ -431,7 +431,7 @@ public class ConstantsAdmin {
                     context.getResources().getDisplayMetrics());
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
             realHeightImage = (int) temp;
-        }
+        }*/
         Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
         if (currentC.getRounded() == 1) {
             b = getRoundedCornerBitmap(b, currentC.getRound());
@@ -446,7 +446,7 @@ public class ConstantsAdmin {
     public static void customizeBackground(float achicar, Bitmap img, int w, int h, long idCreator, int round, boolean acot, RelativeLayout rl, Activity context) {
         int realWidthImage = 0;
         int realHeightImage = 0;
-        if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+      //  if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
                     context.getResources().getDisplayMetrics());
             if (acot) {
@@ -462,7 +462,7 @@ public class ConstantsAdmin {
             }
             temp = temp * achicar;
             realHeightImage = (int) temp;
-        } else {
+     /*   } else {
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
                     context.getResources().getDisplayMetrics());
 
@@ -474,7 +474,7 @@ public class ConstantsAdmin {
             temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
             temp = temp * achicar;
             realHeightImage = (int) temp;
-        }
+        }*/
         Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
         if (round > 0) {
             b = getRoundedCornerBitmap(b, round);

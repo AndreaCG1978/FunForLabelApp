@@ -19,6 +19,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.io.File;
+import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -98,9 +99,16 @@ public class TagReadyToGoActivity extends AppCompatActivity {
       //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
         ConstantsAdmin.createProductoCarrito(pc, this);
         ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
+      /*  try {
+            ConstantsAdmin.saveBitmapInRemoteServer(ConstantsAdmin.selectedBackground, "probando", "probando.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         ConstantsAdmin.finalizarHastaMenuPrincipal = true;
         ConstantsAdmin.clearSelections();
+
         finish();
+
     }
 
     private void createAlertDialog(String message, String title){
