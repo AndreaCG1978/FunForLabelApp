@@ -3,6 +3,7 @@ package com.boxico.android.kn.funforlabelapp;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
@@ -121,15 +122,15 @@ public class TagReadyToGoActivity extends AppCompatActivity {
 
     private void initializeCreator() {
 
-        LabelAttributes la1, la2 = null;
+      //  LabelAttributes la1, la2 = null;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+/*
         la1 = ConstantsAdmin.selectedLabelAttrbText;
         if(ConstantsAdmin.selectedLabelAttrbTitle != null){
             la2 = ConstantsAdmin.selectedLabelAttrbTitle;
         }
-        //int height = displayMetrics.heightPixels;
+*/
         int width = displayMetrics.widthPixels;
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
@@ -139,9 +140,11 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         }
 
         RelativeLayout linearTag = this.findViewById(R.id.relativeReadyToGoTag);
-        ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedBackground,ConstantsAdmin.currentCreator, acotar, linearTag, this);
+        BitmapDrawable bd = new BitmapDrawable(this.getResources(), ConstantsAdmin.screenShot);
+        linearTag.setBackground(bd);
+     //   ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedBackground,ConstantsAdmin.currentCreator, acotar, linearTag, this);
 
-
+/*
         // CONFIGURACION DE UN AREA DE TEXTO
 
         EditText textTag = null;
@@ -175,7 +178,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
             titleTag.setTypeface(face);
         }
 
-
+*/
 
     }
 

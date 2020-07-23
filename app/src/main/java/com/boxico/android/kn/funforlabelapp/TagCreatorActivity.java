@@ -656,6 +656,7 @@ public class TagCreatorActivity extends AppCompatActivity {
 
     }
 
+
     private void privateLoadCreator() {
         Call<Creator> call = null;
         Response<Creator> response;
@@ -860,6 +861,20 @@ public class TagCreatorActivity extends AppCompatActivity {
         if(titleTag != null){
             ConstantsAdmin.titleEntered = titleTag.getText().toString();
         }
+        textTag.setFocusable(false);
+        if(titleTag!= null){
+            titleTag.setFocusable(false);
+        }
+        Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
+        ConstantsAdmin.screenShot = bmp;
+        textTag.setFocusable(true);
+        textTag.setFocusableInTouchMode(true);
+        textTag.requestFocus();
+        if(titleTag!= null){
+            titleTag.setFocusable(true);
+            titleTag.setFocusableInTouchMode(true);
+        }
+
         Intent intent = new Intent(me, TagReadyToGoActivity.class);
         startActivity(intent);
 

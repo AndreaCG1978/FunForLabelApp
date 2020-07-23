@@ -205,6 +205,7 @@ public class ConstantsAdmin {
     public static String URL_DETALLE_ORDEN="URL_DETALLE_ORDEN";
     public static final String url_whatsapp ="https://api.whatsapp.com/";
     public static final String TEL_WSP ="TEL_FFLABEL";
+    public static Bitmap screenShot;
 
     private static ArrayList<LabelImage> capturas = null;
 
@@ -689,6 +690,15 @@ public class ConstantsAdmin {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+
+    public static Bitmap takeScreenshot(View v) {
+       Bitmap bmp = null;
+       v.setDrawingCacheEnabled(true);
+       bmp = Bitmap.createBitmap(v.getDrawingCache());
+       v.setDrawingCacheEnabled(false);
+       return bmp;
     }
 
     public static void copyFileFromUrl(String urlPath, String fontFilename){
