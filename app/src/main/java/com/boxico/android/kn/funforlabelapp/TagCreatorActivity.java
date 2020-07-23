@@ -862,17 +862,21 @@ public class TagCreatorActivity extends AppCompatActivity {
             ConstantsAdmin.titleEntered = titleTag.getText().toString();
         }
         textTag.setFocusable(false);
+        textTag.setHint("");
         if(titleTag!= null){
             titleTag.setFocusable(false);
+            titleTag.setHint("");
         }
         Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
         ConstantsAdmin.screenShot = bmp;
         textTag.setFocusable(true);
         textTag.setFocusableInTouchMode(true);
         textTag.requestFocus();
+        textTag.setHint(R.string.your_name_here);
         if(titleTag!= null){
             titleTag.setFocusable(true);
             titleTag.setFocusableInTouchMode(true);
+            titleTag.setHint(R.string.your_name_here);
         }
 
         Intent intent = new Intent(me, TagReadyToGoActivity.class);

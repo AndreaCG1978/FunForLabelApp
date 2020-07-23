@@ -128,6 +128,7 @@ public class ConstantsAdmin {
     public static final String KEY_NOMBRE_PRODUCTO = "nombreProducto" ;
     public static final String KEY_PRECIO_PRODUCTO = "precio" ;
     public static final String KEY_CANTIDAD_PRODUCTO = "cantidad" ;
+    public static final String KEY_CANTIDAD_PRODUCTO_PORPACK = "cantidadPorPack" ;
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
     public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
@@ -812,6 +813,7 @@ public class ConstantsAdmin {
         String nombre;
         String precio;
         String cantidad;
+        String cantidadPorPack;
         String modelo;
         ProductoCarrito item = null;
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
@@ -866,6 +868,7 @@ public class ConstantsAdmin {
             modelo = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_MODELO_PRODUCTO));
             precio = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_PRECIO_PRODUCTO));
             cantidad = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO));
+            cantidadPorPack = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK));
             idProducto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_PRODUCTO));
             idFillsTextured = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FILLS_TEXTURED));
             idFontText = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FONT_TEXT));
@@ -889,6 +892,7 @@ public class ConstantsAdmin {
             item.setIdProduct(idProducto);
             item.setFillsTexturedId(idFillsTextured);
             item.setFontTextId(idFontText);
+            item.setCantidadPorPack(cantidadPorPack);
             backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
             comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
             idCreador = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_CREATOR));

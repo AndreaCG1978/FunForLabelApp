@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,6 +32,8 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.List;
 
@@ -38,6 +41,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
 
     CarritoActivity mContext;
     int resourceLayout;
+
 /*
     public KNCarritoAdapterListView(@NonNull Context context, int resource, @NonNull List<ProductoCarrito> objects) {
         super(context, resource, objects);
@@ -67,7 +71,9 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
         String newPrice = pc.getPrecio().substring(0, pc.getPrecio().length() - 2);
         txt.setText("$" + newPrice);
         txt = v.findViewById(R.id.tvCantidad);
-        txt.setText(pc.getCantidad());
+        txt.setText(pc.getCantidadPorPack());
+        TextView txtCantidad = (TextView)v.findViewById(R.id.txtCantidadProducto);
+        txtCantidad.setText(pc.getCantidad());
         txt = v.findViewById(R.id.tvModelo);
         txt.setText(pc.getModelo());
         LinearLayout linear = v.findViewById(R.id.linearImagen);
@@ -89,10 +95,47 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
                 openViewTag(pc);
             }
         });
+        Button btn = v.findViewById(R.id.btnMas);
+        btn.setTag(txtCantidad);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView txtCantidad = (TextView) v.getTag();
+                int cant = Integer.valueOf(txtCantidad.getText().toString());
+                cant++;
+                txtCantidad.setText(String.valueOf(cant));
+                pc.setCantidad(String.valueOf(cant));
+                ConstantsAdmin.createProductoCarrito(pc, mContext);
+            }
+        });
+        btn = v.findViewById(R.id.btnMenos);
+        btn.setTag(txtCantidad);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView txtCantidad = (TextView) v.getTag();
+                int cant = Integer.valueOf(txtCantidad.getText().toString());
+                if(cant > 1) {
+                    cant--;
+                    txtCantidad.setText(String.valueOf(cant));
+                    pc.setCantidad(String.valueOf(cant));
+                    ConstantsAdmin.createProductoCarrito(pc, mContext);
+                }
+            }
+        });
      //   mContext.setTerminoCargaListado(false);
         v.refreshDrawableState();
         return v;
     }
+
+    private void agregarCantidad(ProductoCarrito pc, TextView txtCantidad) {
+
+    }
+
+    private void quitarCantidad(ProductoCarrito pc, TextView txtCantidad) {
+
+    }
+
 
     private void borrarProductoCarrito(final ProductoCarrito pc) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

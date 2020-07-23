@@ -219,10 +219,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + "-----------------------------------------------" + "\n";
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         ProductoCarrito pc = null;
+        float precioTemp;
         while(it.hasNext()){
             pc = it.next();
-            String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            body = body + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + precio + "\n";
+            precioTemp = Float.valueOf(pc.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
+            //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            body = body + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
         }
         body = body + "-----------------------------------------------" + "\n\n";
         String precioText = String.valueOf(precioTotalTags);
@@ -319,7 +322,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
-                        p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, 1,
+                        p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
                         p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
                         "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)p.getTitleFontSize(),
@@ -327,7 +330,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                         0,p.getFontTitleId(),p.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
-                        p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, 1,
+                        p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
                         p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
                         "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
@@ -380,12 +383,14 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         String temp = "";
         String precio;
         precioTotalTags = 0;
+        float precioTemp = 0;
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             pc = (ProductoCarrito) it.next();
-            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + "-"+ pc.getNombre() + ": $" + precio + "\n";
-            precioTotalTags = precioTotalTags + Float.valueOf(pc.getPrecio());
+            precioTemp = (Float.valueOf(pc.getPrecio()) * Float.valueOf(pc.getCantidad()));
+//            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + "-"+ pc.getCantidad() + " x " + pc.getNombre() + ": $" + String.valueOf(precioTemp) + "\n";
+            precioTotalTags = precioTotalTags + precioTemp;
         }
         textDetalleTags.setPadding(3,3,3,3);
         textDetalleTags.setText(temp);

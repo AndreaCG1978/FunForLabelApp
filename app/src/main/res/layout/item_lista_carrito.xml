@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:id="@+id/linearImagen"
-            android:layout_width="170dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
@@ -45,7 +45,7 @@
             </TextView>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -67,11 +67,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:textSize="15sp"
                     android:textColor="@android:color/holo_red_dark"
-                    android:id="@+id/tvPrecio"
-                    />
+                    android:id="@+id/tvPrecio"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal|center_vertical">
+
+                    <Button android:id="@+id/btnMenos"
+                        android:layout_width="30dp"
+                        android:text="-"
+                        android:layout_height="30dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:textSize="15dp"
+                        android:padding="3dp"
+                        android:textStyle="bold"
+                        android:background="@drawable/custom_button"
+                        android:textColor="@android:color/holo_red_dark"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtCantidadProducto"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:textColor="@color/color_negro"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:layout_margin="3dp"/>
+
+                    <Button android:id="@+id/btnMas"
+                        android:layout_width="30dp"
+                        android:text="+"
+                        android:layout_height="30dp"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:textSize="15dp"
+                        android:padding="3dp"
+                        android:textStyle="bold"
+                        android:background="@drawable/custom_button"
+                        android:textColor="@android:color/holo_red_dark"
+                        />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

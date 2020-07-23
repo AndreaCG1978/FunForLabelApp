@@ -39,11 +39,20 @@ public class ProductoCarrito {
     private String nombre = null;
     private String precio = null;
     private String cantidad = null;
+    private String cantidadPorPack = null;
     private String modelo = null;
     private int idProduct = -1;
     private int fillsTexturedId = -1;
     private int fontTextId = -1;
     private int fontTitleId = -1;
+
+    public String getCantidadPorPack() {
+        return cantidadPorPack;
+    }
+
+    public void setCantidadPorPack(String cantidadPorPack) {
+        this.cantidadPorPack = cantidadPorPack;
+    }
 
     public int getFontTextId() {
         return fontTextId;
