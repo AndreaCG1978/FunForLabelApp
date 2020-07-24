@@ -96,7 +96,7 @@ public class CarritoActivity extends FragmentActivity {
         Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             pc = it.next();
-            valor = valor + Float.valueOf(pc.getPrecio());
+            valor = valor + Float.valueOf(pc.getPrecio()) * Float.valueOf(pc.getCantidad());
         }
         result = String.valueOf(valor);
         result = result.substring(0, result.length() - 2);
@@ -122,6 +122,13 @@ public class CarritoActivity extends FragmentActivity {
         String precioTotal = this.calcularPrecioTotal();
         totalPrecio.setText("($" + precioTotal + ")");
     }
+
+    public void actualizarPrecioCarrito() {
+      //  listViewCarrito.setAdapter(new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito));
+        String precioTotal = this.calcularPrecioTotal();
+        totalPrecio.setText("($" + precioTotal + ")");
+    }
+
 
   /*  private void configListView(ListView lv){
         this.setTerminoCargaListado(false);

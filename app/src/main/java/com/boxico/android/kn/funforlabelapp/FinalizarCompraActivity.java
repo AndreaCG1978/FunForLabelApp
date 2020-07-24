@@ -1,9 +1,17 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
@@ -18,6 +26,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
+import com.boxico.android.kn.funforlabelapp.utils.BundleCodes;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +68,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     private float precioTotalEnvio;
     Integer idOrder = -1;
     private boolean okInsert = true;
+    private Integer PAYMENT_REQUEST = 1001;
 
 
     @Override
@@ -164,14 +175,111 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
             if(okInsert){// PUDO INSERTAR EN ORDERS
-                new SendCustomerNotificationTask().execute();
+                switch ((int)ConstantsAdmin.selectedPaymentMethod.getId()){
+                    case 1:// ES TRANSFERENCIA BANCARIA
+                        new SendCustomerNotificationTask().execute();
+                        break;
+                    case 2:
+                        break;
+                    case 3: // ES MERCADOLIBRE
+                        redirigirAMercadoLibre();
+                    default:
+                        break;
+                }
+
             }
             if(dialog != null) {
                 dialog.cancel();
             }
         }
+
     }
 
+    private void redirigirAMercadoLibre() {
+    }
+/*
+    MyReceiver receiver;
+    public class MyReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //You will receive the status -> PROCESSING when a payment is initiated...
+            Log.d("Payment status", intent.getStringExtra(BundleCodes.STATUS));
+        }
+    }*/
+
+/*
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
+    }*/
+/*
+    private void redirigirAMercadoLibre() {
+        IntentFilter filter = new IntentFilter("com.mercadopago.merchant.PAYMENT_STATUS");
+        receiver = new MyReceiver();
+        registerReceiver(receiver, filter);
+
+        Intent i = new Intent();
+
+        i.setAction("com.mercadopago.PAYMENT_ACTION");
+
+        Bundle bundle = new Bundle();
+
+// AppId
+        bundle.putString(BundleCodes.APP_ID, "8755027555974708");
+
+// Secret
+        bundle.putString(BundleCodes.APP_SECRET, "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU");
+
+        // App Fee
+        bundle.putDouble(BundleCodes.APP_FEE, 10);
+
+// Amount of transaction
+        bundle.putDouble(BundleCodes.AMOUNT, Double.valueOf(precioTotalTags + precioTotalEnvio));
+
+        // Description of transaction
+        bundle.putString(BundleCodes.DESCRIPTION, "Compra en Fun For Labels App");
+
+        bundle.putInt(BundleCodes.INSTALLMENTS, 1);
+
+// Kiosk Mode
+        bundle.putBoolean(BundleCodes.IS_KIOSK, true);
+
+        if (isAvailable(i)) {
+            // start activity for result
+            i.putExtras(bundle);
+            startActivityForResult(i, PAYMENT_REQUEST);
+        } else {
+            // send to google play.
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+            }
+        }
+
+    }
+*/
+ /*   public boolean isAvailable(Intent intent) {
+        final PackageManager mgr = getPackageManager();
+        List<ResolveInfo> list =
+                mgr.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PAYMENT_REQUEST && data != null) {
+            Intent intent = new Intent(this, ResultadoMLActivity.class);
+            intent.putExtras(data.getExtras());
+            startActivity(intent);
+        }
+    }
+*/
     private class SendCustomerNotificationTask extends AsyncTask<Long, Integer, Integer> {
 
 

@@ -106,6 +106,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
                 txtCantidad.setText(String.valueOf(cant));
                 pc.setCantidad(String.valueOf(cant));
                 ConstantsAdmin.createProductoCarrito(pc, mContext);
+                mContext.actualizarPrecioCarrito();
             }
         });
         btn = v.findViewById(R.id.btnMenos);
@@ -120,6 +121,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
                     txtCantidad.setText(String.valueOf(cant));
                     pc.setCantidad(String.valueOf(cant));
                     ConstantsAdmin.createProductoCarrito(pc, mContext);
+                    mContext.actualizarPrecioCarrito();
                 }
             }
         });
@@ -128,13 +130,6 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ProductoCarrito> {
         return v;
     }
 
-    private void agregarCantidad(ProductoCarrito pc, TextView txtCantidad) {
-
-    }
-
-    private void quitarCantidad(ProductoCarrito pc, TextView txtCantidad) {
-
-    }
 
 
     private void borrarProductoCarrito(final ProductoCarrito pc) {
