@@ -30,6 +30,8 @@ import com.boxico.android.kn.funforlabelapp.utils.BundleCodes;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mercadopago.android.px.core.MercadoPagoCheckout;
+import com.mercadopago.android.px.core.MercadoPagoCheckout.Builder;
 
 
 import java.io.IOException;
@@ -69,6 +71,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     Integer idOrder = -1;
     private boolean okInsert = true;
     private Integer PAYMENT_REQUEST = 1001;
+    final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9")
+            .build();
 
 
     @Override
@@ -196,6 +200,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void redirigirAMercadoLibre() {
+        checkout.startPayment(this, PAYMENT_REQUEST);
     }
 /*
     MyReceiver receiver;
