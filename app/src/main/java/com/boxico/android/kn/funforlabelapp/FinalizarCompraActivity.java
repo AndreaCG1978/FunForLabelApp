@@ -23,6 +23,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
@@ -38,9 +44,15 @@ import com.mercadopago.android.px.core.MercadoPagoCheckout;
 import com.mercadopago.android.px.core.MercadoPagoCheckout.Builder;
 import com.mercadopago.android.px.core.PaymentProcessor;
 import com.mercadopago.android.px.model.Item;
+import com.mercadopago.android.px.model.Payment;
 import com.mercadopago.android.px.model.Sites;
+import com.mercadopago.android.px.model.exceptions.MercadoPagoError;
 import com.mercadopago.android.px.preferences.CheckoutPreference;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -49,8 +61,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -210,6 +224,76 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void redirigirAMercadoLibre() {
+        JSONObject jsonObject = new JSONObject();
+        final JSONObject itemJSON = new JSONObject();
+        final JSONObject payerJSON = new JSONObject();
+        JSONArray itemJsonArray = new JSONArray();
+        try {
+
+            itemJSON.put("title", "Compra de etiquetas");
+            itemJSON.put("description", "Muchas");
+            itemJSON.put("quantity", 1);
+            itemJSON.put("currency_id", "AR");
+            itemJSON.put("unit_price", precioTotalTags + precioTotalEnvio);
+
+            itemJsonArray.put(itemJSON);
+
+            JSONObject phoneJSON = new JSONObject();
+            phoneJSON.put("area_code", "");
+            phoneJSON.put("number", "880.402.7555");
+            JSONObject idJSON = new JSONObject();
+            idJSON.put("type", "DNI");
+            idJSON.put("number", "123456789");
+            JSONObject addressJSON = new JSONObject();
+            addressJSON.put("street_name", "la calle");
+            addressJSON.put("street_number", 1234);
+            addressJSON.put("zip_code", "1895");
+
+            payerJSON.put("name", "juan");
+            payerJSON.put("surname", "perez");
+            payerJSON.put("email", "leann@gmail.com");
+            payerJSON.put("date_created", "2015-06-02T12:58:41.425-04:00");
+            payerJSON.put("phone", phoneJSON);
+            payerJSON.put("identification", idJSON);
+            payerJSON.put("address", addressJSON);
+
+
+            jsonObject.put("items", itemJsonArray);
+            jsonObject.put("payer", payerJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String ACCESS_TOKEN_SANDBOX = "APP_USR-2650764728493246-072419-f5f9c713ef5a03660350e923ac9a3efc-143391108";
+        final String PUBLIC_KEY_SANDBOX = "APP_USR-9e9e8795-313e-4db6-8e3d-167ef4a5d0cc";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final String url = "https://api.mercadopago.com/checkout/preferences?access_token="+ACCESS_TOKEN_SANDBOX;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i("debinf MainAct", "response JSONObject: "+response);
+                    String checkoutPreferenceId = response.getString("id");
+                    new MercadoPagoCheckout.Builder(PUBLIC_KEY_SANDBOX, checkoutPreferenceId).build().startPayment( me,PAYMENT_REQUEST);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("debinf MainAct", "response ERROR: "+error.networkResponse.allHeaders);
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        requestQueue.add(jsonObjectRequest);
+
+/*
         final Item item = new Item.Builder("Orden de compra FunForLabels", 1, new BigDecimal(precioTotalTags + precioTotalEnvio)).setDescription("Las Etiquetas").build();
         CheckoutPreference checkoutPreference = new CheckoutPreference.Builder(Sites.ARGENTINA, ConstantsAdmin.currentCustomer.getEmail(), Collections.singletonList(item)).setDefaultInstallments(1).build();
         PaymentConfiguration paymentConfiguration = new PaymentConfiguration.Builder(new PaymentProcessor() {
@@ -240,8 +324,29 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 return null;
             }
         }).build();
-        new Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", checkoutPreference, paymentConfiguration).build().startPayment(this, PAYMENT_REQUEST);
+        new Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", checkoutPreference, paymentConfiguration).build().startPayment(this, PAYMENT_REQUEST);*/
        //checkout.startPayment(this, PAYMENT_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == PAYMENT_REQUEST) {
+            if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
+                final Payment payment = (Payment) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_PAYMENT_RESULT);
+                //((TextView) findViewById(R.id.mp_results)).setText("Resultado del pago: " + payment.getStatus());
+                //Done!
+            } else if (resultCode == RESULT_CANCELED) {
+                if (data != null && data.getExtras() != null
+                        && data.getExtras().containsKey(MercadoPagoCheckout.EXTRA_ERROR)) {
+                    final MercadoPagoError mercadoPagoError =
+                            (MercadoPagoError) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_ERROR);
+                  //  ((TextView) findViewById(R.id.mp_results)).setText("Error: " +  mercadoPagoError.getMessage());
+                    //Resolve error in checkout
+                } else {
+                    //Resolve canceled checkout
+                }
+            }
+        }
     }
 /*
     MyReceiver receiver;
@@ -328,14 +433,6 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 */
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PAYMENT_REQUEST && data != null) {
-            Intent intent = new Intent(this, ResultadoMLActivity.class);
-            intent.putExtras(data.getExtras());
-            startActivity(intent);
-        }
-    }
 
     private class SendCustomerNotificationTask extends AsyncTask<Long, Integer, Integer> {
 
