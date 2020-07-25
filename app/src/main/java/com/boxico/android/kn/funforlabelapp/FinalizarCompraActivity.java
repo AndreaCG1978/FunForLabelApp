@@ -17,8 +17,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
@@ -30,14 +33,21 @@ import com.boxico.android.kn.funforlabelapp.utils.BundleCodes;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mercadopago.android.px.configuration.PaymentConfiguration;
 import com.mercadopago.android.px.core.MercadoPagoCheckout;
 import com.mercadopago.android.px.core.MercadoPagoCheckout.Builder;
+import com.mercadopago.android.px.core.PaymentProcessor;
+import com.mercadopago.android.px.model.Item;
+import com.mercadopago.android.px.model.Sites;
+import com.mercadopago.android.px.preferences.CheckoutPreference;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -71,8 +81,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     Integer idOrder = -1;
     private boolean okInsert = true;
     private Integer PAYMENT_REQUEST = 1001;
-    final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9")
-            .build();
+    final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
+   // final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("8755027555974708", "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU").build();
 
 
     @Override
@@ -200,7 +210,38 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void redirigirAMercadoLibre() {
-        checkout.startPayment(this, PAYMENT_REQUEST);
+        final Item item = new Item.Builder("Orden de compra FunForLabels", 1, new BigDecimal(precioTotalTags + precioTotalEnvio)).setDescription("Las Etiquetas").build();
+        CheckoutPreference checkoutPreference = new CheckoutPreference.Builder(Sites.ARGENTINA, ConstantsAdmin.currentCustomer.getEmail(), Collections.singletonList(item)).setDefaultInstallments(1).build();
+        PaymentConfiguration paymentConfiguration = new PaymentConfiguration.Builder(new PaymentProcessor() {
+            @Override
+            public void startPayment(@NonNull CheckoutData data, @NonNull Context context, @NonNull OnPaymentListener paymentListener) {
+
+            }
+
+            @Override
+            public int getPaymentTimeout() {
+                return 0;
+            }
+
+            @Override
+            public boolean shouldShowFragmentOnPayment() {
+                return false;
+            }
+
+            @Nullable
+            @Override
+            public Bundle getFragmentBundle(@NonNull CheckoutData data, @NonNull Context context) {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Fragment getFragment(@NonNull CheckoutData data, @NonNull Context context) {
+                return null;
+            }
+        }).build();
+        new Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", checkoutPreference, paymentConfiguration).build().startPayment(this, PAYMENT_REQUEST);
+       //checkout.startPayment(this, PAYMENT_REQUEST);
     }
 /*
     MyReceiver receiver;
