@@ -285,6 +285,17 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
     }
 */
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PAYMENT_REQUEST && data != null) {
+            Intent intent = new Intent(this, ResultadoMLActivity.class);
+            intent.putExtras(data.getExtras());
+            startActivity(intent);
+        }
+    }
+
     private class SendCustomerNotificationTask extends AsyncTask<Long, Integer, Integer> {
 
 
