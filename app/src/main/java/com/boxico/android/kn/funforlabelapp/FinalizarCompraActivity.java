@@ -225,53 +225,121 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private void redirigirAMercadoLibre() {
         JSONObject jsonObject = new JSONObject();
-        final JSONObject itemJSON = new JSONObject();
+        final JSONObject itemJSON1 = new JSONObject();
+        final JSONObject itemJSON2 = new JSONObject();
         final JSONObject payerJSON = new JSONObject();
         JSONArray itemJsonArray = new JSONArray();
+        Properties p = ConstantsAdmin.fflProperties;
         try {
+            itemJSON1.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS));
+            String desc = getDescripcionTags();
 
-            itemJSON.put("title", "Compra de etiquetas");
-            itemJSON.put("description", "Muchas");
+            itemJSON1.put("description", desc);
+            itemJSON1.put("quantity", 1);
+            itemJSON1.put("currency_id", "ARS");
+            itemJSON1.put("unit_price", precioTotalTags);
+            itemJsonArray.put(itemJSON1);
+
+            if(precioTotalEnvio > 0){
+                desc = ConstantsAdmin.selectedShippingMethod.getName() +"(" + ConstantsAdmin.selectedShippingMethod.getDescription() + ")";
+                itemJSON2.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_ENVIO));
+                itemJSON2.put("description", desc);
+                itemJSON2.put("quantity", 1);
+                itemJSON2.put("currency_id", "ARS");
+                itemJSON2.put("unit_price", precioTotalEnvio);
+                itemJsonArray.put(itemJSON2);
+            }
+
+            JSONObject phoneJSON = new JSONObject();
+            phoneJSON.put("area_code", "");
+            phoneJSON.put("number", ConstantsAdmin.currentCustomer.getTelephone());
+            JSONObject idJSON = new JSONObject();
+            idJSON.put("type", "DNI");
+            idJSON.put("number", "123456789");
+
+            JSONObject addressJSON = new JSONObject();
+            addressJSON.put("street_name", ConstantsAdmin.currentCustomer.getDireccion());
+            addressJSON.put("street_number", 0);
+            addressJSON.put("zip_code", ConstantsAdmin.currentCustomer.getCp());
+
+            payerJSON.put("name", ConstantsAdmin.currentCustomer.getFirstName());
+            payerJSON.put("surname", ConstantsAdmin.currentCustomer.getLastName());
+            payerJSON.put("email", ConstantsAdmin.currentCustomer.getEmail());
+            Date date= new Date();
+            long time = date.getTime();
+            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
+            payerJSON.put("date_created", timeStamp);
+            payerJSON.put("phone", phoneJSON);
+            payerJSON.put("address", addressJSON);
+
+            payerJSON.put("identification", idJSON);
+            jsonObject.put("items", itemJsonArray);
+            jsonObject.put("payer", payerJSON);
+/*
+            itemJSON.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS));
+            String descTags = getDescripcionTags();
+
+            itemJSON.put("description", descTags);
             itemJSON.put("quantity", 1);
-            itemJSON.put("currency_id", "AR");
+            itemJSON.put("currency_id", "ARS");
+            itemJSON.put("unit_price", precioTotalTags);
+            itemJsonArray.put(itemJSON);
+
+            String precioText = String.valueOf(precioTotalEnvio);
+            if(precioTotalEnvio > 0){
+                precioText = precioText.substring(0, precioText.length() - 2);
+            }
+            descTags = descTags + ConstantsAdmin.selectedShippingMethod.getName() +"(" + ConstantsAdmin.selectedShippingMethod.getDescription() + "): $" + precioText;
+            itemJSON.put("title", p.getProperty(ConstantsAdmin.TITULO_MECADO_PAGO));
+            itemJSON.put("description", descTags);
+            itemJSON.put("quantity", 1);
+            itemJSON.put("currency_id", "ARS");
             itemJSON.put("unit_price", precioTotalTags + precioTotalEnvio);
+
 
             itemJsonArray.put(itemJSON);
 
             JSONObject phoneJSON = new JSONObject();
             phoneJSON.put("area_code", "");
-            phoneJSON.put("number", "880.402.7555");
+            phoneJSON.put("number", ConstantsAdmin.currentCustomer.getTelephone());
             JSONObject idJSON = new JSONObject();
             idJSON.put("type", "DNI");
             idJSON.put("number", "123456789");
             JSONObject addressJSON = new JSONObject();
-            addressJSON.put("street_name", "la calle");
-            addressJSON.put("street_number", 1234);
-            addressJSON.put("zip_code", "1895");
+            addressJSON.put("street_name", ConstantsAdmin.currentCustomer.getDireccion());
+            addressJSON.put("zip_code", ConstantsAdmin.currentCustomer.getCp());
 
-            payerJSON.put("name", "juan");
-            payerJSON.put("surname", "perez");
-            payerJSON.put("email", "leann@gmail.com");
-            payerJSON.put("date_created", "2015-06-02T12:58:41.425-04:00");
+            payerJSON.put("name", ConstantsAdmin.currentCustomer.getFirstName());
+            payerJSON.put("surname", ConstantsAdmin.currentCustomer.getLastName());
+            payerJSON.put("email", ConstantsAdmin.currentCustomer.getEmail());
+            Date date= new Date();
+            long time = date.getTime();
+            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
+            payerJSON.put("date_created", timeStamp);
             payerJSON.put("phone", phoneJSON);
-            payerJSON.put("identification", idJSON);
             payerJSON.put("address", addressJSON);
 
 
             jsonObject.put("items", itemJsonArray);
-            jsonObject.put("payer", payerJSON);
+            jsonObject.put("payer", payerJSON);*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String ACCESS_TOKEN_SANDBOX = "APP_USR-2650764728493246-072419-f5f9c713ef5a03660350e923ac9a3efc-143391108";
-        final String PUBLIC_KEY_SANDBOX = "APP_USR-9e9e8795-313e-4db6-8e3d-167ef4a5d0cc";
+        //MIO
+     //   String ACCESS_TOKEN_SANDBOX = "APP_USR-2650764728493246-072419-f5f9c713ef5a03660350e923ac9a3efc-143391108";
+     //   final String PUBLIC_KEY_SANDBOX = "APP_USR-9e9e8795-313e-4db6-8e3d-167ef4a5d0cc";
+
+        //GUI
+        String ACCESS_TOKEN_SANDBOX = "APP_USR-8755027555974708-090911-7b66430095cb7d32cce6fc192bde1944__LD_LA__-78106585";
+        final String PUBLIC_KEY_SANDBOX = "APP_USR-9c81d8db-230c-4a55-8985-c80946ab0274";
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final String url = "https://api.mercadopago.com/checkout/preferences?access_token="+ACCESS_TOKEN_SANDBOX;
+        final String url = ConstantsAdmin.URL_MERCADO_PAGO +ACCESS_TOKEN_SANDBOX;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.i("debinf MainAct", "response JSONObject: "+response);
+              //      Log.i("debinf MainAct", "response JSONObject: "+response);
                     String checkoutPreferenceId = response.getString("id");
                     new MercadoPagoCheckout.Builder(PUBLIC_KEY_SANDBOX, checkoutPreferenceId).build().startPayment( me,PAYMENT_REQUEST);
                 } catch (JSONException e) {
@@ -281,7 +349,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("debinf MainAct", "response ERROR: "+error.networkResponse.allHeaders);
+             //   Log.i("debinf MainAct", "response ERROR: "+error.networkResponse.allHeaders);
             }
         }){
             @Override
@@ -332,20 +400,26 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == PAYMENT_REQUEST) {
             if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
-                final Payment payment = (Payment) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_PAYMENT_RESULT);
-                //((TextView) findViewById(R.id.mp_results)).setText("Resultado del pago: " + payment.getStatus());
-                //Done!
+                Payment payment = (Payment) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_PAYMENT_RESULT);
+                ConstantsAdmin.compraExitosa = true;
+                ConstantsAdmin.mensajeCompra = payment.getPaymentStatus() + "(" + payment.getPaymentStatusDetail() + ")";
             } else if (resultCode == RESULT_CANCELED) {
+                ConstantsAdmin.compraExitosa = false;
                 if (data != null && data.getExtras() != null
                         && data.getExtras().containsKey(MercadoPagoCheckout.EXTRA_ERROR)) {
                     final MercadoPagoError mercadoPagoError =
                             (MercadoPagoError) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_ERROR);
-                  //  ((TextView) findViewById(R.id.mp_results)).setText("Error: " +  mercadoPagoError.getMessage());
+
+                    ConstantsAdmin.mensajeCompra = mercadoPagoError.getMessage();
+
+                    //  ((TextView) findViewById(R.id.mp_results)).setText("Error: " +  mercadoPagoError.getMessage());
                     //Resolve error in checkout
                 } else {
-                    //Resolve canceled checkout
+                    ConstantsAdmin.mensajeCompra = getString(R.string.cancelo_compra);
                 }
             }
+            Intent intent = new Intent(me, CompraFinalizadaActivity.class);
+            startActivity(intent);
         }
     }
 /*
@@ -465,7 +539,20 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
     }
 
-
+    private String getDescripcionTags(){
+        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ProductoCarrito pc = null;
+        String temp = "";
+        float precioTemp;
+        while(it.hasNext()){
+            pc = it.next();
+            precioTemp = Float.valueOf(pc.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
+            //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+        }
+        return temp;
+    }
 
     private void sendCustomerNotification() {
         String body= "\n\n";
@@ -479,7 +566,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + entryComentario.getText().toString() +"\n";
         body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_PRODUCTOS) + "\n";
         body = body + "-----------------------------------------------" + "\n";
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+
+        String temp = getDescripcionTags();
+        body = body + temp;
+        /*Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         ProductoCarrito pc = null;
         float precioTemp;
         while(it.hasNext()){
@@ -488,7 +578,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             body = body + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
-        }
+        }*/
         body = body + "-----------------------------------------------" + "\n\n";
         String precioText = String.valueOf(precioTotalTags);
         precioText = precioText.substring(0, precioText.length() - 2);
@@ -532,13 +622,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Customer c = ConstantsAdmin.currentCustomer;
         AddressBook ab = ConstantsAdmin.addressCustomer;
         Date date= new Date();
-        //getTime() returns current time in milliseconds
         long time = date.getTime();
-        //Passed the milliseconds to constructor of Timestamp class
-        Timestamp ts = new Timestamp(time);
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
         Properties p =  ConstantsAdmin.fflProperties;
         MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
+
         try {
             this.generarBitmapsDeTags();
             ConstantsAdmin.mensaje = null;

@@ -132,6 +132,9 @@ public class ConstantsAdmin {
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
     public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
+    public static final String TITULO_MP__DETALLE_TAGS = "TITULO_MP__DETALLE_TAGS";
+    public static final String URL_MERCADO_PAGO = "https://api.mercadopago.com/checkout/preferences?access_token=";
+    public static final String TITULO_MP__DETALLE_ENVIO = "TITULO_MP__DETALLE_ENVIO";
 
 
     public static String mensaje = null;
@@ -191,7 +194,8 @@ public class ConstantsAdmin {
     public static String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
     public static LabelImage selectedImage;
 
-    public static String MENSAJE_EXITO_ORDEN_GENERADA="MENSAJE_EXITO_ORDEN_GENERADA";
+    public static String MENSAJE_EXITO_ORDEN_GENERADA1="MENSAJE_EXITO_ORDEN_GENERADA1";
+    public static String MENSAJE_EXITO_ORDEN_GENERADA2="MENSAJE_EXITO_ORDEN_GENERADA2";
     public static String MAIL_PROCESO_ORDEN_SUBJECT="MAIL_PROCESO_ORDEN_SUBJECT";
     public static String MAIL_PROCESO_ORDEN_NRO="MAIL_PROCESO_ORDEN_NRO";
     public static String MAIL_PROCESO_ORDEN_FACTURA_DETALLE="MAIL_PROCESO_ORDEN_FACTURA_DETALLE";
@@ -207,6 +211,8 @@ public class ConstantsAdmin {
     public static final String url_whatsapp ="https://api.whatsapp.com/";
     public static final String TEL_WSP ="TEL_FFLABEL";
     public static Bitmap screenShot;
+    public static String mensajeCompra = "";
+    public static boolean compraExitosa = true;
 
     private static ArrayList<LabelImage> capturas = null;
 

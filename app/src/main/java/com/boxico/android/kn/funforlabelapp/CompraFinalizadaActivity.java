@@ -21,10 +21,12 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
 
     private CompraFinalizadaActivity me;
     private TextView textWellcomeUsr;
-    TextView textMensajeExito;
+    TextView textMensajeExito1;
+    TextView textMensajeExito2;
     TextView textEnvioMail;
     TextView textEnvioWsp;
     Button btnFinalizar;
+    private TextView textConector;
 
 
     @Override
@@ -40,7 +42,9 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
     private void configureWidgets() {
         textEnvioMail = (TextView) findViewById(R.id.textEnvioMail);
         textEnvioWsp = (TextView) findViewById(R.id.textEnvioWsp);
-        textMensajeExito = (TextView) findViewById(R.id.textMensajeExito);
+        textMensajeExito1 = (TextView) findViewById(R.id.textMensajeExito1);
+        textMensajeExito2 = (TextView) findViewById(R.id.textMensajeExito2);
+        textConector = (TextView) findViewById(R.id.textConector);
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
@@ -50,19 +54,37 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
                 volverMain();
             }
         });
-        textMensajeExito.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA));
-        textEnvioMail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enviarMail();
+        if(ConstantsAdmin.compraExitosa){// COMPRA EXITOSA
+            textEnvioWsp.setVisibility(View.VISIBLE);
+            textEnvioMail.setVisibility(View.VISIBLE);
+            textConector.setVisibility(View.VISIBLE);
+            textMensajeExito2.setVisibility(View.VISIBLE);
+            textMensajeExito1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA1));
+            String temp = "";
+            if(ConstantsAdmin.mensajeCompra != null && !ConstantsAdmin.mensajeCompra.equals("")){
+                temp = "\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
             }
-        });
-        textEnvioWsp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enviarWsp();
-            }
-        });
+            textMensajeExito2.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp);
+            textEnvioMail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    enviarMail();
+                }
+            });
+            textEnvioWsp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    enviarWsp();
+                }
+            });
+        }else{// COMPRA CON ERROR O CANCELADA
+            textEnvioWsp.setVisibility(View.GONE);
+            textEnvioMail.setVisibility(View.GONE);
+            textMensajeExito2.setVisibility(View.GONE);
+            textConector.setVisibility(View.GONE);
+            textMensajeExito1.setText(getString(R.string.cancelacion_compra) + "\n" + ConstantsAdmin.mensajeCompra);
+
+        }
 
 
 

@@ -92,8 +92,11 @@
     <string name="forma_envio_title">░ FORMA DE ENVIO</string>
     <string name="label_total_etiquetas">Total en etiquetas:</string>
     <string name="label_total">Total a pagar:</string>
-    <string name="enviar_mail">[Email]</string>
-    <string name="enviar_wsp" translatable="false">[Whatsapp]</string>
+    <string name="enviar_mail">Email</string>
+    <string name="enviar_wsp" translatable="false">Whatsapp</string>
     <string name="solicito_envio_cbu">Solicito envío CBU</string>
     <string name="solicito_envio_cbu_detalle">Solicito que me envien su nro de CBU para poder efectivizar la compra. Gracias!</string>
+    <string name="cancelo_compra">Ha cancelado su compra! Dejaremos su carrito con los productos en el caso de que desee realizarla en otro momento.</string>
+    <string name="cancelacion_compra">COMPRA CANCELADA:</string>
+    <string name="estado_compra">Estado de la compra:</string>
 </resources>
