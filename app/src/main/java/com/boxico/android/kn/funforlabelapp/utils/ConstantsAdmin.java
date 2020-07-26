@@ -190,6 +190,7 @@ public class ConstantsAdmin {
     public static String CURRENCY = "CURRENCY";
     public static String CURRENCY_VALUE = "CURRENCY_VALUE";
     public static String ORDER_STATUS_PENDING_TRANSFERENCE = "ORDER_STATUS_PENDING_TRANSFERENCE";
+    public static String ORDER_STATUS_MERCADO_PAGO_CANCELED = "ORDER_STATUS_MERCADO_PAGO_CANCELED";
     public static String TAG_LEGEND_TYPE_TEXT = "TAG_LEGEND_TYPE_TEXT";
     public static String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
     public static LabelImage selectedImage;

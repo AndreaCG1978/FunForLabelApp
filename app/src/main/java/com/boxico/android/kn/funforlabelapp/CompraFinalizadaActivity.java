@@ -62,7 +62,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             textMensajeExito1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA1));
             String temp = "";
             if(ConstantsAdmin.mensajeCompra != null && !ConstantsAdmin.mensajeCompra.equals("")){
-                temp = "\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
+                temp = "\n\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
             }
             textMensajeExito2.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp);
             textEnvioMail.setOnClickListener(new View.OnClickListener() {

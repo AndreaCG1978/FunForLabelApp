@@ -232,7 +232,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Properties p = ConstantsAdmin.fflProperties;
         try {
             itemJSON1.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS));
-            String desc = getDescripcionTags();
+            String desc = getDescripcionTagsLite();
 
             itemJSON1.put("description", desc);
             itemJSON1.put("quantity", 1);
@@ -415,6 +415,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     //  ((TextView) findViewById(R.id.mp_results)).setText("Error: " +  mercadoPagoError.getMessage());
                     //Resolve error in checkout
                 } else {
+                    new RegistrarCancelacionMercadoPagoTask().execute();
                     ConstantsAdmin.mensajeCompra = getString(R.string.cancelo_compra);
                 }
             }
@@ -422,6 +423,61 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    private void registrarCancelacionMercadoPago() {
+        Call<Integer> call = null;
+        Response<Integer> response = null;
+        Properties p =  ConstantsAdmin.fflProperties;
+        MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = orderService.updateOrder(true, ConstantsAdmin.tokenFFL,idOrder, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_MERCADO_PAGO_CANCELED)));
+            response = call.execute();
+            if(response.body() != null){
+                idOrder = response.body();
+            }else{
+
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+        }
+
+    }
+
+    private class RegistrarCancelacionMercadoPagoTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+        private int resultado = -1;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            registrarCancelacionMercadoPago();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(dialog != null) {
+                dialog.cancel();
+            }
+        }
+
+    }
+
 /*
     MyReceiver receiver;
     public class MyReceiver extends BroadcastReceiver {
@@ -554,6 +610,25 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         return temp;
     }
 
+    private String getDescripcionTagsLite(){
+        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ProductoCarrito pc = null;
+        String temp = "";
+        float precioTemp;
+        while(it.hasNext()){
+            pc = it.next();
+            precioTemp = Float.valueOf(pc.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
+            //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + pc.getNombre() +": $" + String.valueOf(precioTemp);
+            if(it.hasNext()){
+                temp =  temp + " + ";
+            }
+        }
+        return temp;
+    }
+
+
     private void sendCustomerNotification() {
         String body= "\n\n";
         Properties p = ConstantsAdmin.fflProperties;
@@ -628,9 +703,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
 
         try {
-            this.generarBitmapsDeTags();
             ConstantsAdmin.mensaje = null;
-            call = orderService.insertOder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
+            call = orderService.insertOrder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
                     ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
@@ -657,8 +731,6 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
     }
 
-    private void generarBitmapsDeTags() {
-    }
 
     private void insertarEtiquetas() throws IOException {
         Call<Integer> call = null;

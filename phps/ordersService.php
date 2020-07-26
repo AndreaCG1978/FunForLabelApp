@@ -255,6 +255,16 @@
             echo json_encode( $idTagLegend,JSON_UNESCAPED_UNICODE);
             exit();
 
+        }else if(isset($_POST['updateOrder'])){
+            // ACTUALIZA EL ESTADO DE LA ORDEN
+            $newStatus=$_POST['newStatus'];
+            $idOrder=$_POST['order_id'];
+            $sql = "UPDATE ". TABLE_ORDERS ." set orders_status = " . (int)$newStatus . " where orders_id = " .(int)$idOrder;
+
+            $statementUpdateOrder = $dbConn->prepare($sql);
+            $statementUpdateOrder->execute();
+            echo json_encode($idOrder,JSON_UNESCAPED_UNICODE);
+        
         }else{
             echo json_encode(-1,JSON_UNESCAPED_UNICODE);
         }

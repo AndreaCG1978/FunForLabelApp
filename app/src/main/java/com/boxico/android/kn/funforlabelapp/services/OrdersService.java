@@ -14,7 +14,7 @@ public interface OrdersService {
 
     @POST(API_ROUTE)
     @FormUrlEncoded
-    Call<Integer> insertOder(@Field("insertInOrders") boolean insertInOrders, @Field("tokenFFL") long tokenFFL,
+    Call<Integer> insertOrder(@Field("insertInOrders") boolean insertInOrders, @Field("tokenFFL") long tokenFFL,
                              @Field("customers_id") Integer customers_id,
                              @Field("customers_name") String customers_name,
                              @Field("customers_street_address") String customers_street_address,
@@ -60,15 +60,10 @@ public interface OrdersService {
 
     @POST(API_ROUTE)
     @FormUrlEncoded
-    Call<Integer> insertSingles(@Field("insertSingles") boolean insertSingles, @Field("tokenFFL") long tokenFFL,
-                             @Field("orders_id") Integer orders_id,
-                             // ORDERS_TOTAL
-                             @Field("ot_title_shipping") String ot_title_shipping,
-                             @Field("ot_value") Integer ot_value,
+    Call<Integer> updateOrder(@Field("updateOrder") boolean updateOrder, @Field("tokenFFL") long tokenFFL,
+                              @Field("order_id") Integer order_id,
+                              @Field("newStatus") Integer newStatus);
 
-                             // ORDERS_STATUS_HISTORY
-                             @Field("osh_date_added") Integer osh_date_added,
-                             @Field("osh_comments") String osh_comments);
 
 
     @POST(API_ROUTE)
