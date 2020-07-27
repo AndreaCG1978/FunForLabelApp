@@ -211,6 +211,8 @@ public class ConstantsAdmin {
     public static String URL_DETALLE_ORDEN="URL_DETALLE_ORDEN";
     public static final String url_whatsapp ="https://api.whatsapp.com/";
     public static final String TEL_WSP ="TEL_FFLABEL";
+    public static final String ID_PRODUCTS_COMBO ="ID_PRODUCTS_COMBO";
+    public static final String ID_CATEGORY_COMBO ="ID_CATEGORY_COMBO";
     public static Bitmap screenShot;
     public static String mensajeCompra = "";
     public static boolean compraExitosa = true;
