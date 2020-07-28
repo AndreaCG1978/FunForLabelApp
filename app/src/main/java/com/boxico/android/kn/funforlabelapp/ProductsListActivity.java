@@ -335,8 +335,14 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void goToTagCreator(Product prod) {
+        Long idCat = Long.valueOf(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ID_CATEGORY_COMBO));
         ConstantsAdmin.currentProduct = prod;
-        Intent intent = new Intent(me, TagCreatorActivity.class);
+        Intent intent;
+        if(ConstantsAdmin.currentCategory.getId()!=idCat) {// NO ES UN COMBO
+            intent = new Intent(me, TagCreatorActivity.class);
+        }else{// ES UN COMBO
+            intent = new Intent(me, TagComboCreatorActivity.class);
+        }
         startActivity(intent);
     }
 

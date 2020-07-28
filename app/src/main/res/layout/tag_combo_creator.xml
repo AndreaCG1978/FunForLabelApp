@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/bg_body">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            >
+
+        <ImageView
+            android:layout_width="320dp"
+            android:layout_height="100dp"
+            android:src="@drawable/store_logo"
+            android:gravity="center_horizontal"
+            />
+
+
+
+        <TextView
+            android:id="@+id/textWellcomeUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/custom_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+
+            <RelativeLayout
+                android:id="@+id/linearTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+            </RelativeLayout>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerBackgrounds"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_margin="10dp"
+                android:layout_gravity="right|bottom"
+                />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerFonts"
+                android:layout_margin="3dp"
+                android:background="@android:drawable/btn_dropdown"
+                />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerFontSize"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_margin="3dp"
+
+                />
+
+            <Button android:id="@+id/pickColor"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="░"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_margin="3dp"
+                android:background="@android:drawable/btn_default"
+                />
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/custom_line" />
+
+            <Button android:id="@+id/btnReadyToGo"
+                android:layout_width="wrap_content"
+                android:text="@string/culminarTag"
+                android:layout_height="30dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="15dp"
+                android:padding="7dp"
+                android:layout_margin="25dp"
+                android:textStyle="bold"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/holo_red_dark"
+
+                />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>
