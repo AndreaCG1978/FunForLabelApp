@@ -135,6 +135,15 @@ public class ConstantsAdmin {
     public static final String TITULO_MP__DETALLE_TAGS = "TITULO_MP__DETALLE_TAGS";
     public static final String URL_MERCADO_PAGO = "https://api.mercadopago.com/checkout/preferences?access_token=";
     public static final String TITULO_MP__DETALLE_ENVIO = "TITULO_MP__DETALLE_ENVIO";
+    public static final int ACTIVITY_EJECUTAR_ACERCA_DE = 1;
+    public static final int ACTIVITY_EJECUTAR_CERRAR_SESSION = 2;
+    public static final String TITULO_ACERCA_DE = "TITULO_ACERCA_DE";
+    public static final String TEXTO1_ACERCA_DE = "TEXTO1_ACERCA_DE";
+    public static final String TEXTO2_ACERCA_DE = "TEXTO2_ACERCA_DE";
+    public static final String TEXTO3_ACERCA_DE = "TEXTO3_ACERCA_DE";
+    public static final String POLITICA_PRIVACIDAD_LINK = "POLITICA_PRIVACIDAD_LINK";
+    public static final String ENVIO_DEVOLUCIONES_LINK = "ENVIO_DEVOLUCIONES_LINK";
+    public static final String CONDICIONES_USO_LINK = "CONDICIONES_USO_LINK";
 
 
     public static String mensaje = null;

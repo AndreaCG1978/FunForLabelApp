@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -59,6 +60,37 @@ public class MainActivity extends FragmentActivity {
     ArrayList<Category> categories;
     TextView verCarrito = null;
     private ImageButton imagenVerCarrito = null;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, ConstantsAdmin.ACTIVITY_EJECUTAR_ACERCA_DE,0, R.string.menu_acerca_de);
+        menu.add(0, ConstantsAdmin.ACTIVITY_EJECUTAR_CERRAR_SESSION,0, R.string.cerrar_session);
+        return true;
+    }
+
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch(item.getItemId()) {
+            case ConstantsAdmin.ACTIVITY_EJECUTAR_ACERCA_DE:
+                this.openAcercaDe();
+                return true;
+            case ConstantsAdmin.ACTIVITY_EJECUTAR_CERRAR_SESSION:
+                this.cerrarSession();
+                return true;
+        }
+        //return super.onMenuItemSelected(featureId, item);
+        return true;
+    }
+
+    private void cerrarSession() {
+        this.finish();
+    }
+
+    private void openAcercaDe() {
+        Intent intent = new Intent(me, AcercaDeActivity.class);
+        startActivity(intent);
+
+    }
 
 
     @Override

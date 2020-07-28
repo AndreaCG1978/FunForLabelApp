@@ -99,4 +99,9 @@
     <string name="cancelo_compra">Ha cancelado su compra! Dejaremos su carrito con los productos en el caso de que desee realizarla en otro momento.</string>
     <string name="cancelacion_compra">COMPRA CANCELADA:</string>
     <string name="estado_compra">Estado de la compra:</string>
+    <string name="menu_acerca_de">Acerca de...</string>
+    <string name="cerrar_session">Salir</string>
+    <string name="envio_devoluciones">Envío y devoluciones</string>
+    <string name="politica_privacidad">Política de privacidad</string>
+    <string name="condiciones_uso">Condiciones de uso</string>
 </resources>
