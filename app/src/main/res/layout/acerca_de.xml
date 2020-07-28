@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/bg_body"
-    android:layout_marginBottom="20dp">
+    android:layout_margin="15dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -47,42 +47,213 @@
             android:background="@drawable/custom_line" />
 
 
-
         <TextView
-            android:id="@+id/textEnvioDevoluciones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_light"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
             android:textSize="17sp"
+            android:text="@string/quienesSomosTitle"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/textAcercaDe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_negro"
+            android:gravity="left"
+            android:textSize="15sp"
             android:layout_margin="15dp"
-            android:text="@string/envio_devoluciones"
             android:fontFamily="sans-serif"
             android:background="@android:color/white"
             />
 
         <TextView
-            android:id="@+id/textPoliticaPrivacidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="@string/tePuedeInteresarTitle"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="15dp"
+            />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp">
+
+                <TextView
+                    android:id="@+id/textPoliticaPrivacidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17sp"
+                    android:layout_gravity="left"
+                    android:layout_margin="7dp"
+                    android:text="@string/politica_privacidad"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/textCondicionesUso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17sp"
+                    android:layout_margin="7dp"
+                    android:layout_gravity="left"
+                    android:text="@string/condiciones_uso"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/textFormasDePago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17sp"
+                    android:layout_gravity="left"
+                    android:layout_margin="7dp"
+                    android:text="@string/formas_pago"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/white"
+                    />
+
+
+                <TextView
+                    android:id="@+id/textEnvioDevoluciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17sp"
+                    android:layout_gravity="left"
+                    android:layout_margin="7dp"
+                    android:text="@string/envio_devoluciones"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/white"
+                    />
+
+                <TextView
+                    android:id="@+id/textPreguntasFrecuentes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17sp"
+                    android:layout_gravity="left"
+                    android:layout_margin="7dp"
+                    android:text="@string/preguntas_frecuentes"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/white"
+                    />
+
+            </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="@string/contactanos"
+            android:fontFamily="sans-serif-smallcaps"
+            android:background="@android:color/white"
+            android:layout_marginTop="25dp"
+            />
+
+
+        <TextView
+            android:id="@+id/textMensajeEnvioWsp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_negro"
+            android:gravity="left"
+            android:textSize="15sp"
+            android:layout_margin="15dp"
+            android:fontFamily="sans-serif"
+            android:background="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/textNroTel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/holo_red_light"
             android:textSize="17sp"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif"
+            android:background="@android:color/white"
+            />
+
+
+        <TextView
+            android:id="@+id/textMensajeEnvioMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_negro"
+            android:gravity="left"
             android:layout_margin="15dp"
-            android:text="@string/politica_privacidad"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif"
+            android:background="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/textMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="17sp"
+            android:layout_gravity="center"
             android:fontFamily="sans-serif"
             android:background="@android:color/white"
             />
 
         <TextView
-            android:id="@+id/textCondicionesUso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_light"
+            android:textColor="@color/color_gris_oscuro"
+            android:textStyle="bold"
             android:textSize="17sp"
-            android:layout_margin="15dp"
-            android:text="@string/condiciones_uso"
-            android:fontFamily="sans-serif"
+            android:text="@string/seguinos"
+            android:fontFamily="sans-serif-smallcaps"
             android:background="@android:color/white"
+            android:layout_marginTop="30dp"
             />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical|center_horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnInstagram"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/instagram"/>
+
+                <ImageButton
+                    android:id="@+id/btnFacebook"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/facebook"/>
+
+
+            </LinearLayout>
+
 
 
 

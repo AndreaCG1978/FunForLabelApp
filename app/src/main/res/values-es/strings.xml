@@ -101,7 +101,13 @@
     <string name="estado_compra">Estado de la compra:</string>
     <string name="menu_acerca_de">Acerca de...</string>
     <string name="cerrar_session">Salir</string>
-    <string name="envio_devoluciones">Envío y devoluciones</string>
-    <string name="politica_privacidad">Política de privacidad</string>
-    <string name="condiciones_uso">Condiciones de uso</string>
+    <string name="envio_devoluciones">░ Formas de envío</string>
+    <string name="politica_privacidad">░ Nuestra Política de privacidad</string>
+    <string name="condiciones_uso">░ Condiciones de uso</string>
+    <string name="formas_pago">░ Formas de pago</string>
+    <string name="preguntas_frecuentes">░ Preguntas frecuentes</string>
+    <string name="quienesSomosTitle">Quienes somos...</string>
+    <string name="tePuedeInteresarTitle">Te invitamos a que leas...</string>
+    <string name="contactanos">Contactanos!</string>
+    <string name="seguinos">Seguinos!</string>
 </resources>

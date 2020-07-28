@@ -137,13 +137,17 @@ public class ConstantsAdmin {
     public static final String TITULO_MP__DETALLE_ENVIO = "TITULO_MP__DETALLE_ENVIO";
     public static final int ACTIVITY_EJECUTAR_ACERCA_DE = 1;
     public static final int ACTIVITY_EJECUTAR_CERRAR_SESSION = 2;
-    public static final String TITULO_ACERCA_DE = "TITULO_ACERCA_DE";
-    public static final String TEXTO1_ACERCA_DE = "TEXTO1_ACERCA_DE";
-    public static final String TEXTO2_ACERCA_DE = "TEXTO2_ACERCA_DE";
-    public static final String TEXTO3_ACERCA_DE = "TEXTO3_ACERCA_DE";
-    public static final String POLITICA_PRIVACIDAD_LINK = "POLITICA_PRIVACIDAD_LINK";
-    public static final String ENVIO_DEVOLUCIONES_LINK = "ENVIO_DEVOLUCIONES_LINK";
-    public static final String CONDICIONES_USO_LINK = "CONDICIONES_USO_LINK";
+    public static final String ACERCADE_TITULO_ACERCA_DE = "TITULO_ACERCA_DE";
+    public static final String ACERCADE_QUIENES_SOMOS_TEXTO = "QUIENES_SOMOS_TEXTO";
+    public static final String ACERCADE_POLITICA_PRIVACIDAD_LINK = "POLITICA_PRIVACIDAD_LINK";
+    public static final String ACERCADE_ENVIO_DEVOLUCIONES_LINK = "ENVIO_DEVOLUCIONES_LINK";
+    public static final String ACERCADE_CONDICIONES_USO_LINK = "CONDICIONES_USO_LINK";
+    public static final String ACERCADE_FORMAS_PAGO_LINK = "FORMAS_PAGO_LINK";
+    public static final String ACERCADE_PREGUNTAS_FRECUENTES_LINK = "PREGUNTAS_FRECUENTES_LINK";
+    public static final String ACERCADE_TEXTO_ENVIO_WSP = "TEXTO_ENVIO_WSP";
+    public static final String ACERCADE_TEXTO_ENVIO_MAIL = "TEXTO_ENVIO_MAIL";
+    public static final String URL_INSTAGRAM = "URL_INSTAGRAM" ;
+    public static final String URL_FACEBOOK = "URL_FACEBOOK" ;
 
 
     public static String mensaje = null;
