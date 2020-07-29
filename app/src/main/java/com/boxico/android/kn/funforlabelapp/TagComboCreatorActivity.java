@@ -28,6 +28,8 @@ import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
+import com.boxico.android.kn.funforlabelapp.dtos.Product;
+import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
@@ -85,6 +87,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedPosFontTitle = -1;
     private int selectedPosFontSizeTitle = -1;
     private int selectedTitleColor = Color.BLACK;
+    private CategoriesProductsService productService;
+    private ArrayList<Product> productsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +114,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
         if (requestCode == PERMISSIONS_WRITE_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                this.loadCreator();
+                this.loadCombos();
             }
         }
 
@@ -127,13 +131,17 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
             } else {//Ya tiene el permiso...
-                this.loadCreator();
+                this.loadCombos();
             }
         } else {
-            this.loadCreator();
+            this.loadCombos();
         }
 
 
+    }
+
+    private void loadCombos() {
+        new LoadCombosTask().execute();
     }
 
     private void loadCreator() {
@@ -175,6 +183,60 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         //    new LoadAttributesTask().execute();
         }
     }
+
+    private class LoadCombosTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            privateLoadProductCombo();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(dialog != null) {
+                dialog.cancel();
+            }
+
+        }
+    }
+
+    private void privateLoadProductCombo() {
+        Call<List<Product>> call = null;
+        Response<List<Product>> response;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                productsList = new ArrayList<>(response.body());
+                if(productsList.size() == 0){
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            }else{
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
 
     private class LoadImagesTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -778,6 +840,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         creatorService = retrofit.create(CreatorService.class);
+        productService = retrofit.create(CategoriesProductsService.class);
     }
 
 

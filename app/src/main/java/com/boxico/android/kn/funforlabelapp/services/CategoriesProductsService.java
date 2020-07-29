@@ -19,6 +19,7 @@ public interface CategoriesProductsService {
     @GET(API_ROUTE)
     Call< List<Product>> getProductsFromCategory(@Query("categoryId") long categoryId, @Query("currentLang") long currentLang, @Query("tokenFFL") long tokenFFL);
 
-
+    @GET(API_ROUTE)
+    Call< List<Product>> getProductsFromComboProduct(@Query("getProductsFromComboProduct") boolean getProductsFromComboProduct, @Query("productId") long productId, @Query("currentLang") long currentLang, @Query("tokenFFL") long tokenFFL);
 
 }
