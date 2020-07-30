@@ -218,6 +218,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
+            
             call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
