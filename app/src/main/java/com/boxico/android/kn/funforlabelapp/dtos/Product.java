@@ -103,6 +103,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "";
+        return getName();
     }
 }

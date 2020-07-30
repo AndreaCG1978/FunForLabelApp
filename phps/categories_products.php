@@ -44,13 +44,14 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
-		}elseif (isset($_GET['getProductsFromComboProduct']))
+		}elseif (isset($_GET['getProductsFromComboProduct'])&& isset($_GET['currentLang']))
 		{// SE PIDEN LOS PRODUCTOS DE UN COMBO
 			$productId = tep_db_prepare_input($_GET['productId']);
-			$consulta = "SELECT ". TABLE_PRODUCTS . ".products_id, products_model, products_image FROM ". 
-			TABLE_PRODUCTS . ", ". TCM_COMBOS . ", ". TCM_COMBOS_HAS_PRODUCTS . 
+			$current_lang = tep_db_prepare_input($_GET['currentLang']);
+			$consulta = "SELECT ". TABLE_PRODUCTS . ".products_id, products_name, products_model, products_image FROM ". 
+			TABLE_PRODUCTS . ", ". TCM_COMBOS . ", ". TCM_COMBOS_HAS_PRODUCTS . ", " . TABLE_PRODUCTS_DESCRIPTION .
 			" WHERE " . TCM_COMBOS . ".products_id = " . $productId . " AND " .  TCM_COMBOS . ".combos_id = " . TCM_COMBOS_HAS_PRODUCTS . ".combos_id AND " . 
-			TCM_COMBOS_HAS_PRODUCTS . ".products_id = ". TABLE_PRODUCTS . ".products_id";
+			TCM_COMBOS_HAS_PRODUCTS . ".products_id = ". TABLE_PRODUCTS . ".products_id AND " . TABLE_PRODUCTS . ".products_id = " . TABLE_PRODUCTS_DESCRIPTION . ".products_id and language_id = ".$current_lang;
 			$sql = $dbConn->prepare($consulta);
 			$sql->execute();
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

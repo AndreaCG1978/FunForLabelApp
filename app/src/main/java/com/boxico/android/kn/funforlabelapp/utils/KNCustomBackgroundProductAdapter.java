@@ -43,7 +43,7 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), dstWidth,dstHeight, false);
 	//	Bitmap b =Bitmap.createScaledBitmap
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
-		txt.setCompoundDrawablesWithIntrinsicBounds(null, null, icon,null);
+		txt.setCompoundDrawablesWithIntrinsicBounds(icon, null, null,null);
 		return view;
 	}
 
@@ -65,7 +65,7 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 		//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
 		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), dstWidth,dstHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
-		txt.setCompoundDrawablesWithIntrinsicBounds(null, null, icon,null);
+		txt.setCompoundDrawablesWithIntrinsicBounds(icon, null, null,null);
 		GradientDrawable border = new GradientDrawable();
 		border.setColor(Color.TRANSPARENT); //white background
 		border.setStroke(2, Color.DKGRAY); //black border with full opacity

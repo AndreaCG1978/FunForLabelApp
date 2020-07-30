@@ -182,8 +182,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
-            new LoadImagesTask().execute();
-        //    new LoadAttributesTask().execute();
+       //     new LoadImagesTask().execute();
+            new LoadAttributesTask().execute();
         }
     }
 
@@ -242,6 +242,20 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 dialog.cancel();
             }
             spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
+            spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
+                    loadCreator();
+                    //    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
 
         }
@@ -271,7 +285,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         try {
             ConstantsAdmin.mensaje = null;
             
-            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.tokenFFL);
+            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 productsList = new ArrayList<>(response.body());
@@ -521,6 +535,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             acotar = true;
         }
         Bitmap firstBitmap = images[0].getImage();
+        linearTag.removeAllViews();
         ConstantsAdmin.customizeBackground(firstBitmap,ConstantsAdmin.currentCreator, acotar, linearTag, this);
 
 
@@ -630,24 +645,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             }
         });
 
-        spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
-            //    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
         spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
         spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
-        spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
+       // spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
 
         textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -786,7 +789,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = creatorService.getCreator(ConstantsAdmin.currentProduct.getId(), true, ConstantsAdmin.tokenFFL);
+            call = creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 ConstantsAdmin.currentCreator = response.body();
