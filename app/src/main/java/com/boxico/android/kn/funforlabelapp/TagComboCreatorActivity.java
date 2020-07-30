@@ -33,6 +33,7 @@ import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundProductAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
 import com.google.gson.Gson;
@@ -41,6 +42,7 @@ import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +77,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
     private Spinner spinnerBackgrounds;
+    private Spinner spinnerProducts;
  //   private EditText entryTextTag;
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
@@ -208,7 +211,56 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             if(dialog != null) {
                 dialog.cancel();
             }
+            new LoadImageForComboProductsTask().execute();
 
+        }
+    }
+
+
+    private class LoadImageForComboProductsTask extends AsyncTask<Long, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+
+        @Override
+        protected Integer doInBackground(Long... longs) {
+            publishProgress(1);
+            loadImagesForComboProducts();
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            dialog = ProgressDialog.show(me, "",
+                    getResources().getString(R.string.loading_data), true);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(dialog != null) {
+                dialog.cancel();
+            }
+            spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
+
+
+        }
+    }
+
+    private void loadImagesForComboProducts() {
+        Iterator<Product> it = productsList.iterator();
+        Product p;
+        String url;
+        Bitmap b;
+        try {
+            while (it.hasNext()){
+                p = it.next();
+                url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_IMAGES) + p.getImageString();
+                b = ConstantsAdmin.getImageFromURL(url);
+                p.setImage(b);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -219,7 +271,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         try {
             ConstantsAdmin.mensaje = null;
             
-            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 productsList = new ArrayList<>(response.body());
@@ -578,9 +630,24 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             }
         });
 
+        spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
+            //    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
         spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
         spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
+        spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
 
         textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -883,6 +950,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         spinnerFonts = (Spinner) this.findViewById(R.id.spinnerFonts);
         spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
         spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
+        spinnerProducts = (Spinner) this.findViewById(R.id.spinnerProducts);
         pickColor = (Button) this.findViewById(R.id.pickColor);
         btnReadyToGo = (Button) this.findViewById(R.id.btnReadyToGo);
         pickColor.setOnClickListener(new View.OnClickListener() {

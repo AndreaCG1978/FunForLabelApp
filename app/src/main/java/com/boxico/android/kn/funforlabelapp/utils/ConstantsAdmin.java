@@ -229,6 +229,7 @@ public class ConstantsAdmin {
     public static Bitmap screenShot;
     public static String mensajeCompra = "";
     public static boolean compraExitosa = true;
+    public static Product selectedComboProduct;
 
     private static ArrayList<LabelImage> capturas = null;
 

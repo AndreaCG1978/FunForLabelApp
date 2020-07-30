@@ -44,6 +44,22 @@
 			}else{
 				echo json_encode([],JSON_UNESCAPED_UNICODE);
 			}
+		}elseif (isset($_GET['getProductsFromComboProduct']))
+		{// SE PIDEN LOS PRODUCTOS DE UN COMBO
+			$productId = tep_db_prepare_input($_GET['productId']);
+			$consulta = "SELECT ". TABLE_PRODUCTS . ".products_id, products_model, products_image FROM ". 
+			TABLE_PRODUCTS . ", ". TCM_COMBOS . ", ". TCM_COMBOS_HAS_PRODUCTS . 
+			" WHERE " . TCM_COMBOS . ".products_id = " . $productId . " AND " .  TCM_COMBOS . ".combos_id = " . TCM_COMBOS_HAS_PRODUCTS . ".combos_id AND " . 
+			TCM_COMBOS_HAS_PRODUCTS . ".products_id = ". TABLE_PRODUCTS . ".products_id";
+			$sql = $dbConn->prepare($consulta);
+			$sql->execute();
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+			if($resultado != null){
+                header("HTTP/1.1 200 OK");
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+			}else{
+				echo json_encode([],JSON_UNESCAPED_UNICODE);
+			}
 		}else{
 			echo json_encode([],JSON_UNESCAPED_UNICODE);
 		}

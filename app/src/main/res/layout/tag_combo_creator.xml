@@ -51,6 +51,14 @@
             android:gravity="center"
             android:layout_margin="10dp">
 
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerProducts"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            />
 
             <RelativeLayout
                 android:id="@+id/linearTag"
