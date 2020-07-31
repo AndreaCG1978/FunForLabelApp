@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -73,6 +74,12 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 
 		view.setBackground(border);
 		view.setPadding(10,10,10,10);
+		ImageView img = view.findViewById(R.id.imgChecked);
+		if(p.isChecked()){
+			img.setVisibility(View.VISIBLE);
+		}else{
+			img.setVisibility(View.GONE);
+		}
 		return view;
 	}
 }

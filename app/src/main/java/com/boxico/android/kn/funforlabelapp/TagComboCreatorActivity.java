@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundProductAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.TagParams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -82,7 +84,6 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
     private Button btnReadyToGo;
-    private Paint mPaint;
     private Button pickColor;
     private int selectedPosFontText = -1;
     private int selectedPosFontSizeText = -1;
@@ -92,11 +93,14 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedTitleColor = Color.BLACK;
     private CategoriesProductsService productService;
     private ArrayList<Product> productsList;
+    private ArrayMap<Long,TagParams> params;
+    private ColorPicker colorPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me = this;
+        params = new ArrayMap<>();
         setContentView(R.layout.tag_combo_creator);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -242,11 +246,37 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 dialog.cancel();
             }
             spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
+
             spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
+                        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        if(textTag != null && textTag.getText()!= null){
+                            tp.setText(textTag.getText().toString());
+                        }
+
+                        if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
+                            tp.setTitle(titleTag.getText().toString());
+                        }
+
+                    }
                     ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
+                    TagParams param = null;
+                    if(!params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+                        param = new TagParams();
+                        param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
+                        params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                    }
                     loadCreator();
+                  /*  if(textTag != null && textTag.getText()!= null){
+                        param.setText(textTag.getText().toString());
+                    }
+
+                    if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
+                        param.setTitle(titleTag.getText().toString());
+                    }*/
+
                     //    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
                 }
@@ -571,21 +601,29 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     size = size * ((float)1.04);
                 }
 
-
+                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTextSize(TypedValue.TYPE_STRING, size);
                     selectedPosFontSizeText = position;
+                    tp.setFontSizeText(String.valueOf(size));
+                    tp.setPosSizeText(position);
                     if(titleTag != null){
                         selectedPosFontSizeTitle = position;
                         titleTag.setTextSize(TypedValue.TYPE_STRING, size);
+                        tp.setFontSizeTitle(String.valueOf(size));
+                        tp.setPosSizeTitle(position);
                     }
                 }else {
                     if (textTag.hasFocus()) {
                         selectedPosFontSizeText = position;
                         textTag.setTextSize(TypedValue.TYPE_STRING, size);
+                        tp.setFontSizeText(String.valueOf(size));
+                        tp.setPosSizeText(position);
                     } else if (titleTag != null && titleTag.hasFocus()) {
                         selectedPosFontSizeTitle = position;
                         titleTag.setTextSize(TypedValue.TYPE_STRING, size);
+                        tp.setFontSizeTitle(String.valueOf(size));
+                        tp.setPosSizeTitle(position);
                     }
                 }
 
@@ -605,21 +643,29 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
                 File fileFont = ConstantsAdmin.getFile(lf.getBasename());
                 Typeface face = Typeface.createFromFile(fileFont);
-
+                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTypeface(face);
+                    tp.setFontText(face);
+                    tp.setPosFontText(position);
                     selectedPosFontText = position;
                     if(titleTag != null){
                         titleTag.setTypeface(face);
                         selectedPosFontTitle = position;
+                        tp.setFontTitle(face);
+                        tp.setPosFontTitle(position);
                     }
                 }else {
                     if (textTag.hasFocus()) {
                         selectedPosFontText = position;
                         textTag.setTypeface(face);
+                        tp.setFontText(face);
+                        tp.setPosFontText(position);
                     } else if (titleTag != null && titleTag.hasFocus()) {
                         selectedPosFontTitle = position;
                         titleTag.setTypeface(face);
+                        tp.setFontTitle(face);
+                        tp.setPosFontTitle(position);
                     }
                 }
 
@@ -635,6 +681,9 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConstantsAdmin.selectedImage = (LabelImage) parent.getAdapter().getItem(position);
+                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                tp.setImage(ConstantsAdmin.selectedImage);
+                tp.setPosImage(position);
                 ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
             }
@@ -676,6 +725,22 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
             });
         }
+        if(ConstantsAdmin.selectedComboProduct!= null && params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+            TagParams param = params.get(ConstantsAdmin.selectedComboProduct.getId());
+            spinnerBackgrounds.setSelection(param.getPosImage());
+            spinnerFonts.setSelection(param.getPosFontText());
+            spinnerFontSizes.setSelection(param.getPosSizeText());
+            textTag.setText(param.getText());
+            textTag.setTextColor(param.getColorText());
+            pickColor.setTextColor(param.getColorText());
+            if(param.getText()!= null && !param.getText().toString().equals("")){
+                ConstantsAdmin.selectedComboProduct.setChecked(true);
+            }else{
+                ConstantsAdmin.selectedComboProduct.setChecked(false);
+            }
+
+        }
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
     }
@@ -1045,7 +1110,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
     private void openColorPicker() {
 
-        ColorPicker colorPicker = new ColorPicker(me);
+        colorPicker = new ColorPicker(me);
         ArrayList<String> colorToHex = new ArrayList<>();
         colorToHex.add("#FEFEFE");
         colorToHex.add("#F69060");
@@ -1079,18 +1144,27 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
             @Override
             public void onChooseColor(int position,int color) {
+                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTextColor(color);
+                    tp.setColorText(color);
+                    tp.setPosColorText(position);
                     if(titleTag != null){
                         titleTag.setTextColor(color);
+                        tp.setColorTitle(color);
+                        tp.setPosColorTitle(position);
                     }
                 }else {
                     if (textTag.hasFocus()) {
                         selectedTextColor = color;
                         textTag.setTextColor(color);
+                        tp.setPosColorText(position);
+                        tp.setColorText(color);
                     } else if (titleTag != null && titleTag.hasFocus()) {
                         titleTag.setTextColor(color);
                         selectedTitleColor = color;
+                        tp.setColorTitle(color);
+                        tp.setPosColorTitle(position);
                     }
                 }
                 pickColor.setTextColor(color);
@@ -1105,118 +1179,6 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         colorPicker.setColumns(5);
         colorPicker.show();
 
-              /*
-                setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
-            @Override
-            public void setOnFastChooseColorListener(int position, int color) {
-                // put code
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
-                    textTag.setTextColor(color);
-                    if(titleTag != null){
-                        titleTag.setTextColor(color);
-                    }
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedTextColor = color;
-                        textTag.setTextColor(color);
-                    } else if (titleTag != null && titleTag.hasFocus()) {
-                        titleTag.setTextColor(color);
-                        selectedTitleColor = color;
-                    }
-                }
-                pickColor.setTextColor(color);
-            }
 
-            @Override
-            public void onCancel(){
-                // put code
-            }
-        }).setDefaultColorButton(Color.parseColor("#f84c44")).setColumns(5).setColors(colorToHex).show();
-*/
-     /*   ColorPicker colorPicker = new ColorPicker(me);
-        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
-            @Override
-            public void onChooseColor(int position,int color) {
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
-                    textTag.setTextColor(color);
-                    if(titleTag != null){
-                        titleTag.setTextColor(color);
-                    }
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedTextColor = color;
-                        textTag.setTextColor(color);
-                    } else if (titleTag != null && titleTag.hasFocus()) {
-                        titleTag.setTextColor(color);
-                        selectedTitleColor = color;
-                    }
-                }
-                pickColor.setTextColor(color);
-            }
-
-            @Override
-            public void onCancel(){
-                // put code
-            }
-        });
-        colorPicker.show();*/
-
-        /*
-        colorPicker.setOnFastChooseColorListener(new ColorPicker.OnFastChooseColorListener() {
-            @Override
-            public void setOnFastChooseColorListener(int position, int color) {
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
-                    textTag.setTextColor(color);
-                    if(titleTag != null){
-                        titleTag.setTextColor(color);
-                    }
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedTextColor = color;
-                        textTag.setTextColor(color);
-                    } else if (titleTag != null && titleTag.hasFocus()) {
-                        titleTag.setTextColor(color);
-                        selectedTitleColor = color;
-                    }
-                }
-                pickColor.setTextColor(color);
-            }
-
-            @Override
-            public void onCancel(){
-                // put code
-            }
-        }).setDefaultColorButton(Color.parseColor("#f84c44")).setColumns(5).show();
-*/
-        /*
-
-
-
-        AmbilWarnaDialog myColorPicker = new AmbilWarnaDialog(this, Color.BLACK, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
-                    textTag.setTextColor(color);
-                    if(titleTag != null){
-                        titleTag.setTextColor(color);
-                    }
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedTextColor = color;
-                        textTag.setTextColor(color);
-                    } else if (titleTag != null && titleTag.hasFocus()) {
-                        titleTag.setTextColor(color);
-                        selectedTitleColor = color;
-                    }
-                }
-                pickColor.setTextColor(color);
-            }
-        });
-        myColorPicker.show();*/
     }
 }
