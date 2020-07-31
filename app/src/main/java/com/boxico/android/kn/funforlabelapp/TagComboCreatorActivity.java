@@ -16,6 +16,7 @@ import android.os.StrictMode;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -246,7 +247,33 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 dialog.cancel();
             }
             spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
+            spinnerProducts.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
+                        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        if(textTag != null && textTag.getText()!= null){
+                            tp.setText(textTag.getText().toString());
+                            if(!textTag.getText().toString().equals("")) {
+                                ConstantsAdmin.selectedComboProduct.setChecked(true);
+                            }else{
+                                ConstantsAdmin.selectedComboProduct.setChecked(false);
+                            }
+                        }
 
+                        if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
+                            tp.setTitle(titleTag.getText().toString());
+                            if(!titleTag.getText().toString().equals("")) {
+                                ConstantsAdmin.selectedComboProduct.setChecked(true);
+                            }else{
+                                ConstantsAdmin.selectedComboProduct.setChecked(false);
+                            }
+
+                        }
+                    }
+                    return false;
+                }
+            });
             spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -254,12 +281,18 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                         TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
                         if(textTag != null && textTag.getText()!= null){
                             tp.setText(textTag.getText().toString());
+                            if(!textTag.getText().toString().equals("")) {
+                                ConstantsAdmin.selectedComboProduct.setChecked(true);
+                            }
                         }
 
                         if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
                             tp.setTitle(titleTag.getText().toString());
-                        }
+                            if(!titleTag.getText().toString().equals("")) {
+                                ConstantsAdmin.selectedComboProduct.setChecked(true);
+                            }
 
+                        }
                     }
                     ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
                     TagParams param = null;
@@ -696,9 +729,9 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
 
-        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, fonts));
-        spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
-        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
+        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, fonts));
+        spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
+        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, images));
        // spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
 
         textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
