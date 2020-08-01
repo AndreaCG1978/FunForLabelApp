@@ -1,5 +1,6 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
@@ -20,6 +21,7 @@ public class TagParams {
     private boolean isTitle = false;
     private long idProduct = -1;
 
+
     private int posSizeText;
     private int posSizeTitle;
     private int posFontText;
@@ -27,6 +29,8 @@ public class TagParams {
     private int posColorText;
     private int posColorTitle;
     private int posImage;
+
+
 
     public int getPosSizeText() {
         return posSizeText;

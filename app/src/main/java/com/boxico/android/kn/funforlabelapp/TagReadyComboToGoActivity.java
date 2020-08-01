@@ -2,33 +2,30 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Iterator;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
+public class TagReadyComboToGoActivity extends AppCompatActivity {
 
-public class TagReadyToGoActivity extends AppCompatActivity {
-
-    private TagReadyToGoActivity me;
+    private TagReadyComboToGoActivity me;
     TextView textWellcomeUsr = null;
     Button agregarAlCarrito = null;
     EditText comentarioUsr = null;
@@ -40,9 +37,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         setContentView(R.layout.tag_ready_to_go);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        this.initializeService();
         this.configureWidgets();
-        this.askForWriteStoragePermission();
         this.initializeCreator();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,6 +46,8 @@ public class TagReadyToGoActivity extends AppCompatActivity {
 
     private void agregarProductoAlCarrito() {
         ProductoCarrito pc = new ProductoCarrito();
+        /*
+
         if(ConstantsAdmin.selectedLabelAttrbTitle != null){
             pc.setAreaTitulo(ConstantsAdmin.selectedLabelAttrbTitle);
             pc.setFontTitleColor(ConstantsAdmin.selectedTitleFontColor);
@@ -102,15 +99,11 @@ public class TagReadyToGoActivity extends AppCompatActivity {
       //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
         ConstantsAdmin.createProductoCarrito(pc, this);
         ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
-      /*  try {
-            ConstantsAdmin.saveBitmapInRemoteServer(ConstantsAdmin.selectedBackground, "probando", "probando.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+
         ConstantsAdmin.finalizarHastaMenuPrincipal = true;
         ConstantsAdmin.clearSelections();
 
-        finish();
+        finish();*/
 
     }
 
@@ -123,70 +116,52 @@ public class TagReadyToGoActivity extends AppCompatActivity {
     }
 
     private void initializeCreator() {
-
-      //  LabelAttributes la1, la2 = null;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+     /*   DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-/*
-        la1 = ConstantsAdmin.selectedLabelAttrbText;
-        if(ConstantsAdmin.selectedLabelAttrbTitle != null){
-            la2 = ConstantsAdmin.selectedLabelAttrbTitle;
-        }
-*/
+
         int width = displayMetrics.widthPixels;
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
         boolean acotar = false;
         if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
-        }
-
+        }*/
         LinearLayout linearTag = this.findViewById(R.id.linearReadyToGoTag);
-        BitmapDrawable bd = new BitmapDrawable(this.getResources(), ConstantsAdmin.screenShot);
-        linearTag.setBackground(bd);
-     //   ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedBackground,ConstantsAdmin.currentCreator, acotar, linearTag, this);
+        ImageView iv = null;
+        LinearLayout.LayoutParams params = null;
+        BitmapDrawable bd = null;
+        Iterator<Product> it = ConstantsAdmin.currentComboProducts.iterator();
+        Bitmap bm = null;
+        Product p = null;
+        TextView tv = null;
+        while (it.hasNext()){
+            tv = new TextView(this);
+            iv = new ImageView(this);
+            p = it.next();
+            bm = p.getScreenShot();
+            tv.setText(p.getName());
+            params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(15,15,15,10);
+            tv.setLayoutParams(params);
+            linearTag.addView(tv);
 
-/*
-        // CONFIGURACION DE UN AREA DE TEXTO
+            params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(15,5,15,15);
+            int srcWidth = bm.getWidth();
+            int srcHeight = bm.getHeight();
+            int dstWidth = (int)(srcWidth*0.50f);
+            int dstHeight = (int)(srcHeight*0.50f);
+            // Add image path from drawable folder.
 
-        EditText textTag = null;
-        EditText titleTag = null;
-        if(la1.getIsTitle()==0) {
-            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-        }else{
-            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1,"",ConstantsAdmin.currentCreator, acotar, linearTag,me);
+            Bitmap b =Bitmap.createScaledBitmap(bm, dstWidth,dstHeight, false);
+            bd = new BitmapDrawable(this.getResources(),b);
+            iv.setBackground(bd);
+            iv.setLayoutParams(params);
+
+            linearTag.addView(iv);
         }
-        if(la2 != null) {
-            if(la2.getIsTitle()==0){
-                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-            }else {
-                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, "",ConstantsAdmin.currentCreator, acotar, linearTag,me);
-            }
-        }
-        textTag.setText(ConstantsAdmin.textEntered);
-        textTag.setTextColor(ConstantsAdmin.selectedTextFontColor);
-        textTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTextFontSize);
-        File fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTextFont.getBasename());
-        Typeface face = Typeface.createFromFile(fileFont);
-        textTag.setTypeface(face);
-        textTag.setEnabled(false);
-        if(titleTag != null){
-            titleTag.setEnabled(false);
-            titleTag.setText(ConstantsAdmin.titleEntered);
-            titleTag.setTextColor(ConstantsAdmin.selectedTitleFontColor);
-            titleTag.setTextSize(TypedValue.TYPE_STRING, ConstantsAdmin.selectedTitleFontSize);
-            fileFont = ConstantsAdmin.getFile(ConstantsAdmin.selectedTitleFont.getBasename());
-            face = Typeface.createFromFile(fileFont);
-            titleTag.setTypeface(face);
-        }
-
-*/
-
     }
 
-    private void askForWriteStoragePermission() {
-        
-    }
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
@@ -202,7 +177,5 @@ public class TagReadyToGoActivity extends AppCompatActivity {
     }
 
 
-    private void initializeService() {
-    }
 
 }

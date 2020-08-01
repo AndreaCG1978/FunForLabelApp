@@ -230,6 +230,7 @@ public class ConstantsAdmin {
     public static String mensajeCompra = "";
     public static boolean compraExitosa = true;
     public static Product selectedComboProduct;
+    public static ArrayList<Product> currentComboProducts;
 
     private static ArrayList<LabelImage> capturas = null;
 

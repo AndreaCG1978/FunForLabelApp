@@ -3,6 +3,7 @@ package com.boxico.android.kn.funforlabelapp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -250,27 +251,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             spinnerProducts.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
-                        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
-                        if(textTag != null && textTag.getText()!= null){
-                            tp.setText(textTag.getText().toString());
-                            if(!textTag.getText().toString().equals("")) {
-                                ConstantsAdmin.selectedComboProduct.setChecked(true);
-                            }else{
-                                ConstantsAdmin.selectedComboProduct.setChecked(false);
-                            }
-                        }
-
-                        if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
-                            tp.setTitle(titleTag.getText().toString());
-                            if(!titleTag.getText().toString().equals("")) {
-                                ConstantsAdmin.selectedComboProduct.setChecked(true);
-                            }else{
-                                ConstantsAdmin.selectedComboProduct.setChecked(false);
-                            }
-
-                        }
-                    }
+                    actualizarTagActual();
                     return false;
                 }
             });
@@ -321,6 +302,32 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             });
 
 
+        }
+    }
+
+    private void actualizarTagActual(){
+        if(ConstantsAdmin.selectedComboProduct !=null) {// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
+            TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+            if (textTag != null && textTag.getText() != null) {
+                tp.setText(textTag.getText().toString());
+                if (!textTag.getText().toString().equals("")) {
+                    ConstantsAdmin.selectedComboProduct.setChecked(true);
+                } else {
+                    ConstantsAdmin.selectedComboProduct.setChecked(false);
+                }
+            }
+
+            if (ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle() == 1 && titleTag != null && titleTag.getText() != null) {
+                tp.setTitle(titleTag.getText().toString());
+                if (!titleTag.getText().toString().equals("")) {
+                    ConstantsAdmin.selectedComboProduct.setChecked(true);
+                } else {
+                    ConstantsAdmin.selectedComboProduct.setChecked(false);
+                }
+
+            }
+            Bitmap bmp = takeScreenShot();
+            ConstantsAdmin.selectedComboProduct.setScreenShot(bmp);
         }
     }
 
@@ -1071,22 +1078,69 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private void openCulminarTag() {
-        ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
-        ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
-        ConstantsAdmin.selectedTextFontColor = selectedTextColor;
-        ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
-        if(labelAttributes.length > 1){//ES UN TAG CON TITULO
-            ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
-            ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
-            ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
-            ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
+        actualizarTagActual();
+        boolean allChecked = verificarTodosTagsCheckeados();
+        if(allChecked){/*
+            ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
+            ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
+            ConstantsAdmin.selectedTextFontColor = selectedTextColor;
+            ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
+            if(labelAttributes.length > 1){//ES UN TAG CON TITULO
+                ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
+                ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
+                ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
+                ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
+            }
+            ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
+            ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
+            ConstantsAdmin.textEntered = textTag.getText().toString();
+            if(titleTag != null){
+                ConstantsAdmin.titleEntered = titleTag.getText().toString();
+            }
+            textTag.setFocusable(false);
+            textTag.setHint("");
+            if(titleTag!= null){
+                titleTag.setFocusable(false);
+                titleTag.setHint("");
+            }
+            Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
+            ConstantsAdmin.screenShot = bmp;
+            textTag.setFocusable(true);
+            textTag.setFocusableInTouchMode(true);
+            textTag.requestFocus();
+            textTag.setHint(R.string.your_name_here);
+            if(titleTag!= null){
+                titleTag.setFocusable(true);
+                titleTag.setFocusableInTouchMode(true);
+                titleTag.setHint(R.string.your_name_here);
+            }
+*/
+            ConstantsAdmin.currentComboProducts = productsList;
+            Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
+            startActivity(intent);
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(me);
+            builder.setMessage(me.getString(R.string.mensaje_tags_combo_incompleto))
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.show();
+
         }
-        ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
-        ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
-        ConstantsAdmin.textEntered = textTag.getText().toString();
-        if(titleTag != null){
-            ConstantsAdmin.titleEntered = titleTag.getText().toString();
-        }
+
+    }
+
+    private Bitmap takeScreenShot(){
         textTag.setFocusable(false);
         textTag.setHint("");
         if(titleTag!= null){
@@ -1104,10 +1158,16 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             titleTag.setFocusableInTouchMode(true);
             titleTag.setHint(R.string.your_name_here);
         }
+        return bmp;
+    }
 
-        Intent intent = new Intent(me, TagReadyToGoActivity.class);
-        startActivity(intent);
-
+    private boolean verificarTodosTagsCheckeados() {
+        boolean result = true;
+        Iterator<Product> it = productsList.iterator();
+        while(result && it.hasNext()){
+            result = it.next().isChecked();
+        }
+        return result;
     }
 /*
     private void openColorPicker(){

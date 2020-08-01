@@ -39,6 +39,17 @@ public class Product {
 
     private boolean checked = false;
 
+
+    private Bitmap screenShot;
+
+    public Bitmap getScreenShot() {
+        return screenShot;
+    }
+
+    public void setScreenShot(Bitmap screenShot) {
+        this.screenShot = screenShot;
+    }
+
     public boolean isChecked() {
         return checked;
     }
