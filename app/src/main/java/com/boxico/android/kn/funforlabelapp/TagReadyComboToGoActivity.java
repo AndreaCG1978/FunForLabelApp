@@ -2,6 +2,8 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -140,17 +142,19 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             p = it.next();
             bm = p.getScreenShot();
             tv.setText(p.getName());
+            tv.setTypeface(Typeface.SANS_SERIF);
+            tv.setTextColor(Color.BLACK);
             params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(15,15,15,10);
             tv.setLayoutParams(params);
             linearTag.addView(tv);
 
             params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(15,5,15,15);
+            params.setMargins(15,5,15,20);
             int srcWidth = bm.getWidth();
             int srcHeight = bm.getHeight();
-            int dstWidth = (int)(srcWidth*0.50f);
-            int dstHeight = (int)(srcHeight*0.50f);
+            int dstWidth = (int)(srcWidth*0.65f);
+            int dstHeight = (int)(srcHeight*0.65f);
             // Add image path from drawable folder.
 
             Bitmap b =Bitmap.createScaledBitmap(bm, dstWidth,dstHeight, false);

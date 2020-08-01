@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
+import com.boxico.android.kn.funforlabelapp.dtos.Creator;
+import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 
@@ -29,8 +31,42 @@ public class TagParams {
     private int posColorText;
     private int posColorTitle;
     private int posImage;
+    private Creator creator;
+    private LabelAttributes[] labelAttributes;
+    private LabelFont[] fonts;
+    private LabelImage[] images;
 
+    public LabelImage[] getImages() {
+        return images;
+    }
 
+    public void setImages(LabelImage[] images) {
+        this.images = images;
+    }
+
+    public LabelFont[] getFonts() {
+        return fonts;
+    }
+
+    public void setFonts(LabelFont[] fonts) {
+        this.fonts = fonts;
+    }
+
+    public LabelAttributes[] getLabelAttributes() {
+        return labelAttributes;
+    }
+
+    public void setLabelAttributes(LabelAttributes[] labelAttributes) {
+        this.labelAttributes = labelAttributes;
+    }
+
+    public Creator getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Creator creator) {
+        this.creator = creator;
+    }
 
     public int getPosSizeText() {
         return posSizeText;

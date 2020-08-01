@@ -3,12 +3,10 @@ package com.boxico.android.kn.funforlabelapp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -789,9 +787,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         String url;
         Bitmap b;
         for (LabelImage li: images) {
-            url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
-            b = ConstantsAdmin.getImageFromURL(url);
-            li.setImage(b);
+            if(li.getImage() == null){
+                url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                b = ConstantsAdmin.getImageFromURL(url);
+                li.setImage(b);
+            }
+
         }
 
 
@@ -801,11 +802,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
         private ProgressDialog dialog = null;
+        private boolean needLoadFontFile = false;
 
         @Override
         protected Integer doInBackground(Long... longs) {
             publishProgress(1);
-            privateLoadFonts(labelAttributes[0].getTextAreasId());
+            needLoadFontFile = privateLoadFonts(labelAttributes[0].getTextAreasId());
             return 0;
         }
 
@@ -823,7 +825,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 dialog.cancel();
             }
             //new LoadImagesTask().execute();
-            new GetFontFilesTask().execute();
+            if(needLoadFontFile){
+                new GetFontFilesTask().execute();
+            }else{
+                new LoadImagesTask().execute();
+            }
+
         }
     }
 
@@ -889,100 +896,134 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
     private void privateLoadCreator() {
-        Call<Creator> call = null;
-        Response<Creator> response;
+        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        if(tp != null && tp.getCreator() != null){
+            ConstantsAdmin.currentCreator = tp.getCreator();
+        }else{
+            Call<Creator> call = null;
+            Response<Creator> response;
 
-        try {
-            ConstantsAdmin.mensaje = null;
-            call = creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                ConstantsAdmin.currentCreator = response.body();
-                if(ConstantsAdmin.currentCreator == null){
+            try {
+                ConstantsAdmin.mensaje = null;
+                call = creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
+                response = call.execute();
+                if(response.body() != null){
+                    ConstantsAdmin.currentCreator = response.body();
+                    if(tp != null){
+                        tp.setCreator(ConstantsAdmin.currentCreator);
+                    }
+                    if(ConstantsAdmin.currentCreator == null){
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }
+                }else{
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
-            }else{
+            }catch(Exception exc){
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            }
-        }catch(Exception exc){
-            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            if(call != null) {
-                call.cancel();
+                if(call != null) {
+                    call.cancel();
+                }
             }
 
         }
     }
 
     private void privateLoadImages() {
-        Call<List<LabelImage>> call = null;
-        Response<List<LabelImage>> response;
-        ArrayList temp;
+        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        if(tp != null && tp.getImages() != null){
+            images = tp.getImages();
+        }else{
+            Call<List<LabelImage>> call = null;
+            Response<List<LabelImage>> response;
+            ArrayList temp;
 
-        try {
-            ConstantsAdmin.mensaje = null;
-            call = creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                temp = new ArrayList<>(response.body());
-                if(temp.size() == 0){
-                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            try {
+                ConstantsAdmin.mensaje = null;
+                call = creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                response = call.execute();
+                if(response.body() != null){
+                    temp = new ArrayList<>(response.body());
+                    if(temp.size() == 0){
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }else{
+                        images = (LabelImage[]) temp.toArray(new LabelImage[temp.size()]);
+                        if(tp != null){
+                            tp.setImages(images);
+                        }
+                    }
                 }else{
-                    images = (LabelImage[]) temp.toArray(new LabelImage[temp.size()]);
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
-            }else{
+            }catch(Exception exc){
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if(call != null) {
+                    call.cancel();
+                }
             }
-        }catch(Exception exc){
-            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            if(call != null) {
-                call.cancel();
-            }
-
         }
     }
 
-    private void privateLoadFonts(long textAreasId) {
-        Call<List<LabelFont>> call = null;
-        Response<List<LabelFont>> response;
-        List<LabelFont> temp;
+    private boolean privateLoadFonts(long textAreasId) {
+        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        boolean needLoadFontFile = true;
+        if(tp != null && tp.getFonts() != null){
+            fonts = tp.getFonts();
+            needLoadFontFile = false;
+        }else{
+            Call<List<LabelFont>> call = null;
+            Response<List<LabelFont>> response;
+            List<LabelFont> temp;
 
-        try {
-            ConstantsAdmin.mensaje = null;
-            call = creatorService.getFonts(textAreasId, true,  ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                temp = new ArrayList<>(response.body());
-                fonts = (LabelFont[]) temp.toArray(new LabelFont[temp.size()]);
+            try {
+                ConstantsAdmin.mensaje = null;
+                call = creatorService.getFonts(textAreasId, true,  ConstantsAdmin.tokenFFL);
+                response = call.execute();
+                if(response.body() != null){
+                    temp = new ArrayList<>(response.body());
+                    fonts = (LabelFont[]) temp.toArray(new LabelFont[temp.size()]);
+                    if(tp != null){
+                        tp.setFonts(fonts);
+                    }
 
-            }
-        }catch(Exception exc){
-            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            if(call != null) {
-                call.cancel();
+                }
+            }catch(Exception exc){
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if(call != null) {
+                    call.cancel();
+                }
             }
 
         }
+        return needLoadFontFile;
     }
 
     private void privateLoadAttributes() {
-        Call<List<LabelAttributes>> call = null;
-        Response<List<LabelAttributes>> response;
-        List<LabelAttributes> temp;
-        try {
-            ConstantsAdmin.mensaje = null;
-            call = creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                temp = new ArrayList<>(response.body());
-                labelAttributes = (LabelAttributes[]) temp.toArray(new LabelAttributes[temp.size()]);
-               // labelAttributes = response.body();
-            }else{
+        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        if(tp != null && tp.getLabelAttributes() != null){
+            labelAttributes = tp.getLabelAttributes();
+        }else{
+            Call<List<LabelAttributes>> call = null;
+            Response<List<LabelAttributes>> response;
+            List<LabelAttributes> temp;
+            try {
+                ConstantsAdmin.mensaje = null;
+                call = creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                response = call.execute();
+                if(response.body() != null){
+                    temp = new ArrayList<>(response.body());
+                    labelAttributes = (LabelAttributes[]) temp.toArray(new LabelAttributes[temp.size()]);
+                    if(tp != null){
+                        tp.setLabelAttributes(labelAttributes);
+                    }
+                    // labelAttributes = response.body();
+                }else{
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            }catch(Exception exc){
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            }
-        }catch(Exception exc){
-            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            if(call != null) {
-                call.cancel();
+                if(call != null) {
+                    call.cancel();
+                }
             }
 
         }
@@ -1119,25 +1160,17 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
             startActivity(intent);
         }else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(me);
-            builder.setMessage(me.getString(R.string.mensaje_tags_combo_incompleto))
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
-                            startActivity(intent);
-
-                        }
-                    })
-                    .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            builder.show();
-
+            createAlertDialog(getString(R.string.mensaje_tags_combo_incompleto), getString(R.string.atencion));
         }
 
+    }
+
+    private void createAlertDialog(String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message).setTitle(title);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private Bitmap takeScreenShot(){

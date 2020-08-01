@@ -110,5 +110,5 @@
     <string name="tePuedeInteresarTitle">Te invitamos a que leas...</string>
     <string name="contactanos">Contactanos!</string>
     <string name="seguinos">Seguinos!</string>
-    <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas, desea continuar?</string>
+    <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>
 </resources>
