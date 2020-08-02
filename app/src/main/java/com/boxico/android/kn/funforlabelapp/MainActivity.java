@@ -111,7 +111,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initializeCarrito() {
-        ConstantsAdmin.productosDelCarrito = ConstantsAdmin.getProductosCarrito(this);
+        ConstantsAdmin.productosDelCarrito = ConstantsAdmin.getProductosCarrito(this, -1);
+        ConstantsAdmin.combosDelCarrito = ConstantsAdmin.getCombosCarrito(this);
     }
 
     private void initializeLang() {
@@ -131,7 +132,7 @@ public class MainActivity extends FragmentActivity {
         linearCategories = findViewById(R.id.linearCategories);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         verCarrito = findViewById(R.id.verCarrito);
-        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
+        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size()  + ConstantsAdmin.combosDelCarrito.size() + "]");
 
         verCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +152,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void openVerCarrito() {
-        if(ConstantsAdmin.productosDelCarrito != null && ConstantsAdmin.productosDelCarrito.size() > 0){
+        if((ConstantsAdmin.productosDelCarrito != null && ConstantsAdmin.productosDelCarrito.size() > 0) || (ConstantsAdmin.combosDelCarrito != null && ConstantsAdmin.combosDelCarrito.size() > 0)){
             Intent intent = new Intent(me, CarritoActivity.class);
             startActivity(intent);
         }else{
@@ -399,7 +400,7 @@ public class MainActivity extends FragmentActivity {
             ConstantsAdmin.finalizarHastaMenuPrincipal = false;
         }
         super.onStart();
-        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size() + "]");
+        verCarrito.setText("[" + (ConstantsAdmin.productosDelCarrito.size() + ConstantsAdmin.combosDelCarrito.size()) + "]");
 
     }
 

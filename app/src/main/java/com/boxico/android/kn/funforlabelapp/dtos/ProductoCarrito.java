@@ -2,7 +2,7 @@ package com.boxico.android.kn.funforlabelapp.dtos;
 
 import android.graphics.Bitmap;
 
-public class ProductoCarrito {
+public class ProductoCarrito extends ItemCarrito{
 
     private int id;
     private Creator creador = null;
@@ -14,11 +14,8 @@ public class ProductoCarrito {
     private float titleFontSize = 0f;
     private String titleFontName = null;
     private int fontTitleColor = -1;
-    private Bitmap background = null;
     private LabelAttributes areaTexto = null;
     private LabelAttributes areaTitulo = null;
-    private String comentarioUsr = null;
-    private String backgroundFilename = null;
     private boolean tieneTitulo = false;
     private int idAreaTitulo = -1;
     private int idAreaTexto = -1;
@@ -36,16 +33,13 @@ public class ProductoCarrito {
     private int esMultilineaTituto= -1;
     private int fromXTituto= -1;
     private int fromYTituto= -1;
-    private String nombre = null;
-    private String precio = null;
-    private String cantidad = null;
-    private String cantidadPorPack = null;
-    private String modelo = null;
-    private int idProduct = -1;
-    private int fillsTexturedId = -1;
     private int fontTextId = -1;
     private int fontTitleId = -1;
     private int idCombo = -1;
+
+    public boolean isProduct(){
+        return true;
+    }
 
     public int getIdCombo() {
         return idCombo;

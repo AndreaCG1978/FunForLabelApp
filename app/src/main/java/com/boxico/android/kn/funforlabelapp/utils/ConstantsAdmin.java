@@ -1,10 +1,8 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +16,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -32,12 +29,12 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 
-import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
@@ -45,7 +42,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
-import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarritoCombo;
+import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -59,14 +56,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -185,8 +178,8 @@ public class ConstantsAdmin {
 
     public static boolean finalizarHastaMenuPrincipal;
     public static Customer currentCustomer = null;
-    public static List<ProductoCarrito> productosDelCarrito = new ArrayList<ProductoCarrito>();
-    public static List<ProductoCarritoCombo> combosDelCarrito = new ArrayList<ProductoCarritoCombo>();
+    public static List<ItemCarrito> productosDelCarrito = new ArrayList<ItemCarrito>();
+    public static List<ItemCarrito> combosDelCarrito = new ArrayList<ItemCarrito>();
 
     public static Product currentProduct;
     public static String selectedBackgroundFilename;
@@ -478,25 +471,25 @@ public class ConstantsAdmin {
     }
 
 
-    public static void customizeBackground(float achicar, Bitmap img, int w, int h, long idCreator, int round, boolean acot, RelativeLayout rl, Activity context) {
+    public static void customizeBackground(float achicar, Bitmap img, int w, int h, int round, boolean acot, RelativeLayout rl, Activity context) {
         int realWidthImage = 0;
         int realHeightImage = 0;
       //  if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
-            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
-                    context.getResources().getDisplayMetrics());
-            if (acot) {
-                temp = temp - temp * 3 / 19;
-            }
-            temp = temp * achicar;
-            realWidthImage = (int) temp;
-            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, h,
-                    context.getResources().getDisplayMetrics());
+        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
+                context.getResources().getDisplayMetrics());
+        if (acot) {
+            temp = temp - temp * 3 / 19;
+        }
+        temp = temp * achicar;
+        realWidthImage = (int) temp;
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, h,
+                context.getResources().getDisplayMetrics());
 
-            if (acot) {
-                temp = temp - temp * 3 / 19;
-            }
-            temp = temp * achicar;
-            realHeightImage = (int) temp;
+        if (acot) {
+            temp = temp - temp * 3 / 19;
+        }
+        temp = temp * achicar;
+        realHeightImage = (int) temp;
      /*   } else {
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
                     context.getResources().getDisplayMetrics());
@@ -578,7 +571,7 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
-    public static void createComboCarrito(ProductoCarritoCombo c, Context ctx) {
+    public static void createComboCarrito(ComboCarrito c, Context ctx) {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
         dbm.createComboCarrito(c);
@@ -789,7 +782,7 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
-    public static void deleteComboProductoCarrito(Context ctx, ProductoCarritoCombo c) {
+    public static void deleteComboProductoCarrito(Context ctx, ComboCarrito c) {
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
         dbm.deleteComboProductoCarrito(c);
@@ -823,8 +816,60 @@ public class ConstantsAdmin {
         return item;
     }
 
-    public static ArrayList<ProductoCarrito> getProductosCarrito(Context ctx) {
-        ArrayList<ProductoCarrito> listaProductos = new ArrayList<ProductoCarrito>();
+    public static ArrayList<ItemCarrito> getCombosCarrito(Context ctx) {
+        ArrayList<ItemCarrito> listaCombos = new ArrayList<ItemCarrito>();
+        ArrayList<ItemCarrito> listaProductos;
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        int itemId;
+        String backgroundFilename;
+        String comentario;
+        int idProducto;
+        int idFillsTextured;
+        String nombre;
+        String precio;
+        String cantidad;
+        ComboCarrito item = null;
+        Cursor cursor = dbm.cursorComboProductoCarrito();
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            item = new ComboCarrito();
+            itemId = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ROWID));
+            nombre = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_NOMBRE_PRODUCTO));
+            precio = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_PRECIO_PRODUCTO));
+            cantidad = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO));
+            idProducto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_PRODUCTO));
+            idFillsTextured = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FILLS_TEXTURED));
+            backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
+            comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
+            item.setNombre(nombre);
+            item.setCantidad(cantidad);
+            item.setPrecio(precio);
+            item.setIdProduct(idProducto);
+            item.setFillsTexturedId(idFillsTextured);
+            item.setBackgroundFilename(backgroundFilename);
+            item.setComentarioUsr(comentario);
+            item.setId(itemId);
+            listaProductos = getProductosCarrito(ctx, item.getId(), dbm);
+            item.setProductos(listaProductos);
+            cursor.moveToNext();
+            listaCombos.add(item);
+        }
+        dbm.close();
+        return listaCombos;
+    }
+
+    public static ArrayList<ItemCarrito> getProductosCarrito(Context ctx, int idCombo) {
+        ArrayList<ItemCarrito> listaProductos;
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        listaProductos = getProductosCarrito(ctx, idCombo, dbm);
+        dbm.close();
+        return listaProductos;
+    }
+
+    public static ArrayList<ItemCarrito> getProductosCarrito(Context ctx, int idCombo, DataBaseManager dbm) {
+        ArrayList<ItemCarrito> listaProductos = new ArrayList<ItemCarrito>();
         int itemId;
         String texto;
         String titulo;
@@ -863,9 +908,9 @@ public class ConstantsAdmin {
         String cantidadPorPack;
         String modelo;
         ProductoCarrito item = null;
-        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
-        dbm.open();
-        Cursor cursor = dbm.cursorProductoCarrito();
+       // DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+       // dbm.open();
+        Cursor cursor = dbm.cursorProductoCarrito(idCombo);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
             item = new ProductoCarrito();
@@ -951,7 +996,7 @@ public class ConstantsAdmin {
             cursor.moveToNext();
         }
         cursor.close();
-        dbm.close();
+      //  dbm.close();
         return listaProductos;
     }
 
@@ -975,16 +1020,16 @@ public class ConstantsAdmin {
         }
     }
 
-    public static void agregarProductoAlCarrito(ProductoCarrito pc) {
+    public static void agregarProductoAlCarrito(ItemCarrito pc) {
         if(productosDelCarrito == null){
-            productosDelCarrito = new ArrayList<ProductoCarrito>();
+            productosDelCarrito = new ArrayList<ItemCarrito>();
         }
         productosDelCarrito.add(pc);
     }
 
-    public static void agregarComboAlCarrito(ProductoCarritoCombo c) {
+    public static void agregarComboAlCarrito(ItemCarrito c) {
         if(combosDelCarrito == null){
-            combosDelCarrito = new ArrayList<ProductoCarritoCombo>();
+            combosDelCarrito = new ArrayList<ItemCarrito>();
         }
         combosDelCarrito.add(c);
     }

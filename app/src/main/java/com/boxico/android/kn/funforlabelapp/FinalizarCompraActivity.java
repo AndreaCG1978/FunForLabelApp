@@ -31,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
+import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
@@ -596,31 +597,31 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private String getDescripcionTags(){
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ProductoCarrito pc = null;
+        Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ItemCarrito ic = null;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
-            pc = it.next();
-            precioTemp = Float.valueOf(pc.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
+            ic = it.next();
+            precioTemp = Float.valueOf(ic.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + pc.getCantidad() + " x " + pc.getNombre() + "(" + pc.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+            temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
         }
         return temp;
     }
 
     private String getDescripcionTagsLite(){
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ProductoCarrito pc = null;
+        Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ItemCarrito ic = null;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
-            pc = it.next();
-            precioTemp = Float.valueOf(pc.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(pc.getCantidad());
+            ic = it.next();
+            precioTemp = Float.valueOf(ic.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + pc.getNombre() +": $" + String.valueOf(precioTemp);
+            temp = temp + ic.getNombre() +": $" + String.valueOf(precioTemp);
             if(it.hasNext()){
                 temp =  temp + " + ";
             }
@@ -738,9 +739,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         ProductoCarrito p;
         Customer c = ConstantsAdmin.currentCustomer;
         Properties prop = ConstantsAdmin.fflProperties;
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext() && okInsert){
-            p = it.next();
+            p = (ProductoCarrito) it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
@@ -806,7 +807,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         String precio;
         precioTotalTags = 0;
         float precioTemp = 0;
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         while(it.hasNext()){
             pc = (ProductoCarrito) it.next();
             precioTemp = (Float.valueOf(pc.getPrecio()) * Float.valueOf(pc.getCantidad()));

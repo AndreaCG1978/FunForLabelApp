@@ -4,20 +4,20 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-public class ProductoCarritoCombo {
+public class ItemCarrito {
 
-    private int id;
-    private Bitmap background = null;
-    private String comentarioUsr = null;
-    private String backgroundFilename = null;
-    private String nombre = null;
-    private String precio = null;
-    private String cantidad = null;
-    private String cantidadPorPack = null;
-    private String modelo = null;
-    private int idProduct = -1;
-    private int fillsTexturedId = -1;
-    private ArrayList<ProductoCarrito> productos;
+    protected int id;
+    protected Bitmap background = null;
+    protected String comentarioUsr = null;
+    protected String backgroundFilename = null;
+    protected String nombre = null;
+    protected String precio = null;
+    protected String cantidad = null;
+    protected String cantidadPorPack = null;
+    protected String modelo = null;
+    protected int idProduct = -1;
+    protected int fillsTexturedId = -1;
+
 
     public int getId() {
         return id;
@@ -107,19 +107,17 @@ public class ProductoCarritoCombo {
         this.fillsTexturedId = fillsTexturedId;
     }
 
-    public ArrayList<ProductoCarrito> getProductos() {
-        if(productos == null){
-            productos = new ArrayList<>();
-        }
-        return productos;
-    }
-
-    public void setProductos(ArrayList<ProductoCarrito> productos) {
-        this.productos = productos;
-    }
 
     @Override
     public String toString() {
         return this.getNombre();
+    }
+
+    public boolean isProduct(){
+        return false;
+    }
+
+    public boolean isCombo(){
+        return false;
     }
 }

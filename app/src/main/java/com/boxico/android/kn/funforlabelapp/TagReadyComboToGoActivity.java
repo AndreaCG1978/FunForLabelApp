@@ -7,21 +7,19 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
-import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarritoCombo;
+import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.TagParams;
 
@@ -50,29 +48,29 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
 
     private void agregarProductoAlCarrito() {
         ProductoCarrito pc;
-        ProductoCarritoCombo combo = new ProductoCarritoCombo();
+        ComboCarrito combo = new ComboCarrito();
         Product p;
         TagParams temp;
         Iterator<Product> it = ConstantsAdmin.currentComboProducts.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             pc = new ProductoCarrito();
             p = it.next();
             temp = ConstantsAdmin.params.get(p.getId());
-            if(temp.isTitle()){
+            if (temp.isTitle()) {
                 pc.setAreaTitulo(temp.getLabelAttributes()[1]);
                 pc.setFontTitleColor(temp.getColorTitle());
                 pc.setTitulo(temp.getTitle());
                 pc.setTitleFontName(temp.getFontTitleBaseName());
                 pc.setTitleFontSize(Float.valueOf(temp.getFontSizeTitle()));
                 pc.setTieneTitulo(true);
-                pc.setIdAreaTitulo((int)pc.getAreaTitulo().getTextAreasId());
+                pc.setIdAreaTitulo((int) pc.getAreaTitulo().getTextAreasId());
                 pc.setAnchoAreaTituto(pc.getAreaTitulo().getWidth());
                 pc.setLargoAreaTituto(pc.getAreaTitulo().getHeight());
                 pc.setEsMultilineaTituto(pc.getAreaTitulo().getMultiline());
                 pc.setFromXTituto(pc.getAreaTitulo().getFromX());
                 pc.setFromYTituto(pc.getAreaTitulo().getFromY());
                 pc.setFontTitleId(temp.getFontTitleId());
-            }else{
+            } else {
                 pc.setTieneTitulo(false);
             }
             pc.setAreaTexto(temp.getLabelAttributes()[0]);
@@ -85,15 +83,13 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             pc.setTexto(temp.getText());
             pc.setTextFontName(temp.getFontTextBaseName());
             pc.setTextFontSize(Float.valueOf(temp.getFontSizeText()));
-            pc.setIdAreaTexto((int)pc.getAreaTexto().getTextAreasId());
+            pc.setIdAreaTexto((int) pc.getAreaTexto().getTextAreasId());
             pc.setFontTextId(temp.getFontTextId());
             pc.setCreador(temp.getCreator());
-
-            pc.setComentarioUsr(comentarioUsr.getText().toString());
             pc.setBackgroundFilename(temp.getBackgroundFilename());
             pc.setBackground(temp.getImage().getImage());
 
-            pc.setIdCreador((int)pc.getCreador().getId());
+            pc.setIdCreador((int) pc.getCreador().getId());
             pc.setRound(pc.getCreador().getRound());
             pc.setAnchoTag(pc.getCreador().getWidth());
             pc.setLargoTag(pc.getCreador().getHeight());
@@ -101,9 +97,14 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             pc.setCantidad("1");
             pc.setCantidadPorPack(p.getQuantity());
             pc.setModelo(p.getModel());
+            pc.setIdProduct((int) p.getId());
             combo.getProductos().add(pc);
         }
         combo.setPrecio(ConstantsAdmin.currentProduct.getPrice());
+        combo.setCantidad(String.valueOf(1));
+        combo.setComentarioUsr(comentarioUsr.getText().toString());
+        combo.setNombre(ConstantsAdmin.currentProduct.getName());
+        combo.setBackgroundFilename(ConstantsAdmin.currentProduct.getImageString());
         combo.setIdProduct((int)ConstantsAdmin.currentProduct.getId());
         combo.setFillsTexturedId((int)ConstantsAdmin.selectedImage.getFillsTexturedId());
 
@@ -111,7 +112,7 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
 
             //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
         ConstantsAdmin.createComboCarrito(combo, this);
-        ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
+        ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.currentProduct.getImage(), combo.getBackgroundFilename());
 
         ConstantsAdmin.finalizarHastaMenuPrincipal = true;
         ConstantsAdmin.clearSelections();

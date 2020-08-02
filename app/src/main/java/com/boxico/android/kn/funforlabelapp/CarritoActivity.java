@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -12,11 +13,15 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
+import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.KNCarritoAdapterListView;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class CarritoActivity extends FragmentActivity {
 
@@ -65,18 +70,19 @@ public class CarritoActivity extends FragmentActivity {
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         confirmarCarrito = findViewById(R.id.btnConfirmarCarrito);
         listViewCarrito = findViewById(R.id.listViewCarrito);
-        KNCarritoAdapterListView customAdapter = new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito);
+        actualizarListaProductosCarrito();
+        //KNCarritoAdapterListView customAdapter = new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito);
 
-        listViewCarrito.setAdapter(customAdapter);
+        //listViewCarrito.setAdapter(customAdapter);
         confirmarCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmarCompra();
             }
         });
-        totalPrecio = findViewById(R.id.totalPrecio);
+     /*   totalPrecio = findViewById(R.id.totalPrecio);
         String precioTotal = this.calcularPrecioTotal();
-        totalPrecio.setText("($" + precioTotal + ")");
+        totalPrecio.setText("($" + precioTotal + ")");*/
        // configListView(listViewCarrito);
     }
 
@@ -92,11 +98,16 @@ public class CarritoActivity extends FragmentActivity {
     private String calcularPrecioTotal() {
         String result = null;
         float valor = 0;
-        ProductoCarrito pc = null;
-        Iterator<ProductoCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        while(it.hasNext()){
-            pc = it.next();
-            valor = valor + Float.valueOf(pc.getPrecio()) * Float.valueOf(pc.getCantidad());
+        ItemCarrito ic = null;
+        Iterator<ItemCarrito> it1 = ConstantsAdmin.productosDelCarrito.iterator();
+        while(it1.hasNext()){
+            ic = it1.next();
+            valor = valor + Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad());
+        }
+        Iterator<ItemCarrito> it2 = ConstantsAdmin.combosDelCarrito.iterator();
+        while(it2.hasNext()){
+            ic = it2.next();
+            valor = valor + Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad());
         }
         result = String.valueOf(valor);
         result = result.substring(0, result.length() - 2);
@@ -118,8 +129,20 @@ public class CarritoActivity extends FragmentActivity {
     }
 
     public void actualizarListaProductosCarrito() {
-        listViewCarrito.setAdapter(new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito));
+        Iterator<ItemCarrito> itemsCarrito1 = ConstantsAdmin.productosDelCarrito.iterator();
+        Iterator<ItemCarrito> itemsCarrito2 = ConstantsAdmin.combosDelCarrito.iterator();
+        ArrayList<ItemCarrito> newCol = new ArrayList<>();
+        while (itemsCarrito1.hasNext()){
+            newCol.add(itemsCarrito1.next());
+        }
+        while (itemsCarrito2.hasNext()){
+            newCol.add(itemsCarrito2.next());
+        }
+        listViewCarrito.setAdapter(new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,newCol));
         String precioTotal = this.calcularPrecioTotal();
+        if(totalPrecio == null){
+            totalPrecio = findViewById(R.id.totalPrecio);
+        }
         totalPrecio.setText("($" + precioTotal + ")");
     }
 

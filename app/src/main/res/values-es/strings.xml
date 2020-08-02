@@ -77,7 +77,7 @@
     <string name="tag_agregado_carrito">El producto fue agregado al carrito!</string>
     <string name="su_carrito">Su Carrito!</string>
     <string name="confirmar_carrito">Comprar</string>
-    <string name="mensaje_borrar_producto_carrito">Está seguro de eliminar esta etiqueta de su Carrito?</string>
+    <string name="mensaje_borrar_producto_carrito">Está seguro de eliminar este item de su Carrito?</string>
     <string name="establecer_pago">Forma de Pago</string>
     <string name="direccion_envio_title">░ DIRECCION DE ENVIO</string>
     <string name="titulo_envio">INFORMACION DE ENVIO</string>
