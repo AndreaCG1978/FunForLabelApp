@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initializeCarrito() {
-        ConstantsAdmin.productosDelCarrito = ConstantsAdmin.getCarrito(this);
+        ConstantsAdmin.productosDelCarrito = ConstantsAdmin.getProductosCarrito(this);
     }
 
     private void initializeLang() {

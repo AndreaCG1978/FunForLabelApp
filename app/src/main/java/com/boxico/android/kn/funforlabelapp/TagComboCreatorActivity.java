@@ -93,14 +93,14 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedTitleColor = Color.BLACK;
     private CategoriesProductsService productService;
     private ArrayList<Product> productsList;
-    private ArrayMap<Long,TagParams> params;
+
     private ColorPicker colorPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me = this;
-        params = new ArrayMap<>();
+        ConstantsAdmin.params = new ArrayMap<>();
         setContentView(R.layout.tag_combo_creator);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -257,7 +257,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
-                        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                         if(textTag != null && textTag.getText()!= null){
                             tp.setText(textTag.getText().toString());
                             if(!textTag.getText().toString().equals("")) {
@@ -275,10 +275,10 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     }
                     ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
                     TagParams param = null;
-                    if(!params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+                    if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
                         param = new TagParams();
                         param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
-                        params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                        ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
                     }
                     loadCreator();
                   /*  if(textTag != null && textTag.getText()!= null){
@@ -305,7 +305,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
     private void actualizarTagActual(){
         if(ConstantsAdmin.selectedComboProduct !=null) {// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
-            TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+            TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
             if (textTag != null && textTag.getText() != null) {
                 tp.setText(textTag.getText().toString());
                 if (!textTag.getText().toString().equals("")) {
@@ -639,7 +639,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     size = size * ((float)1.04);
                 }
 
-                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTextSize(TypedValue.TYPE_STRING, size);
                     selectedPosFontSizeText = position;
@@ -681,16 +681,20 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
                 File fileFont = ConstantsAdmin.getFile(lf.getBasename());
                 Typeface face = Typeface.createFromFile(fileFont);
-                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTypeface(face);
                     tp.setFontText(face);
+                    tp.setFontTextBaseName(lf.getBasename());
+                    tp.setFontTextId((int)lf.getId());
                     tp.setPosFontText(position);
                     selectedPosFontText = position;
                     if(titleTag != null){
                         titleTag.setTypeface(face);
                         selectedPosFontTitle = position;
                         tp.setFontTitle(face);
+                        tp.setFontTitleBaseName(lf.getBasename());
+                        tp.setFontTitleId((int)lf.getId());
                         tp.setPosFontTitle(position);
                     }
                 }else {
@@ -719,8 +723,9 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ConstantsAdmin.selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                 tp.setImage(ConstantsAdmin.selectedImage);
+                tp.setBackgroundFilename(ConstantsAdmin.selectedImage.getUniquename());
                 tp.setPosImage(position);
                 ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
@@ -763,8 +768,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
             });
         }
-        if(ConstantsAdmin.selectedComboProduct!= null && params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
-            TagParams param = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        if(ConstantsAdmin.selectedComboProduct!= null && ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+            TagParams param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
             spinnerBackgrounds.setSelection(param.getPosImage());
             spinnerFonts.setSelection(param.getPosFontText());
             spinnerFontSizes.setSelection(param.getPosSizeText());
@@ -896,7 +901,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
     private void privateLoadCreator() {
-        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
         if(tp != null && tp.getCreator() != null){
             ConstantsAdmin.currentCreator = tp.getCreator();
         }else{
@@ -929,7 +934,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private void privateLoadImages() {
-        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
         if(tp != null && tp.getImages() != null){
             images = tp.getImages();
         }else{
@@ -964,7 +969,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private boolean privateLoadFonts(long textAreasId) {
-        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
         boolean needLoadFontFile = true;
         if(tp != null && tp.getFonts() != null){
             fonts = tp.getFonts();
@@ -998,7 +1003,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private void privateLoadAttributes() {
-        TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
         if(tp != null && tp.getLabelAttributes() != null){
             labelAttributes = tp.getLabelAttributes();
         }else{
@@ -1161,6 +1166,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             startActivity(intent);
         }else{
             createAlertDialog(getString(R.string.mensaje_tags_combo_incompleto), getString(R.string.atencion));
+            spinnerProducts.performClick();
         }
 
     }
@@ -1270,7 +1276,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
             @Override
             public void onChooseColor(int position,int color) {
-                TagParams tp = params.get(ConstantsAdmin.selectedComboProduct.getId());
+                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTextColor(color);
                     tp.setColorText(color);

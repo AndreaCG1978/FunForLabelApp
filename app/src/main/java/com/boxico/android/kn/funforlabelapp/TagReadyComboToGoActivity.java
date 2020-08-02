@@ -21,7 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
+import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarritoCombo;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.TagParams;
 
 import java.util.Iterator;
 
@@ -47,7 +49,78 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
     }
 
     private void agregarProductoAlCarrito() {
-        ProductoCarrito pc = new ProductoCarrito();
+        ProductoCarrito pc;
+        ProductoCarritoCombo combo = new ProductoCarritoCombo();
+        Product p;
+        TagParams temp;
+        Iterator<Product> it = ConstantsAdmin.currentComboProducts.iterator();
+        while(it.hasNext()){
+            pc = new ProductoCarrito();
+            p = it.next();
+            temp = ConstantsAdmin.params.get(p.getId());
+            if(temp.isTitle()){
+                pc.setAreaTitulo(temp.getLabelAttributes()[1]);
+                pc.setFontTitleColor(temp.getColorTitle());
+                pc.setTitulo(temp.getTitle());
+                pc.setTitleFontName(temp.getFontTitleBaseName());
+                pc.setTitleFontSize(Float.valueOf(temp.getFontSizeTitle()));
+                pc.setTieneTitulo(true);
+                pc.setIdAreaTitulo((int)pc.getAreaTitulo().getTextAreasId());
+                pc.setAnchoAreaTituto(pc.getAreaTitulo().getWidth());
+                pc.setLargoAreaTituto(pc.getAreaTitulo().getHeight());
+                pc.setEsMultilineaTituto(pc.getAreaTitulo().getMultiline());
+                pc.setFromXTituto(pc.getAreaTitulo().getFromX());
+                pc.setFromYTituto(pc.getAreaTitulo().getFromY());
+                pc.setFontTitleId(temp.getFontTitleId());
+            }else{
+                pc.setTieneTitulo(false);
+            }
+            pc.setAreaTexto(temp.getLabelAttributes()[0]);
+            pc.setAnchoAreaTexto(pc.getAreaTexto().getWidth());
+            pc.setLargoAreaTexto(pc.getAreaTexto().getHeight());
+            pc.setEsMultilineaTexto(pc.getAreaTexto().getMultiline());
+            pc.setFromXTexto(pc.getAreaTexto().getFromX());
+            pc.setFromYTexto(pc.getAreaTexto().getFromY());
+            pc.setFontTextColor(temp.getColorText());
+            pc.setTexto(temp.getText());
+            pc.setTextFontName(temp.getFontTextBaseName());
+            pc.setTextFontSize(Float.valueOf(temp.getFontSizeText()));
+            pc.setIdAreaTexto((int)pc.getAreaTexto().getTextAreasId());
+            pc.setFontTextId(temp.getFontTextId());
+            pc.setCreador(temp.getCreator());
+
+            pc.setComentarioUsr(comentarioUsr.getText().toString());
+            pc.setBackgroundFilename(temp.getBackgroundFilename());
+            pc.setBackground(temp.getImage().getImage());
+
+            pc.setIdCreador((int)pc.getCreador().getId());
+            pc.setRound(pc.getCreador().getRound());
+            pc.setAnchoTag(pc.getCreador().getWidth());
+            pc.setLargoTag(pc.getCreador().getHeight());
+            pc.setNombre(pc.getCreador().getName());
+            pc.setCantidad("1");
+            pc.setCantidadPorPack(p.getQuantity());
+            pc.setModelo(p.getModel());
+            combo.getProductos().add(pc);
+        }
+        combo.setPrecio(ConstantsAdmin.currentProduct.getPrice());
+        combo.setIdProduct((int)ConstantsAdmin.currentProduct.getId());
+        combo.setFillsTexturedId((int)ConstantsAdmin.selectedImage.getFillsTexturedId());
+
+        ConstantsAdmin.agregarComboAlCarrito(combo);
+
+            //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
+        ConstantsAdmin.createComboCarrito(combo, this);
+        ConstantsAdmin.copyBitmapInStorage(ConstantsAdmin.selectedBackground, ConstantsAdmin.selectedBackgroundFilename);
+
+        ConstantsAdmin.finalizarHastaMenuPrincipal = true;
+        ConstantsAdmin.clearSelections();
+
+        finish();
+
+
+
+
         /*
 
         if(ConstantsAdmin.selectedLabelAttrbTitle != null){

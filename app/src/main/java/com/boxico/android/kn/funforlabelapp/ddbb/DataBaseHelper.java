@@ -51,12 +51,26 @@ class DataBaseHelper extends SQLiteOpenHelper {
             + ConstantsAdmin.KEY_ID_PRODUCTO + " integer, "
             + ConstantsAdmin.KEY_ID_FONT_TEXT + " integer, "
             + ConstantsAdmin.KEY_ID_FONT_TITLE + " integer, "
+            + ConstantsAdmin.KEY_ID_COMBO + " integer, "
             + ConstantsAdmin.KEY_NOMBRE_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_PRECIO_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK + " text, "
             + ConstantsAdmin.KEY_MODELO_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_ID_AREA_TEXTO + " integer);";
+
+
+    private static final String DATABASE_CREATE_COMBO_CARRITO = "create table if not exists " + ConstantsAdmin.TABLE_COMBO_CARRITO +
+            "(" + ConstantsAdmin.KEY_ROWID +" integer primary key autoincrement, "
+            + ConstantsAdmin.KEY_BACKGROUND_FILENAME + " text, "
+            + ConstantsAdmin.KEY_COMENTARIO_USR + " text, "
+            + ConstantsAdmin.KEY_ID_FILLS_TEXTURED + " integer, "
+            + ConstantsAdmin.KEY_ID_PRODUCTO + " integer, "
+            + ConstantsAdmin.KEY_NOMBRE_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_PRECIO_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK + " text, "
+            + ConstantsAdmin.KEY_MODELO_PRODUCTO + " text);";
 
 	public DataBaseHelper(Context context) {
          super(context, ConstantsAdmin.DATABASE_NAME, null, ConstantsAdmin.DATABASE_VERSION);
@@ -66,6 +80,7 @@ class DataBaseHelper extends SQLiteOpenHelper {
      public void onCreate(SQLiteDatabase db) {
          db.execSQL(DATABASE_CREATE_LOGIN);
          db.execSQL(DATABASE_CREATE_PRODUCTO_CARRITO);
+         db.execSQL(DATABASE_CREATE_COMBO_CARRITO);
      }
 
      public void deleteAll(SQLiteDatabase db) {
@@ -78,6 +93,7 @@ class DataBaseHelper extends SQLiteOpenHelper {
                  + newVersion + ", which will destroy all old data");
          db.execSQL("DROP TABLE IF EXISTS " + ConstantsAdmin.TABLE_LOGIN);
          db.execSQL("DROP TABLE IF EXISTS " + ConstantsAdmin.TABLE_PRODUCTO_CARRITO);
+         db.execSQL("DROP TABLE IF EXISTS " + ConstantsAdmin.TABLE_COMBO_CARRITO);
          onCreate(db);
      }
 

@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -44,6 +45,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
+import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarritoCombo;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -130,6 +132,7 @@ public class ConstantsAdmin {
     public static final String KEY_CANTIDAD_PRODUCTO = "cantidad" ;
     public static final String KEY_CANTIDAD_PRODUCTO_PORPACK = "cantidadPorPack" ;
     public static final String KEY_MODELO_PRODUCTO = "modelo" ;
+    public static final String KEY_ID_COMBO = "idCombo";
     public static final String INTRO_ENVIO = "DIRECCION_ENVIO_INTRO";
     public static final String INTRO_PAGO = "METODO_PAGO_INTRO";
     public static final String TITULO_MP__DETALLE_TAGS = "TITULO_MP__DETALLE_TAGS";
@@ -150,6 +153,7 @@ public class ConstantsAdmin {
     public static final String URL_FACEBOOK = "URL_FACEBOOK" ;
 
 
+
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
     public static final String DATABASE_NAME = "FunForLabelsAppDB";
@@ -157,6 +161,7 @@ public class ConstantsAdmin {
 
     public static final String TABLE_LOGIN = "tabla_login";
     public static final String TABLE_PRODUCTO_CARRITO = "tabla_producto_carrito";
+    public static final String TABLE_COMBO_CARRITO = "tabla_combo_carrito";
 
     public static final String KEY_NAME = "name";
     public static final String ENTER = "\n";
@@ -181,6 +186,7 @@ public class ConstantsAdmin {
     public static boolean finalizarHastaMenuPrincipal;
     public static Customer currentCustomer = null;
     public static List<ProductoCarrito> productosDelCarrito = new ArrayList<ProductoCarrito>();
+    public static List<ProductoCarritoCombo> combosDelCarrito = new ArrayList<ProductoCarritoCombo>();
 
     public static Product currentProduct;
     public static String selectedBackgroundFilename;
@@ -231,8 +237,11 @@ public class ConstantsAdmin {
     public static boolean compraExitosa = true;
     public static Product selectedComboProduct;
     public static ArrayList<Product> currentComboProducts;
+    public static ArrayMap<Long,TagParams> params;
 
     private static ArrayList<LabelImage> capturas = null;
+
+
 
     public static ArrayList<LabelImage> getCapturas() {
         if(capturas == null){
@@ -569,6 +578,13 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
+    public static void createComboCarrito(ProductoCarritoCombo c, Context ctx) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.createComboCarrito(c);
+        dbm.close();
+    }
+
     public static Bitmap getImageFromURL(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Bitmap bmp = null;
@@ -773,6 +789,13 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
+    public static void deleteComboProductoCarrito(Context ctx, ProductoCarritoCombo c) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.deleteComboProductoCarrito(c);
+        dbm.close();
+    }
+
     public static Customer getLogin(Context ctx) {
         int itemId;
         String usr;
@@ -800,7 +823,7 @@ public class ConstantsAdmin {
         return item;
     }
 
-    public static ArrayList<ProductoCarrito> getCarrito(Context ctx) {
+    public static ArrayList<ProductoCarrito> getProductosCarrito(Context ctx) {
         ArrayList<ProductoCarrito> listaProductos = new ArrayList<ProductoCarrito>();
         int itemId;
         String texto;
@@ -959,6 +982,13 @@ public class ConstantsAdmin {
         productosDelCarrito.add(pc);
     }
 
+    public static void agregarComboAlCarrito(ProductoCarritoCombo c) {
+        if(combosDelCarrito == null){
+            combosDelCarrito = new ArrayList<ProductoCarritoCombo>();
+        }
+        combosDelCarrito.add(c);
+    }
+
     public static Bitmap getImageFromStorage(String backgroundFilename) {
         Bitmap img = null;
         File f = getFile(backgroundFilename);
@@ -972,7 +1002,6 @@ public class ConstantsAdmin {
 
     public static void clearSelections() {
         currentProduct = null;
-        String selectedBackgroundFilename= null;
         selectedBackground= null;
         selectedTitleFontSize= 0;
         selectedTitleFontColor= -1;
@@ -985,6 +1014,11 @@ public class ConstantsAdmin {
         currentCreator= null;
         textEntered= null;
         titleEntered= null;
+        params = null;
+        currentComboProducts = null;
+        selectedBackgroundFilename = null;
+        selectedImage = null;
+
 
 
     }

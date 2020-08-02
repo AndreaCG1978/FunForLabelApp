@@ -45,6 +45,15 @@ public class ProductoCarrito {
     private int fillsTexturedId = -1;
     private int fontTextId = -1;
     private int fontTitleId = -1;
+    private int idCombo = -1;
+
+    public int getIdCombo() {
+        return idCombo;
+    }
+
+    public void setIdCombo(int idCombo) {
+        this.idCombo = idCombo;
+    }
 
     public String getCantidadPorPack() {
         return cantidadPorPack;

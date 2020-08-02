@@ -35,6 +35,51 @@ public class TagParams {
     private LabelAttributes[] labelAttributes;
     private LabelFont[] fonts;
     private LabelImage[] images;
+    private String fontTitleBaseName;
+    private String fontTextBaseName;
+    private int fontTitleId;
+    private int fontTextId;
+    private String backgroundFilename;
+
+    public String getBackgroundFilename() {
+        return backgroundFilename;
+    }
+
+    public void setBackgroundFilename(String backgroundFilename) {
+        this.backgroundFilename = backgroundFilename;
+    }
+
+    public int getFontTitleId() {
+        return fontTitleId;
+    }
+
+    public void setFontTitleId(int fontTitleId) {
+        this.fontTitleId = fontTitleId;
+    }
+
+    public int getFontTextId() {
+        return fontTextId;
+    }
+
+    public void setFontTextId(int fontTextId) {
+        this.fontTextId = fontTextId;
+    }
+
+    public String getFontTitleBaseName() {
+        return fontTitleBaseName;
+    }
+
+    public void setFontTitleBaseName(String fontTitleBaseName) {
+        this.fontTitleBaseName = fontTitleBaseName;
+    }
+
+    public String getFontTextBaseName() {
+        return fontTextBaseName;
+    }
+
+    public void setFontTextBaseName(String fontTextBaseName) {
+        this.fontTextBaseName = fontTextBaseName;
+    }
 
     public LabelImage[] getImages() {
         return images;

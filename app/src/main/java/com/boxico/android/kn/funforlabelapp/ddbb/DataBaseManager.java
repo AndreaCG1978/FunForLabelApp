@@ -10,8 +10,10 @@ import android.database.sqlite.SQLiteStatement;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
+import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarritoCombo;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
+import java.util.Iterator;
 
 
 public class DataBaseManager {
@@ -85,6 +87,7 @@ public class DataBaseManager {
 		//long returnValue = item.getId();
 		ContentValues initialValues = new ContentValues();
 		if(item.getId() == -1 || item.getId()==0) {
+			initialValues.put(ConstantsAdmin.KEY_ID_COMBO, item.getIdCombo());
 			initialValues.put(ConstantsAdmin.KEY_COMENTARIO_USR, item.getComentarioUsr());
 			initialValues.put(ConstantsAdmin.KEY_TEXTO_COLOR, item.getFontTextColor());
 			initialValues.put(ConstantsAdmin.KEY_TEXTO_FUENTE, item.getTextFontName());
@@ -140,6 +143,89 @@ public class DataBaseManager {
 
 	}
 
+	public void createComboCarrito(ProductoCarritoCombo item) {
+		//long returnValue = item.getId();
+		ContentValues initialValues = new ContentValues();
+		if(item.getId() == -1 || item.getId()==0) {
+			initialValues.put(ConstantsAdmin.KEY_COMENTARIO_USR, item.getComentarioUsr());
+			initialValues.put(ConstantsAdmin.KEY_NOMBRE_PRODUCTO, item.getNombre());
+			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
+			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK, item.getCantidadPorPack());
+			initialValues.put(ConstantsAdmin.KEY_PRECIO_PRODUCTO, item.getPrecio());
+			initialValues.put(ConstantsAdmin.KEY_MODELO_PRODUCTO, item.getModelo());
+			initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, item.getIdProduct());
+			initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
+			initialValues.put(ConstantsAdmin.KEY_BACKGROUND_FILENAME, item.getBackgroundFilename());
+		}else{// ES UNA ACTUALIZACION DE CANTIDAD
+			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
+		}
+		long id = -1;
+		if(item.getId() == 0 ){
+			id= mDb.insert(ConstantsAdmin.TABLE_COMBO_CARRITO, null, initialValues);
+			item.setId((int) id);
+		}else{
+			mDb.update(ConstantsAdmin.TABLE_COMBO_CARRITO, initialValues, ConstantsAdmin.KEY_ROWID + "=" + item.getId() , null);
+		}
+		Iterator<ProductoCarrito> it = item.getProductos().iterator();
+		ProductoCarrito pc;
+		while (it.hasNext()){
+			initialValues = new ContentValues();
+			pc = it.next();
+			pc.setIdCombo((int) id);
+			initialValues.put(ConstantsAdmin.KEY_ID_COMBO, pc.getIdCombo());
+			initialValues.put(ConstantsAdmin.KEY_COMENTARIO_USR, pc.getComentarioUsr());
+			initialValues.put(ConstantsAdmin.KEY_TEXTO_COLOR, pc.getFontTextColor());
+			initialValues.put(ConstantsAdmin.KEY_TEXTO_FUENTE, pc.getTextFontName());
+			initialValues.put(ConstantsAdmin.KEY_TEXTO_TAMANIO, String.valueOf(pc.getTextFontSize()));
+			initialValues.put(ConstantsAdmin.KEY_TEXTO, pc.getTexto());
+			initialValues.put(ConstantsAdmin.KEY_ID_CREATOR, pc.getCreador().getId());
+			initialValues.put(ConstantsAdmin.KEY_ID_AREA_TEXTO, pc.getAreaTexto().getTextAreasId());
+			initialValues.put(ConstantsAdmin.KEY_WIDTH_TAG, pc.getAnchoTag());
+			initialValues.put(ConstantsAdmin.KEY_HEIGHT_TAG, pc.getLargoTag());
+			initialValues.put(ConstantsAdmin.KEY_ROUND, pc.getRound());
+			initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TEXTO, pc.getEsMultilineaTexto());
+			initialValues.put(ConstantsAdmin.KEY_FROM_X_TEXTO, pc.getFromXTexto());
+			initialValues.put(ConstantsAdmin.KEY_FROM_Y_TEXTO, pc.getFromYTexto());
+			initialValues.put(ConstantsAdmin.KEY_WIDTH_AREA_TEXTO, pc.getAnchoAreaTexto());
+			initialValues.put(ConstantsAdmin.KEY_HEIGHT_AREA_TEXTO, pc.getLargoAreaTexto());
+			initialValues.put(ConstantsAdmin.KEY_NOMBRE_PRODUCTO, pc.getNombre());
+			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, pc.getCantidad());
+			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK, pc.getCantidadPorPack());
+			initialValues.put(ConstantsAdmin.KEY_PRECIO_PRODUCTO, pc.getPrecio());
+			initialValues.put(ConstantsAdmin.KEY_MODELO_PRODUCTO, pc.getModelo());
+			initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, pc.getIdProduct());
+			initialValues.put(ConstantsAdmin.KEY_ID_FONT_TEXT, pc.getFontTextId());
+			initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
+			if (pc.getAreaTitulo() != null) {
+				initialValues.put(ConstantsAdmin.KEY_ID_FONT_TITLE, pc.getFontTitleId());
+				initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO, pc.getEsMultilineaTituto());
+				initialValues.put(ConstantsAdmin.KEY_TITULO_FUENTE, pc.getTitleFontName());
+				initialValues.put(ConstantsAdmin.KEY_TITULO_COLOR, pc.getFontTitleColor());
+				initialValues.put(ConstantsAdmin.KEY_ID_AREA_TITULO, pc.getAreaTitulo().getTextAreasId());
+				initialValues.put(ConstantsAdmin.KEY_TITULO, pc.getTitulo());
+				initialValues.put(ConstantsAdmin.KEY_TITULO_TAMANIO, String.valueOf(pc.getTitleFontSize()));
+				initialValues.put(ConstantsAdmin.KEY_TIENE_TITULO, 1);
+				initialValues.put(ConstantsAdmin.KEY_FROM_X_TITULO, pc.getFromXTituto());
+				initialValues.put(ConstantsAdmin.KEY_FROM_Y_TITULO, pc.getFromYTituto());
+				initialValues.put(ConstantsAdmin.KEY_WIDTH_AREA_TITULO, pc.getAnchoAreaTituto());
+				initialValues.put(ConstantsAdmin.KEY_HEIGHT_AREA_TITULO, pc.getLargoAreaTituto());
+
+			} else {
+				initialValues.put(ConstantsAdmin.KEY_TIENE_TITULO, 0);
+			}
+			initialValues.put(ConstantsAdmin.KEY_BACKGROUND_FILENAME, pc.getBackgroundFilename());
+			if(pc.getId() == 0 ){
+				long idPC= mDb.insert(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, null, initialValues);
+				pc.setId((int) id);
+			}else{
+				mDb.update(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, initialValues, ConstantsAdmin.KEY_ROWID + "=" + pc.getId() , null);
+			}
+
+		}
+
+
+	}
+
 	public void deleteLogin(){
 		mDb.delete(ConstantsAdmin.TABLE_LOGIN, ConstantsAdmin.KEY_ROWID + "= 1", null);
 	}
@@ -147,6 +233,11 @@ public class DataBaseManager {
 	public void deleteProductoCarrito(ProductoCarrito pc){
 		mDb.delete(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, ConstantsAdmin.KEY_ROWID + "=" + pc.getId(), null);
 	}
+
+	public void deleteComboProductoCarrito(ProductoCarritoCombo c){
+		mDb.delete(ConstantsAdmin.TABLE_COMBO_CARRITO, ConstantsAdmin.KEY_ROWID + "=" + c.getId(), null);
+	}
+
 
 
 	private long sizeLogin(){
@@ -173,6 +264,15 @@ public class DataBaseManager {
 		}
 		return c;
 	}
+
+	public Cursor cursorComboProductoCarrito() {
+		Cursor c = null;
+		if(mDb.isOpen()){
+				c = mDb.query(ConstantsAdmin.TABLE_COMBO_CARRITO, null, null, null, null, null, null, null );
+		}
+		return c;
+	}
+
 
 
 
