@@ -257,7 +257,7 @@ public class ConstantsAdmin {
                 try {
                     inputStream.close();
                     String filename = Environment
-                            .getExternalStorageDirectory().toString() +"/"
+                            .getExternalStorageDirectory().toString() +"/" + FOLDER_FFL + "/"
                             + ConstantsAdmin.PROPERTIES_FILE;
                     File f = new File(filename);
                     if(f.exists()) {

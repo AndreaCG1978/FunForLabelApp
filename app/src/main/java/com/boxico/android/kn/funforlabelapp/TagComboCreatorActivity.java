@@ -598,7 +598,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
-
+        acotar = false;
         if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }
@@ -633,6 +633,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 String fontSize = null;
                 fontSize = (String) parent.getAdapter().getItem(position);
                 float size = Float.valueOf(fontSize);
+                float originalSize = size;
                 if(needToAcot){
                     size = size * ((float)0.884);
                 }else{
@@ -643,24 +644,24 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
                     textTag.setTextSize(TypedValue.TYPE_STRING, size);
                     selectedPosFontSizeText = position;
-                    tp.setFontSizeText(String.valueOf(size));
+                    tp.setFontSizeText(String.valueOf(originalSize));
                     tp.setPosSizeText(position);
                     if(titleTag != null){
                         selectedPosFontSizeTitle = position;
                         titleTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeTitle(String.valueOf(size));
+                        tp.setFontSizeTitle(String.valueOf(originalSize));
                         tp.setPosSizeTitle(position);
                     }
                 }else {
                     if (textTag.hasFocus()) {
                         selectedPosFontSizeText = position;
                         textTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeText(String.valueOf(size));
+                        tp.setFontSizeText(String.valueOf(originalSize));
                         tp.setPosSizeText(position);
                     } else if (titleTag != null && titleTag.hasFocus()) {
                         selectedPosFontSizeTitle = position;
                         titleTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeTitle(String.valueOf(size));
+                        tp.setFontSizeTitle(String.valueOf(originalSize));
                         tp.setPosSizeTitle(position);
                     }
                 }

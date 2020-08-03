@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,7 +201,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     }
 
     private void initializeCreatorFull(ItemCarrito ic, RelativeLayout productView, LinearLayout comboView) {
-        float achicar = 0.7f;
+        float achicar = 0.65f;
         boolean acotar = false;
         ProductoCarrito pc = null;
         ComboCarrito combo = null;
@@ -226,6 +227,16 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
 
     private void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag){
         Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
+     /*   DisplayMetrics displayMetrics = new DisplayMetrics();
+        mContext.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        float screenWidthMM = ConstantsAdmin.pxToMm((float) width, mContext);
+
+        if(screenWidthMM < pc.getAnchoTag()){
+            acotar = true;
+        }
+*/
         ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
         // CONFIGURACION DE UN AREA DE TEXTO
 
