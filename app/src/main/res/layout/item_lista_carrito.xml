@@ -7,15 +7,15 @@
     android:gravity="center_vertical|center_horizontal">
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center|left">
 
         <LinearLayout
             android:id="@+id/linearImagen"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
+            android:layout_width="170dp"
+            android:layout_height="120dp"
             android:orientation="vertical"
             android:gravity="center"
             android:layout_margin="10dp"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:layout_gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -151,8 +151,7 @@
           android:layout_height="30dp"
           android:background="@drawable/delete"
           android:layout_gravity="right|top"
-          android:layout_marginRight="10dp"
-          android:layout_marginTop="10dp"/>
+          android:layout_margin="10dp"/>
 
 
 

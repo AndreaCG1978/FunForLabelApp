@@ -124,40 +124,7 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
-    private void privateLoadProperties(){
-        Properties properties;
-        InputStream inputStream = null;
-        ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL + ConstantsAdmin.PROPERTIES_FILE, ConstantsAdmin.PROPERTIES_FILE);
-        properties = new Properties();
-        try {
-            String filename = Environment
-                    .getExternalStorageDirectory().toString() +"/"
-                    + ConstantsAdmin.PROPERTIES_FILE;
-            inputStream = new FileInputStream(filename);
 
-            properties.load(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if(inputStream != null){
-                try {
-                    inputStream.close();
-                    String filename = Environment
-                            .getExternalStorageDirectory().toString() +"/"
-                            + ConstantsAdmin.PROPERTIES_FILE;
-                    File f = new File(filename);
-                    if(f.exists()) {
-                        f.delete();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        ConstantsAdmin.fflProperties = properties;
-    }
 
 
     private void loadProperties() {
@@ -307,7 +274,7 @@ public class LoginActivity extends FragmentActivity {
         @Override
         protected Integer doInBackground(Long... longs) {
             publishProgress(1);
-            privateLoadProperties();
+            ConstantsAdmin.privateLoadProperties();
             return 0;
         }
 

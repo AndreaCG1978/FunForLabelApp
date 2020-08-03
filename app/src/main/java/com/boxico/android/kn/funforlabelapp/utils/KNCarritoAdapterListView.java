@@ -32,6 +32,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
@@ -175,7 +176,15 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View popupInputDialogView = layoutInflater.inflate(R.layout.tag_view, null);
         RelativeLayout rl = popupInputDialogView.findViewById(R.id.relativeTagView);
-        initializeCreatorFull(ic, rl);
+        LinearLayout ll = popupInputDialogView.findViewById(R.id.linearTagView);
+        if(ic.isProduct()){
+            ll.setVisibility(View.GONE);
+            rl.setVisibility(View.VISIBLE);
+        }else{
+            ll.setVisibility(View.VISIBLE);
+            rl.setVisibility(View.GONE);
+        }
+        initializeCreatorFull(ic, rl, ll);
         return popupInputDialogView;
     }
 
@@ -190,47 +199,58 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
 
     }
 
-    private void initializeCreatorFull(ItemCarrito ic, RelativeLayout linearTag) {
-        float achicar = 0.70f;
+    private void initializeCreatorFull(ItemCarrito ic, RelativeLayout productView, LinearLayout comboView) {
+        float achicar = 0.7f;
         boolean acotar = false;
         ProductoCarrito pc = null;
+        ComboCarrito combo = null;
         if(ic.isProduct()){
             pc = (ProductoCarrito) ic;
-            Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
-            ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
-            // CONFIGURACION DE UN AREA DE TEXTO
-
-            EditText textTag = null;
-            EditText titleTag = null;
-            textTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
-            if(pc.getIdAreaTitulo()!= -1) {
-                titleTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(),pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
-            }
-            textTag.setText(pc.getTexto());
-            textTag.setTextColor(pc.getFontTextColor());
-            textTag.setTextSize(TypedValue.TYPE_STRING, pc.getTextFontSize() * achicar);
-            File fileFont = ConstantsAdmin.getFile(pc.getTextFontName());
-            Typeface face = Typeface.createFromFile(fileFont);
-            textTag.setTypeface(face);
-            textTag.setEnabled(false);
-            if(titleTag != null){
-                titleTag.setEnabled(false);
-                titleTag.setText(pc.getTitulo());
-                titleTag.setTextColor(pc.getFontTitleColor());
-                titleTag.setTextSize(TypedValue.TYPE_STRING, pc.getTitleFontSize() * achicar);
-                fileFont = ConstantsAdmin.getFile(pc.getTitleFontName());
-                face = Typeface.createFromFile(fileFont);
-                titleTag.setTypeface(face);
-            }
-
+            makeTag(pc, achicar, acotar, productView);
         }else{
-            Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
-            ConstantsAdmin.customizeBackground(achicar, imagen, imagen.getWidth(), imagen.getHeight(), 0, acotar, linearTag, mContext);
+            combo = (ComboCarrito) ic;
+            Iterator<ItemCarrito> productos = combo.getProductos().iterator();
+            RelativeLayout rl = null;
+            while (productos.hasNext()){
+                pc = (ProductoCarrito) productos.next();
+                rl = new RelativeLayout(mContext);
+                RelativeLayout.LayoutParams layoutParamsTextTag = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParamsTextTag.setMargins(15,15,15,15);
+                rl.setLayoutParams(layoutParamsTextTag);
+
+                makeTag(pc, achicar, acotar, rl);
+                comboView.addView(rl);
+            }
         }
+    }
 
+    private void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag){
+        Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
+        ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
+        // CONFIGURACION DE UN AREA DE TEXTO
 
-
-
+        EditText textTag = null;
+        EditText titleTag = null;
+        textTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        if(pc.getIdAreaTitulo()!= -1) {
+            titleTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(),pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        }
+        textTag.setText(pc.getTexto());
+        textTag.setTextColor(pc.getFontTextColor());
+        textTag.setTextSize(TypedValue.TYPE_STRING, pc.getTextFontSize() * achicar);
+        File fileFont = ConstantsAdmin.getFile(pc.getTextFontName());
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);
+        textTag.setEnabled(false);
+        if(titleTag != null){
+            titleTag.setEnabled(false);
+            titleTag.setText(pc.getTitulo());
+            titleTag.setTextColor(pc.getFontTitleColor());
+            titleTag.setTextSize(TypedValue.TYPE_STRING, pc.getTitleFontSize() * achicar);
+            fileFont = ConstantsAdmin.getFile(pc.getTitleFontName());
+            face = Typeface.createFromFile(fileFont);
+            titleTag.setTypeface(face);
+        }
     }
 
     private void initializeCreator(ItemCarrito ic, RelativeLayout linearTag) {
@@ -246,9 +266,9 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
             Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
             ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
         }else{
-            achicar = 0.05f;
+            achicar = 1f;
             Bitmap imagen = ConstantsAdmin.getImageFromStorage(ic.getBackgroundFilename());
-            ConstantsAdmin.customizeBackground(achicar, imagen, imagen.getWidth(), imagen.getHeight(), 0, acotar, linearTag, mContext);
+            ConstantsAdmin.customizeBackground(achicar, imagen, 20, 17, 0, acotar, linearTag, mContext);
         }
 
 

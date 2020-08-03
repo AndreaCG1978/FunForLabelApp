@@ -98,6 +98,7 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             pc.setCantidadPorPack(p.getQuantity());
             pc.setModelo(p.getModel());
             pc.setIdProduct((int) p.getId());
+            ConstantsAdmin.copyBitmapInStorage(temp.getImage().getImage(), temp.getBackgroundFilename());
             combo.getProductos().add(pc);
         }
         combo.setPrecio(ConstantsAdmin.currentProduct.getPrice());

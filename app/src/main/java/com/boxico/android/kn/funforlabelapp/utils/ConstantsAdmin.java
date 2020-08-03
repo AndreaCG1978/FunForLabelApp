@@ -58,6 +58,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,8 +145,8 @@ public class ConstantsAdmin {
     public static final String ACERCADE_TEXTO_ENVIO_MAIL = "TEXTO_ENVIO_MAIL";
     public static final String URL_INSTAGRAM = "URL_INSTAGRAM" ;
     public static final String URL_FACEBOOK = "URL_FACEBOOK" ;
-
-
+    public static final String FOLDER_FFL = "FFLFiles";
+    public static final String FOLDER_TEMP = "temps";
 
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
@@ -234,7 +235,41 @@ public class ConstantsAdmin {
 
     private static ArrayList<LabelImage> capturas = null;
 
+    public static void privateLoadProperties(){
+        Properties properties;
+        InputStream inputStream = null;
+        ConstantsAdmin.createFolder();
+        ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL + ConstantsAdmin.PROPERTIES_FILE, ConstantsAdmin.PROPERTIES_FILE);
+        properties = new Properties();
+        try {
+            String filename = Environment
+                    .getExternalStorageDirectory().toString() + "/" + FOLDER_FFL + "/"
+                    + ConstantsAdmin.PROPERTIES_FILE;
+            inputStream = new FileInputStream(filename);
 
+            properties.load(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(inputStream != null){
+                try {
+                    inputStream.close();
+                    String filename = Environment
+                            .getExternalStorageDirectory().toString() +"/"
+                            + ConstantsAdmin.PROPERTIES_FILE;
+                    File f = new File(filename);
+                    if(f.exists()) {
+                        f.delete();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        ConstantsAdmin.fflProperties = properties;
+    }
 
     public static ArrayList<LabelImage> getCapturas() {
         if(capturas == null){
@@ -599,17 +634,24 @@ public class ConstantsAdmin {
 
     public static File getFile(String filename){
         String completeFilename = Environment
-                .getExternalStorageDirectory().toString() +"/"
+                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/"
                 + filename;
         File f = new File(completeFilename);
         return f;
     }
 
+    public static File getImageFile(String filename){
+        String completeFilename = Environment
+                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/"
+                + filename;
+        File f = new File(completeFilename);
+        return f;
+    }
+
+
     public static void copyBitmapInStorage(Bitmap bmp, String filename){
        // String root = Environment.getExternalStorageDirectory().toString();
-        String completeFilename = Environment
-                .getExternalStorageDirectory().toString() +"/"
-                + filename;
+        String completeFilename = Environment.getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + filename;
         File newFile = new File(completeFilename);
         if (newFile.exists())
             newFile.delete();
@@ -703,7 +745,7 @@ public class ConstantsAdmin {
         Bitmap bitmap = null;
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + now + ".png";
 
             // create bitmap screen capture
             View v1 = context.getWindow().getDecorView().getRootView();
@@ -735,11 +777,23 @@ public class ConstantsAdmin {
        return bmp;
     }
 
+    public static void createFolder(){
+        File f = new File(Environment.getExternalStorageDirectory(), FOLDER_FFL);
+        if (!f.exists()) {
+            f.mkdirs();
+            File subdir = new File(f, FOLDER_TEMP);
+            if(!subdir.exists()){
+                subdir.mkdirs();
+            }
+
+        }
+    }
+
     public static void copyFileFromUrl(String urlPath, String fontFilename){
         int count;
         try {
             String filename = Environment
-                    .getExternalStorageDirectory().toString() +"/"
+                    .getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/"
                     + fontFilename;
             File f = new File(filename);
             if(!f.exists()) {
@@ -1036,7 +1090,7 @@ public class ConstantsAdmin {
 
     public static Bitmap getImageFromStorage(String backgroundFilename) {
         Bitmap img = null;
-        File f = getFile(backgroundFilename);
+        File f = getImageFile(backgroundFilename);
         try {
             img = BitmapFactory.decodeStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
