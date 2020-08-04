@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
+import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
@@ -96,7 +97,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     Integer idOrder = -1;
     private boolean okInsert = true;
     private Integer PAYMENT_REQUEST = 1001;
-    final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
+  //  final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
    // final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("8755027555974708", "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU").build();
 
 
@@ -608,6 +609,16 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
         }
+
+        it = ConstantsAdmin.combosDelCarrito.iterator();
+        while(it.hasNext()){
+            ic = it.next();
+            precioTemp = Float.valueOf(ic.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+        }
+
         return temp;
     }
 
@@ -616,6 +627,17 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         ItemCarrito ic = null;
         String temp = "";
         float precioTemp;
+        while(it.hasNext()){
+            ic = it.next();
+            precioTemp = Float.valueOf(ic.getPrecio());
+            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
+            temp = temp + ic.getNombre() +": $" + String.valueOf(precioTemp);
+            if(it.hasNext()){
+                temp =  temp + " + ";
+            }
+        }
+        it = ConstantsAdmin.combosDelCarrito.iterator();
         while(it.hasNext()){
             ic = it.next();
             precioTemp = Float.valueOf(ic.getPrecio());
@@ -763,7 +785,45 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
+        }
+        it = ConstantsAdmin.combosDelCarrito.iterator();
+        ComboCarrito combo = null;
+        Integer idProduct = -1;
+        while(it.hasNext() && okInsert){
+            combo = (ComboCarrito) it.next();
+            String precio =combo.getPrecio().substring(0, combo.getPrecio().length() - 5);
+            call = orderService.insertProduct(true, ConstantsAdmin.tokenFFL, idOrder, combo.getIdProduct(),"",
+                    combo.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(combo.getCantidad()));
+            response = call.execute();
+            if(response.body() != null) {
+                idProduct = response.body();
+            }else{
+                okInsert = false;
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+            Iterator<ItemCarrito> it1 = combo.getProductos().iterator();
+            ProductoCarrito pc = null;
+            while (it1.hasNext() && okInsert){
+                pc = (ProductoCarrito) it1.next();
+                if(pc.isTieneTitulo()){
+                    call = orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
+                            "iconotemporal",(int)c.getId(),pc.getIdProduct(), 0,
+                            "tcm/thumbs/iconotemporal.png", 0, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
+                            0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)pc.getTitleFontSize(),
+                            ConstantsAdmin.convertIntColorToHex(pc.getFontTitleColor()),0,
+                            0,pc.getFontTitleId(),pc.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
+                }else{
+                    call = orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"iconotemporal",(int)c.getId(),
+                            pc.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", 0, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
+                            0,0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
+                }
+                response = call.execute();
+                if(response.body() == null) {
+                    okInsert = false;
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
 
+            }
 
         }
     }
@@ -802,19 +862,22 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void cargarDetalleTags() {
-        ProductoCarrito pc;
+        ItemCarrito ic;
         String temp = "";
-        String precio;
         precioTotalTags = 0;
         float precioTemp = 0;
-        Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
+        ArrayList<ItemCarrito> items = new ArrayList<>();
+        items.addAll(ConstantsAdmin.productosDelCarrito);
+        items.addAll(ConstantsAdmin.combosDelCarrito);
+        Iterator<ItemCarrito> it = items.iterator();
         while(it.hasNext()){
-            pc = (ProductoCarrito) it.next();
-            precioTemp = (Float.valueOf(pc.getPrecio()) * Float.valueOf(pc.getCantidad()));
+            ic = (ItemCarrito) it.next();
+            precioTemp = (Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad()));
 //            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + "-"+ pc.getCantidad() + " x " + pc.getNombre() + ": $" + String.valueOf(precioTemp) + "\n";
+            temp = temp + "-"+ ic.getCantidad() + " x " + ic.getNombre() + ": $" + String.valueOf(precioTemp) + "\n";
             precioTotalTags = precioTotalTags + precioTemp;
         }
+
         textDetalleTags.setPadding(3,3,3,3);
         textDetalleTags.setText(temp);
         String precioText = String.valueOf(precioTotalTags);
