@@ -607,7 +607,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = Float.valueOf(ic.getPrecio());
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+            if(ic.getModelo() != null && !ic.getModelo().equals("")){
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+            }else{
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + String.valueOf(precioTemp) + "\n";
+            }
+
         }
 
         it = ConstantsAdmin.combosDelCarrito.iterator();
@@ -616,7 +621,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = Float.valueOf(ic.getPrecio());
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+            if(ic.getModelo() != null && !ic.getModelo().equals("")){
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+            }else{
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + String.valueOf(precioTemp) + "\n";
+            }
         }
 
         return temp;
@@ -801,6 +810,19 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
+            // SE INSERTA UN TAG QUE REPRESENTA AL PADRE DEL COMBO
+            Integer idParent = -1;
+            call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),"iconotemporal",(int)c.getId(),
+                    combo.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", 0);
+
+            response = call.execute();
+            if(response.body() == null) {
+                okInsert = false;
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }else{
+                idParent = response.body();
+            }
+
             Iterator<ItemCarrito> it1 = combo.getProductos().iterator();
             ProductoCarrito pc = null;
             while (it1.hasNext() && okInsert){
@@ -808,13 +830,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 if(pc.isTieneTitulo()){
                     call = orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
                             "iconotemporal",(int)c.getId(),pc.getIdProduct(), 0,
-                            "tcm/thumbs/iconotemporal.png", 0, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
+                            "tcm/thumbs/iconotemporal.png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
                             0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)pc.getTitleFontSize(),
                             ConstantsAdmin.convertIntColorToHex(pc.getFontTitleColor()),0,
                             0,pc.getFontTitleId(),pc.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
                 }else{
                     call = orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"iconotemporal",(int)c.getId(),
-                            pc.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", 0, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
+                            pc.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
                             0,0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
                 }
                 response = call.execute();

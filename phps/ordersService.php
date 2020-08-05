@@ -393,9 +393,31 @@
                 $idTagLegendTitle = $dbConn->lastInsertId();                
 
             }
-            echo json_encode( $idTagLegend,JSON_UNESCAPED_UNICODE);
+            echo json_encode( $idTag,JSON_UNESCAPED_UNICODE);
             exit();
 
+        }else if(isset($_POST['insertOnlyTagWithoutOthers'])){
+            // SE INSERTA SOLO EN TAGS
+
+            $idOrderProduct = $_POST['op_products_id'];
+
+            // SE INSERTA TAGS
+            $sql = "INSERT INTO ". TCM_TAGS ."(fills_textured_id, orders_products_id, comment, tcm_tag, customers_id, products_id, icon_width, preview, parent)
+            VALUES(:fills_textured_id, :orders_products_id, :comment, :tcm_tag, :customers_id, :products_id, :icon_width, :preview, :parent)";
+            $statement = $dbConn->prepare($sql);
+            $statement->bindParam (":fills_textured_id",$_POST['t_fills_textured_id'] , PDO::PARAM_INT);
+            $statement->bindParam (":orders_products_id",$idOrderProduct, PDO::PARAM_INT);
+            $statement->bindParam (":comment",  $_POST['t_comments'] , PDO::PARAM_STR);
+            $statement->bindParam (":tcm_tag",  $_POST['t_tcm_tag'] , PDO::PARAM_STR);
+            $statement->bindParam (":customers_id",$_POST['t_customers_id'], PDO::PARAM_INT);
+            $statement->bindParam (":products_id",$_POST['t_products_id'], PDO::PARAM_INT);
+            $statement->bindParam (":icon_width",$_POST['t_icon_width'], PDO::PARAM_INT);
+            $statement->bindParam (":preview",  $_POST['t_preview'] , PDO::PARAM_STR);
+            $statement->bindParam (":parent",$_POST['t_parent'], PDO::PARAM_INT);
+            $statement->execute();
+            $idTag = $dbConn->lastInsertId();
+            echo json_encode( $idTag,JSON_UNESCAPED_UNICODE);
+            exit();
         }else{
             echo json_encode(-1,JSON_UNESCAPED_UNICODE);
         }

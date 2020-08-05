@@ -105,6 +105,22 @@ public interface OrdersService {
 
     @POST(API_ROUTE)
     @FormUrlEncoded
+    Call<Integer> insertOnlyTagWithoutOthers(@Field("insertOnlyTagWithoutOthers") boolean insertTag, @Field("tokenFFL") long tokenFFL,
+                                             // ORDERS_PRODUCTS
+                                             @Field("op_products_id") Integer op_products_id,
+                                             // TAGS
+                                             @Field("t_fills_textured_id") Integer t_fills_textured_id,
+                                             @Field("t_comments") String osh_comments,
+                                             @Field("t_tcm_tag") String t_tcm_tag,
+                                             @Field("t_customers_id") Integer t_customers_id,
+                                             @Field("t_products_id") Integer t_products_id,
+                                             @Field("t_icon_width") Integer t_icon_width,
+                                             @Field("t_preview") String t_preview,
+                                             @Field("t_parent") Integer t_parent);
+
+
+    @POST(API_ROUTE)
+    @FormUrlEncoded
     Call<Integer> insertTag(@Field("insertTag") boolean insertTag, @Field("tokenFFL") long tokenFFL,
                                 @Field("orders_id") Integer orders_id,
                                 // ORDERS_PRODUCTS
