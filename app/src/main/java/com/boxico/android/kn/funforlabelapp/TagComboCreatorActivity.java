@@ -285,7 +285,11 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                         param = new TagParams();
                         param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
                         ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                    }else{
+                        param = (TagParams) ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                     }
+                    param.setInicializadoFont(false);
+                    param.setInicializadoSize(false);
                     loadCreator();
                   /*  if(textTag != null && textTag.getText()!= null){
                         param.setText(textTag.getText().toString());
@@ -787,13 +791,16 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         if(ConstantsAdmin.selectedComboProduct!= null && ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
             TagParams param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
             spinnerBackgrounds.setSelection(param.getPosImage());
+            selectedPosFontText = param.getPosFontText();
             spinnerFonts.setSelection(param.getPosFontText());
+            selectedPosFontSizeText = param.getPosSizeText();
             spinnerFontSizes.setSelection(param.getPosSizeText());
+            textTag.requestFocus();
             if(titleTag != null){
-                titleTag.requestFocus();
+                titleTag.setTextSize(TypedValue.TYPE_STRING, Float.valueOf(param.getFontSizeTitle()));
 
             }
-            textTag.requestFocus();
+
             textTag.setText(param.getText());
             textTag.setTextColor(param.getColorText());
             pickColor.setTextColor(param.getColorText());
@@ -803,6 +810,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 ConstantsAdmin.selectedComboProduct.setChecked(false);
             }
             if(param.isTitle()){
+                selectedPosFontTitle = param.getPosFontTitle();
+                selectedPosFontSizeTitle = param.getPosSizeTitle();
                 titleTag.setText(param.getTitle());
                 titleTag.setTextColor(param.getColorTitle());
 
@@ -1165,41 +1174,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private void openCulminarTag() {
         actualizarTagActual();
         boolean allChecked = verificarTodosTagsCheckeados();
-        if(allChecked){/*
-            ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
-            ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
-            ConstantsAdmin.selectedTextFontColor = selectedTextColor;
-            ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
-            if(labelAttributes.length > 1){//ES UN TAG CON TITULO
-                ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
-                ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
-                ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
-                ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
-            }
-            ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
-            ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
-            ConstantsAdmin.textEntered = textTag.getText().toString();
-            if(titleTag != null){
-                ConstantsAdmin.titleEntered = titleTag.getText().toString();
-            }
-            textTag.setFocusable(false);
-            textTag.setHint("");
-            if(titleTag!= null){
-                titleTag.setFocusable(false);
-                titleTag.setHint("");
-            }
-            Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
-            ConstantsAdmin.screenShot = bmp;
-            textTag.setFocusable(true);
-            textTag.setFocusableInTouchMode(true);
-            textTag.requestFocus();
-            textTag.setHint(R.string.your_name_here);
-            if(titleTag!= null){
-                titleTag.setFocusable(true);
-                titleTag.setFocusableInTouchMode(true);
-                titleTag.setHint(R.string.your_name_here);
-            }
-*/
+        if(allChecked){
+
             ConstantsAdmin.currentComboProducts = productsList;
             Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
             startActivity(intent);

@@ -112,4 +112,5 @@
     <string name="contactanos">Contactanos!</string>
     <string name="seguinos">Seguinos!</string>
     <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>
+    <string name="productos_combo">Productos del Combo</string>
 </resources>

@@ -193,7 +193,7 @@ public class DataBaseManager {
 				initialValues.put(ConstantsAdmin.KEY_MODELO_PRODUCTO, pc.getModelo());
 				initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, pc.getIdProduct());
 				initialValues.put(ConstantsAdmin.KEY_ID_FONT_TEXT, pc.getFontTextId());
-				initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
+				initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, pc.getFillsTexturedId());
 				if (pc.getAreaTitulo() != null) {
 					initialValues.put(ConstantsAdmin.KEY_ID_FONT_TITLE, pc.getFontTitleId());
 					initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO, pc.getEsMultilineaTituto());

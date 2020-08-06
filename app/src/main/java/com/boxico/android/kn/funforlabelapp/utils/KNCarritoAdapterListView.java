@@ -176,15 +176,20 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View popupInputDialogView = layoutInflater.inflate(R.layout.tag_view, null);
-        RelativeLayout rl = popupInputDialogView.findViewById(R.id.relativeTagView);
+   //     RelativeLayout rl = popupInputDialogView.findViewById(R.id.relativeTagView);
+
+        RelativeLayout rl = new RelativeLayout(mContext);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(7,7,7,7);
+        rl.setLayoutParams(lp);
         LinearLayout ll = popupInputDialogView.findViewById(R.id.linearTagView);
-        if(ic.isProduct()){
+     /*   if(ic.isProduct()){
             ll.setVisibility(View.GONE);
             rl.setVisibility(View.VISIBLE);
         }else{
             ll.setVisibility(View.VISIBLE);
             rl.setVisibility(View.GONE);
-        }
+        }*/
         initializeCreatorFull(ic, rl, ll);
         return popupInputDialogView;
     }
@@ -208,10 +213,14 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
         if(ic.isProduct()){
             pc = (ProductoCarrito) ic;
             makeTag(pc, achicar, acotar, productView);
+            comboView.addView(productView);
         }else{
             combo = (ComboCarrito) ic;
             Iterator<ItemCarrito> productos = combo.getProductos().iterator();
             RelativeLayout rl = null;
+            if(combo.getProductos().size() > 4){
+                achicar = 0.5f;
+            }
             while (productos.hasNext()){
                 pc = (ProductoCarrito) productos.next();
                 rl = new RelativeLayout(mContext);
