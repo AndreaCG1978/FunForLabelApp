@@ -267,12 +267,18 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
                         if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
                             tp.setTitle(titleTag.getText().toString());
-                            if(!titleTag.getText().toString().equals("")) {
+                         /*   if(!titleTag.getText().toString().equals("")) {
                                 ConstantsAdmin.selectedComboProduct.setChecked(true);
-                            }
+                            }*/
 
                         }
                     }
+                 /*   selectedPosFontText = -1;
+                    selectedPosFontSizeText = -1;
+                    selectedTextColor = Color.BLACK;
+                    selectedPosFontTitle = -1;
+                    selectedPosFontSizeTitle = -1;
+                    selectedTitleColor = Color.BLACK;*/
                     ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
                     TagParams param = null;
                     if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
@@ -317,14 +323,16 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
             if (ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle() == 1 && titleTag != null && titleTag.getText() != null) {
                 tp.setTitle(titleTag.getText().toString());
-                if (!titleTag.getText().toString().equals("")) {
+
+             /*   if (!titleTag.getText().toString().equals("")) {
                     ConstantsAdmin.selectedComboProduct.setChecked(true);
                 } else {
                     ConstantsAdmin.selectedComboProduct.setChecked(false);
-                }
+                }*/
 
             }
             Bitmap bmp = takeScreenShot();
+
             ConstantsAdmin.selectedComboProduct.setScreenShot(bmp);
         }
     }
@@ -608,7 +616,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
        // CONFIGURACION DE UN AREA DE TEXTO
-
+        textTag = null;
+        titleTag = null;
         if(la1.getIsTitle()==0) {
             textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
         }else{
@@ -641,7 +650,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
 
                 TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                if(tp.isInicializadoSize()){
                     textTag.setTextSize(TypedValue.TYPE_STRING, size);
                     selectedPosFontSizeText = position;
                     tp.setFontSizeText(String.valueOf(originalSize));
@@ -652,6 +661,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                         tp.setFontSizeTitle(String.valueOf(originalSize));
                         tp.setPosSizeTitle(position);
                     }
+                    tp.setInicializadoSize(true);
                 }else {
                     if (textTag.hasFocus()) {
                         selectedPosFontSizeText = position;
@@ -683,7 +693,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 File fileFont = ConstantsAdmin.getFile(lf.getBasename());
                 Typeface face = Typeface.createFromFile(fileFont);
                 TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                if(!textTag.hasFocus() && (titleTag == null|| !titleTag.hasFocus())){
+                if(!tp.isInicializadoFont()){
                     textTag.setTypeface(face);
                     tp.setFontText(face);
                     tp.setFontTextBaseName(lf.getBasename());
@@ -698,16 +708,19 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                         tp.setFontTitleId((int)lf.getId());
                         tp.setPosFontTitle(position);
                     }
+                    tp.setInicializadoFont(true);
                 }else {
                     if (textTag.hasFocus()) {
                         selectedPosFontText = position;
                         textTag.setTypeface(face);
                         tp.setFontText(face);
+                        tp.setFontTextId((int)lf.getId());
                         tp.setPosFontText(position);
                     } else if (titleTag != null && titleTag.hasFocus()) {
                         selectedPosFontTitle = position;
                         titleTag.setTypeface(face);
                         tp.setFontTitle(face);
+                        tp.setFontTitleId((int)lf.getId());
                         tp.setPosFontTitle(position);
                     }
                 }
@@ -769,11 +782,18 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
             });
         }
+
+
         if(ConstantsAdmin.selectedComboProduct!= null && ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
             TagParams param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
             spinnerBackgrounds.setSelection(param.getPosImage());
             spinnerFonts.setSelection(param.getPosFontText());
             spinnerFontSizes.setSelection(param.getPosSizeText());
+            if(titleTag != null){
+                titleTag.requestFocus();
+
+            }
+            textTag.requestFocus();
             textTag.setText(param.getText());
             textTag.setTextColor(param.getColorText());
             pickColor.setTextColor(param.getColorText());
@@ -782,6 +802,18 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             }else{
                 ConstantsAdmin.selectedComboProduct.setChecked(false);
             }
+            if(param.isTitle()){
+                titleTag.setText(param.getTitle());
+                titleTag.setTextColor(param.getColorTitle());
+
+            }
+            //pickColor.setTextColor(param.getColorText());
+          /*  if(param.getText()!= null && !param.getText().toString().equals("")){
+                ConstantsAdmin.selectedComboProduct.setChecked(true);
+            }else{
+                ConstantsAdmin.selectedComboProduct.setChecked(false);
+            }*/
+
 
         }
 
@@ -924,6 +956,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }else{
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
+
             }catch(Exception exc){
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 if(call != null) {
@@ -1020,6 +1053,11 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     labelAttributes = (LabelAttributes[]) temp.toArray(new LabelAttributes[temp.size()]);
                     if(tp != null){
                         tp.setLabelAttributes(labelAttributes);
+                        if(labelAttributes.length > 1){
+                            tp.setTitle(true);
+                        }else{
+                            tp.setTitle(false);
+                        }
                     }
                     // labelAttributes = response.body();
                 }else{
@@ -1188,7 +1226,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             titleTag.setHint("");
         }
         Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
-        ConstantsAdmin.screenShot = bmp;
+   //     ConstantsAdmin.screenShot = bmp;
         textTag.setFocusable(true);
         textTag.setFocusableInTouchMode(true);
         textTag.requestFocus();

@@ -12,9 +12,9 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 public class TagParams {
 
     private LabelImage image;
-    private String fontSizeText;
+    private String fontSizeText = "8.0";
     private Typeface fontText;
-    private String fontSizeTitle;
+    private String fontSizeTitle = "8.0";
     private Typeface fontTitle;
     private int colorText = Color.BLACK;
     private int colorTitle = Color.BLACK;
@@ -22,6 +22,8 @@ public class TagParams {
     private String title;
     private boolean isTitle = false;
     private long idProduct = -1;
+    private boolean inicializadoSize = false;
+    private boolean inicializadoFont = false;
 
 
     private int posSizeText;
@@ -37,9 +39,25 @@ public class TagParams {
     private LabelImage[] images;
     private String fontTitleBaseName;
     private String fontTextBaseName;
-    private int fontTitleId;
-    private int fontTextId;
+    private int fontTitleId = 3;
+    private int fontTextId = 3;
     private String backgroundFilename;
+
+    public boolean isInicializadoSize() {
+        return inicializadoSize;
+    }
+
+    public void setInicializadoSize(boolean inicializadoSize) {
+        this.inicializadoSize = inicializadoSize;
+    }
+
+    public boolean isInicializadoFont() {
+        return inicializadoFont;
+    }
+
+    public void setInicializadoFont(boolean inicializadoFont) {
+        this.inicializadoFont = inicializadoFont;
+    }
 
     public String getBackgroundFilename() {
         return backgroundFilename;

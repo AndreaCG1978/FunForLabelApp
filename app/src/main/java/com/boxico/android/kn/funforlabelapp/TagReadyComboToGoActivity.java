@@ -61,7 +61,12 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
                 pc.setFontTitleColor(temp.getColorTitle());
                 pc.setTitulo(temp.getTitle());
                 pc.setTitleFontName(temp.getFontTitleBaseName());
-                pc.setTitleFontSize(Float.valueOf(temp.getFontSizeTitle()));
+              //  if(temp.getFontSizeTitle()!= null){
+                    pc.setTitleFontSize(Float.valueOf(temp.getFontSizeTitle()));
+           //     }else{
+            //        pc.setTitleFontSize(Float.valueOf("8.0"));
+            //    }
+
                 pc.setTieneTitulo(true);
                 pc.setIdAreaTitulo((int) pc.getAreaTitulo().getTextAreasId());
                 pc.setAnchoAreaTituto(pc.getAreaTitulo().getWidth());
@@ -69,7 +74,12 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
                 pc.setEsMultilineaTituto(pc.getAreaTitulo().getMultiline());
                 pc.setFromXTituto(pc.getAreaTitulo().getFromX());
                 pc.setFromYTituto(pc.getAreaTitulo().getFromY());
-                pc.setFontTitleId(temp.getFontTitleId());
+           //     if(temp.getFontTitleId()!= 0){
+                    pc.setFontTitleId(temp.getFontTitleId());
+          //      }else{
+          //          pc.setFontTitleId(3);//AVERIA
+           //     }
+
             } else {
                 pc.setTieneTitulo(false);
             }
