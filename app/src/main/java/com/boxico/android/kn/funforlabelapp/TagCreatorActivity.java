@@ -262,7 +262,7 @@ public class TagCreatorActivity extends AppCompatActivity {
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
 
-        if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
+        if((screenWidthMM - 2.0f) <= (float)ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }
         Bitmap firstBitmap = images[0].getImage();

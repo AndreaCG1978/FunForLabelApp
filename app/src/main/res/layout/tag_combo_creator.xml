@@ -98,6 +98,15 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/spinnerFontsTitle"
+                android:layout_margin="3dp"
+                android:visibility="gone"
+                android:background="@android:drawable/btn_dropdown"
+                />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/spinnerFontSize"
                 android:background="@android:drawable/btn_dropdown"
                 android:layout_margin="3dp"
