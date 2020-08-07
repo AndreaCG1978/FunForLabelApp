@@ -267,7 +267,8 @@ public class MainActivity extends FragmentActivity {
         tv1.setTypeface(Typeface.create("sans-serif-smallcaps", Typeface.NORMAL));
 
         LinearLayout parent = new LinearLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(300, 320);
         layoutParams.setMargins(15, 15, 15, 15);
         parent.setLayoutParams(layoutParams);
         parent.setOrientation(LinearLayout.VERTICAL);

@@ -30,7 +30,7 @@ public class KNCustomFontSizeAdapter extends ArrayAdapter<String> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		txt.setTextSize(17);
+		txt.setTextSize(15);
 		txt.setTextColor(Color.BLACK);
 		return view;
 	}

@@ -698,43 +698,55 @@ public class TagCreatorActivity extends AppCompatActivity {
     }
 
     private void openCulminarTag() {
-        ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
-        ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
-        ConstantsAdmin.selectedTextFontColor = selectedTextColor;
-        ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
-        if(labelAttributes.length > 1){//ES UN TAG CON TITULO
-            ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
-            ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
-            ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
-            ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
-        }
-        ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
-        ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
-        ConstantsAdmin.textEntered = textTag.getText().toString();
-        if(titleTag != null){
-            ConstantsAdmin.titleEntered = titleTag.getText().toString();
-        }
-        textTag.setFocusable(false);
-        textTag.setHint("");
-        if(titleTag!= null){
-            titleTag.setFocusable(false);
-            titleTag.setHint("");
-        }
-        Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
-        ConstantsAdmin.screenShot = bmp;
-        textTag.setFocusable(true);
-        textTag.setFocusableInTouchMode(true);
-        textTag.requestFocus();
-        textTag.setHint(R.string.your_name_here);
-        if(titleTag!= null){
-            titleTag.setFocusable(true);
-            titleTag.setFocusableInTouchMode(true);
-            titleTag.setHint(R.string.your_name_here);
+        if(textTag.getText() != null && !textTag.getText().toString().equals("")){
+            ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
+            ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
+            ConstantsAdmin.selectedTextFontColor = selectedTextColor;
+            ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
+            if(labelAttributes.length > 1){//ES UN TAG CON TITULO
+                ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
+                ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
+                ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
+                ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
+            }
+            ConstantsAdmin.selectedBackground = ((LabelImage)spinnerBackgrounds.getSelectedItem()).getImage();
+            ConstantsAdmin.selectedBackgroundFilename =((LabelImage)spinnerBackgrounds.getSelectedItem()).getUniquename();
+            ConstantsAdmin.textEntered = textTag.getText().toString();
+            if(titleTag != null){
+                ConstantsAdmin.titleEntered = titleTag.getText().toString();
+            }
+            textTag.setFocusable(false);
+            textTag.setHint("");
+            if(titleTag!= null){
+                titleTag.setFocusable(false);
+                titleTag.setHint("");
+            }
+            Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
+            ConstantsAdmin.screenShot = bmp;
+            textTag.setFocusable(true);
+            textTag.setFocusableInTouchMode(true);
+            textTag.requestFocus();
+            textTag.setHint(R.string.your_name_here);
+            if(titleTag!= null){
+                titleTag.setFocusable(true);
+                titleTag.setFocusableInTouchMode(true);
+                titleTag.setHint(R.string.your_name_here);
+            }
+
+            Intent intent = new Intent(me, TagReadyToGoActivity.class);
+            startActivity(intent);
+        }else{
+            createAlertDialog(getString(R.string.tag_incompleto), getString(R.string.atencion));
         }
 
-        Intent intent = new Intent(me, TagReadyToGoActivity.class);
-        startActivity(intent);
+    }
 
+    private void createAlertDialog(String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message).setTitle(title);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 /*
     private void openColorPicker(){

@@ -35,8 +35,8 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();
-		int dstWidth = (int)(srcWidth*0.22f);
-		int dstHeight = (int)(srcHeight*0.22f);
+		int dstWidth = (int)(srcWidth*0.15f);
+		int dstHeight = (int)(srcHeight*0.15f);
 	//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
 		Bitmap b =Bitmap.createScaledBitmap(li.getImage(), dstWidth,dstHeight, false);
 	//	Bitmap b =Bitmap.createScaledBitmap

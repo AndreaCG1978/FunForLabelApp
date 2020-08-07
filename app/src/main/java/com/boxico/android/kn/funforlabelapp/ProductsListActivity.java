@@ -247,7 +247,7 @@ public class ProductsListActivity extends FragmentActivity {
 
         LinearLayout l1 = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10, 10, 10, 10);
+        layoutParams.setMargins(15, 10, 15, 10);
         l1.setLayoutParams(layoutParams);
         l1.setGravity(Gravity.CENTER);
         l1.setOrientation(LinearLayout.VERTICAL);
@@ -269,12 +269,13 @@ public class ProductsListActivity extends FragmentActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             descEtiqueta.setText(Html.fromHtml(p.getDescription(), Html.FROM_HTML_MODE_COMPACT));
         } else {
-            descEtiqueta.setText(Html.fromHtml(p.getDescription()));
+            descEtiqueta.setText(Html.fromHtml(p.getDescription(), Html.FROM_HTML_MODE_LEGACY));
         }
         descEtiqueta.setLayoutParams(lpText);
         descEtiqueta.setTextSize(11);
         descEtiqueta.setTextColor(Color.DKGRAY);
         descEtiqueta.setTypeface(Typeface.SANS_SERIF);
+        //descEtiqueta.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
         TextView precioEtiqueta = new TextView(this);
         String newPrice = p.getPrice().substring(0, p.getPrice().length() - 2);
@@ -294,15 +295,25 @@ public class ProductsListActivity extends FragmentActivity {
 
         LinearLayout l2 = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams2.setMargins(10, 10, 10, 10);
+        layoutParams2.setMargins(5, 10, 10, 10);
         l2.setLayoutParams(layoutParams2);
         l2.setOrientation(LinearLayout.VERTICAL);
         l2.setGravity(Gravity.LEFT);
+
 
         l2.addView(nombreEtiqueta);
     //    l2.addView(descEtiqueta);
         l2.addView(precioEtiqueta);
         l2.addView(cantidadEtiqueta);
+        l2.setTag(p);
+
+        l2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout ll = (LinearLayout) v;
+                goToTagCreator((Product)ll.getTag());
+            }
+        });
 
 
         LinearLayout l3 = new LinearLayout(this);
