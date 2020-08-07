@@ -35,7 +35,7 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
 		Product p = (Product) getItem(position);
-
+		txt.setTextSize(12);
 		int srcWidth = p.getImage().getWidth();
 		int srcHeight = p.getImage().getHeight();
 		int dstWidth = (int)(srcWidth*0.70f);
@@ -67,6 +67,7 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), dstWidth,dstHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
 		txt.setCompoundDrawablesWithIntrinsicBounds(icon, null, null,null);
+		txt.setTextSize(14);
 		GradientDrawable border = new GradientDrawable();
 		border.setColor(Color.TRANSPARENT); //white background
 		border.setStroke(2, Color.DKGRAY); //black border with full opacity

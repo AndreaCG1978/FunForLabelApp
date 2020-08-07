@@ -109,19 +109,37 @@
                 android:background="@android:color/white"
                 />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="25dp">
 
-        <Button android:id="@+id/btnFinalizar"
-            android:layout_width="wrap_content"
-            android:text="@string/volver"
-            android:layout_height="35dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textSize="15dp"
-            android:padding="7dp"
-            android:layout_margin="25dp"
-            android:background="@drawable/custom_button"
-            android:textColor="@android:color/holo_red_dark"
-            />
+                <Button android:id="@+id/btnLimpiarCarrito"
+                    android:layout_width="wrap_content"
+                    android:text="@string/limpiarCarrito"
+                    android:layout_height="35dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="15dp"
+                    android:padding="7dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/holo_red_dark"
+                    />
+                <Button android:id="@+id/btnFinalizar"
+                    android:layout_width="wrap_content"
+                    android:text="@string/volver"
+                    android:layout_height="35dp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="15dp"
+                    android:padding="7dp"
 
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/holo_red_dark"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 

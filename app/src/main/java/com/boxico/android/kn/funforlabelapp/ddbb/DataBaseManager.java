@@ -237,6 +237,10 @@ public class DataBaseManager {
 		mDb.delete(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, ConstantsAdmin.KEY_ROWID + "=" + pc.getId(), null);
 	}
 
+	public void deleteAllProductoCarrito(){
+		mDb.delete(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, null, null);
+	}
+
 	public void deleteComboProductoCarrito(ComboCarrito c){
 		Iterator<ItemCarrito> it = c.getProductos().iterator();
 		ProductoCarrito pc = null;
@@ -247,6 +251,9 @@ public class DataBaseManager {
 		mDb.delete(ConstantsAdmin.TABLE_COMBO_CARRITO, ConstantsAdmin.KEY_ROWID + "=" + c.getId(), null);
 	}
 
+	public void deleteAllComboProductoCarrito(){
+		mDb.delete(ConstantsAdmin.TABLE_COMBO_CARRITO, null, null);
+	}
 
 
 	private long sizeLogin(){

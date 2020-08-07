@@ -146,7 +146,7 @@ public class ConstantsAdmin {
     public static final String URL_INSTAGRAM = "URL_INSTAGRAM" ;
     public static final String URL_FACEBOOK = "URL_FACEBOOK" ;
     public static final String FOLDER_FFL = "FFLFiles";
-    public static final String FOLDER_TEMP = "temps";
+    public static final String FOLDER_TEMP = ".temps";
 
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
@@ -469,7 +469,9 @@ public class ConstantsAdmin {
     public static void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
         int realWidthImage = 0;
         int realHeightImage = 0;
-      //  if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
+        final Object mutex = new Object();
+        synchronized (mutex) {
+
             float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
                     context.getResources().getDisplayMetrics());
             if (acot) {
@@ -483,25 +485,16 @@ public class ConstantsAdmin {
                 temp = temp - temp * 3 / 19;
             }
             realHeightImage = (int) temp;
-     /*   } else {
-            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
-                    context.getResources().getDisplayMetrics());
 
-            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
+            Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
+            if (currentC.getRounded() == 1) {
+                b = getRoundedCornerBitmap(b, currentC.getRound());
+            }
 
-            realWidthImage = (int) temp;
-            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
-                    context.getResources().getDisplayMetrics());
-            temp = temp * ConstantsAdmin.PARAM_TO_INCREASE;
-            realHeightImage = (int) temp;
-        }*/
-        Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
-        if (currentC.getRounded() == 1) {
-            b = getRoundedCornerBitmap(b, currentC.getRound());
+            Drawable d = new BitmapDrawable(context.getResources(), b);
+            rl.setBackground(d);
         }
 
-        Drawable d = new BitmapDrawable(context.getResources(), b);
-        rl.setBackground(d);
 
     }
 
@@ -648,6 +641,12 @@ public class ConstantsAdmin {
         return f;
     }
 
+    public static File getTempFolder(){
+        String completeFilename = Environment
+                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP;
+        File f = new File(completeFilename);
+        return f;
+    }
 
     public static void copyBitmapInStorage(Bitmap bmp, String filename){
        // String root = Environment.getExternalStorageDirectory().toString();
@@ -842,6 +841,21 @@ public class ConstantsAdmin {
         dbm.deleteComboProductoCarrito(c);
         dbm.close();
     }
+
+    public static void deleteAllProductoCarrito(Context ctx) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.deleteAllProductoCarrito();
+        dbm.close();
+    }
+
+    public static void deleteAllComboProductoCarrito(Context ctx) {
+        DataBaseManager dbm = DataBaseManager.getInstance(ctx);
+        dbm.open();
+        dbm.deleteAllComboProductoCarrito();
+        dbm.close();
+    }
+
 
     public static Customer getLogin(Context ctx) {
         int itemId;
@@ -1099,6 +1113,14 @@ public class ConstantsAdmin {
         return img;
     }
 
+    public static void deleteImageFromStorage(String backgroundFilename) {
+        File f = getImageFile(backgroundFilename);
+        if(f != null && f.exists()){
+            f.delete();
+        }
+    }
+
+
     public static void clearSelections() {
         currentProduct = null;
         selectedBackground= null;
@@ -1128,5 +1150,17 @@ public class ConstantsAdmin {
         Date date = new Date();
         return formatter.format(date);
 
+    }
+
+    public static void deleteAllImagesFromStorage() {
+        File tempFolder = getTempFolder();
+        if (tempFolder.isDirectory())
+        {
+            String[] children = tempFolder.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(tempFolder, children[i]).delete();
+            }
+        }
     }
 }

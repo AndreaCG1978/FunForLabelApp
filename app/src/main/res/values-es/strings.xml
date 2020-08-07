@@ -113,4 +113,7 @@
     <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>
     <string name="productos_combo">Vista preliminar</string>
     <string name="tag_incompleto">Debe completar la etiqueta con algún texto!</string>
+    <string name="limpiarCarrito">Vaciar carrito</string>
+    <string name="mensaje_vaciar_carrito">Está seguro de vaciar su Carrito?</string>
+    <string name="carrito_vacio">Su Carrito ya se encuentra vacio!</string>
 </resources>

@@ -60,68 +60,49 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
-        ListView lv = (ListView)parent;
-        RelativeLayout rl = v.findViewById(R.id.relativeProductoCarrito);
-        final ItemCarrito ic = (ItemCarrito) lv.getAdapter().getItem(position);
-        initializeCreator(ic, rl);
-        TextView txt = v.findViewById(R.id.tvNombreProducto);
-        txt.setText(ic.getNombre());
-        txt = v.findViewById(R.id.tvPrecio);
-        String newPrice = ic.getPrecio().substring(0, ic.getPrecio().length() - 2);
-        txt.setText("$" + newPrice);
-        txt = v.findViewById(R.id.tvCantidad);
-        txt.setText(ic.getCantidadPorPack());
-        TextView txtCantidad = (TextView)v.findViewById(R.id.txtCantidadProducto);
-        txtCantidad.setText(ic.getCantidad());
-        txt = v.findViewById(R.id.tvModelo);
-        txt.setText(ic.getModelo());
-        LinearLayout linear = v.findViewById(R.id.linearImagen);
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(0xFFFFFFFF); //white background
-        border.setStroke(3, Color.RED); //black border with full opacity
-        linear.setBackground(border);
-        ImageButton borrar = v.findViewById(R.id.borrarProductoCarrito);
-        borrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                borrarItemCarrito(ic);
-            }
-        });
-        ImageButton ver =  v.findViewById(R.id.verProductoCarrito);
-        ver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openViewTag(ic);
-            }
-        });
-        Button btn = v.findViewById(R.id.btnMas);
-        btn.setTag(txtCantidad);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView txtCantidad = (TextView) v.getTag();
-                int cant = Integer.valueOf(txtCantidad.getText().toString());
-                cant++;
-                txtCantidad.setText(String.valueOf(cant));
-                ic.setCantidad(String.valueOf(cant));
-                if(ic.isProduct()){
-                    ConstantsAdmin.createProductoCarrito((ProductoCarrito) ic, mContext);
-                }else{
-                    ConstantsAdmin.createComboCarrito((ComboCarrito) ic, mContext);
+        try {
+            ListView lv = (ListView)parent;
+            RelativeLayout rl = v.findViewById(R.id.relativeProductoCarrito);
+            final ItemCarrito ic = (ItemCarrito) lv.getAdapter().getItem(position);
+            initializeCreator(ic, rl);
+            TextView txt = v.findViewById(R.id.tvNombreProducto);
+            txt.setText(ic.getNombre());
+            txt = v.findViewById(R.id.tvPrecio);
+            String newPrice = ic.getPrecio().substring(0, ic.getPrecio().length() - 2);
+            txt.setText("$" + newPrice);
+            txt = v.findViewById(R.id.tvCantidad);
+            txt.setText(ic.getCantidadPorPack());
+            TextView txtCantidad = (TextView)v.findViewById(R.id.txtCantidadProducto);
+            txtCantidad.setText(ic.getCantidad());
+            txt = v.findViewById(R.id.tvModelo);
+            txt.setText(ic.getModelo());
+            LinearLayout linear = v.findViewById(R.id.linearImagen);
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(0xFFFFFFFF); //white background
+            border.setStroke(3, Color.RED); //black border with full opacity
+            linear.setBackground(border);
+            ImageButton borrar = v.findViewById(R.id.borrarProductoCarrito);
+            borrar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    borrarItemCarrito(ic);
                 }
-
-                mContext.actualizarPrecioCarrito();
-            }
-        });
-        btn = v.findViewById(R.id.btnMenos);
-        btn.setTag(txtCantidad);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView txtCantidad = (TextView) v.getTag();
-                int cant = Integer.valueOf(txtCantidad.getText().toString());
-                if(cant > 1) {
-                    cant--;
+            });
+            ImageButton ver =  v.findViewById(R.id.verProductoCarrito);
+            ver.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openViewTag(ic);
+                }
+            });
+            Button btn = v.findViewById(R.id.btnMas);
+            btn.setTag(txtCantidad);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView txtCantidad = (TextView) v.getTag();
+                    int cant = Integer.valueOf(txtCantidad.getText().toString());
+                    cant++;
                     txtCantidad.setText(String.valueOf(cant));
                     ic.setCantidad(String.valueOf(cant));
                     if(ic.isProduct()){
@@ -129,12 +110,35 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
                     }else{
                         ConstantsAdmin.createComboCarrito((ComboCarrito) ic, mContext);
                     }
+
                     mContext.actualizarPrecioCarrito();
                 }
-            }
-        });
-     //   mContext.setTerminoCargaListado(false);
-        v.refreshDrawableState();
+            });
+            btn = v.findViewById(R.id.btnMenos);
+            btn.setTag(txtCantidad);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView txtCantidad = (TextView) v.getTag();
+                    int cant = Integer.valueOf(txtCantidad.getText().toString());
+                    if(cant > 1) {
+                        cant--;
+                        txtCantidad.setText(String.valueOf(cant));
+                        ic.setCantidad(String.valueOf(cant));
+                        if(ic.isProduct()){
+                            ConstantsAdmin.createProductoCarrito((ProductoCarrito) ic, mContext);
+                        }else{
+                            ConstantsAdmin.createComboCarrito((ComboCarrito) ic, mContext);
+                        }
+                        mContext.actualizarPrecioCarrito();
+                    }
+                }
+            });
+            //   mContext.setTerminoCargaListado(false);
+            v.refreshDrawableState();
+        }catch (Exception exc){
+
+        }
         return v;
     }
 
@@ -166,8 +170,8 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
         }else{
             ConstantsAdmin.combosDelCarrito.remove(ic);
             ConstantsAdmin.deleteComboProductoCarrito(mContext,(ComboCarrito) ic);
-
         }
+        ConstantsAdmin.deleteImageFromStorage(ic.getBackgroundFilename());
         mContext.actualizarListaProductosCarrito();
     }
 
@@ -284,11 +288,16 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
         if(ic.isProduct()){
             ProductoCarrito pc = (ProductoCarrito) ic;
             Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
-            ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
+            if(imagen != null){
+                ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
+            }
+
         }else{
             achicar = 1f;
             Bitmap imagen = ConstantsAdmin.getImageFromStorage(ic.getBackgroundFilename());
-            ConstantsAdmin.customizeBackground(achicar, imagen, 20, 17, 0, acotar, linearTag, mContext);
+            if(imagen != null) {
+                ConstantsAdmin.customizeBackground(achicar, imagen, 20, 17, 0, acotar, linearTag, mContext);
+            }
         }
 
 

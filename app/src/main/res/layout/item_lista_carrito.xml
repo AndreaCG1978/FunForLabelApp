@@ -4,17 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="center_vertical|center_horizontal">
+    android:layout_marginLeft="10dp"
+    android:gravity="left">
 
     <LinearLayout
-        android:layout_width="320dp"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center|left">
+        android:gravity="center"
+        android:layout_gravity="center">
 
         <LinearLayout
             android:id="@+id/linearImagen"
-            android:layout_width="170dp"
+            android:layout_width="160dp"
             android:layout_height="120dp"
             android:orientation="vertical"
             android:gravity="center"
@@ -47,7 +49,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_vertical|center_horizontal">
 
             <TextView
                 android:id="@+id/tvNombreProducto"
@@ -55,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
                 android:textSize="15sp"
+                android:gravity="center"
                 android:layout_margin="3dp">
 
             </TextView>
@@ -62,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center">
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -151,7 +155,7 @@
           android:layout_height="30dp"
           android:background="@drawable/delete"
           android:layout_gravity="right|top"
-          android:layout_margin="10dp"/>
+          android:layout_marginTop="10dp"/>
 
 
 

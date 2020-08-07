@@ -617,154 +617,67 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         }
         Bitmap firstBitmap = images[0].getImage();
         linearTag.removeAllViews();
-        ConstantsAdmin.customizeBackground(firstBitmap,ConstantsAdmin.currentCreator, acotar, linearTag, this);
+        final Object mutex = new Object();
+        synchronized (mutex) {
+            ConstantsAdmin.customizeBackground(firstBitmap, ConstantsAdmin.currentCreator, acotar, linearTag, this);
 
 
-       // CONFIGURACION DE UN AREA DE TEXTO
-        textTag = null;
-        titleTag = null;
-        if(la1.getIsTitle()==0) {
-            textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
-        }else{
-            titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
-        }
-        if(la2 != null) {
-            if(la2.getIsTitle()==0){
-                textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here),ConstantsAdmin.currentCreator, acotar, linearTag,me);
-            }else {
-                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title),ConstantsAdmin.currentCreator, acotar, linearTag,me);
+            // CONFIGURACION DE UN AREA DE TEXTO
+            textTag = null;
+            titleTag = null;
+            if (la1.getIsTitle() == 0) {
+                textTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_name_here), ConstantsAdmin.currentCreator, acotar, linearTag, me);
+            } else {
+                titleTag = ConstantsAdmin.createTextArea(new EditText(this), la1, this.getString(R.string.your_title), ConstantsAdmin.currentCreator, acotar, linearTag, me);
             }
-        }
-
-
-
-
-        //CONFIGURACION DE LOS SPINNERS
-        final boolean needToAcot = acotar;
-        spinnerFontSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String fontSize = null;
-                fontSize = (String) parent.getAdapter().getItem(position);
-                float size = Float.valueOf(fontSize);
-                float originalSize = size;
-                if(needToAcot){
-                    size = size * ((float)0.884);
-                }else{
-                    size = size * ((float)1.04);
+            if (la2 != null) {
+                if (la2.getIsTitle() == 0) {
+                    textTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_name_here), ConstantsAdmin.currentCreator, acotar, linearTag, me);
+                } else {
+                    titleTag = ConstantsAdmin.createTextArea(new EditText(this), la2, this.getString(R.string.your_title), ConstantsAdmin.currentCreator, acotar, linearTag, me);
                 }
-
-                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                if(tp.isInicializadoSize()){
-                    textTag.setTextSize(TypedValue.TYPE_STRING, size);
-                    selectedPosFontSizeText = position;
-                    tp.setFontSizeText(String.valueOf(originalSize));
-                    tp.setPosSizeText(position);
-                    if(titleTag != null){
-                        selectedPosFontSizeTitle = position;
-                        titleTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeTitle(String.valueOf(originalSize));
-                        tp.setPosSizeTitle(position);
-                    }
-                    tp.setInicializadoSize(true);
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedPosFontSizeText = position;
-                        textTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeText(String.valueOf(originalSize));
-                        tp.setPosSizeText(position);
-                    } else if (titleTag != null && titleTag.hasFocus()) {
-                        selectedPosFontSizeTitle = position;
-                        titleTag.setTextSize(TypedValue.TYPE_STRING, size);
-                        tp.setFontSizeTitle(String.valueOf(originalSize));
-                        tp.setPosSizeTitle(position);
-                    }
-                }
-
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-
-
-        spinnerFontSizes.setSelection(1);
-
-
-        spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
-                File fileFont = ConstantsAdmin.getFile(lf.getBasename());
-                Typeface face = Typeface.createFromFile(fileFont);
-                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                if(!tp.isInicializadoFont()){
-                    textTag.setTypeface(face);
-                    tp.setFontText(face);
-                    tp.setFontTextBaseName(lf.getBasename());
-                    tp.setFontTextId((int)lf.getId());
-                    tp.setPosFontText(position);
-                    selectedPosFontText = position;
-                  /*  if(titleTag != null){
-                        titleTag.setTypeface(face);
-                        selectedPosFontTitle = position;
-                        tp.setFontTitle(face);
-                        tp.setFontTitleBaseName(lf.getBasename());
-                        tp.setFontTitleId((int)lf.getId());
-                        tp.setPosFontTitle(position);
-                    }*/
-                    tp.setInicializadoFont(true);
-                }else {
-                    if (textTag.hasFocus()) {
-                        selectedPosFontText = position;
-                        textTag.setTypeface(face);
-                        tp.setFontText(face);
-                        tp.setFontTextBaseName(lf.getBasename());
-                        tp.setFontTextId((int)lf.getId());
-                        tp.setPosFontText(position);
-                    }/* else if (titleTag != null && titleTag.hasFocus()) {
-                        selectedPosFontTitle = position;
-                        titleTag.setTypeface(face);
-                        tp.setFontTitle(face);
-                        tp.setFontTitleId((int)lf.getId());
-                        tp.setPosFontTitle(position);
-                    }*/
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        if(titleTag != null){
-            spinnerFontsTitle = (Spinner) this.findViewById(R.id.spinnerFontsTitle);
-            spinnerFontsTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //CONFIGURACION DE LOS SPINNERS
+            final boolean needToAcot = acotar;
+            spinnerFontSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
-                    File fileFont = ConstantsAdmin.getFile(lf.getBasename());
-                    Typeface face = Typeface.createFromFile(fileFont);
+                    String fontSize = null;
+                    fontSize = (String) parent.getAdapter().getItem(position);
+                    float size = Float.valueOf(fontSize);
+                    float originalSize = size;
+                    if (needToAcot) {
+                        size = size * ((float) 0.884);
+                    } else {
+                        size = size * ((float) 1.04);
+                    }
+
                     TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                    if(!tp.isInicializadoFont()){
-                        titleTag.setTypeface(face);
-                        selectedPosFontTitle = position;
-                        tp.setFontTitle(face);
-                        tp.setFontTitleBaseName(lf.getBasename());
-                        tp.setFontTitleId((int)lf.getId());
-                        tp.setPosFontTitle(position);
-                        tp.setInicializadoFont(true);
-                    }else {
-                        if (titleTag.hasFocus()) {
-                            selectedPosFontTitle = position;
-                            titleTag.setTypeface(face);
-                            tp.setFontTitle(face);
-                            tp.setFontTitleBaseName(lf.getBasename());
-                            tp.setFontTitleId((int)lf.getId());
-                            tp.setPosFontTitle(position);
+                    if (tp.isInicializadoSize()) {
+                        textTag.setTextSize(TypedValue.TYPE_STRING, size);
+                        selectedPosFontSizeText = position;
+                        tp.setFontSizeText(String.valueOf(originalSize));
+                        tp.setPosSizeText(position);
+                        if (titleTag != null) {
+                            selectedPosFontSizeTitle = position;
+                            titleTag.setTextSize(TypedValue.TYPE_STRING, size);
+                            tp.setFontSizeTitle(String.valueOf(originalSize));
+                            tp.setPosSizeTitle(position);
+                        }
+                        tp.setInicializadoSize(true);
+                    } else {
+                        if (textTag.hasFocus()) {
+                            selectedPosFontSizeText = position;
+                            textTag.setTextSize(TypedValue.TYPE_STRING, size);
+                            tp.setFontSizeText(String.valueOf(originalSize));
+                            tp.setPosSizeText(position);
+                        } else if (titleTag != null && titleTag.hasFocus()) {
+                            selectedPosFontSizeTitle = position;
+                            titleTag.setTextSize(TypedValue.TYPE_STRING, size);
+                            tp.setFontSizeTitle(String.valueOf(originalSize));
+                            tp.setPosSizeTitle(position);
                         }
                     }
 
@@ -775,67 +688,153 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
                 }
             });
-            spinnerFontsTitle.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, fonts));
-
-        }else{
-            spinnerFontsTitle = null;
-        }
-
-        spinnerBackgrounds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ConstantsAdmin.selectedImage = (LabelImage) parent.getAdapter().getItem(position);
-                TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                tp.setImage(ConstantsAdmin.selectedImage);
-                tp.setBackgroundFilename(ConstantsAdmin.selectedImage.getUniquename());
-                tp.setPosImage(position);
-                ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
+            spinnerFontSizes.setSelection(1);
 
-        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, fonts));
-        spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
-        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, images));
-       // spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
 
-        textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    spinnerFonts.setVisibility(View.VISIBLE);
-                    if(spinnerFontsTitle != null){
-                        spinnerFontsTitle.setVisibility(View.GONE);
+            spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
+                    File fileFont = ConstantsAdmin.getFile(lf.getBasename());
+                    Typeface face = Typeface.createFromFile(fileFont);
+                    TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                    if (!tp.isInicializadoFont()) {
+                        textTag.setTypeface(face);
+                        tp.setFontText(face);
+                        tp.setFontTextBaseName(lf.getBasename());
+                        tp.setFontTextId((int) lf.getId());
+                        tp.setPosFontText(position);
+                        selectedPosFontText = position;
+                  /*  if(titleTag != null){
+                        titleTag.setTypeface(face);
+                        selectedPosFontTitle = position;
+                        tp.setFontTitle(face);
+                        tp.setFontTitleBaseName(lf.getBasename());
+                        tp.setFontTitleId((int)lf.getId());
+                        tp.setPosFontTitle(position);
+                    }*/
+                        tp.setInicializadoFont(true);
+                    } else {
+                        if (textTag.hasFocus()) {
+                            selectedPosFontText = position;
+                            textTag.setTypeface(face);
+                            tp.setFontText(face);
+                            tp.setFontTextBaseName(lf.getBasename());
+                            tp.setFontTextId((int) lf.getId());
+                            tp.setPosFontText(position);
+                        }/* else if (titleTag != null && titleTag.hasFocus()) {
+                        selectedPosFontTitle = position;
+                        titleTag.setTypeface(face);
+                        tp.setFontTitle(face);
+                        tp.setFontTitleId((int)lf.getId());
+                        tp.setPosFontTitle(position);
+                    }*/
                     }
-                    spinnerFonts.setSelection(selectedPosFontText);
-                    spinnerFontSizes.setSelection(selectedPosFontSizeText);
-                    pickColor.setTextColor(selectedTextColor);
-                }
-            }
-        });
 
-        if(titleTag != null){
-            titleTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            if (titleTag != null) {
+                spinnerFontsTitle = (Spinner) this.findViewById(R.id.spinnerFontsTitle);
+                spinnerFontsTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        LabelFont lf = (LabelFont) parent.getAdapter().getItem(position);
+                        File fileFont = ConstantsAdmin.getFile(lf.getBasename());
+                        Typeface face = Typeface.createFromFile(fileFont);
+                        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        if (!tp.isInicializadoFont()) {
+                            titleTag.setTypeface(face);
+                            selectedPosFontTitle = position;
+                            tp.setFontTitle(face);
+                            tp.setFontTitleBaseName(lf.getBasename());
+                            tp.setFontTitleId((int) lf.getId());
+                            tp.setPosFontTitle(position);
+                            tp.setInicializadoFont(true);
+                        } else {
+                            if (titleTag.hasFocus()) {
+                                selectedPosFontTitle = position;
+                                titleTag.setTypeface(face);
+                                tp.setFontTitle(face);
+                                tp.setFontTitleBaseName(lf.getBasename());
+                                tp.setFontTitleId((int) lf.getId());
+                                tp.setPosFontTitle(position);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                spinnerFontsTitle.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item, R.id.rowValor, fonts));
+
+            } else {
+                spinnerFontsTitle = null;
+            }
+
+            spinnerBackgrounds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ConstantsAdmin.selectedImage = (LabelImage) parent.getAdapter().getItem(position);
+                    TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                    tp.setImage(ConstantsAdmin.selectedImage);
+                    tp.setBackgroundFilename(ConstantsAdmin.selectedImage.getUniquename());
+                    tp.setPosImage(position);
+                    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(), ConstantsAdmin.currentCreator, acotar, linearTag, me);
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item, R.id.rowValor, fonts));
+            spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item, R.id.rowValor, ConstantsAdmin.FONT_SIZES));
+            spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_simple_item, R.id.rowValor, images));
+            // spinnerProducts.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_item,R.id.rowValor, images));
+
+            textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus){
-                        spinnerFontsTitle.setVisibility(View.VISIBLE);
-                        spinnerFonts.setVisibility(View.GONE);
-                        spinnerFontsTitle.setSelection(selectedPosFontTitle);
-                        spinnerFontSizes.setSelection(selectedPosFontSizeTitle);
-                        pickColor.setTextColor(selectedTitleColor);
+                    if (hasFocus) {
+                        spinnerFonts.setVisibility(View.VISIBLE);
+                        if (spinnerFontsTitle != null) {
+                            spinnerFontsTitle.setVisibility(View.GONE);
+                        }
+                        spinnerFonts.setSelection(selectedPosFontText);
+                        spinnerFontSizes.setSelection(selectedPosFontSizeText);
+                        pickColor.setTextColor(selectedTextColor);
                     }
                 }
             });
-        }
 
+            if (titleTag != null) {
+                titleTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (hasFocus) {
+                            spinnerFontsTitle.setVisibility(View.VISIBLE);
+                            spinnerFonts.setVisibility(View.GONE);
+                            spinnerFontsTitle.setSelection(selectedPosFontTitle);
+                            spinnerFontSizes.setSelection(selectedPosFontSizeTitle);
+                            pickColor.setTextColor(selectedTitleColor);
+                        }
+                    }
+                });
+            }
+        }
 
         if(ConstantsAdmin.selectedComboProduct!= null && ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
             TagParams param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());

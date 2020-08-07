@@ -1,6 +1,8 @@
 package com.boxico.android.kn.funforlabelapp;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,9 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class CompraFinalizadaActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
     TextView textEnvioWsp;
     Button btnFinalizar;
     private TextView textConector;
+    private Button btnLimpiarCarrito;
 
 
     @Override
@@ -47,6 +52,13 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
         textConector = (TextView) findViewById(R.id.textConector);
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        btnLimpiarCarrito = (Button) findViewById(R.id.btnLimpiarCarrito);
+        btnLimpiarCarrito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vaciarCarrito();
+            }
+        });
         btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +101,50 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
 
 
         // configListView(listViewCarrito);
+    }
+
+    private void vaciarCarrito() {
+        if(ConstantsAdmin.productosDelCarrito.size() > 0 || ConstantsAdmin.combosDelCarrito.size() > 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(this.getString(R.string.mensaje_vaciar_carrito))
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            vaciarCarritoPrivado();
+                        }
+                    })
+                    .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.show();
+        }else{
+            createAlertDialog(getString(R.string.carrito_vacio), getString(R.string.atencion));
+        }
+    }
+
+    private void createAlertDialog(String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(me);
+        builder.setMessage(message).setTitle(title);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void vaciarCarritoPrivado() {
+        ConstantsAdmin.deleteAllProductoCarrito(this);
+        ConstantsAdmin.deleteAllComboProductoCarrito(this);
+        ConstantsAdmin.deleteAllImagesFromStorage();
+        ConstantsAdmin.productosDelCarrito = new ArrayList<ItemCarrito>();
+        ConstantsAdmin.combosDelCarrito = new ArrayList<ItemCarrito>();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        volverMain();
     }
 
     private void enviarWsp() {
