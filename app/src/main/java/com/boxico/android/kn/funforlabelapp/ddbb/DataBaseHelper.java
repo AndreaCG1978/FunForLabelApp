@@ -57,6 +57,7 @@ class DataBaseHelper extends SQLiteOpenHelper {
             + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO + " text, "
             + ConstantsAdmin.KEY_CANTIDAD_PRODUCTO_PORPACK + " text, "
             + ConstantsAdmin.KEY_MODELO_PRODUCTO + " text, "
+            + ConstantsAdmin.KEY_IMAGEN + " blob, "
             + ConstantsAdmin.KEY_ID_AREA_TEXTO + " integer);";
 
 

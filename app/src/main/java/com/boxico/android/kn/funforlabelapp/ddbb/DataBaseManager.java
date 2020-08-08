@@ -112,6 +112,7 @@ public class DataBaseManager {
 			initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, item.getIdProduct());
 			initialValues.put(ConstantsAdmin.KEY_ID_FONT_TEXT, item.getFontTextId());
 			initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
+			initialValues.put(ConstantsAdmin.KEY_IMAGEN, item.getImagenDeTag());
 			if (item.getAreaTitulo() != null) {
 				initialValues.put(ConstantsAdmin.KEY_ID_FONT_TITLE, item.getFontTitleId());
 				initialValues.put(ConstantsAdmin.KEY_ES_MULTILINEA_TITULO, item.getEsMultilineaTituto());

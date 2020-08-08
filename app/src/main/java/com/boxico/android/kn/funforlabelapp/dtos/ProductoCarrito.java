@@ -36,6 +36,15 @@ public class ProductoCarrito extends ItemCarrito{
     private int fontTextId = -1;
     private int fontTitleId = -1;
     private int idCombo = -1;
+    private byte[] imagenDeTag;
+
+    public byte[] getImagenDeTag() {
+        return imagenDeTag;
+    }
+
+    public void setImagenDeTag(byte[] imagenDeTag) {
+        this.imagenDeTag = imagenDeTag;
+    }
 
     public boolean isProduct(){
         return true;

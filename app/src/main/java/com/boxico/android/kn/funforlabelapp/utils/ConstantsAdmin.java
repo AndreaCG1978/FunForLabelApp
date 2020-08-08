@@ -13,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -23,12 +24,15 @@ import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 
+import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
@@ -46,6 +50,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,6 +68,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -72,6 +78,7 @@ import okhttp3.Request;
 public class ConstantsAdmin {
 
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
+    public static final String URL_BASE = "http://test.funforlabels.com/";
     public static final String PROPERTIES_FILE = "funforlabels.properties";
     public static final String ATR_URL_IMAGES = "URL_IMAGES";
     public static final String ATR_URL_FONTS = "URL_FONTS";
@@ -148,6 +155,7 @@ public class ConstantsAdmin {
     public static final String URL_FACEBOOK = "URL_FACEBOOK" ;
     public static final String FOLDER_FFL = "FFLFiles";
     public static final String FOLDER_TEMP = ".temps";
+    public static final String KEY_IMAGEN = "imagenDeTag";
 
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
@@ -235,6 +243,17 @@ public class ConstantsAdmin {
     public static ArrayMap<Long,TagParams> params;
 
     private static ArrayList<LabelImage> capturas = null;
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
 
     public static void privateLoadProperties(){
         Properties properties;
@@ -739,21 +758,74 @@ public class ConstantsAdmin {
          */
     }
 
-    public static String takeScreenshot(Activity context) {
+    public static void initializeCreatorFull(ProductoCarrito pc, RelativeLayout productView, Activity ctx) {
+        float achicar = 0.65f;
+        boolean acotar = false;
+        ConstantsAdmin.makeTag(pc, achicar, acotar, productView, ctx);
+    }
+
+    private static View initPopupViewTag(ProductoCarrito pc, Activity mContext)
+    {
+        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        View popupInputDialogView = layoutInflater.inflate(R.layout.tag_view, null);
+        RelativeLayout rl = new RelativeLayout(mContext);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(7,7,7,7);
+        rl.setLayoutParams(lp);
+        LinearLayout ll = popupInputDialogView.findViewById(R.id.linearTagView);
+        initializeCreatorFull(pc, rl, mContext);
+        return popupInputDialogView;
+    }
+
+    public static void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag, Activity mContext){
+        Bitmap imagen = getImageFromStorage(pc.getBackgroundFilename());
+        customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
+        EditText textTag = null;
+        EditText titleTag = null;
+        textTag = createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        if(pc.getIdAreaTitulo()!= -1) {
+            titleTag = createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(),pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        }
+        textTag.setText(pc.getTexto());
+        textTag.setTextColor(pc.getFontTextColor());
+        textTag.setTextSize(TypedValue.TYPE_STRING, pc.getTextFontSize() * achicar);
+        File fileFont = getFile(pc.getTextFontName());
+        Typeface face = Typeface.createFromFile(fileFont);
+        textTag.setTypeface(face);
+        textTag.setEnabled(false);
+        if(titleTag != null){
+            titleTag.setEnabled(false);
+            titleTag.setText(pc.getTitulo());
+            titleTag.setTextColor(pc.getFontTitleColor());
+            titleTag.setTextSize(TypedValue.TYPE_STRING, pc.getTitleFontSize() * achicar);
+            fileFont = getFile(pc.getTitleFontName());
+            face = Typeface.createFromFile(fileFont);
+            titleTag.setTypeface(face);
+        }
+    }
+
+
+    public static String takeScreenshot(Activity context, ProductoCarrito pc) {
         Date now = new Date();
-        android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
-        String nameFile = now + ".png";
+        String temp = (String) android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
+        String nameFile = temp + ".png";
         Bitmap bitmap = null;
         try {
             // image naming and path  to include sd card  appending name you choose for file
 
             String mPath = Environment.getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + nameFile;
 
+            //View v = initPopupViewTag(pc, context);
             // create bitmap screen capture
-            View v1 = context.getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
+          /*  RelativeLayout rl = new RelativeLayout(context);
+            RelativeLayout.LayoutParams layoutParamsTextTag = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            rl.setLayoutParams(layoutParamsTextTag);
+
+            ConstantsAdmin.makeTag(pc, 1f, false, rl, context);*/
+
+            //v.setDrawingCacheEnabled(true);
+            bitmap = ConstantsAdmin.getImage(pc.getImagenDeTag());
+            //v.setDrawingCacheEnabled(false);
 
             File imageFile = new File(mPath);
 
@@ -767,7 +839,7 @@ public class ConstantsAdmin {
             // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
-        return nameFile;
+        return temp;
     }
 
 
@@ -978,6 +1050,7 @@ public class ConstantsAdmin {
         String cantidad;
         String cantidadPorPack;
         String modelo;
+        byte[] img;
         ProductoCarrito item = null;
        // DataBaseManager dbm = DataBaseManager.getInstance(ctx);
        // dbm.open();
@@ -1035,6 +1108,7 @@ public class ConstantsAdmin {
             idProducto = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_PRODUCTO));
             idFillsTextured = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FILLS_TEXTURED));
             idFontText = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FONT_TEXT));
+            img = cursor.getBlob(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_IMAGEN));
             item.setRound(round);
             item.setAnchoTag(anchoTag);
             item.setLargoTag(largoTag);
@@ -1056,6 +1130,7 @@ public class ConstantsAdmin {
             item.setFillsTexturedId(idFillsTextured);
             item.setFontTextId(idFontText);
             item.setCantidadPorPack(cantidadPorPack);
+            item.setImagenDeTag(img);
             backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
             comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
             idCreador = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_CREATOR));
@@ -1181,18 +1256,15 @@ public class ConstantsAdmin {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        File sourceFile = new File(sourceFileUri);
+        File sourceFile = getImageFile(fileName);
 
-        if (!sourceFile.isFile()) {
-            return 0;
-        }
-        else{
+
             int serverResponseCode = 0;
             try {
 
                 // open a URL connection to the Servlet
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
-                String upLoadServerUri = URL + "storageImage.php";
+                String upLoadServerUri = URL_BASE + "storageImage.php";
                 URL url = new URL(upLoadServerUri);
 
                 // Open a HTTP  connection to  the URL
@@ -1260,5 +1332,5 @@ public class ConstantsAdmin {
           }
           return serverResponseCode;
      }
-    }
+
 }

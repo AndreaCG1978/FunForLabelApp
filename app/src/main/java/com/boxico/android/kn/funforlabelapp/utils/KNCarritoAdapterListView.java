@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
 import android.util.DisplayMetrics;
@@ -201,6 +203,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     private void openViewTag(ItemCarrito ic) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
         View v = initPopupViewTag(ic);
+       // ConstantsAdmin.takeScreenshot(mContext, (ProductoCarrito)ic);
         alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
         alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setView(v);
@@ -216,7 +219,9 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
         ComboCarrito combo = null;
         if(ic.isProduct()){
             pc = (ProductoCarrito) ic;
-            makeTag(pc, achicar, acotar, productView);
+           // ConstantsAdmin.makeTag(pc, achicar, acotar, productView, mContext);
+            BitmapDrawable bd = new BitmapDrawable(mContext.getResources(), ConstantsAdmin.getImage(pc.getImagenDeTag()));
+            productView.setBackground(bd);
             comboView.addView(productView);
         }else{
             combo = (ComboCarrito) ic;
@@ -232,27 +237,15 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
                 layoutParamsTextTag.setMargins(15,15,15,15);
                 rl.setLayoutParams(layoutParamsTextTag);
 
-                makeTag(pc, achicar, acotar, rl);
+                ConstantsAdmin.makeTag(pc, achicar, acotar, rl, mContext);
                 comboView.addView(rl);
             }
         }
     }
-
+/*
     private void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag){
         Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
-     /*   DisplayMetrics displayMetrics = new DisplayMetrics();
-        mContext.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-
-        float screenWidthMM = ConstantsAdmin.pxToMm((float) width, mContext);
-
-        if(screenWidthMM < pc.getAnchoTag()){
-            acotar = true;
-        }
-*/
         ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
-        // CONFIGURACION DE UN AREA DE TEXTO
-
         EditText textTag = null;
         EditText titleTag = null;
         textTag = ConstantsAdmin.createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
@@ -276,7 +269,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
             titleTag.setTypeface(face);
         }
     }
-
+*/
     private void initializeCreator(ItemCarrito ic, RelativeLayout linearTag) {
 
         float achicar = 0.35f;
@@ -287,7 +280,9 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
 
         if(ic.isProduct()){
             ProductoCarrito pc = (ProductoCarrito) ic;
-            Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
+       //     Bitmap imagen = ConstantsAdmin.getImageFromStorage(pc.getBackgroundFilename());
+   //         ConstantsAdmin.uploadFile(pc.getBackgroundFilename());
+            Bitmap imagen = ConstantsAdmin.getImage(pc.getImagenDeTag());
             if(imagen != null){
                 ConstantsAdmin.customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
             }

@@ -774,26 +774,28 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         while(it.hasNext() && okInsert){
             p = (ProductoCarrito) it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
-            //String imageName = ConstantsAdmin.takeScreenshot()
+            String imageName = ConstantsAdmin.takeScreenshot(this, p);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
-                        p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
-                        "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),imageName,(int)c.getId(),p.getIdProduct(), 0,
+                        "tcm/thumbs/" + imageName + ".png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)p.getTitleFontSize(),
                         ConstantsAdmin.convertIntColorToHex(p.getFontTitleColor()),0,
                         0,p.getFontTitleId(),p.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
                 call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
-                        p.getFillsTexturedId(),p.getComentarioUsr(),"iconotemporal",(int)c.getId(),p.getIdProduct(), 0,
-                        "tcm/thumbs/iconotemporal.png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
+                        p.getFillsTexturedId(),p.getComentarioUsr(),imageName,(int)c.getId(),p.getIdProduct(), 0,
+                        "tcm/thumbs/" + imageName + ".png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
                         0,p.getFontTextId(),p.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
             }
             response = call.execute();
             if(response.body() == null){
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }else{
+                this.almacenarImagenRemoto(p, imageName + ".png");
             }
         }
         it = ConstantsAdmin.combosDelCarrito.iterator();
@@ -849,6 +851,41 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void almacenarImagenRemoto(ProductoCarrito p, String imageName) {
+        new AlmacenarImagenRemotoTask().execute(imageName);
+    }
+
+    private class AlmacenarImagenRemotoTask extends AsyncTask<Object, Integer, Integer> {
+
+
+        private ProgressDialog dialog = null;
+        private int resultado = -1;
+
+
+        @Override
+        protected Integer doInBackground(Object... o) {
+            publishProgress(1);
+            String n = (String) o[0];
+            almacenarImagenRemotoPrivado(n);
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
+
+    }
+
+    private void almacenarImagenRemotoPrivado(String n) {
+        ConstantsAdmin.uploadFile(n);
     }
 
 

@@ -95,8 +95,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         pc.setIdProduct((int)ConstantsAdmin.currentProduct.getId());
         pc.setFillsTexturedId((int)ConstantsAdmin.selectedImage.getFillsTexturedId());
         pc.setFontTextId((int)ConstantsAdmin.selectedTextFont.getId());
-
-
+        pc.setImagenDeTag(ConstantsAdmin.getBytes(ConstantsAdmin.screenShot));
         ConstantsAdmin.agregarProductoAlCarrito(pc);
 
       //  createAlertDialog(getString(R.string.tag_agregado_carrito), "");
