@@ -774,6 +774,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         while(it.hasNext() && okInsert){
             p = (ProductoCarrito) it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
+            //String imageName = ConstantsAdmin.takeScreenshot()
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
