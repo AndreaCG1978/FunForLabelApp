@@ -170,7 +170,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
             rb.setText(m.getName());
             rb.setTextColor(Color.BLACK);
             rb.setTextSize(15);
-            rb.setBackgroundColor(Color.WHITE);
+
             rb.setId((int)m.getId());
             rb.setTag(m);
             if(m.getId()==1){

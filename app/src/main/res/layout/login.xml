@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@drawable/bg_body">
+    android:background="@drawable/bg_body1">
 
 
     <ScrollView
@@ -16,8 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:background="@drawable/bg_body">
+            android:gravity="center_horizontal">
 
             <ImageView
                 android:layout_width="320dp"
@@ -37,7 +36,7 @@
                 android:text="@string/bienvenido_title"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"
+
                 />
 
             <View
@@ -72,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
-                    android:background="@color/color_blanco"
+
                     >
 
                     <TextView
@@ -83,8 +82,7 @@
                         android:textColor="@color/color_gris_oscuro"
                         android:fontFamily="sans-serif"
                         android:text="@string/usuario"
-                        android:textStyle="bold"
-                        android:background="@android:color/white"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/usrEntry"
@@ -94,7 +92,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:maxLength="80"
@@ -109,7 +107,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:orientation="horizontal"
-                    android:background="@color/color_blanco"
                     android:gravity="center_vertical|clip_vertical">
 
 
@@ -122,7 +119,7 @@
                         android:fontFamily="sans-serif"
                         android:text="@string/contrasenia"
                         android:textStyle="bold"
-                        android:background="@android:color/white"/>
+                        />
 
                     <EditText
                         android:id="@+id/passEntry"
@@ -132,7 +129,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:maxLength="30"
@@ -164,7 +161,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/recordarPsw"
                         android:textSize="13sp"
-                        android:background="@color/color_blanco"
                         android:fontFamily="sans-serif-smallcaps"
                         android:textColor="@color/color_gris_oscuro"/>
 
@@ -252,7 +248,6 @@
                 android:text="@string/crear_cuenta_title"
                 android:textSize="13sp"
                 android:layout_gravity="center_horizontal"
-                android:background="@android:color/white"
                 android:fontFamily="sans-serif-smallcaps"
                 />
             </LinearLayout>
@@ -284,7 +279,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="@string/presione_aqui_title"
                     android:textSize="13sp"
-                    android:background="@android:color/white"
+
                     android:fontFamily="sans-serif-smallcaps"
                     />
             </LinearLayout>

@@ -20,7 +20,7 @@
     <string name="presione_aqui_title"><![CDATA[Recuperar Contraseña]]></string>
     <string name="title_nueva_contrasenia">Nueva Contraseña</string>
     <string name="send_mail_error">No es posible mandar el mail con la nueva contraseña.</string>
-    <string name="send_mail_succes">La nueva contraseña fue envía a la cuenta:</string>
+    <string name="send_mail_succes">La nueva contraseña fue envíada a la cuenta:</string>
     <string name="mensaje_enviar_contrasenia"><![CDATA[Se enviará una nueva contraseña a la cuenta de mail <]]></string>
     <string name="usuario_inexistente">"No existe usuario registrado con esta cuenta de mail! "</string>
     <string name="label_si">SI</string>
@@ -28,7 +28,7 @@
     <string name="mensaje_desea_continuar"><![CDATA[> Desea continuar?]]></string>
     <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
     <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
-    <string name="body2_nueva_contrasenia">Recuerde modificarla al iniciar sesión.</string>
+    <string name="body2_nueva_contrasenia">Desde el sitio web, podrá modificarla al iniciar sesión.</string>
     <string name="sending_mail_progress">Enviando información a su cuenta de correo...</string>
     <string name="informacion_personal_title">░ Información Personal</string>
     <string name="direccion_title">░ Dirección</string>
@@ -67,12 +67,12 @@
     <string name="price">$</string>
     <string name="quantity">Cantidad:</string>
     <string name="per_pack"> por pack</string>
-    <string name="your_name_here">Ingreso un texto</string>
+    <string name="your_name_here">Tu nombre aquí</string>
     <string name="select_font_style">Elija su letra...</string>
     <string name="select_tag_style">Elija su estilo...</string>
-    <string name="your_title">Ingrese un título</string>
+    <string name="your_title">Tu colegio aquí</string>
     <string name="culminarTag">Agregar al carrito</string>
-    <string name="enter_comment">Ingrese un comentario...</string>
+    <string name="enter_comment">Aquí podes dejarnos un comentario...</string>
     <string name="agregar_tag_acarrito">Agregar</string>
     <string name="tag_agregado_carrito">El producto fue agregado al carrito!</string>
     <string name="su_carrito">Su Carrito!</string>
@@ -114,7 +114,5 @@
     <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>
     <string name="productos_combo">Vista preliminar</string>
     <string name="tag_incompleto">Debe completar la etiqueta con algún texto!</string>
-    <string name="limpiarCarrito">Vaciar carrito</string>
-    <string name="mensaje_vaciar_carrito">Está seguro de vaciar su Carrito?</string>
-    <string name="carrito_vacio">Su Carrito ya se encuentra vacio!</string>
+    <string name="guarda_carrito">Si querés repetir alguna de estas etiquetas en el futuro, contactate con nosotros que guardamos todas las imágenes.</string>
 </resources>

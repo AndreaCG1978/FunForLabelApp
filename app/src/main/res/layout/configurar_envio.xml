@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/bg_body"
+    android:background="@drawable/bg_body1"
     android:layout_marginBottom="20dp">
 
     <ScrollView
@@ -29,18 +29,15 @@
             />
 
 
-
-        <TextView
-            android:id="@+id/textWellcomeUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_gris_oscuro"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"
-            />
+            <TextView
+                android:id="@+id/textWellcomeUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:textColor="@color/color_gris_oscuro"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         <View
             android:layout_width="match_parent"
@@ -58,7 +55,7 @@
             android:layout_margin="10dp"
             android:textSize="17sp"
             android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"/>
+            />
 
         <TextView
             android:id="@+id/textIntroEnvio"
@@ -69,7 +66,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:textSize="12sp"
-            android:background="@android:color/white"
+
             />
 
         <TextView
@@ -82,8 +79,7 @@
             android:textStyle="bold"
             android:layout_gravity="left"
             android:textSize="13sp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"/>
+            android:fontFamily="sans-serif-smallcaps"/>
 
         <TextView
             android:id="@+id/textDirEnvio"
@@ -108,7 +104,7 @@
             android:layout_gravity="left"
             android:textSize="13sp"
             android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"/>
+            />
 
             <RadioGroup
                 android:id="@+id/opciones_envio"
@@ -119,9 +115,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="20dp"
                 android:orientation="vertical">
-
-
-
 
             </RadioGroup>
 
@@ -136,7 +129,7 @@
                 android:layout_gravity="left"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"/>
+                />
 
             <EditText
                 android:id="@+id/entryCommentEnvio"
@@ -148,7 +141,7 @@
                 android:padding="4dp"
                 android:textSize="13sp"
                 android:textColor="@color/color_gris_oscuro"
-                android:background="@color/color_gris_muy_claro"
+                android:background="@android:color/white"
                 android:layout_margin="15dp"
                 android:maxLength="220"
 

@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/bg_body"
+    android:background="@drawable/bg_body1"
     android:layout_marginBottom="20dp">
 
     <ScrollView
@@ -39,7 +39,7 @@
             android:gravity="center_horizontal"
             android:textSize="14sp"
             android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"
+
             />
 
         <View
@@ -58,7 +58,7 @@
             android:layout_margin="10dp"
             android:textSize="17sp"
             android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"/>
+           />
 
         <TextView
             android:id="@+id/textIntroPago"
@@ -69,7 +69,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:textSize="12sp"
-            android:background="@android:color/white"
+
             />
 
             <TextView
@@ -83,7 +83,7 @@
             android:layout_gravity="left"
             android:textSize="13sp"
             android:fontFamily="sans-serif-smallcaps"
-            android:background="@android:color/white"/>
+            />
 
             <RadioGroup
                 android:id="@+id/opciones_pago"
@@ -108,7 +108,7 @@
                 android:layout_gravity="left"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-smallcaps"
-                android:background="@android:color/white"/>
+                />
 
             <EditText
                 android:id="@+id/entryCommentPago"
@@ -120,7 +120,7 @@
                 android:padding="4dp"
                 android:textSize="13sp"
                 android:textColor="@color/color_gris_oscuro"
-                android:background="@color/color_gris_muy_claro"
+                android:background="@android:color/white"
                 android:layout_margin="15dp"
                 android:maxLength="220"
 

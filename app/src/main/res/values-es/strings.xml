@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <string name="app_name">FunForLabels App</string>
     <string name="usuario">USUARIO:</string>
     <string name="usuarioHint">Usuario</string>
@@ -12,6 +14,7 @@
     <string name="conexion_server_error">Problemas para conectarse con el Servidor de datos.</string>
     <string name="login_progress">Intento de logueo...</string>
     <string name="atencion">Atención!</string>
+
     <string name="soy_cliente_title">░ Soy Cliente!</string>
     <string name="bienvenido_title">Bienvenido a FunForLabels App</string>
     <string name="no_soy_cliente_title">░ No sos Cliente?</string>
@@ -20,7 +23,7 @@
     <string name="presione_aqui_title"><![CDATA[Recuperar Contraseña]]></string>
     <string name="title_nueva_contrasenia">Nueva Contraseña</string>
     <string name="send_mail_error">No es posible mandar el mail con la nueva contraseña.</string>
-    <string name="send_mail_succes">La nueva contraseña fue envía a la cuenta:</string>
+    <string name="send_mail_succes">La nueva contraseña fue envíada a la cuenta:</string>
     <string name="mensaje_enviar_contrasenia"><![CDATA[Se enviará una nueva contraseña a la cuenta de mail <]]></string>
     <string name="usuario_inexistente">"No existe usuario registrado con esta cuenta de mail! "</string>
     <string name="label_si">SI</string>
@@ -28,7 +31,7 @@
     <string name="mensaje_desea_continuar"><![CDATA[> Desea continuar?]]></string>
     <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
     <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
-    <string name="body2_nueva_contrasenia">Recuerde modificarla al iniciar sesión.</string>
+    <string name="body2_nueva_contrasenia">Desde el sitio web, podrá modificarla al iniciar sesión.</string>
     <string name="sending_mail_progress">Enviando información a su cuenta de correo...</string>
     <string name="informacion_personal_title">░ Información Personal</string>
     <string name="direccion_title">░ Dirección</string>
@@ -67,12 +70,12 @@
     <string name="price">$</string>
     <string name="quantity">Cantidad:</string>
     <string name="per_pack"> por pack</string>
-    <string name="your_name_here">Ingrese un Texto</string>
+    <string name="your_name_here">Tu nombre aquí</string>
     <string name="select_font_style">Elija su letra...</string>
     <string name="select_tag_style">Elija su estilo...</string>
-    <string name="your_title">Ingrese un título</string>
+    <string name="your_title">Tu colegio aquí</string>
     <string name="culminarTag">Agregar al carrito</string>
-    <string name="enter_comment">Ingrese un comentario...</string>
+    <string name="enter_comment">Aquí podes dejarnos un comentario...</string>
     <string name="agregar_tag_acarrito">Agregar</string>
     <string name="tag_agregado_carrito">El producto fue agregado al carrito!</string>
     <string name="su_carrito">Su Carrito!</string>
@@ -92,6 +95,7 @@
     <string name="forma_envio_title">░ FORMA DE ENVIO</string>
     <string name="label_total_etiquetas">Total en etiquetas:</string>
     <string name="label_total">Total a pagar:</string>
+    <string name="volver">Volver</string>
     <string name="enviar_mail">Email</string>
     <string name="enviar_wsp" translatable="false">Whatsapp</string>
     <string name="solicito_envio_cbu">Solicito envío CBU</string>
@@ -113,7 +117,5 @@
     <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>
     <string name="productos_combo">Vista preliminar</string>
     <string name="tag_incompleto">Debe completar la etiqueta con algún texto!</string>
-    <string name="limpiarCarrito">Vaciar carrito</string>
-    <string name="mensaje_vaciar_carrito">Está seguro de vaciar su Carrito?</string>
-    <string name="carrito_vacio">Su Carrito ya se encuentra vacio!</string>
+    <string name="guarda_carrito">Si querés repetir alguna de estas etiquetas en el futuro, contactate con nosotros que guardamos todas las imágenes.</string>
 </resources>

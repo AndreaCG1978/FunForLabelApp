@@ -254,7 +254,6 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             rb.setText(m.getName() + ": $" + m.getPrice());
             rb.setTextColor(Color.BLACK);
             rb.setTextSize(15);
-            rb.setBackgroundColor(Color.WHITE);
             rb.setId((int)m.getId());
             rb.setTag(m);
             if(m.getId()==1){

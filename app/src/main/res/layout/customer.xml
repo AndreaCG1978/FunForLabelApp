@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/bg_body1"
 
     >
 
@@ -95,7 +96,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:importantForAutofill="no"
                         android:inputType="textPersonName"
                         android:maxLength="50"
@@ -143,7 +144,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:textSize="14sp"
                         android:inputType="textPersonName"
                         android:maxLength="50"
@@ -189,7 +190,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:textSize="14sp"
                         android:inputType="textEmailAddress"
                         android:maxLength="70"
@@ -198,7 +199,7 @@
 
                 </LinearLayout>
 
-                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                <RadioGroup
                     android:id="@+id/opciones_sexo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -285,7 +286,7 @@
                     android:layout_width="210dp"
                     android:layout_height="30dp"
                     android:id="@+id/state_spinner"
-                    android:background="@color/color_gris_muy_claro"
+                    android:background="@android:color/white"
                     />
 
                 <EditText
@@ -295,7 +296,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:textSize="14sp"
                     android:inputType="textCapWords"
                     android:maxLength="50"
@@ -344,7 +345,7 @@
                     android:layout_width="210dp"
                     android:layout_height="30dp"
                     android:id="@+id/city_spinner"
-                    android:background="@color/color_gris_muy_claro"/>
+                    android:background="@android:color/white"/>
 
                 <EditText
                     android:id="@+id/entryCiudad"
@@ -353,7 +354,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:textSize="14sp"
                     android:maxLength="50"
                     android:inputType="textCapWords"
@@ -403,7 +404,7 @@
                     android:layout_width="210dp"
                     android:layout_height="27dp"
                     android:id="@+id/barrio_spinner"
-                    android:background="@color/color_gris_muy_claro"
+                    android:background="@android:color/white"
                     />
 
             </LinearLayout>
@@ -446,7 +447,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences|textMultiLine"
                     android:background="@android:color/white"
@@ -501,7 +502,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:textSize="14sp"
                     android:inputType="textPostalAddress"
                     android:maxLength="15"
@@ -574,7 +575,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:textSize="14sp"
                     android:inputType="phone"
                     android:maxLength="30"
@@ -609,7 +610,7 @@
                     android:layout_marginStart="5dp"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:backgroundTint="@color/color_gris_muy_claro"
+                    android:backgroundTint="@android:color/white"
                     android:textSize="14sp"
                     android:inputType="phone"
                     android:maxLength="30"
@@ -703,7 +704,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:maxLength="30"
@@ -749,7 +750,7 @@
                         android:layout_marginStart="5dp"
                         android:paddingStart="5dp"
                         android:textColor="@android:color/black"
-                        android:backgroundTint="@color/color_gris_muy_claro"
+                        android:backgroundTint="@android:color/white"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:maxLength="30"

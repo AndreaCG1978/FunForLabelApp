@@ -32,6 +32,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
     Button btnFinalizar;
     private TextView textConector;
     private Button btnLimpiarCarrito;
+    private TextView textMensajeExito3;
 
 
     @Override
@@ -49,16 +50,17 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
         textEnvioWsp = (TextView) findViewById(R.id.textEnvioWsp);
         textMensajeExito1 = (TextView) findViewById(R.id.textMensajeExito1);
         textMensajeExito2 = (TextView) findViewById(R.id.textMensajeExito2);
+        textMensajeExito3 = (TextView) findViewById(R.id.textMensajeExito3);
         textConector = (TextView) findViewById(R.id.textConector);
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
-        btnLimpiarCarrito = (Button) findViewById(R.id.btnLimpiarCarrito);
-        btnLimpiarCarrito.setOnClickListener(new View.OnClickListener() {
+      //  btnLimpiarCarrito = (Button) findViewById(R.id.btnLimpiarCarrito);
+    /*  btnLimpiarCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vaciarCarrito();
             }
-        });
+        });*/
         btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +78,9 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             if(ConstantsAdmin.mensajeCompra != null && !ConstantsAdmin.mensajeCompra.equals("")){
                 temp = "\n\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
             }
-            textMensajeExito2.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp);
+            String temp1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp;
+
+            textMensajeExito2.setText(temp1);
             textEnvioMail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,6 +93,8 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
                     enviarWsp();
                 }
             });
+            textMensajeExito3.setText(getString(R.string.guarda_carrito));
+            this.vaciarCarritoPrivado();
         }else{// COMPRA CON ERROR O CANCELADA
             textEnvioWsp.setVisibility(View.GONE);
             textEnvioMail.setVisibility(View.GONE);
@@ -100,9 +106,10 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
 
 
 
+
         // configListView(listViewCarrito);
     }
-
+/*
     private void vaciarCarrito() {
         if(ConstantsAdmin.productosDelCarrito.size() > 0 || ConstantsAdmin.combosDelCarrito.size() > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -122,7 +129,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
         }else{
             createAlertDialog(getString(R.string.carrito_vacio), getString(R.string.atencion));
         }
-    }
+    }*/
 
     private void createAlertDialog(String message, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(me);
