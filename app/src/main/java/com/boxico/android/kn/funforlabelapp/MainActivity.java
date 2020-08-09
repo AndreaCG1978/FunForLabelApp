@@ -287,7 +287,9 @@ public class MainActivity extends FragmentActivity {
         GradientDrawable border = new GradientDrawable();
         border.setColor(0xFFFFFFFF); //white background
         border.setStroke(3, Color.RED); //black border with full opacity
+        border.setCornerRadius(17);
         parent.setBackground(border);
+
 
         return parent;
     }

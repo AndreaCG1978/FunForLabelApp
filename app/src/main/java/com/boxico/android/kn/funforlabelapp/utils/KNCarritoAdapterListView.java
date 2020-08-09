@@ -81,7 +81,8 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
             LinearLayout linear = v.findViewById(R.id.linearImagen);
             GradientDrawable border = new GradientDrawable();
             border.setColor(0xFFFFFFFF); //white background
-            border.setStroke(3, Color.RED); //black border with full opacity
+            border.setStroke(3, Color.RED);
+            border.setCornerRadius(17);//black border with full opacity
             linear.setBackground(border);
             ImageButton borrar = v.findViewById(R.id.borrarProductoCarrito);
             borrar.setOnClickListener(new View.OnClickListener() {
@@ -203,7 +204,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     private void openViewTag(ItemCarrito ic) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
         View v = initPopupViewTag(ic);
-       // ConstantsAdmin.takeScreenshot(mContext, (ProductoCarrito)ic);
+        ConstantsAdmin.uploadFile1(ic.getBackgroundFilename());
         alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
         alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setView(v);

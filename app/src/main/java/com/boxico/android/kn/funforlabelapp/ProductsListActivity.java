@@ -339,7 +339,8 @@ public class ProductsListActivity extends FragmentActivity {
 
         GradientDrawable border = new GradientDrawable();
         border.setColor(0xFFFFFFFF); //white background
-        border.setStroke(3, Color.RED); //black border with full opacity
+        border.setStroke(3, Color.RED);
+        border.setCornerRadius(17);//black border with full opacity
         parent.setBackground(border);
 
         linearProducts.addView(parent);
