@@ -158,6 +158,7 @@ public class DataBaseManager {
 			initialValues.put(ConstantsAdmin.KEY_ID_PRODUCTO, item.getIdProduct());
 			initialValues.put(ConstantsAdmin.KEY_ID_FILLS_TEXTURED, item.getFillsTexturedId());
 			initialValues.put(ConstantsAdmin.KEY_BACKGROUND_FILENAME, item.getBackgroundFilename());
+			initialValues.put(ConstantsAdmin.KEY_IMAGEN, item.getImagenDeTag());
 		}else{// ES UNA ACTUALIZACION DE CANTIDAD
 			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
 		}

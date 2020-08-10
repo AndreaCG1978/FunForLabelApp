@@ -18,6 +18,17 @@ public class ItemCarrito {
     protected int idProduct = -1;
     protected int fillsTexturedId = -1;
 
+    private byte[] imagenDeTag;
+
+    public byte[] getImagenDeTag() {
+        return imagenDeTag;
+    }
+
+    public void setImagenDeTag(byte[] imagenDeTag) {
+        this.imagenDeTag = imagenDeTag;
+    }
+
+
 
     public int getId() {
         return id;

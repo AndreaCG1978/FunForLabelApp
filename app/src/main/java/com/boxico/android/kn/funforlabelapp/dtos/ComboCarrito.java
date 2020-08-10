@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class ComboCarrito extends ItemCarrito{
 
     private int id;
-
     private ArrayList<ItemCarrito> productos;
+
 
     public int getId() {
         return id;

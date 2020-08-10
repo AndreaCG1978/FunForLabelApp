@@ -795,7 +795,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }else{
-                this.almacenarImagenRemoto(p, imageName + ".png");
+                ConstantsAdmin.uploadFile(imageName + ".png");
+               // this.almacenarImagenRemoto(p, imageName + ".png");
             }
         }
         it = ConstantsAdmin.combosDelCarrito.iterator();
@@ -803,6 +804,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Integer idProduct = -1;
         while(it.hasNext() && okInsert){
             combo = (ComboCarrito) it.next();
+            String imageName = ConstantsAdmin.takeScreenshot(this, combo);
             String precio =combo.getPrecio().substring(0, combo.getPrecio().length() - 5);
             call = orderService.insertProduct(true, ConstantsAdmin.tokenFFL, idOrder, combo.getIdProduct(),"",
                     combo.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(combo.getCantidad()));
@@ -815,8 +817,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
             // SE INSERTA UN TAG QUE REPRESENTA AL PADRE DEL COMBO
             Integer idParent = -1;
-            call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),"iconotemporal",(int)c.getId(),
-                    combo.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", 0);
+            call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),imageName,(int)c.getId(),
+                    combo.getIdProduct(), 0,"tcm/thumbs/" + imageName + ".png", 0);
 
             response = call.execute();
             if(response.body() == null) {
@@ -847,8 +849,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     okInsert = false;
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }
-
             }
+            if(okInsert){
+                ConstantsAdmin.uploadFile(imageName + ".png");
+            }
+
 
         }
     }

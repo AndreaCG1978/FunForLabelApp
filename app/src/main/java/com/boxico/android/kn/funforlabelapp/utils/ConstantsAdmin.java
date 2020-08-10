@@ -806,9 +806,10 @@ public class ConstantsAdmin {
     }
 
 
-    public static String takeScreenshot(Activity context, ProductoCarrito pc) {
+    public static String takeScreenshot(Activity context, ItemCarrito ic) {
         Date now = new Date();
         String temp = (String) android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
+        temp = "cart_" + ic.getIdProduct() + "_" + temp;
         String nameFile = temp + ".png";
         Bitmap bitmap = null;
         try {
@@ -825,14 +826,21 @@ public class ConstantsAdmin {
             ConstantsAdmin.makeTag(pc, 1f, false, rl, context);*/
 
             //v.setDrawingCacheEnabled(true);
-            bitmap = ConstantsAdmin.getImage(pc.getImagenDeTag());
+            bitmap = ConstantsAdmin.getImage(ic.getImagenDeTag());
+
+            Bitmap bitmapSmall = null;
+            if(ic.isProduct()){
+                bitmapSmall= getResizedBitmap(bitmap, 200);
+            }else{
+                bitmapSmall= getResizedBitmap(bitmap, 400);
+            }
             //v.setDrawingCacheEnabled(false);
 
             File imageFile = new File(mPath);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+            int quality = 90;
+            bitmapSmall.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
 
@@ -841,6 +849,21 @@ public class ConstantsAdmin {
             e.printStackTrace();
         }
         return temp;
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
 
@@ -974,6 +997,7 @@ public class ConstantsAdmin {
         String precio;
         String cantidad;
         ComboCarrito item = null;
+        byte[] img;
         Cursor cursor = dbm.cursorComboProductoCarrito();
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
@@ -986,6 +1010,7 @@ public class ConstantsAdmin {
             idFillsTextured = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FILLS_TEXTURED));
             backgroundFilename = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_BACKGROUND_FILENAME));
             comentario = cursor.getString(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_COMENTARIO_USR));
+            img = cursor.getBlob(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_IMAGEN));
             item.setNombre(nombre);
             item.setCantidad(cantidad);
             item.setPrecio(precio);
@@ -994,6 +1019,7 @@ public class ConstantsAdmin {
             item.setBackgroundFilename(backgroundFilename);
             item.setComentarioUsr(comentario);
             item.setId(itemId);
+            item.setImagenDeTag(img);
             listaProductos = getProductosCarrito(ctx, item.getId(), dbm);
             item.setProductos(listaProductos);
             cursor.moveToNext();
@@ -1244,7 +1270,7 @@ public class ConstantsAdmin {
     }
 
 
-    public static int uploadFile1(String sourceFileUri){
+    public static int uploadFile(String sourceFileUri){
         final String temp = sourceFileUri;
 
         class UploadFileAsync extends AsyncTask<String, Void, String> {
@@ -1286,7 +1312,7 @@ public class ConstantsAdmin {
                                     "multipart/form-data");
                             conn.setRequestProperty("Content-Type",
                                     "multipart/form-data;boundary=" + boundary);
-                            conn.setRequestProperty("bill", sourceFileUri);
+                            conn.setRequestProperty("uploaded_file", sourceFileUri);
 
                             dos = new DataOutputStream(conn.getOutputStream());
 
@@ -1341,6 +1367,7 @@ public class ConstantsAdmin {
                             fileInputStream.close();
                             dos.flush();
                             dos.close();
+                            sourceFile.delete();
 
                         } catch (Exception e) {
 
@@ -1379,7 +1406,7 @@ public class ConstantsAdmin {
         return 1;
     }
 
-    public static int uploadFile(String sourceFileUri) {
+    public static int uploadFile1(String sourceFileUri) {
 
 
         String fileName = sourceFileUri;

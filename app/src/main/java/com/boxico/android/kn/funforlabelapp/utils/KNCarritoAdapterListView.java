@@ -204,7 +204,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     private void openViewTag(ItemCarrito ic) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
         View v = initPopupViewTag(ic);
-        ConstantsAdmin.uploadFile1(ic.getBackgroundFilename());
+       // ConstantsAdmin.uploadFile1(ic.getBackgroundFilename());
         alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
         alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setView(v);
@@ -226,6 +226,11 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
             comboView.addView(productView);
         }else{
             combo = (ComboCarrito) ic;
+            BitmapDrawable bd = new BitmapDrawable(mContext.getResources(), ConstantsAdmin.getImage(combo.getImagenDeTag()));
+            productView.setBackground(bd);
+            comboView.addView(productView);
+
+            /*
             Iterator<ItemCarrito> productos = combo.getProductos().iterator();
             RelativeLayout rl = null;
             if(combo.getProductos().size() > 4){
@@ -240,7 +245,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
 
                 ConstantsAdmin.makeTag(pc, achicar, acotar, rl, mContext);
                 comboView.addView(rl);
-            }
+            }*/
         }
     }
 /*

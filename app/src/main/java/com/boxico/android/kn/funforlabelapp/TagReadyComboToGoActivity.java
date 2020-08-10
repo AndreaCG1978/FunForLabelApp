@@ -31,7 +31,8 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
     TextView textWellcomeUsr = null;
     Button agregarAlCarrito = null;
     EditText comentarioUsr = null;
-    
+    private LinearLayout linearTag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +120,9 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
         combo.setBackgroundFilename(ConstantsAdmin.currentProduct.getImageString());
         combo.setIdProduct((int)ConstantsAdmin.currentProduct.getId());
         combo.setFillsTexturedId((int)ConstantsAdmin.selectedImage.getFillsTexturedId());
+        Bitmap bmp = ConstantsAdmin.takeScreenshot(linearTag);
+        ConstantsAdmin.screenShot = bmp;
+        combo.setImagenDeTag(ConstantsAdmin.getBytes(ConstantsAdmin.screenShot));
 
         ConstantsAdmin.agregarComboAlCarrito(combo);
 
@@ -214,7 +218,7 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
         if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }*/
-        LinearLayout linearTag = this.findViewById(R.id.linearReadyToGoTag);
+        linearTag = this.findViewById(R.id.linearReadyToGoTag);
         ImageView iv = null;
         LinearLayout.LayoutParams params = null;
         BitmapDrawable bd = null;
@@ -250,6 +254,7 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
 
             linearTag.addView(iv);
         }
+
     }
 
 
