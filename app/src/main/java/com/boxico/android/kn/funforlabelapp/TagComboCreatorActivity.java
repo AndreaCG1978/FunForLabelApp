@@ -337,6 +337,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
             }
             Bitmap bmp = takeScreenShot();
+            tp.setPreview(bmp);
 
             ConstantsAdmin.selectedComboProduct.setScreenShot(bmp);
         }

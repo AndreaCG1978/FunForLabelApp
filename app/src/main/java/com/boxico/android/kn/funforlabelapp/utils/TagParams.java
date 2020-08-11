@@ -42,6 +42,7 @@ public class TagParams {
     private int fontTitleId = 3;
     private int fontTextId = 3;
     private String backgroundFilename;
+    private Bitmap preview;
 
     public boolean isInicializadoSize() {
         return inicializadoSize;
@@ -275,5 +276,13 @@ public class TagParams {
 
     public void setTitle(boolean title) {
         isTitle = title;
+    }
+
+    public void setPreview(Bitmap preview) {
+        this.preview = preview;
+    }
+
+    public Bitmap getPreview() {
+        return preview;
     }
 }

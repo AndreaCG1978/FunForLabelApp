@@ -18,7 +18,7 @@ public class ItemCarrito {
     protected int idProduct = -1;
     protected int fillsTexturedId = -1;
 
-    private byte[] imagenDeTag;
+    protected byte[] imagenDeTag;
 
     public byte[] getImagenDeTag() {
         return imagenDeTag;

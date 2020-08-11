@@ -802,9 +802,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         it = ConstantsAdmin.combosDelCarrito.iterator();
         ComboCarrito combo = null;
         Integer idProduct = -1;
+        String imageNameCombo, imageName;
         while(it.hasNext() && okInsert){
             combo = (ComboCarrito) it.next();
-            String imageName = ConstantsAdmin.takeScreenshot(this, combo);
+      //      imageNameCombo = ConstantsAdmin.takeScreenshot(this, combo);
             String precio =combo.getPrecio().substring(0, combo.getPrecio().length() - 5);
             call = orderService.insertProduct(true, ConstantsAdmin.tokenFFL, idOrder, combo.getIdProduct(),"",
                     combo.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(combo.getCantidad()));
@@ -817,9 +818,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
             // SE INSERTA UN TAG QUE REPRESENTA AL PADRE DEL COMBO
             Integer idParent = -1;
-            call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),imageName,(int)c.getId(),
+         /*   call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),imageName,(int)c.getId(),
                     combo.getIdProduct(), 0,"tcm/thumbs/" + imageName + ".png", 0);
-
+*/          call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),"",(int)c.getId(),
+                    combo.getIdProduct(), 0,"", 0);
             response = call.execute();
             if(response.body() == null) {
                 okInsert = false;
@@ -832,27 +834,30 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             ProductoCarrito pc = null;
             while (it1.hasNext() && okInsert){
                 pc = (ProductoCarrito) it1.next();
+                imageName = ConstantsAdmin.takeScreenshot(this, pc);
                 if(pc.isTieneTitulo()){
                     call = orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
-                            "iconotemporal",(int)c.getId(),pc.getIdProduct(), 0,
-                            "tcm/thumbs/iconotemporal.png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
+                            "imageName",(int)c.getId(),pc.getIdProduct(), 0,
+                            "tcm/thumbs/" + imageName + ".png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
                             0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)pc.getTitleFontSize(),
                             ConstantsAdmin.convertIntColorToHex(pc.getFontTitleColor()),0,
                             0,pc.getFontTitleId(),pc.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
                 }else{
-                    call = orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"iconotemporal",(int)c.getId(),
-                            pc.getIdProduct(), 0,"tcm/thumbs/iconotemporal.png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
+                    call = orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"imageName",(int)c.getId(),
+                            pc.getIdProduct(), 0,"tcm/thumbs/" + imageName + ".png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
                             0,0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
                 }
                 response = call.execute();
                 if(response.body() == null) {
                     okInsert = false;
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }else{
+                    ConstantsAdmin.uploadFile(imageName + ".png");
                 }
             }
-            if(okInsert){
-                ConstantsAdmin.uploadFile(imageName + ".png");
-            }
+         /*   if(okInsert){
+                ConstantsAdmin.uploadFile(imageNameCombo + ".png");
+            }*/
 
 
         }

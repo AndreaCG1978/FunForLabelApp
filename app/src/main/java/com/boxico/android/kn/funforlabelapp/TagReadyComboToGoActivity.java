@@ -110,6 +110,7 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             pc.setModelo(p.getModel());
             pc.setIdProduct((int) p.getId());
             pc.setFillsTexturedId((int) temp.getImage().getFillsTexturedId());
+            pc.setImagenDeTag(ConstantsAdmin.getBytes(temp.getPreview()));
             ConstantsAdmin.copyBitmapInStorage(temp.getImage().getImage(), temp.getBackgroundFilename());
             combo.getProductos().add(pc);
         }
