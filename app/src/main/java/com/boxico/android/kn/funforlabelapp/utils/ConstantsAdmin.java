@@ -852,9 +852,9 @@ public class ConstantsAdmin {
 
             Bitmap bitmapSmall = null;
             if(ic.isProduct()){
-                bitmapSmall= getResizedBitmap(bitmap, 200);
+                bitmapSmall= getResizedBitmap(bitmap, 100);
             }else{
-                bitmapSmall= getResizedBitmap(bitmap, 400);
+                bitmapSmall= getResizedBitmap(bitmap, 200);
             }
             //v.setDrawingCacheEnabled(false);
 
