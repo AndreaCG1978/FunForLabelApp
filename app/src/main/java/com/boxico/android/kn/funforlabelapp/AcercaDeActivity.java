@@ -47,7 +47,12 @@ public class AcercaDeActivity extends AppCompatActivity {
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         final Properties p = ConstantsAdmin.fflProperties;
         TextView tv =  (TextView) findViewById(R.id.textAcercaDe);
-        tv.setText((String)p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO));
+        if(ConstantsAdmin.currentLanguage==1){
+            tv.setText((String)p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO_EN));
+        }else{
+            tv.setText((String)p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO));
+        }
+
         tv = (TextView) findViewById(R.id.textEnvioDevoluciones);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +90,12 @@ public class AcercaDeActivity extends AppCompatActivity {
         });
 
         tv = (TextView) findViewById(R.id.textMensajeEnvioWsp);
-        tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_WSP)) ;
+        if(ConstantsAdmin.currentLanguage==1){
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_WSP_EN)) ;
+        }else{
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_WSP)) ;
+        }
+
 
         tv = (TextView) findViewById(R.id.textNroTel);
         tv.setText(p.getProperty(ConstantsAdmin.TEL_WSP));
@@ -104,7 +114,12 @@ public class AcercaDeActivity extends AppCompatActivity {
         });
 
         tv = (TextView) findViewById(R.id.textMensajeEnvioMail);
-        tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_MAIL)) ;
+        if(ConstantsAdmin.currentLanguage== 1){
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_MAIL_EN)) ;
+        }else{
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_MAIL)) ;
+        }
+
 
         tv = (TextView) findViewById(R.id.textMail);
         tv.setText(p.getProperty(ConstantsAdmin.ATR_FFL_MAIL));

@@ -280,7 +280,12 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         textIntroEnvio = findViewById(R.id.textIntroEnvio);
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
-        textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO));
+        if(ConstantsAdmin.currentLanguage== 1){
+            textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO_EN));
+        }else{
+            textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO));
+        }
+
         entryComentario = (EditText) findViewById(R.id.entryCommentEnvio);
         btnGoToPayment = (Button) findViewById(R.id.btnConfirmarEnvio);
         btnGoToPayment.setOnClickListener(new View.OnClickListener() {

@@ -73,12 +73,23 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             textEnvioMail.setVisibility(View.VISIBLE);
             textConector.setVisibility(View.VISIBLE);
             textMensajeExito2.setVisibility(View.VISIBLE);
+            if(ConstantsAdmin.currentLanguage == 1){// INGLES
+                textMensajeExito1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA1_EN));
+            }else{
+                textMensajeExito1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA1));
+            }
             textMensajeExito1.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA1));
             String temp = "";
             if(ConstantsAdmin.mensajeCompra != null && !ConstantsAdmin.mensajeCompra.equals("")){
                 temp = "\n\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
             }
-            String temp1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp;
+            String temp1 = null;
+            if(ConstantsAdmin.currentLanguage == 1){
+                temp1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2_EN) + temp;
+            }else{
+                temp1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2) + temp;
+            }
+
 
             textMensajeExito2.setText(temp1);
             textEnvioMail.setOnClickListener(new View.OnClickListener() {

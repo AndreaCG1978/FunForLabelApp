@@ -233,7 +233,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         JSONArray itemJsonArray = new JSONArray();
         Properties p = ConstantsAdmin.fflProperties;
         try {
-            itemJSON1.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS));
+            if(ConstantsAdmin.currentLanguage==1){
+                itemJSON1.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS_EN));
+            }else{
+                itemJSON1.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_TAGS));
+            }
+
             String desc = getDescripcionTagsLite();
 
             itemJSON1.put("description", desc);
@@ -244,7 +249,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
             if(precioTotalEnvio > 0){
                 desc = ConstantsAdmin.selectedShippingMethod.getName() +"(" + ConstantsAdmin.selectedShippingMethod.getDescription() + ")";
-                itemJSON2.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_ENVIO));
+                if(ConstantsAdmin.currentLanguage== 1){
+                    itemJSON2.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_ENVIO_EN));
+                }else {
+                    itemJSON2.put("title", p.getProperty(ConstantsAdmin.TITULO_MP__DETALLE_ENVIO));
+                }
                 itemJSON2.put("description", desc);
                 itemJSON2.put("quantity", 1);
                 itemJSON2.put("currency_id", "ARS");
@@ -332,8 +341,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
      //   final String PUBLIC_KEY_SANDBOX = "APP_USR-9e9e8795-313e-4db6-8e3d-167ef4a5d0cc";
 
         //GUI
-        String ACCESS_TOKEN_SANDBOX = "APP_USR-8755027555974708-090911-7b66430095cb7d32cce6fc192bde1944__LD_LA__-78106585";
-        final String PUBLIC_KEY_SANDBOX = "APP_USR-9c81d8db-230c-4a55-8985-c80946ab0274";
+     //   String ACCESS_TOKEN_SANDBOX = "APP_USR-8755027555974708-090911-7b66430095cb7d32cce6fc192bde1944__LD_LA__-78106585";
+     //   final String PUBLIC_KEY_SANDBOX = "APP_USR-9c81d8db-230c-4a55-8985-c80946ab0274";
+
+        String ACCESS_TOKEN_SANDBOX = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ACCESS_TOKEN_SANDBOX);
+        final String PUBLIC_KEY_SANDBOX = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.PUBLIC_KEY_SANDBOX);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         final String url = ConstantsAdmin.URL_MERCADO_PAGO +ACCESS_TOKEN_SANDBOX;
@@ -666,12 +678,23 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         Properties p = ConstantsAdmin.fflProperties;
         body = body + getString(R.string.app_name) + "\n" ;
         body = body + "-----------------------------------------------" + "\n\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_NRO) + idOrder + "\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FACTURA_DETALLE) + p.getProperty(ConstantsAdmin.URL_DETALLE_ORDEN)+ idOrder + "\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FECHA) + ConstantsAdmin.getFechaYHoraActual() + "\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_COMENTARIO) + "\n";
-        body = body + entryComentario.getText().toString() +"\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_PRODUCTOS) + "\n";
+        if(ConstantsAdmin.currentLanguage==1) {
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_NRO_EN) + idOrder + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN) + p.getProperty(ConstantsAdmin.URL_DETALLE_ORDEN)+ idOrder + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FECHA_EN) + ConstantsAdmin.getFechaYHoraActual() + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_COMENTARIO_EN) + "\n";
+            body = body + entryComentario.getText().toString() +"\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_PRODUCTOS_EN) + "\n";
+
+        }else{
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_NRO) + idOrder + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FACTURA_DETALLE) + p.getProperty(ConstantsAdmin.URL_DETALLE_ORDEN)+ idOrder + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_FECHA) + ConstantsAdmin.getFechaYHoraActual() + "\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_COMENTARIO) + "\n";
+            body = body + entryComentario.getText().toString() +"\n";
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_PRODUCTOS) + "\n";
+
+        }
         body = body + "-----------------------------------------------" + "\n";
 
         String temp = getDescripcionTags();
@@ -689,7 +712,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + "-----------------------------------------------" + "\n\n";
         String precioText = String.valueOf(precioTotalTags);
         precioText = precioText.substring(0, precioText.length() - 2);
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBTOTAL) + " $" + precioText + "\n";
+        if(ConstantsAdmin.currentLanguage==1) {
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBTOTAL_EN) + " $" + precioText + "\n";
+        }else{
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBTOTAL) + " $" + precioText + "\n";
+        }
         precioText = String.valueOf(precioTotalEnvio);
         if(precioTotalEnvio > 0){
             precioText = precioText.substring(0, precioText.length() - 2);
@@ -697,18 +724,38 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + ConstantsAdmin.selectedShippingMethod.getName() +"(" + ConstantsAdmin.selectedShippingMethod.getDescription() + "): $" + precioText + "\n";
         precioText = String.valueOf(precioTotalTags + precioTotalEnvio);
         precioText = precioText.substring(0, precioText.length() - 2);
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_TOTAL) + " $" + precioText + "\n" ;
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_ENTREGA) + "\n";
+        if(ConstantsAdmin.currentLanguage==1) {
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_TOTAL_EN) + " $" + precioText + "\n" ;
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN) + "\n";
+        }else{
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_TOTAL) + " $" + precioText + "\n" ;
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_ENTREGA) + "\n";
+
+        }
         body = body + "-----------------------------------------------" + "\n";
         body = body + getStringDirEnvio() + "\n\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_FACTURACION) + "\n";
+        if(ConstantsAdmin.currentLanguage==1) {
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN) + "\n";
+        }else{
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_DIR_FACTURACION) + "\n";
+        }
         body = body + "-----------------------------------------------" + "\n";
         body = body + getStringDirEnvio() + "\n\n";
-        body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_METODO_PAGO) + "\n";
+        if(ConstantsAdmin.currentLanguage==1) {
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_METODO_PAGO_EN) + "\n";
+        }else{
+            body = body + p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_METODO_PAGO) + "\n";
+        }
         body = body + "-----------------------------------------------" + "\n";
         body = body + ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")";
 
-        String subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT);
+        String subject = null;
+        if(ConstantsAdmin.currentLanguage == 1){
+            subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT_EN);
+        }else{
+            subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT);
+        }
+
 
         String to = ConstantsAdmin.currentCustomer.getEmail();
         ConstantsAdmin.enviarMail(subject, body, to);

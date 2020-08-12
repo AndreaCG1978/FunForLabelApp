@@ -157,6 +157,8 @@ public class ConstantsAdmin {
     public static final String FOLDER_FFL = "FFLFiles";
     public static final String FOLDER_TEMP = ".temps";
     public static final String KEY_IMAGEN = "imagenDeTag";
+    public static final String ACCESS_TOKEN_SANDBOX = "ACCESS_TOKEN_SANDBOX";
+    public static final String PUBLIC_KEY_SANDBOX = "PUBLIC_KEY_SANDBOX";
 
     public static String mensaje = null;
     public static final String TAG = "DataBaseManager";
@@ -244,6 +246,26 @@ public class ConstantsAdmin {
     public static ArrayMap<Long,TagParams> params;
 
     private static ArrayList<LabelImage> capturas = null;
+
+    public static String INTRO_ENVIO_EN="DIRECCION_ENVIO_INTRO_EN";
+    public static String MENSAJE_EXITO_ORDEN_GENERADA1_EN="MENSAJE_EXITO_ORDEN_GENERADA1_EN";
+    public static String MENSAJE_EXITO_ORDEN_GENERADA2_EN="MENSAJE_EXITO_ORDEN_GENERADA2_EN";
+    public static String MAIL_PROCESO_ORDEN_SUBJECT_EN="MAIL_PROCESO_ORDEN_SUBJECT_EN";
+    public static String MAIL_PROCESO_ORDEN_NRO_EN="MAIL_PROCESO_ORDEN_NRO_EN";
+    public static String MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN="MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN";
+    public static String MAIL_PROCESO_ORDEN_FECHA_EN="MAIL_PROCESO_ORDEN_FECHA_EN";
+    public static String MAIL_PROCESO_ORDEN_COMENTARIO_EN="MAIL_PROCESO_ORDEN_COMENTARIO_EN";
+    public static String MAIL_PROCESO_ORDEN_PRODUCTOS_EN="MAIL_PROCESO_ORDEN_PRODUCTOS_EN";
+    public static String MAIL_PROCESO_ORDEN_SUBTOTAL_EN="MAIL_PROCESO_ORDEN_SUBTOTAL_EN";
+    public static String MAIL_PROCESO_ORDEN_TOTAL_EN="MAIL_PROCESO_ORDEN_TOTAL_EN";
+    public static String MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN="MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN";
+    public static String MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN="MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN";
+    public static String MAIL_PROCESO_ORDEN_METODO_PAGO_EN="MAIL_PROCESO_ORDEN_METODO_PAGO_EN";
+    public static String ACERCADE_QUIENES_SOMOS_TEXTO_EN="QUIENES_SOMOS_TEXTO_EN";
+    public static String ACERCADE_TEXTO_ENVIO_WSP_EN="TEXTO_ENVIO_WSP_EN";
+    public static String ACERCADE_TEXTO_ENVIO_MAIL_EN="TEXTO_ENVIO_MAIL_EN";
+    public static String TITULO_MP__DETALLE_TAGS_EN="TITULO_MP__DETALLE_TAGS_EN";
+    public static String TITULO_MP__DETALLE_ENVIO_EN="TITULO_MP__DETALLE_ENVIO_EN";
 
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
