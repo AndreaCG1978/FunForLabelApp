@@ -108,7 +108,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         setContentView(R.layout.finalizar_compra);
         this.initializeService();
         this.configureWidgets();
-
+        ConstantsAdmin.compraExitosa = true;
+        ConstantsAdmin.mensajeCompra= "";
     }
 
 

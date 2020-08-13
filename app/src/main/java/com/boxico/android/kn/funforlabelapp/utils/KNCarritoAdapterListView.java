@@ -214,21 +214,18 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
     }
 
     private void initializeCreatorFull(ItemCarrito ic, RelativeLayout productView, LinearLayout comboView) {
-        float achicar = 0.65f;
-        boolean acotar = false;
-        ProductoCarrito pc = null;
-        ComboCarrito combo = null;
-        if(ic.isProduct()){
-            pc = (ProductoCarrito) ic;
-           // ConstantsAdmin.makeTag(pc, achicar, acotar, productView, mContext);
-            BitmapDrawable bd = new BitmapDrawable(mContext.getResources(), ConstantsAdmin.getImage(pc.getImagenDeTag()));
-            productView.setBackground(bd);
-            comboView.addView(productView);
-        }else{
-            combo = (ComboCarrito) ic;
-            BitmapDrawable bd = new BitmapDrawable(mContext.getResources(), ConstantsAdmin.getImage(combo.getImagenDeTag()));
-            productView.setBackground(bd);
-            comboView.addView(productView);
+        // ConstantsAdmin.makeTag(pc, achicar, acotar, productView, mContext);
+        Bitmap img = ConstantsAdmin.getImage(ic.getImagenDeTag());
+        int srcWidth = img.getWidth();
+        int srcHeight = img.getHeight();
+        int dstWidth = (int)(srcWidth*0.77f);
+        int dstHeight = (int)(srcHeight*0.77f);
+        //	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
+        Bitmap b =Bitmap.createScaledBitmap(img, dstWidth,dstHeight, false);
+        BitmapDrawable bd = new BitmapDrawable(mContext.getResources(),b);
+        productView.setBackground(bd);
+        comboView.addView(productView);
+
 
             /*
             Iterator<ItemCarrito> productos = combo.getProductos().iterator();
@@ -246,7 +243,6 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
                 ConstantsAdmin.makeTag(pc, achicar, acotar, rl, mContext);
                 comboView.addView(rl);
             }*/
-        }
     }
 /*
     private void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag){

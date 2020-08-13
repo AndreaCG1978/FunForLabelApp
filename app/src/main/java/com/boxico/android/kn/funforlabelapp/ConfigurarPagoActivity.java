@@ -209,7 +209,12 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         textIntroPago = findViewById(R.id.textIntroPago);
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
-        textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO));
+        if(ConstantsAdmin.currentLanguage== 1){
+            textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO_EN));
+        }else{
+            textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO));
+        }
+
         entryComentario = (EditText) findViewById(R.id.entryCommentPago);
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
             entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");

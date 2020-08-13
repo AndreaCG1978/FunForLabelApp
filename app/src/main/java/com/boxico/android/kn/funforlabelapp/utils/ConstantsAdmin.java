@@ -248,6 +248,7 @@ public class ConstantsAdmin {
     private static ArrayList<LabelImage> capturas = null;
 
     public static String INTRO_ENVIO_EN="DIRECCION_ENVIO_INTRO_EN";
+    public static final String INTRO_PAGO_EN = "METODO_PAGO_INTRO_EN";
     public static String MENSAJE_EXITO_ORDEN_GENERADA1_EN="MENSAJE_EXITO_ORDEN_GENERADA1_EN";
     public static String MENSAJE_EXITO_ORDEN_GENERADA2_EN="MENSAJE_EXITO_ORDEN_GENERADA2_EN";
     public static String MAIL_PROCESO_ORDEN_SUBJECT_EN="MAIL_PROCESO_ORDEN_SUBJECT_EN";
@@ -852,7 +853,7 @@ public class ConstantsAdmin {
 
             Bitmap bitmapSmall = null;
             if(ic.isProduct()){
-                bitmapSmall= getResizedBitmap(bitmap, 100);
+                bitmapSmall= getResizedBitmap(bitmap, 150);
             }else{
                 bitmapSmall= getResizedBitmap(bitmap, 200);
             }
@@ -861,7 +862,7 @@ public class ConstantsAdmin {
             File imageFile = new File(mPath);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 90;
+            int quality = 100;
             bitmapSmall.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
@@ -1266,6 +1267,8 @@ public class ConstantsAdmin {
         currentComboProducts = null;
         selectedBackgroundFilename = null;
         selectedImage = null;
+        compraExitosa = true;
+        mensajeCompra = null;
 
 
 
