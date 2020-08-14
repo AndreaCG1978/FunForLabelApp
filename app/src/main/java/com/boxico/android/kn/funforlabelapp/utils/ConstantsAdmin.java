@@ -66,6 +66,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -291,7 +292,7 @@ public class ConstantsAdmin {
                     + ConstantsAdmin.PROPERTIES_FILE;
             inputStream = new FileInputStream(filename);
 
-            properties.load(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -927,7 +928,7 @@ public class ConstantsAdmin {
 
                 // Output stream
                 OutputStream output = new FileOutputStream(filename);
-                byte data[] = new byte[1024];
+                byte[] data = new byte[1024];
                 long total = 0;
                 while ((count = input.read(data)) != -1) {
                     total += count;

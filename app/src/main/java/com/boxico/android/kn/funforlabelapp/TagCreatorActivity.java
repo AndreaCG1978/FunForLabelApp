@@ -296,9 +296,9 @@ public class TagCreatorActivity extends AppCompatActivity {
                 fontSize = (String) parent.getAdapter().getItem(position);
                 float size = Float.valueOf(fontSize);
                 if(needToAcot){
-                    size = size * ((float)0.884);
+                    size = size * ((float)0.82);
                 }else{
-                    size = size * ((float)1.04);
+                    size = size * ((float)1.00);
                 }
 
 
@@ -491,7 +491,7 @@ public class TagCreatorActivity extends AppCompatActivity {
         }
 */
         for (LabelFont lf: fonts) {
-            extension = lf.getBasename().substring(lf.getBasename().length() - 4,lf.getBasename().length());
+            extension = lf.getBasename().substring(lf.getBasename().length() - 4);
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
             temp = temp + "-Regular" + extension;
             lf.setBasename(temp);
@@ -574,7 +574,7 @@ public class TagCreatorActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
-                fonts = (LabelFont[]) temp.toArray(new LabelFont[temp.size()]);
+                fonts = temp.toArray(new LabelFont[temp.size()]);
 
             }
         }catch(Exception exc){
@@ -596,7 +596,7 @@ public class TagCreatorActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
-                labelAttributes = (LabelAttributes[]) temp.toArray(new LabelAttributes[temp.size()]);
+                labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
                // labelAttributes = response.body();
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -676,11 +676,11 @@ public class TagCreatorActivity extends AppCompatActivity {
        // textProductSelected = findViewById(R.id.textProductSelected);
       //  textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-        spinnerFonts = (Spinner) this.findViewById(R.id.spinnerFonts);
-        spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
-        spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
-        pickColor = (Button) this.findViewById(R.id.pickColor);
-        btnReadyToGo = (Button) this.findViewById(R.id.btnReadyToGo);
+        spinnerFonts = this.findViewById(R.id.spinnerFonts);
+        spinnerFontSizes = this.findViewById(R.id.spinnerFontSize);
+        spinnerBackgrounds = this.findViewById(R.id.spinnerBackgrounds);
+        pickColor = this.findViewById(R.id.pickColor);
+        btnReadyToGo = this.findViewById(R.id.btnReadyToGo);
         pickColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

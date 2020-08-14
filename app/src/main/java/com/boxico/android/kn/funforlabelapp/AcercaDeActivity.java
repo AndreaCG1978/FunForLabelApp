@@ -46,50 +46,50 @@ public class AcercaDeActivity extends AppCompatActivity {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
         final Properties p = ConstantsAdmin.fflProperties;
-        TextView tv =  (TextView) findViewById(R.id.textAcercaDe);
+        TextView tv = findViewById(R.id.textAcercaDe);
         if(ConstantsAdmin.currentLanguage==1){
-            tv.setText((String)p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO_EN));
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO_EN));
         }else{
-            tv.setText((String)p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO));
+            tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_QUIENES_SOMOS_TEXTO));
         }
 
-        tv = (TextView) findViewById(R.id.textEnvioDevoluciones);
+        tv = findViewById(R.id.textEnvioDevoluciones);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirect((String)p.getProperty(ConstantsAdmin.ACERCADE_ENVIO_DEVOLUCIONES_LINK));
+                redirect(p.getProperty(ConstantsAdmin.ACERCADE_ENVIO_DEVOLUCIONES_LINK));
             }
         });
-        tv = (TextView) findViewById(R.id.textPoliticaPrivacidad);
+        tv = findViewById(R.id.textPoliticaPrivacidad);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirect((String)p.getProperty(ConstantsAdmin.ACERCADE_POLITICA_PRIVACIDAD_LINK));
+                redirect(p.getProperty(ConstantsAdmin.ACERCADE_POLITICA_PRIVACIDAD_LINK));
             }
         });
-        tv = (TextView) findViewById(R.id.textCondicionesUso);
+        tv = findViewById(R.id.textCondicionesUso);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirect((String)p.getProperty(ConstantsAdmin.ACERCADE_CONDICIONES_USO_LINK));
+                redirect(p.getProperty(ConstantsAdmin.ACERCADE_CONDICIONES_USO_LINK));
             }
         });
-        tv = (TextView) findViewById(R.id.textFormasDePago);
+        tv = findViewById(R.id.textFormasDePago);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirect((String)p.getProperty(ConstantsAdmin.ACERCADE_FORMAS_PAGO_LINK));
+                redirect(p.getProperty(ConstantsAdmin.ACERCADE_FORMAS_PAGO_LINK));
             }
         });
-        tv = (TextView) findViewById(R.id.textPreguntasFrecuentes);
+        tv = findViewById(R.id.textPreguntasFrecuentes);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirect((String)p.getProperty(ConstantsAdmin.ACERCADE_PREGUNTAS_FRECUENTES_LINK));
+                redirect(p.getProperty(ConstantsAdmin.ACERCADE_PREGUNTAS_FRECUENTES_LINK));
             }
         });
 
-        tv = (TextView) findViewById(R.id.textMensajeEnvioWsp);
+        tv = findViewById(R.id.textMensajeEnvioWsp);
         if(ConstantsAdmin.currentLanguage==1){
             tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_WSP_EN)) ;
         }else{
@@ -97,7 +97,7 @@ public class AcercaDeActivity extends AppCompatActivity {
         }
 
 
-        tv = (TextView) findViewById(R.id.textNroTel);
+        tv = findViewById(R.id.textNroTel);
         tv.setText(p.getProperty(ConstantsAdmin.TEL_WSP));
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +113,7 @@ public class AcercaDeActivity extends AppCompatActivity {
             }
         });
 
-        tv = (TextView) findViewById(R.id.textMensajeEnvioMail);
+        tv = findViewById(R.id.textMensajeEnvioMail);
         if(ConstantsAdmin.currentLanguage== 1){
             tv.setText(p.getProperty(ConstantsAdmin.ACERCADE_TEXTO_ENVIO_MAIL_EN)) ;
         }else{
@@ -121,7 +121,7 @@ public class AcercaDeActivity extends AppCompatActivity {
         }
 
 
-        tv = (TextView) findViewById(R.id.textMail);
+        tv = findViewById(R.id.textMail);
         tv.setText(p.getProperty(ConstantsAdmin.ATR_FFL_MAIL));
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +129,7 @@ public class AcercaDeActivity extends AppCompatActivity {
                 ConstantsAdmin.enviarMailGenerico(me,p.getProperty(ConstantsAdmin.ATR_FFL_MAIL),"","");
             }
         });
-        ImageButton btn = (ImageButton) findViewById(R.id.btnInstagram);
+        ImageButton btn = findViewById(R.id.btnInstagram);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +140,7 @@ public class AcercaDeActivity extends AppCompatActivity {
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.btnFacebook);
+        btn = findViewById(R.id.btnFacebook);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

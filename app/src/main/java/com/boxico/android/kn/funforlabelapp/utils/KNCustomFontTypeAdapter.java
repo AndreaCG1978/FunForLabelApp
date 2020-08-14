@@ -34,7 +34,7 @@ public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
 		txt.setTextSize(17);
-		LabelFont li = (LabelFont) getItem(position);
+		LabelFont li = getItem(position);
 		File fileFont = ConstantsAdmin.getFile(li.getBasename());
 		Typeface face = Typeface.createFromFile(fileFont);
 		txt.setTypeface(face);
@@ -51,7 +51,7 @@ public class KNCustomFontTypeAdapter extends ArrayAdapter<LabelFont> {
 */
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		LabelFont li = (LabelFont) getItem(position);
+		LabelFont li = getItem(position);
 		txt.setTextSize(24);
 		File fileFont = ConstantsAdmin.getFile(li.getBasename());
 		Typeface face = Typeface.createFromFile(fileFont);

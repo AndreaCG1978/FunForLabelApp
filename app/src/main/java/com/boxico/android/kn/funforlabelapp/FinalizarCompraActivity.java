@@ -144,13 +144,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
 
     private void configureWidgets() {
-        textFormaPago = (TextView) findViewById(R.id.textFormaPago);
-        textDirEnvio = (TextView) findViewById(R.id.textDirEnvio);
-        textFormaEnvio = (TextView) findViewById(R.id.textFormaEnvio);
-        textDetalleTags = (TextView) findViewById(R.id.textDetalleTags);
-        textMontoSubtotal = (TextView) findViewById(R.id.textMontoSubtotal);
-        textMontoTotal = (TextView) findViewById(R.id.textMontoTotal);
-        textFormaEnvioDetalle = (TextView) findViewById(R.id.textFormaEnvioDetalle);
+        textFormaPago = findViewById(R.id.textFormaPago);
+        textDirEnvio = findViewById(R.id.textDirEnvio);
+        textFormaEnvio = findViewById(R.id.textFormaEnvio);
+        textDetalleTags = findViewById(R.id.textDetalleTags);
+        textMontoSubtotal = findViewById(R.id.textMontoSubtotal);
+        textMontoTotal = findViewById(R.id.textMontoTotal);
+        textFormaEnvioDetalle = findViewById(R.id.textFormaEnvioDetalle);
         this.cargarDetalleTags();
         this.cargarDetalleEnvio();
         this.cargarDetallePago();
@@ -162,11 +162,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         precioTotal = precioTotal.substring(0, precioTotal.length() - 2);
         textMontoTotal.setText(getString(R.string.label_total) + " $" + precioTotal);
 
-        entryComentario = (EditText) findViewById(R.id.entryCommentPago);
+        entryComentario = findViewById(R.id.entryCommentPago);
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
             entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
         }
-        btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
+        btnFinalizar = findViewById(R.id.btnFinalizar);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -413,6 +413,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PAYMENT_REQUEST) {
             if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
                 Payment payment = (Payment) data.getSerializableExtra(MercadoPagoCheckout.EXTRA_PAYMENT_RESULT);
@@ -621,9 +622,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
-                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
             }else{
-                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + String.valueOf(precioTemp) + "\n";
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + precioTemp + "\n";
             }
 
         }
@@ -635,9 +636,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
-                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + String.valueOf(precioTemp) + "\n";
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
             }else{
-                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + String.valueOf(precioTemp) + "\n";
+                temp = temp + ic.getCantidad() + " x " + ic.getNombre() +  ": $" + precioTemp + "\n";
             }
         }
 
@@ -654,7 +655,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = Float.valueOf(ic.getPrecio());
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + ic.getNombre() +": $" + String.valueOf(precioTemp);
+            temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
                 temp =  temp + " + ";
             }
@@ -665,7 +666,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             precioTemp = Float.valueOf(ic.getPrecio());
             precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + ic.getNombre() +": $" + String.valueOf(precioTemp);
+            temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
                 temp =  temp + " + ";
             }
@@ -989,10 +990,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         items.addAll(ConstantsAdmin.combosDelCarrito);
         Iterator<ItemCarrito> it = items.iterator();
         while(it.hasNext()){
-            ic = (ItemCarrito) it.next();
+            ic = it.next();
             precioTemp = (Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad()));
 //            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + "-"+ ic.getCantidad() + " x " + ic.getNombre() + ": $" + String.valueOf(precioTemp) + "\n";
+            temp = temp + "-"+ ic.getCantidad() + " x " + ic.getNombre() + ": $" + precioTemp + "\n";
             precioTotalTags = precioTotalTags + precioTemp;
         }
 

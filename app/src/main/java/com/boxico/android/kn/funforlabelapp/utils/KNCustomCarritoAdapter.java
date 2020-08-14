@@ -43,7 +43,7 @@ public class KNCustomCarritoAdapter extends ArrayAdapter<ProductoCarrito> {
 		}
 */
 		final View view = super.getView(position, convertView, parent);
-		ProductoCarrito pc = (ProductoCarrito) getItem(position);
+		ProductoCarrito pc = getItem(position);
 		/*
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();

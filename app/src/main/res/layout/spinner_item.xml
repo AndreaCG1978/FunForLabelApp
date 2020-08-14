@@ -27,7 +27,8 @@
         android:gravity="right"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/checked"/>
+        android:background="@drawable/checked"
+        android:contentDescription="TODO" />
 
 
 </LinearLayout>

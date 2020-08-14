@@ -286,13 +286,13 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO));
         }
 
-        entryComentario = (EditText) findViewById(R.id.entryCommentEnvio);
-        btnGoToPayment = (Button) findViewById(R.id.btnConfirmarEnvio);
+        entryComentario = findViewById(R.id.entryCommentEnvio);
+        btnGoToPayment = findViewById(R.id.btnConfirmarEnvio);
         btnGoToPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
-                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+                RadioButton radioButton = findViewById(selectedId);
                 ConstantsAdmin.selectedShippingMethod = (MetodoEnvio)radioButton.getTag();
                 ConstantsAdmin.comentarioIngresado = entryComentario.getText().toString();
                 Intent intent = new Intent(me, ConfigurarPagoActivity.class);

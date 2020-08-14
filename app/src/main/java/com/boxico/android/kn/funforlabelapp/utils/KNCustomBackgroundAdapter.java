@@ -31,7 +31,7 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		LabelImage li = (LabelImage) getItem(position);
+		LabelImage li = getItem(position);
 
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();
@@ -55,7 +55,7 @@ public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 */
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		LabelImage li = (LabelImage) getItem(position);
+		LabelImage li = getItem(position);
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();
 		int dstWidth = (int)(srcWidth*0.50f);

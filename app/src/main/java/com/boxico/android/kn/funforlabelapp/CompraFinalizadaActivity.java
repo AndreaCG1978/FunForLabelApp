@@ -46,12 +46,12 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
 
 
     private void configureWidgets() {
-        textEnvioMail = (TextView) findViewById(R.id.textEnvioMail);
-        textEnvioWsp = (TextView) findViewById(R.id.textEnvioWsp);
-        textMensajeExito1 = (TextView) findViewById(R.id.textMensajeExito1);
-        textMensajeExito2 = (TextView) findViewById(R.id.textMensajeExito2);
-        textMensajeExito3 = (TextView) findViewById(R.id.textMensajeExito3);
-        textConector = (TextView) findViewById(R.id.textConector);
+        textEnvioMail = findViewById(R.id.textEnvioMail);
+        textEnvioWsp = findViewById(R.id.textEnvioWsp);
+        textMensajeExito1 = findViewById(R.id.textMensajeExito1);
+        textMensajeExito2 = findViewById(R.id.textMensajeExito2);
+        textMensajeExito3 = findViewById(R.id.textMensajeExito3);
+        textConector = findViewById(R.id.textConector);
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
       //  btnLimpiarCarrito = (Button) findViewById(R.id.btnLimpiarCarrito);
@@ -61,7 +61,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
                 vaciarCarrito();
             }
         });*/
-        btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
+        btnFinalizar = findViewById(R.id.btnFinalizar);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

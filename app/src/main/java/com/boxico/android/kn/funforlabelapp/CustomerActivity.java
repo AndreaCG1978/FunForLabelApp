@@ -48,8 +48,6 @@ public class CustomerActivity extends FragmentActivity {
     private Spinner ciudades_spinner;
     private Spinner barrio_spinner;
     private FragmentActivity me;
-    private EditText provinciaEntry;
-    private EditText ciudadEntry;
     private LinearLayout layoutBarrio;
     private TextView tvPartidos;
     private Button btnGuardar;
@@ -117,14 +115,14 @@ public class CustomerActivity extends FragmentActivity {
 
     private void bloquearLocation(boolean bloquear){
         if(bloquear){
-            provinciaEntry.setVisibility(View.VISIBLE);
-            ciudadEntry.setVisibility(View.VISIBLE);
+            entryProvincia.setVisibility(View.VISIBLE);
+            entryCiudad.setVisibility(View.VISIBLE);
             barrio_spinner.setVisibility(View.GONE);
             ciudades_spinner.setVisibility(View.GONE);
             provincias_spinner.setVisibility(View.GONE);
         }else{
-            provinciaEntry.setVisibility(View.GONE);
-            ciudadEntry.setVisibility(View.GONE);
+            entryProvincia.setVisibility(View.GONE);
+            entryCiudad.setVisibility(View.GONE);
             barrio_spinner.setVisibility(View.VISIBLE);
             ciudades_spinner.setVisibility(View.VISIBLE);
             provincias_spinner.setVisibility(View.VISIBLE);
@@ -229,29 +227,27 @@ public class CustomerActivity extends FragmentActivity {
 
     private void configureWidgets() {
         //Initializing Spinner
-        provincias_spinner = (Spinner) this.findViewById(R.id.state_spinner);
-        ciudades_spinner = (Spinner) this.findViewById(R.id.city_spinner);
-        barrio_spinner = (Spinner) this.findViewById(R.id.barrio_spinner);
-        provinciaEntry = (EditText) this.findViewById(R.id.entryProvincia);
-        ciudadEntry = (EditText)this.findViewById(R.id.entryCiudad);
-        layoutBarrio = (LinearLayout) this.findViewById(R.id.layoutBarrio);
-        tvPartidos = (TextView)this.findViewById(R.id.tvPartido);
-        entryNombre = (EditText) this.findViewById(R.id.entryNombre);
-        entryApellido = (EditText) this.findViewById(R.id.entryApellido);
-        entryMail = (EditText) this.findViewById(R.id.entryEmail);
-        entryProvincia = (EditText) this.findViewById(R.id.entryProvincia);
-        entryCiudad = (EditText) this.findViewById(R.id.entryCiudad);
-        entryDireccion = (EditText) this.findViewById(R.id.entryDireccion);
-        entryCP = (EditText) this.findViewById(R.id.entryCodigoPostal);
-        entryTel = (EditText) this.findViewById(R.id.entryTelefono);
-        entryFax = (EditText) this.findViewById(R.id.entryFax);
-        entryContrasenia = (EditText) this.findViewById(R.id.entryContrasenia);
-        entryConfirmacion = (EditText) this.findViewById(R.id.entryConfirmacion);
-        checkNewsletter = (CheckBox) this.findViewById(R.id.checkNewsletter);
-        radioFemenino = (RadioButton) this.findViewById(R.id.radio_femenino);
-        radioMasculino = (RadioButton) this.findViewById(R.id.radio_masculino);
-        btnCancel = (Button) this.findViewById(R.id.buttonCancel);
-        btnGuardar = (Button) this.findViewById(R.id.buttonGuardar);
+        provincias_spinner = this.findViewById(R.id.state_spinner);
+        ciudades_spinner = this.findViewById(R.id.city_spinner);
+        barrio_spinner = this.findViewById(R.id.barrio_spinner);
+        layoutBarrio = this.findViewById(R.id.layoutBarrio);
+        tvPartidos = this.findViewById(R.id.tvPartido);
+        entryNombre = this.findViewById(R.id.entryNombre);
+        entryApellido = this.findViewById(R.id.entryApellido);
+        entryMail = this.findViewById(R.id.entryEmail);
+        entryProvincia = this.findViewById(R.id.entryProvincia);
+        entryCiudad = this.findViewById(R.id.entryCiudad);
+        entryDireccion = this.findViewById(R.id.entryDireccion);
+        entryCP = this.findViewById(R.id.entryCodigoPostal);
+        entryTel = this.findViewById(R.id.entryTelefono);
+        entryFax = this.findViewById(R.id.entryFax);
+        entryContrasenia = this.findViewById(R.id.entryContrasenia);
+        entryConfirmacion = this.findViewById(R.id.entryConfirmacion);
+        checkNewsletter = this.findViewById(R.id.checkNewsletter);
+        radioFemenino = this.findViewById(R.id.radio_femenino);
+        radioMasculino = this.findViewById(R.id.radio_masculino);
+        btnCancel = this.findViewById(R.id.buttonCancel);
+        btnGuardar = this.findViewById(R.id.buttonGuardar);
         entryNombre.clearFocus();
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

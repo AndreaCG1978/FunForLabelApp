@@ -287,7 +287,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                         param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
                         ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
                     }else{
-                        param = (TagParams) ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
                     }
                     param.setInicializadoFont(false);
                     param.setInicializadoSize(false);
@@ -612,10 +612,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
-        acotar = false;
-        if((screenWidthMM - 2.0f) <= (float)ConstantsAdmin.currentCreator.getWidth()){
-            acotar = true;
-        }
+        acotar = (screenWidthMM - 2.0f) <= (float) ConstantsAdmin.currentCreator.getWidth();
         Bitmap firstBitmap = images[0].getImage();
         linearTag.removeAllViews();
         final Object mutex = new Object();
@@ -650,9 +647,9 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     float size = Float.valueOf(fontSize);
                     float originalSize = size;
                     if (needToAcot) {
-                        size = size * ((float) 0.884);
+                        size = size * ((float) 0.82);
                     } else {
-                        size = size * ((float) 1.04);
+                        size = size * ((float) 1.00);
                     }
 
                     TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
@@ -742,7 +739,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
             });
             if (titleTag != null) {
-                spinnerFontsTitle = (Spinner) this.findViewById(R.id.spinnerFontsTitle);
+                spinnerFontsTitle = this.findViewById(R.id.spinnerFontsTitle);
                 spinnerFontsTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -853,7 +850,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             textTag.setText(param.getText());
             textTag.setTextColor(param.getColorText());
             pickColor.setTextColor(param.getColorText());
-            if(param.getText()!= null && !param.getText().toString().equals("")){
+            if(param.getText()!= null && !param.getText().equals("")){
                 ConstantsAdmin.selectedComboProduct.setChecked(true);
             }else{
                 ConstantsAdmin.selectedComboProduct.setChecked(false);
@@ -972,7 +969,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         }
 */
         for (LabelFont lf: fonts) {
-            extension = lf.getBasename().substring(lf.getBasename().length() - 4,lf.getBasename().length());
+            extension = lf.getBasename().substring(lf.getBasename().length() - 4);
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
             temp = temp + "-Regular" + extension;
             lf.setBasename(temp);
@@ -1077,7 +1074,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 response = call.execute();
                 if(response.body() != null){
                     temp = new ArrayList<>(response.body());
-                    fonts = (LabelFont[]) temp.toArray(new LabelFont[temp.size()]);
+                    fonts = temp.toArray(new LabelFont[temp.size()]);
                     if(tp != null){
                         tp.setFonts(fonts);
                     }
@@ -1108,7 +1105,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 response = call.execute();
                 if(response.body() != null){
                     temp = new ArrayList<>(response.body());
-                    labelAttributes = (LabelAttributes[]) temp.toArray(new LabelAttributes[temp.size()]);
+                    labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
                     if(tp != null){
                         tp.setLabelAttributes(labelAttributes);
                         if(labelAttributes.length > 1){
@@ -1198,12 +1195,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
        // textProductSelected = findViewById(R.id.textProductSelected);
       //  textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
-        spinnerFonts = (Spinner) this.findViewById(R.id.spinnerFonts);
-        spinnerFontSizes = (Spinner) this.findViewById(R.id.spinnerFontSize);
-        spinnerBackgrounds = (Spinner) this.findViewById(R.id.spinnerBackgrounds);
-        spinnerProducts = (Spinner) this.findViewById(R.id.spinnerProducts);
-        pickColor = (Button) this.findViewById(R.id.pickColor);
-        btnReadyToGo = (Button) this.findViewById(R.id.btnReadyToGo);
+        spinnerFonts = this.findViewById(R.id.spinnerFonts);
+        spinnerFontSizes = this.findViewById(R.id.spinnerFontSize);
+        spinnerBackgrounds = this.findViewById(R.id.spinnerBackgrounds);
+        spinnerProducts = this.findViewById(R.id.spinnerProducts);
+        pickColor = this.findViewById(R.id.pickColor);
+        btnReadyToGo = this.findViewById(R.id.btnReadyToGo);
         pickColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

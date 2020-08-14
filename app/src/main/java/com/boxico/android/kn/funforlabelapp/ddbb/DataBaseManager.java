@@ -278,7 +278,7 @@ public class DataBaseManager {
 
 	public Cursor cursorProductoCarrito(int idCombo) {
 		Cursor c = null;
-		String selection = "idCombo = " + String.valueOf(idCombo);
+		String selection = "idCombo = " + idCombo;
 		if(mDb.isOpen()){
 			c = mDb.query(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, null, selection, null, null, null, null, null );
 		}

@@ -24,7 +24,7 @@
             android:layout_height="100dp"
             android:src="@drawable/store_logo"
             android:gravity="center_horizontal"
-            />
+            android:contentDescription="TODO" />
 
 
 
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
-            android:gravity="left"
+            android:gravity="start"
             android:textSize="15sp"
             android:layout_margin="15dp"
             android:fontFamily="sans-serif"
@@ -87,8 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp">
+                android:layout_gravity="start"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:id="@+id/textPoliticaPrivacidad"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="17sp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_margin="7dp"
                     android:text="@string/politica_privacidad"
                     android:fontFamily="sans-serif"
@@ -110,7 +110,7 @@
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="17sp"
                     android:layout_margin="7dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:text="@string/condiciones_uso"
                     android:fontFamily="sans-serif"
                      />
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="17sp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_margin="7dp"
                     android:text="@string/formas_pago"
                     android:fontFamily="sans-serif"
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="17sp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_margin="7dp"
                     android:text="@string/envio_devoluciones"
                     android:fontFamily="sans-serif"
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="17sp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_margin="7dp"
                     android:text="@string/preguntas_frecuentes"
                     android:fontFamily="sans-serif"
@@ -173,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
-            android:gravity="left"
+            android:gravity="start"
             android:textSize="15sp"
             android:layout_margin="15dp"
             android:fontFamily="sans-serif"/>
@@ -193,7 +193,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
-            android:gravity="left"
+            android:gravity="start"
             android:layout_margin="15dp"
             android:textSize="15sp"
             android:fontFamily="sans-serif"/>
@@ -230,14 +230,16 @@
                     android:id="@+id/btnInstagram"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/instagram"/>
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/instagram"
+                    android:contentDescription="TODO" />
 
                 <ImageButton
                     android:id="@+id/btnFacebook"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/facebook"/>
+                    android:background="@drawable/facebook"
+                    android:contentDescription="TODO" />
 
 
             </LinearLayout>

@@ -74,7 +74,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
             txt.setText("$" + newPrice);
             txt = v.findViewById(R.id.tvCantidad);
             txt.setText(ic.getCantidadPorPack());
-            TextView txtCantidad = (TextView)v.findViewById(R.id.txtCantidadProducto);
+            TextView txtCantidad = v.findViewById(R.id.txtCantidadProducto);
             txtCantidad.setText(ic.getCantidad());
             txt = v.findViewById(R.id.tvModelo);
             txt.setText(ic.getModelo());

@@ -34,7 +34,7 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		Product p = (Product) getItem(position);
+		Product p = getItem(position);
 		txt.setTextSize(12);
 		int srcWidth = p.getImage().getWidth();
 		int srcHeight = p.getImage().getHeight();
@@ -58,11 +58,11 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 */
 		final View view = super.getView(position, convertView, parent);
 		TextView txt = view.findViewById(R.id.rowValor);
-		Product p = (Product) getItem(position);
+		Product p = getItem(position);
 		int srcWidth = p.getImage().getWidth();
 		int srcHeight = p.getImage().getHeight();
-		int dstWidth = (int)(srcWidth);
-		int dstHeight = (int)(srcHeight);
+		int dstWidth = srcWidth;
+		int dstHeight = srcHeight;
 		//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
 		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), dstWidth,dstHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);

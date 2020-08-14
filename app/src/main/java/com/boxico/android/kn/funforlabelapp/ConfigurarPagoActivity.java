@@ -215,16 +215,16 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
             textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO));
         }
 
-        entryComentario = (EditText) findViewById(R.id.entryCommentPago);
+        entryComentario = findViewById(R.id.entryCommentPago);
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
             entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
         }
-        btnGoToFinish = (Button) findViewById(R.id.btnConfirmarPago);
+        btnGoToFinish = findViewById(R.id.btnConfirmarPago);
         btnGoToFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = radioButtonsGroup.getCheckedRadioButtonId();
-                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+                RadioButton radioButton = findViewById(selectedId);
                 ConstantsAdmin.selectedPaymentMethod = (MetodoPago)radioButton.getTag();
                 ConstantsAdmin.comentarioIngresado = entryComentario.getText().toString();
                 Intent intent = new Intent(me, FinalizarCompraActivity.class);
