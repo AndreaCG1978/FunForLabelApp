@@ -62,7 +62,6 @@ public class LoginActivity extends FragmentActivity {
     private Button buttonLogin = null;
 
     private TextView recuperarContrasenia = null;
-    private CustomerService customerService = null;
     private String pswText;
     private String usrText;
     private LoginActivity me;
@@ -472,7 +471,7 @@ public class LoginActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContrasenia, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContrasenia, ConstantsAdmin.tokenFFL);
             Response<ResponseBody> respuesta = call.execute();
             if(respuesta != null && respuesta.body() != null){
                 exito = true;
@@ -497,7 +496,7 @@ public class LoginActivity extends FragmentActivity {
         try {
             ConstantsAdmin.mensaje = null;
             //   this.inicializarConexionServidor();
-            call = customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
        //     call = customerService.loginCustomer("grassanoandrea@gmail.com", "bocha123", ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
@@ -559,7 +558,7 @@ public class LoginActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = customerService.getCustomer(usrText, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.customerService.getCustomer(usrText, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 customers = new ArrayList<>(response.body());
@@ -607,7 +606,10 @@ public class LoginActivity extends FragmentActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        customerService = retrofit.create(CustomerService.class);
+        if(ConstantsAdmin.customerService == null){
+            ConstantsAdmin.customerService = retrofit.create(CustomerService.class);
+        }
+
     }
 
 

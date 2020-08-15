@@ -48,6 +48,11 @@ import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
+import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
+import com.boxico.android.kn.funforlabelapp.services.CreatorService;
+import com.boxico.android.kn.funforlabelapp.services.CustomerService;
+import com.boxico.android.kn.funforlabelapp.services.OrdersService;
+import com.boxico.android.kn.funforlabelapp.services.UtilsService;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -79,6 +84,12 @@ import okhttp3.Request;
 
 public class ConstantsAdmin {
 
+    public static CategoriesProductsService categoriesProductsService = null;
+    public static CustomerService customerService = null;
+    public static UtilsService utilsService = null;
+    public static OrdersService orderService = null;
+    public static CreatorService creatorService = null;
+    public static CategoriesProductsService productService = null;
     public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
     public static final String URL_BASE = "http://test.funforlabels.com/";
     public static final String PROPERTIES_FILE = "funforlabels.properties";

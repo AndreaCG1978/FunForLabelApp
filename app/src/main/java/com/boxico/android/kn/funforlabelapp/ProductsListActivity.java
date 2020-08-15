@@ -1,13 +1,11 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -47,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ProductsListActivity extends FragmentActivity {
 
     private ProductsListActivity me;
-    private CategoriesProductsService categoriesProductsService;
+
     ArrayList<Product> products;
     LinearLayout linearProducts = null;
     TextView textWellcomeUsr = null;
@@ -101,10 +99,13 @@ public class ProductsListActivity extends FragmentActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        categoriesProductsService = retrofit.create(CategoriesProductsService.class);
+        if(ConstantsAdmin.categoriesProductsService == null){
+            ConstantsAdmin.categoriesProductsService = retrofit.create(CategoriesProductsService.class);
+        }
+
     }
 
-
+/*
     private class LoadProductsTask extends AsyncTask<Long, Integer, Integer> {
         private ProgressDialog dialog = null;
         @Override
@@ -147,19 +148,25 @@ public class ProductsListActivity extends FragmentActivity {
 
         }
     }
-
+*/
     private void privateLoadProducts() {
         Call<List<Product>> call = null;
         Response<List<Product>> response;
-
         try {
             ConstantsAdmin.mensaje = null;
-            call = categoriesProductsService.getProductsFromCategory(ConstantsAdmin.currentCategory.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.categoriesProductsService.getProductsFromCategory(ConstantsAdmin.currentCategory.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 products = new ArrayList<>(response.body());
                 if(products.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }else{
+                    try {
+                        loadImageForProducts();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                   textCategorySelected.setText(ConstantsAdmin.currentCategory.getName());
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -369,7 +376,8 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void loadProducts(){
-        new LoadProductsTask().execute();
+      //  new LoadProductsTask().execute();
+        privateLoadProducts();
 
     }
 

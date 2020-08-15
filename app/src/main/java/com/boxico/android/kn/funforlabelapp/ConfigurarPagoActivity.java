@@ -43,7 +43,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ConfigurarPagoActivity extends AppCompatActivity {
 
     private ConfigurarPagoActivity me;
-    private UtilsService utilsService;
     private List<MetodoPago> metodosPago;
     RadioGroup radioButtonsGroup;
     EditText entryComentario;
@@ -66,7 +65,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = utilsService.getAllPaymentMethod(true, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.utilsService.getAllPaymentMethod(true, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 metodosPago = new ArrayList<>(response.body());
@@ -150,7 +149,9 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        utilsService = retrofit.create(UtilsService.class);
+        if(ConstantsAdmin.utilsService == null) {
+            ConstantsAdmin.utilsService = retrofit.create(UtilsService.class);
+        }
 
     }
 

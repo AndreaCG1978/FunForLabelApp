@@ -40,7 +40,6 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         setContentView(R.layout.tag_ready_to_go);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        this.initializeService();
         this.configureWidgets();
         this.askForWriteStoragePermission();
         this.initializeCreator();
@@ -201,8 +200,5 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         });
     }
 
-
-    private void initializeService() {
-    }
 
 }

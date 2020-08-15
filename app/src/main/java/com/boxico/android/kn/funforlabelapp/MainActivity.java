@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
@@ -45,6 +45,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -56,7 +57,7 @@ public class MainActivity extends FragmentActivity {
     TextView textWellcomeUsr = null;
     LinearLayout linearCategories = null;
     MainActivity me;
-    CategoriesProductsService categoriesProductsService = null;
+
     ArrayList<Category> categories;
     TextView verCarrito = null;
 
@@ -123,7 +124,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void loadCategories() {
-        new LoadCategoriesTask().execute();
+        privateLoadCategories();
+      //  new LoadCategoriesTask().execute();
     }
 
     private void configureWidgets() {
@@ -161,6 +163,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    /*
     private class LoadCategoriesTask extends AsyncTask<Long, Integer, Integer> {
         private ProgressDialog dialog = null;
         @Override
@@ -214,7 +217,7 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
-
+*/
     private void loadImageForCategories() throws IOException {
         Iterator<Category> it = categories.iterator();
         Category cat;
@@ -332,8 +335,60 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(me, ProductsListActivity.class);
         startActivity(intent);
     }
+/*
+    private void privateLoadCategories() {
+        Call<List<Category>> call = null;
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = ConstantsAdmin.categoriesProductsService.getCategories(ConstantsAdmin.categories[0], ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call.enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                    if(response.body() != null){
+                        categories = new ArrayList<>(response.body());
+                        if(categories.size() == 0){
+                            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                        }else{
+                            try {
+                                loadImageForCategories();
+                                Iterator<Category> it = categories.iterator();
+                                Category cat1 = null;
+                                Category cat2 = null;
+                                while(it.hasNext()){
+                                    cat2 = null;
+                                    cat1 = it.next();
+                                    if(it.hasNext()){
+                                        cat2 = it.next();
+                                    }
+                                    addCategoryInView(cat1, cat2);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }else{
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+
+            });
 
 
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
+*/
 
 
     private void privateLoadCategories() {
@@ -342,12 +397,29 @@ public class MainActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = categoriesProductsService.getCategories(ConstantsAdmin.categories[0], ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.categoriesProductsService.getCategories(ConstantsAdmin.categories[0], ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 categories = new ArrayList<>(response.body());
                 if(categories.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }else{
+                    try {
+                        loadImageForCategories();
+                        Iterator<Category> it = categories.iterator();
+                        Category cat1 = null;
+                        Category cat2 = null;
+                        while(it.hasNext()){
+                            cat2 = null;
+                            cat1 = it.next();
+                            if(it.hasNext()){
+                                cat2 = it.next();
+                            }
+                            addCategoryInView(cat1, cat2);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -387,7 +459,9 @@ public class MainActivity extends FragmentActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        categoriesProductsService = retrofit.create(CategoriesProductsService.class);
+        if(ConstantsAdmin.categoriesProductsService == null) {
+            ConstantsAdmin.categoriesProductsService = retrofit.create(CategoriesProductsService.class);
+        }
     }
 
     private void createAlertDialog(String message, String title){

@@ -2,13 +2,11 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -71,7 +69,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     RelativeLayout linearTag = null;
     EditText textTag = null;
     EditText titleTag = null;
-    private CreatorService creatorService;
+
   //  private Creator currentCreator;
     private LabelImage[] images;
     private LabelFont[] fonts;
@@ -91,7 +89,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedPosFontTitle = -1;
     private int selectedPosFontSizeTitle = -1;
     private int selectedTitleColor = Color.BLACK;
-    private CategoriesProductsService productService;
+
     private ArrayList<Product> productsList;
 
     @Override
@@ -146,12 +144,14 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private void loadCombos() {
-        new LoadCombosTask().execute();
-    }
+     //   new LoadCombosTask().execute();
 
+        privateLoadProductCombo();
+    }
+/*
     private void loadCreator() {
         new LoadCreatorTask().execute();
-    }
+    }*/
 /*
     @Override
     public void colorChanged(int color) {
@@ -160,6 +160,10 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         pickColor.setTextColor(color);
     }
 */
+
+
+
+/*
     private class LoadCreatorTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -217,8 +221,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
         }
     }
-
-
+*/
+/*
     private class LoadImageForComboProductsTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -265,18 +269,10 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
                         if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
                             tp.setTitle(titleTag.getText().toString());
-                         /*   if(!titleTag.getText().toString().equals("")) {
-                                ConstantsAdmin.selectedComboProduct.setChecked(true);
-                            }*/
 
                         }
                     }
-                 /*   selectedPosFontText = -1;
-                    selectedPosFontSizeText = -1;
-                    selectedTextColor = Color.BLACK;
-                    selectedPosFontTitle = -1;
-                    selectedPosFontSizeTitle = -1;
-                    selectedTitleColor = Color.BLACK;*/
+
                     ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
                     TagParams param = null;
                     if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
@@ -289,15 +285,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     param.setInicializadoFont(false);
                     param.setInicializadoSize(false);
                     loadCreator();
-                  /*  if(textTag != null && textTag.getText()!= null){
-                        param.setText(textTag.getText().toString());
-                    }
 
-                    if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
-                        param.setTitle(titleTag.getText().toString());
-                    }*/
-
-                    //    ConstantsAdmin.customizeBackground(ConstantsAdmin.selectedImage.getImage(),ConstantsAdmin.currentCreator, acotar, linearTag, me);
 
                 }
 
@@ -310,7 +298,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
         }
     }
-
+*/
     private void actualizarTagActual(){
         if(ConstantsAdmin.selectedComboProduct !=null) {// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
             TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
@@ -364,12 +352,239 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         try {
             ConstantsAdmin.mensaje = null;
             
-            call = productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 productsList = new ArrayList<>(response.body());
                 if(productsList.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }else{
+                    ConstantsAdmin.selectedComboProduct = productsList.get(0);
+                    TagParams param = null;
+                    if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+                        param = new TagParams();
+                        param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
+                        ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                    }else{
+                        param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                    }
+                    param.setInicializadoFont(false);
+                    param.setInicializadoSize(false);
+                    Iterator<Product> it = productsList.iterator();
+                    Product p;
+                    String url;
+                    Bitmap b;
+                    try {
+                        while (it.hasNext()){
+                            p = it.next();
+                            url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_IMAGES) + p.getImageString();
+                            b = ConstantsAdmin.getImageFromURL(url);
+                            p.setImage(b);
+                        }
+                        spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
+                        spinnerProducts.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                actualizarTagActual();
+                                return false;
+                            }
+                        });
+                        spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
+                                    TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                                    if(textTag != null && textTag.getText()!= null){
+                                        tp.setText(textTag.getText().toString());
+                                        if(!textTag.getText().toString().equals("")) {
+                                            ConstantsAdmin.selectedComboProduct.setChecked(true);
+                                        }
+                                    }
+
+                                    if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
+                                        tp.setTitle(titleTag.getText().toString());
+                                    }
+                                }
+                                ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
+                                TagParams param = null;
+                                if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+                                    param = new TagParams();
+                                    param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
+                                    ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                                }else{
+                                    param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                                }
+                                param.setInicializadoFont(false);
+                                param.setInicializadoSize(false);
+                                try {
+                                    cargarCreador();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                        loadAll();
+                  //      cargarCreador();
+
+                        /*
+
+
+
+                        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                        if(tp != null && tp.getCreator() != null){
+                            ConstantsAdmin.currentCreator = tp.getCreator();
+                        }else{
+                            Call<Creator> call1 = null;
+                            Response<Creator> response1;
+                            try {
+                                call1 = ConstantsAdmin.creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
+                                response1 = call1.execute();
+                                if(response1.body() != null){
+                                    ConstantsAdmin.currentCreator = response1.body();
+                                    if(tp != null){
+                                        tp.setCreator(ConstantsAdmin.currentCreator);
+                                    }
+                                    if(ConstantsAdmin.currentCreator == null){
+                                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                    }
+                                }else{
+                                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                }
+
+                            }catch(Exception exc){
+                                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                if(call1 != null) {
+                                    call1.cancel();
+                                }
+                            }
+
+                        }
+
+                        if(tp != null && tp.getLabelAttributes() != null){
+                            labelAttributes = tp.getLabelAttributes();
+                        }else{
+                            Call<List<LabelAttributes>> call2 = null;
+                            Response<List<LabelAttributes>> response2;
+                            List<LabelAttributes> temp2;
+                            try {
+                                call2 = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                                response2 = call2.execute();
+                                if(response2.body() != null){
+                                    temp2 = new ArrayList<>(response2.body());
+                                    labelAttributes = temp2.toArray(new LabelAttributes[temp2.size()]);
+                                    if(tp != null){
+                                        tp.setLabelAttributes(labelAttributes);
+                                        if(labelAttributes.length > 1){
+                                            tp.setTitle(true);
+                                        }else{
+                                            tp.setTitle(false);
+                                        }
+                                    }
+                                    // labelAttributes = response.body();
+                                }else{
+                                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                }
+                            }catch(Exception exc){
+                                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                if(call2 != null) {
+                                    call2.cancel();
+                                }
+                            }
+
+                            boolean needLoadFontFile = true;
+                            if(tp != null && tp.getFonts() != null){
+                                fonts = tp.getFonts();
+                                needLoadFontFile = false;
+                            }else{
+                                Call<List<LabelFont>> call3 = null;
+                                Response<List<LabelFont>> response3;
+                                List<LabelFont> temp3;
+
+                                try {
+                                    ConstantsAdmin.mensaje = null;
+                                    call3 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
+                                    response3 = call3.execute();
+                                    if(response3.body() != null){
+                                        temp3 = new ArrayList<>(response3.body());
+                                        fonts = temp3.toArray(new LabelFont[temp3.size()]);
+                                        if(tp != null){
+                                            tp.setFonts(fonts);
+                                        }
+
+                                    }
+                                }catch(Exception exc){
+                                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                    if(call3 != null) {
+                                        call3.cancel();
+                                    }
+                                }
+
+                            }
+                            if(needLoadFontFile){
+//                                new GetFontFilesTask().execute();
+                                String temp, extension;
+                                for (LabelFont lf: fonts) {
+                                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                                    temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
+                                    temp = temp + "-Regular" + extension;
+                                    lf.setBasename(temp);
+                                    ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + temp, temp);
+                                }
+
+                            }
+                            //new LoadImagesTask().execute();
+                            if(tp != null && tp.getImages() != null){
+                                images = tp.getImages();
+                            }else{
+                                Call<List<LabelImage>> call4 = null;
+                                Response<List<LabelImage>> response4;
+                                ArrayList temp4;
+                                try {
+                                    call4 = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                                    response4 = call4.execute();
+                                    if(response4.body() != null){
+                                        temp4 = new ArrayList<>(response4.body());
+                                        if(temp4.size() == 0){
+                                            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                        }else{
+                                            images = (LabelImage[]) temp4.toArray(new LabelImage[temp4.size()]);
+                                            if(tp != null){
+                                                tp.setImages(images);
+                                            }
+                                        }
+                                    }else{
+                                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                    }
+                                }catch(Exception exc){
+                                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                                    if(call4 != null) {
+                                        call4.cancel();
+                                    }
+                                }
+                            }
+                            String url1;
+                            Bitmap b1;
+                            for (LabelImage li: images) {
+                                if(li.getImage() == null){
+                                    url1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                                    b1 = ConstantsAdmin.getImageFromURL(url1);
+                                    li.setImage(b1);
+                                }
+
+                            }
+                            initializeCreator();
+
+                        }*/
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -384,6 +599,305 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
 
+    private void loadAll() throws IOException {
+        Iterator<Product> it = productsList.iterator();
+        Product p = null;
+        TagParams tp = null;
+
+        while(it.hasNext()){
+            p = it.next();
+            tp = new TagParams();
+
+            // Busco el CREATOR
+            Call<Creator> call1 = null;
+            Response<Creator> response1;
+            try {
+                call1 = ConstantsAdmin.creatorService.getCreator(p.getId(), true, ConstantsAdmin.tokenFFL);
+                response1 = call1.execute();
+                if (response1.body() != null) {
+                //    ConstantsAdmin.currentCreator = response1.body();
+                    if (tp != null) {
+                        tp.setCreator(response1.body());
+                    }
+                    if (response1.body() == null) {
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call1 != null) {
+                    call1.cancel();
+                }
+            }
+            // CARGO LABELATTRIB
+
+            Call<List<LabelAttributes>> call2 = null;
+            Response<List<LabelAttributes>> response2;
+            List<LabelAttributes> temp2;
+            LabelAttributes[] labelAttrs = null;
+            try {
+                call2 = ConstantsAdmin.creatorService.getLabelAttributes(tp.getCreator().getId(), true, ConstantsAdmin.tokenFFL);
+                response2 = call2.execute();
+                if (response2.body() != null) {
+                    temp2 = new ArrayList<>(response2.body());
+                    labelAttrs = temp2.toArray(new LabelAttributes[temp2.size()]);
+                    if (tp != null) {
+                        tp.setLabelAttributes(labelAttrs);
+                        if (labelAttrs.length > 1) {
+                            tp.setTitle(true);
+                        } else {
+                            tp.setTitle(false);
+                        }
+                    }
+                    // labelAttributes = response.body();
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call2 != null) {
+                    call2.cancel();
+                }
+            }
+            boolean needLoadFontFile = true;
+            LabelFont[] fs = null;
+            if (tp != null && tp.getFonts() != null) {
+              //  fonts = tp.getFonts();
+                needLoadFontFile = false;
+            } else {
+                Call<List<LabelFont>> call3 = null;
+                Response<List<LabelFont>> response3;
+                List<LabelFont> temp3;
+
+                try {
+                    ConstantsAdmin.mensaje = null;
+                    call3 = ConstantsAdmin.creatorService.getFonts(labelAttrs[0].getTextAreasId(), true, ConstantsAdmin.tokenFFL);
+                    response3 = call3.execute();
+                    if (response3.body() != null) {
+                        temp3 = new ArrayList<>(response3.body());
+                        fs = temp3.toArray(new LabelFont[temp3.size()]);
+                        if (tp != null) {
+                            tp.setFonts(fs);
+                        }
+
+                    }
+                } catch (Exception exc) {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    if (call3 != null) {
+                        call3.cancel();
+                    }
+                }
+
+            }
+            if (needLoadFontFile) {
+//                                new GetFontFilesTask().execute();
+                String temp, extension;
+                for (LabelFont lf : fs) {
+                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                    temp = lf.getBasename().substring(0, lf.getBasename().length() - 4);
+                    temp = temp + "-Regular" + extension;
+                    lf.setBasename(temp);
+                    ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + temp, temp);
+                }
+
+            }
+            Call<List<LabelImage>> call4 = null;
+            Response<List<LabelImage>> response4;
+            ArrayList temp4;
+            LabelImage[] ims = null;
+            try {
+                call4 = ConstantsAdmin.creatorService.getImages(tp.getCreator().getId(), true, ConstantsAdmin.tokenFFL);
+                response4 = call4.execute();
+                if (response4.body() != null) {
+                    temp4 = new ArrayList<>(response4.body());
+                    if (temp4.size() == 0) {
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    } else {
+                        ims = (LabelImage[]) temp4.toArray(new LabelImage[temp4.size()]);
+                        if (tp != null) {
+                            tp.setImages(ims);
+                        }
+                    }
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call4 != null) {
+                    call4.cancel();
+                }
+            }
+            String url1;
+            Bitmap b1;
+            for (LabelImage li : ims) {
+                if (li.getImage() == null) {
+                    url1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                    b1 = ConstantsAdmin.getImageFromURL(url1);
+                    li.setImage(b1);
+                }
+
+            }
+
+            ConstantsAdmin.params.put(p.getId(), tp);
+
+
+        }
+        cargarCreador();
+
+    }
+
+    private void cargarCreador() throws IOException {
+        TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+        if (tp != null && tp.getCreator() != null) {
+            ConstantsAdmin.currentCreator = tp.getCreator();
+        } else {
+            Call<Creator> call1 = null;
+            Response<Creator> response1;
+            try {
+                call1 = ConstantsAdmin.creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
+                response1 = call1.execute();
+                if (response1.body() != null) {
+                    ConstantsAdmin.currentCreator = response1.body();
+                    if (tp != null) {
+                        tp.setCreator(ConstantsAdmin.currentCreator);
+                    }
+                    if (ConstantsAdmin.currentCreator == null) {
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call1 != null) {
+                    call1.cancel();
+                }
+            }
+
+        }
+        if (tp != null && tp.getFonts() != null) {
+            fonts = tp.getFonts();
+        }
+        if (tp != null && tp.getLabelAttributes() != null) {
+            labelAttributes = tp.getLabelAttributes();
+        } else {
+            Call<List<LabelAttributes>> call2 = null;
+            Response<List<LabelAttributes>> response2;
+            List<LabelAttributes> temp2;
+            try {
+                call2 = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true, ConstantsAdmin.tokenFFL);
+                response2 = call2.execute();
+                if (response2.body() != null) {
+                    temp2 = new ArrayList<>(response2.body());
+                    labelAttributes = temp2.toArray(new LabelAttributes[temp2.size()]);
+                    if (tp != null) {
+                        tp.setLabelAttributes(labelAttributes);
+                        if (labelAttributes.length > 1) {
+                            tp.setTitle(true);
+                        } else {
+                            tp.setTitle(false);
+                        }
+                    }
+                    // labelAttributes = response.body();
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call2 != null) {
+                    call2.cancel();
+                }
+            }
+
+            boolean needLoadFontFile = true;
+            if (tp != null && tp.getFonts() != null) {
+                fonts = tp.getFonts();
+                needLoadFontFile = false;
+            } else {
+                Call<List<LabelFont>> call3 = null;
+                Response<List<LabelFont>> response3;
+                List<LabelFont> temp3;
+
+                try {
+                    ConstantsAdmin.mensaje = null;
+                    call3 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true, ConstantsAdmin.tokenFFL);
+                    response3 = call3.execute();
+                    if (response3.body() != null) {
+                        temp3 = new ArrayList<>(response3.body());
+                        fonts = temp3.toArray(new LabelFont[temp3.size()]);
+                        if (tp != null) {
+                            tp.setFonts(fonts);
+                        }
+
+                    }
+                } catch (Exception exc) {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    if (call3 != null) {
+                        call3.cancel();
+                    }
+                }
+
+            }
+            if (needLoadFontFile) {
+//                                new GetFontFilesTask().execute();
+                String temp, extension;
+                for (LabelFont lf : fonts) {
+                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                    temp = lf.getBasename().substring(0, lf.getBasename().length() - 4);
+                    temp = temp + "-Regular" + extension;
+                    lf.setBasename(temp);
+                    ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + temp, temp);
+                }
+
+            }
+        }
+            //new LoadImagesTask().execute();
+        if (tp != null && tp.getImages() != null) {
+            images = tp.getImages();
+        } else {
+            Call<List<LabelImage>> call4 = null;
+            Response<List<LabelImage>> response4;
+            ArrayList temp4;
+            try {
+                call4 = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true, ConstantsAdmin.tokenFFL);
+                response4 = call4.execute();
+                if (response4.body() != null) {
+                    temp4 = new ArrayList<>(response4.body());
+                    if (temp4.size() == 0) {
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    } else {
+                        images = (LabelImage[]) temp4.toArray(new LabelImage[temp4.size()]);
+                        if (tp != null) {
+                            tp.setImages(images);
+                        }
+                    }
+                } else {
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                }
+            } catch (Exception exc) {
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                if (call4 != null) {
+                    call4.cancel();
+                }
+            }
+            String url1;
+            Bitmap b1;
+            for (LabelImage li : images) {
+                if (li.getImage() == null) {
+                    url1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                    b1 = ConstantsAdmin.getImageFromURL(url1);
+                    li.setImage(b1);
+                }
+
+            }
+        }
+        initializeCreator();
+    }
+
+/*
     private class LoadImagesTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -416,7 +930,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             }
         }
     }
-
+*//*
     private class LoadAttributesTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -446,7 +960,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         }
     }
 
-
+*/
 
  /*   public Bitmap getRoundedCornerBitmap(Bitmap bitmap,int roundPixelSize) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -887,7 +1401,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
 
     }
-
+/*
     private class LoadFontsTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -922,8 +1436,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             }
 
         }
-    }
-
+    }*/
+/*
     private class GetFontFilesTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -952,7 +1466,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             new LoadImagesTask().execute();
         }
     }
-
+*/
     private void privateGetFontFiles() {
 
         String temp, extension;
@@ -995,7 +1509,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
             try {
                 ConstantsAdmin.mensaje = null;
-                call = creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
+                call = ConstantsAdmin.creatorService.getCreator(ConstantsAdmin.selectedComboProduct.getId(), true, ConstantsAdmin.tokenFFL);
                 response = call.execute();
                 if(response.body() != null){
                     ConstantsAdmin.currentCreator = response.body();
@@ -1030,7 +1544,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
             try {
                 ConstantsAdmin.mensaje = null;
-                call = creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                call = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
                 response = call.execute();
                 if(response.body() != null){
                     temp = new ArrayList<>(response.body());
@@ -1067,7 +1581,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
             try {
                 ConstantsAdmin.mensaje = null;
-                call = creatorService.getFonts(textAreasId, true,  ConstantsAdmin.tokenFFL);
+                call = ConstantsAdmin.creatorService.getFonts(textAreasId, true,  ConstantsAdmin.tokenFFL);
                 response = call.execute();
                 if(response.body() != null){
                     temp = new ArrayList<>(response.body());
@@ -1098,7 +1612,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             List<LabelAttributes> temp;
             try {
                 ConstantsAdmin.mensaje = null;
-                call = creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                call = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
                 response = call.execute();
                 if(response.body() != null){
                     temp = new ArrayList<>(response.body());
@@ -1152,8 +1666,14 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        creatorService = retrofit.create(CreatorService.class);
-        productService = retrofit.create(CategoriesProductsService.class);
+        if(ConstantsAdmin.creatorService == null){
+            ConstantsAdmin.creatorService = retrofit.create(CreatorService.class);
+        }
+        if(ConstantsAdmin.productService == null){
+            ConstantsAdmin.productService = retrofit.create(CategoriesProductsService.class);
+        }
+
+
     }
 
 

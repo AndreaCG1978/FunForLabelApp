@@ -46,8 +46,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
 
     private ConfigurarEnvioActivity me;
     private TextView textDirEnvio;
-    private CustomerService customerService;
-    private UtilsService utilsService;
+
    // private AddressBook addressCustomer;
     private List<MetodoEnvio> metodosEnvios;
     RadioGroup radioButtonsGroup;
@@ -73,7 +72,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = utilsService.getAllShippingMethod(true, ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.utilsService.getAllShippingMethod(true, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 metodosEnvios = new ArrayList<>(response.body());
@@ -90,6 +89,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         }
 
     }
+
 
     private class LoadMetodosEnvioTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -183,7 +183,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = customerService.getCustomerAddress(ConstantsAdmin.currentCustomer.getId(), ConstantsAdmin.tokenFFL);
+            call = ConstantsAdmin.customerService.getCustomerAddress(ConstantsAdmin.currentCustomer.getId(), ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
                 customers = new ArrayList<>(response.body());
@@ -233,8 +233,12 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        customerService = retrofit.create(CustomerService.class);
-        utilsService = retrofit.create(UtilsService.class);
+        if(ConstantsAdmin.customerService == null){
+            ConstantsAdmin.customerService = retrofit.create(CustomerService.class);
+        }
+        if(ConstantsAdmin.utilsService == null) {
+            ConstantsAdmin.utilsService = retrofit.create(UtilsService.class);
+        }
 
     }
 

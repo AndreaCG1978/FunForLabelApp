@@ -81,7 +81,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FinalizarCompraActivity extends AppCompatActivity {
 
     private FinalizarCompraActivity me;
-    private OrdersService orderService;
     EditText entryComentario;
     TextView textFormaPago;
     TextView textDirEnvio;
@@ -137,7 +136,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        orderService = retrofit.create(OrdersService.class);
+        if(ConstantsAdmin.orderService == null) {
+            ConstantsAdmin.orderService = retrofit.create(OrdersService.class);
+        }
 
     }
 
@@ -449,7 +450,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = orderService.updateOrder(true, ConstantsAdmin.tokenFFL,idOrder, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_MERCADO_PAGO_CANCELED)));
+            call = ConstantsAdmin.orderService.updateOrder(true, ConstantsAdmin.tokenFFL,idOrder, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_MERCADO_PAGO_CANCELED)));
             response = call.execute();
             if(response.body() != null){
                 idOrder = response.body();
@@ -786,7 +787,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = orderService.insertOrder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
+            call = ConstantsAdmin.orderService.insertOrder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
                     ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getFirstName() + " " + c.getLastName(),
                     ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
@@ -826,7 +827,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
             String imageName = ConstantsAdmin.takeScreenshot(this, p);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
-                call = orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
+                call = ConstantsAdmin.orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
                         p.getFillsTexturedId(),p.getComentarioUsr(),imageName,(int)c.getId(),p.getIdProduct(), 0,
                         "tcm/thumbs/" + imageName + ".png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
@@ -834,7 +835,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                         ConstantsAdmin.convertIntColorToHex(p.getFontTitleColor()),0,
                         0,p.getFontTitleId(),p.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
             }else{// ES UN TAG DE TEXTO COMPUESTO (TIENE TITLE)
-                call = orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
+                call = ConstantsAdmin.orderService.insertTag(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio), Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
                         p.getFillsTexturedId(),p.getComentarioUsr(),imageName,(int)c.getId(),p.getIdProduct(), 0,
                         "tcm/thumbs/" + imageName + ".png", 0, (int)p.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(p.getFontTextColor()),0,
@@ -857,7 +858,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             combo = (ComboCarrito) it.next();
       //      imageNameCombo = ConstantsAdmin.takeScreenshot(this, combo);
             String precio =combo.getPrecio().substring(0, combo.getPrecio().length() - 5);
-            call = orderService.insertProduct(true, ConstantsAdmin.tokenFFL, idOrder, combo.getIdProduct(),"",
+            call = ConstantsAdmin.orderService.insertProduct(true, ConstantsAdmin.tokenFFL, idOrder, combo.getIdProduct(),"",
                     combo.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(combo.getCantidad()));
             response = call.execute();
             if(response.body() != null) {
@@ -870,7 +871,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             Integer idParent = -1;
          /*   call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),imageName,(int)c.getId(),
                     combo.getIdProduct(), 0,"tcm/thumbs/" + imageName + ".png", 0);
-*/          call = orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),"",(int)c.getId(),
+*/          call = ConstantsAdmin.orderService.insertOnlyTagWithoutOthers(true,ConstantsAdmin.tokenFFL, idProduct, combo.getFillsTexturedId(),combo.getComentarioUsr(),"",(int)c.getId(),
                     combo.getIdProduct(), 0,"", 0);
             response = call.execute();
             if(response.body() == null) {
@@ -886,14 +887,14 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 pc = (ProductoCarrito) it1.next();
                 imageName = ConstantsAdmin.takeScreenshot(this, pc);
                 if(pc.isTieneTitulo()){
-                    call = orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
+                    call = ConstantsAdmin.orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
                             "imageName",(int)c.getId(),pc.getIdProduct(), 0,
                             "tcm/thumbs/" + imageName + ".png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),0,
                             0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT),(int)pc.getTitleFontSize(),
                             ConstantsAdmin.convertIntColorToHex(pc.getFontTitleColor()),0,
                             0,pc.getFontTitleId(),pc.getTitulo(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TITLE));
                 }else{
-                    call = orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"imageName",(int)c.getId(),
+                    call = ConstantsAdmin.orderService.insertOnlyTag(true,ConstantsAdmin.tokenFFL, idProduct, pc.getFillsTexturedId(),pc.getComentarioUsr(),"imageName",(int)c.getId(),
                             pc.getIdProduct(), 0,"tcm/thumbs/" + imageName + ".png", idParent, (int)pc.getTextFontSize(),ConstantsAdmin.convertIntColorToHex(pc.getFontTextColor()),
                             0,0,pc.getFontTextId(),pc.getTexto(), prop.getProperty(ConstantsAdmin.TAG_LEGEND_TYPE_TEXT));
                 }

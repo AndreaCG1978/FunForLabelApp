@@ -47,7 +47,6 @@ public class CarritoActivity extends FragmentActivity {
         setContentView(R.layout.carrito);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        this.initializeService();
         this.configureWidgets();
    //     this.initializeCreator();
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -125,9 +124,6 @@ public class CarritoActivity extends FragmentActivity {
 
     }
 
-
-    private void initializeService() {
-    }
 
     public void actualizarListaProductosCarrito() {
         Iterator<ItemCarrito> itemsCarrito1 = ConstantsAdmin.productosDelCarrito.iterator();

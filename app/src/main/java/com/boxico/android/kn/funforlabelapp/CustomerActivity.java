@@ -67,7 +67,7 @@ public class CustomerActivity extends FragmentActivity {
     private String provinciaSeleccionada;
     private String ciudadSeleccionada;
     private String barrioSeleccionado;
-    private CustomerService customerService;
+
     private long geoIdProvinciaSeleccionada;
     private View currentFocusedWidget;
 
@@ -106,7 +106,10 @@ public class CustomerActivity extends FragmentActivity {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        customerService = retrofit.create(CustomerService.class);
+        if(ConstantsAdmin.customerService == null){
+            ConstantsAdmin.customerService = retrofit.create(CustomerService.class);
+        }
+
     }
 
 
@@ -454,7 +457,7 @@ public class CustomerActivity extends FragmentActivity {
 
         try {
             this.initializeService();
-            callInsert = customerService.createAccount(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword(), customer.getGender(), customer.getCiudad(), customer.getProvincia(), customer.getSuburbio(), customer.getDireccion(), customer.getCp(), customer.getTelephone(), customer.getFax(), customer.getNewsletter(), ConstantsAdmin.tokenFFL);
+            callInsert = ConstantsAdmin.customerService.createAccount(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword(), customer.getGender(), customer.getCiudad(), customer.getProvincia(), customer.getSuburbio(), customer.getDireccion(), customer.getCp(), customer.getTelephone(), customer.getFax(), customer.getNewsletter(), ConstantsAdmin.tokenFFL);
             resp = callInsert.execute();
             ArrayList<Customer> customers = new ArrayList<>(resp.body());
             if (customers.size() == 1) {//DEVUELVE EL CLIENTE RECIEN CREADO
