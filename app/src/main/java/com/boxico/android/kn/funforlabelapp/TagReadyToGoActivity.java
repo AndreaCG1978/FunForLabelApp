@@ -189,7 +189,8 @@ public class TagReadyToGoActivity extends AppCompatActivity {
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
         agregarAlCarrito = findViewById(R.id.btnAgregarACarrito);
         comentarioUsr = findViewById(R.id.entryCommentTag);
         agregarAlCarrito.setOnClickListener(new View.OnClickListener() {

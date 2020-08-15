@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@drawable/bg_body1"
-    android:layout_marginBottom="20dp">
 
-    <ScrollView
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_body1"
         android:isScrollContainer="false">
 
         <LinearLayout
@@ -19,6 +11,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
 
         <ImageView
@@ -65,9 +60,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/color_negro"
-            android:gravity="left"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="10dp"
+            android:gravity="start"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
             android:textSize="15sp"
 
             />
@@ -77,9 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
-                android:gravity="left"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="10dp"
+                android:gravity="start"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
                 android:textSize="17sp"
                 android:textStyle="bold"
 
@@ -89,11 +84,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/direccion_envio_title"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/color_gris_oscuro"
             android:textStyle="bold"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:textSize="13sp"
             android:fontFamily="sans-serif-smallcaps"
             />
@@ -113,11 +108,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/forma_envio_title"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:textSize="13sp"
                 android:fontFamily="sans-serif-smallcaps"
                 />
@@ -128,9 +123,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
                 android:layout_marginTop="25dp"
-                android:gravity="left"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="20dp"
+                android:gravity="start"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="20dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
                />
@@ -140,9 +135,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
-                android:gravity="left"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="20dp"
+                android:gravity="start"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="20dp"
                 android:textSize="14sp"
                 />
 
@@ -150,11 +145,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/forma_pago_title"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:textSize="13sp"
                 android:fontFamily="sans-serif-smallcaps"
                 />
@@ -165,9 +160,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
                 android:layout_marginTop="22dp"
-                android:gravity="left"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="10dp"
+                android:gravity="start"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
                  />
@@ -189,10 +184,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/enter_comment"
                 android:layout_marginTop="25dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:textColor="@color/color_gris_oscuro"
                 android:textStyle="bold"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-smallcaps"
                />
@@ -203,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:lines="5"
                 android:maxLines="5"
-                android:gravity="left|top"
+                android:gravity="start|top"
                 android:padding="4dp"
                 android:textSize="13sp"
                 android:textColor="@color/color_gris_oscuro"
@@ -211,7 +206,7 @@
                 android:layout_margin="15dp"
                 android:maxLength="220"
 
-                />
+                android:inputType="textMultiLine" />
 
             <Button android:id="@+id/btnFinalizar"
                 android:layout_width="wrap_content"
@@ -229,7 +224,3 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-
-</LinearLayout>

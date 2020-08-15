@@ -81,7 +81,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FinalizarCompraActivity extends AppCompatActivity {
 
     private FinalizarCompraActivity me;
-    private TextView textWellcomeUsr;
     private OrdersService orderService;
     EditText entryComentario;
     TextView textFormaPago;
@@ -154,17 +153,19 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         this.cargarDetalleTags();
         this.cargarDetalleEnvio();
         this.cargarDetallePago();
-        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        TextView textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
 
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         String precioTotal = String.valueOf(precioTotalTags + precioTotalEnvio);
-        precioTotal = precioTotal.substring(0, precioTotal.length() - 2);
-        textMontoTotal.setText(getString(R.string.label_total) + " $" + precioTotal);
+        precioTotal = getString(R.string.label_total) + " $" + precioTotal.substring(0, precioTotal.length() - 2);
+        textMontoTotal.setText(precioTotal);
 
         entryComentario = findViewById(R.id.entryCommentPago);
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
-            entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
+            String result1 = ConstantsAdmin.comentarioIngresado + "\n";
+            entryComentario.setText(result1);
         }
         btnFinalizar = findViewById(R.id.btnFinalizar);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
@@ -1000,8 +1001,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         textDetalleTags.setPadding(3,3,3,3);
         textDetalleTags.setText(temp);
         String precioText = String.valueOf(precioTotalTags);
-        precioText = precioText.substring(0, precioText.length() - 2);
-        textMontoSubtotal.setText(getString(R.string.label_total_etiquetas) + "$" + precioText);
+        precioText = getString(R.string.label_total_etiquetas) + "$" + precioText.substring(0, precioText.length() - 2);
+        textMontoSubtotal.setText(precioText);
 
     }
 

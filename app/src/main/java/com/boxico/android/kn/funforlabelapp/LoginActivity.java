@@ -61,7 +61,6 @@ public class LoginActivity extends FragmentActivity {
     private EditText passEntry = null;
     private Button buttonLogin = null;
 
-    private TextView crearCuentaText = null;
     private TextView recuperarContrasenia = null;
     private CustomerService customerService = null;
     private String pswText;
@@ -71,7 +70,7 @@ public class LoginActivity extends FragmentActivity {
     private ImageButton hiddeShowPass;
     private boolean isShowingPass = false;
     //private Customer currentCustomer;
-    private String nuevaContraseña;
+    private String nuevaContrasenia;
     private Customer customerTemp;
     private final int PERMISSIONS_WRITE_STORAGE = 102;
 
@@ -166,7 +165,7 @@ public class LoginActivity extends FragmentActivity {
                 finish();
             }
         });
-        crearCuentaText = findViewById(R.id.crearCuentaText);
+        TextView crearCuentaText = findViewById(R.id.crearCuentaText);
         recuperarContrasenia = findViewById(R.id.recuperarContrasenia);
         crearCuentaText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +219,7 @@ public class LoginActivity extends FragmentActivity {
         body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
         body = body + this.getString(R.string.body1_nueva_contrasenia);
         body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER + ConstantsAdmin.TAB;
-        body = body + this.getString(R.string.contrasenia) + nuevaContraseña;
+        body = body + this.getString(R.string.contrasenia) + nuevaContrasenia;
         body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
         body = body + this.getString(R.string.body2_nueva_contrasenia);
         try {
@@ -446,7 +445,7 @@ public class LoginActivity extends FragmentActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 Long[] params = new Long[1];
                                 params[0] = 1L;
-                                nuevaContraseña = me.crearNuevaContrasenia();
+                                nuevaContrasenia = me.crearNuevaContrasenia();
                                 new UpdatePasswordTask().execute(params);
 
 
@@ -473,7 +472,7 @@ public class LoginActivity extends FragmentActivity {
 
         try {
             ConstantsAdmin.mensaje = null;
-            call = customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContraseña, ConstantsAdmin.tokenFFL);
+            call = customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContrasenia, ConstantsAdmin.tokenFFL);
             Response<ResponseBody> respuesta = call.execute();
             if(respuesta != null && respuesta.body() != null){
                 exito = true;

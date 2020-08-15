@@ -43,13 +43,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ConfigurarPagoActivity extends AppCompatActivity {
 
     private ConfigurarPagoActivity me;
-    private TextView textWellcomeUsr;
-    private TextView textIntroPago;
     private UtilsService utilsService;
     private List<MetodoPago> metodosPago;
     RadioGroup radioButtonsGroup;
     EditText entryComentario;
-    private Button btnGoToFinish;
 
 
     @Override
@@ -205,9 +202,10 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
 
     private void configureWidgets() {
 
-        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
-        textIntroPago = findViewById(R.id.textIntroPago);
+        TextView textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
+        TextView textIntroPago = findViewById(R.id.textIntroPago);
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         if(ConstantsAdmin.currentLanguage== 1){
             textIntroPago.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_PAGO_EN));
@@ -217,9 +215,10 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
 
         entryComentario = findViewById(R.id.entryCommentPago);
         if(ConstantsAdmin.comentarioIngresado != null && !ConstantsAdmin.comentarioIngresado.equals("")){
-            entryComentario.setText(ConstantsAdmin.comentarioIngresado + "\n");
+            String temp = ConstantsAdmin.comentarioIngresado + "\n";
+            entryComentario.setText(temp);
         }
-        btnGoToFinish = findViewById(R.id.btnConfirmarPago);
+        Button btnGoToFinish = findViewById(R.id.btnConfirmarPago);
         btnGoToFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

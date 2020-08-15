@@ -44,7 +44,8 @@ public class AcercaDeActivity extends AppCompatActivity {
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
         final Properties p = ConstantsAdmin.fflProperties;
         TextView tv = findViewById(R.id.textAcercaDe);
         if(ConstantsAdmin.currentLanguage==1){

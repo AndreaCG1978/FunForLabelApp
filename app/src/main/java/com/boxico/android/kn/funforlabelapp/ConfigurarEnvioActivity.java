@@ -45,8 +45,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ConfigurarEnvioActivity extends AppCompatActivity {
 
     private ConfigurarEnvioActivity me;
-    private TextView textWellcomeUsr;
-    private TextView textIntroEnvio;
     private TextView textDirEnvio;
     private CustomerService customerService;
     private UtilsService utilsService;
@@ -54,7 +52,6 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
     private List<MetodoEnvio> metodosEnvios;
     RadioGroup radioButtonsGroup;
     EditText entryComentario;
-    private Button btnGoToPayment;
 
 
     @Override
@@ -248,10 +245,12 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         TextView txt;
         radioButtonsGroup = this.findViewById(R.id.opciones_envio);
         Iterator<MetodoEnvio> it = metodosEnvios.iterator();
+        String temp = null;
         while(it.hasNext()){
             m = it.next();
             rb = new RadioButton(this);
-            rb.setText(m.getName() + ": $" + m.getPrice());
+            temp = m.getName() + ": $" + m.getPrice();
+            rb.setText(temp);
             rb.setTextColor(Color.BLACK);
             rb.setTextSize(15);
             rb.setId((int)m.getId());
@@ -276,9 +275,10 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
 
     private void configureWidgets() {
 
-        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
-        textIntroEnvio = findViewById(R.id.textIntroEnvio);
+        TextView textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
+        TextView textIntroEnvio = findViewById(R.id.textIntroEnvio);
       //  textIntroEnvio.setTypeface(Typeface.SANS_SERIF);
         if(ConstantsAdmin.currentLanguage== 1){
             textIntroEnvio.setText(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.INTRO_ENVIO_EN));
@@ -287,7 +287,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         }
 
         entryComentario = findViewById(R.id.entryCommentEnvio);
-        btnGoToPayment = findViewById(R.id.btnConfirmarEnvio);
+        Button btnGoToPayment = findViewById(R.id.btnConfirmarEnvio);
         btnGoToPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

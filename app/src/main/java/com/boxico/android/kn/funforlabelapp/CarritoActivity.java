@@ -67,7 +67,8 @@ public class CarritoActivity extends FragmentActivity {
 
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
         confirmarCarrito = findViewById(R.id.btnConfirmarCarrito);
         listViewCarrito = findViewById(R.id.listViewCarrito);
         actualizarListaProductosCarrito();
@@ -143,13 +144,14 @@ public class CarritoActivity extends FragmentActivity {
         if(totalPrecio == null){
             totalPrecio = findViewById(R.id.totalPrecio);
         }
-        totalPrecio.setText("($" + precioTotal + ")");
+        String result = "($" + precioTotal + ")";
+        totalPrecio.setText(result);
     }
 
     public void actualizarPrecioCarrito() {
       //  listViewCarrito.setAdapter(new KNCarritoAdapterListView(this, R.layout.item_lista_carrito, R.id.tvNombreProducto,ConstantsAdmin.productosDelCarrito));
-        String precioTotal = this.calcularPrecioTotal();
-        totalPrecio.setText("($" + precioTotal + ")");
+        String precioTotal = "($" + this.calcularPrecioTotal() + ")";
+        totalPrecio.setText(precioTotal);
     }
 
 

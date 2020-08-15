@@ -84,7 +84,6 @@ public class TagComboCreatorActivity extends AppCompatActivity {
  //   private EditText entryTextTag;
     boolean acotar = false;
     private final int PERMISSIONS_WRITE_STORAGE = 101;
-    private Button btnReadyToGo;
     private Button pickColor;
     private int selectedPosFontText = -1;
     private int selectedPosFontSizeText = -1;
@@ -94,8 +93,6 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedTitleColor = Color.BLACK;
     private CategoriesProductsService productService;
     private ArrayList<Product> productsList;
-
-    private ColorPicker colorPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1191,7 +1188,8 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
        // textProductSelected = findViewById(R.id.textProductSelected);
       //  textProductSelected.setText(ConstantsAdmin.currentProduct.getName());
         linearTag = findViewById(R.id.linearTag);
@@ -1200,7 +1198,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         spinnerBackgrounds = this.findViewById(R.id.spinnerBackgrounds);
         spinnerProducts = this.findViewById(R.id.spinnerProducts);
         pickColor = this.findViewById(R.id.pickColor);
-        btnReadyToGo = this.findViewById(R.id.btnReadyToGo);
+        Button btnReadyToGo = this.findViewById(R.id.btnReadyToGo);
         pickColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1303,7 +1301,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
     private void openColorPicker() {
 
-        colorPicker = new ColorPicker(me);
+        ColorPicker colorPicker = new ColorPicker(me);
         ArrayList<String> colorToHex = new ArrayList<>();
         colorToHex.add("#FEFEFE");
         colorToHex.add("#F69060");

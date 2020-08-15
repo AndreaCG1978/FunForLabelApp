@@ -50,8 +50,6 @@ public class CustomerActivity extends FragmentActivity {
     private FragmentActivity me;
     private LinearLayout layoutBarrio;
     private TextView tvPartidos;
-    private Button btnGuardar;
-    private Button btnCancel;
     private EditText entryNombre;
     private EditText entryApellido;
     private EditText entryMail;
@@ -63,7 +61,6 @@ public class CustomerActivity extends FragmentActivity {
     private EditText entryContrasenia;
     private EditText entryConfirmacion;
     private RadioButton radioFemenino;
-    private RadioButton radioMasculino;
     private EditText entryProvincia;
     private EditText entryCiudad;
     private Customer customer;
@@ -245,9 +242,9 @@ public class CustomerActivity extends FragmentActivity {
         entryConfirmacion = this.findViewById(R.id.entryConfirmacion);
         checkNewsletter = this.findViewById(R.id.checkNewsletter);
         radioFemenino = this.findViewById(R.id.radio_femenino);
-        radioMasculino = this.findViewById(R.id.radio_masculino);
-        btnCancel = this.findViewById(R.id.buttonCancel);
-        btnGuardar = this.findViewById(R.id.buttonGuardar);
+        RadioButton radioMasculino = this.findViewById(R.id.radio_masculino);
+        Button btnCancel = this.findViewById(R.id.buttonCancel);
+        Button btnGuardar = this.findViewById(R.id.buttonGuardar);
         entryNombre.clearFocus();
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

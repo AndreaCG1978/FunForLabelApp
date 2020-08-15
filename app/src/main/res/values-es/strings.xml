@@ -12,7 +12,7 @@
     <string name="loginLabel">Ingresar</string>
     <string name="login_error">Los datos del usuario o contraseña son incorrectos.</string>
     <string name="conexion_server_error">Problemas para conectarse con el Servidor de datos.</string>
-    <string name="login_progress">Intento de logueo...</string>
+    <string name="login_progress">Intento de logueo…</string>
     <string name="atencion">Atención!</string>
 
     <string name="soy_cliente_title">░ Soy Cliente!</string>
@@ -32,7 +32,7 @@
     <string name="customer_not_exists">No existe Cliente registrado con esta cuenta!</string>
     <string name="body1_nueva_contrasenia">La nueva contraseña generada para la cuenta de Fun for Labels es:</string>
     <string name="body2_nueva_contrasenia">Desde el sitio web, podrá modificarla al iniciar sesión.</string>
-    <string name="sending_mail_progress">Enviando información a su cuenta de correo...</string>
+    <string name="sending_mail_progress">Enviando información a su cuenta de correo…</string>
     <string name="informacion_personal_title">░ Información Personal</string>
     <string name="direccion_title">░ Dirección</string>
     <string name="informacion_contacto_title">░ Información de Contacto</string>
@@ -47,7 +47,7 @@
     <string name="codigo_postal">CP:</string>
     <string name="provincia">Provincia:</string>
     <string name="localidad">Localidad:</string>
-    <string name="loading_data">Cargando datos...</string>
+    <string name="loading_data">Cargando datos…</string>
     <string name="partido">Partido:</string>
     <string name="telefono">Teléfono:</string>
     <string name="fax">Fax:</string>
@@ -58,7 +58,7 @@
     <string name="campoRequerido">*</string>
     <string name="password_not_equal_error">La Contraseña y la Confirmación no coinciden!</string>
     <string name="info_required_hint">Dato Requerido</string>
-    <string name="creating_customer_progress">Creando nueva Cuenta...</string>
+    <string name="creating_customer_progress">Creando nueva Cuenta…</string>
     <string name="exists_customer">Ya existe un Cliente asociado a la cuenta de mail ingresada!</string>
     <string name="create_customer_success">Se creó el Cliente con éxito!</string>
     <string name="create_customer_error">Problemas al registrar la cuenta del Cliente</string>
@@ -71,13 +71,10 @@
     <string name="quantity">Cantidad:</string>
     <string name="per_pack"> por pack</string>
     <string name="your_name_here">Tu nombre aquí</string>
-    <string name="select_font_style">Elija su letra...</string>
-    <string name="select_tag_style">Elija su estilo...</string>
     <string name="your_title">Tu colegio aquí</string>
     <string name="culminarTag">Agregar al carrito</string>
-    <string name="enter_comment">Aquí podes dejarnos un comentario...</string>
+    <string name="enter_comment">Aquí podes dejarnos un comentario…</string>
     <string name="agregar_tag_acarrito">Agregar</string>
-    <string name="tag_agregado_carrito">El producto fue agregado al carrito!</string>
     <string name="su_carrito">Su Carrito!</string>
     <string name="confirmar_carrito">Comprar</string>
     <string name="mensaje_borrar_producto_carrito">Está seguro de eliminar este item de su Carrito?</string>
@@ -103,15 +100,15 @@
     <string name="cancelo_compra">Ha cancelado su compra! Dejaremos su carrito con los productos en el caso de que desee realizarla en otro momento.</string>
     <string name="cancelacion_compra">COMPRA CANCELADA:</string>
     <string name="estado_compra">Estado de la compra:</string>
-    <string name="menu_acerca_de">Acerca de...</string>
+    <string name="menu_acerca_de">Acerca de…</string>
     <string name="cerrar_session">Salir</string>
     <string name="envio_devoluciones">░ Formas de envío</string>
     <string name="politica_privacidad">░ Nuestra Política de privacidad</string>
     <string name="condiciones_uso">░ Condiciones de uso</string>
     <string name="formas_pago">░ Formas de pago</string>
     <string name="preguntas_frecuentes">░ Preguntas frecuentes</string>
-    <string name="quienesSomosTitle">Quienes somos...</string>
-    <string name="tePuedeInteresarTitle">Te invitamos a que leas...</string>
+    <string name="quienesSomosTitle">Quienes somos…</string>
+    <string name="tePuedeInteresarTitle">Te invitamos a que leas…</string>
     <string name="contactanos">Contactanos!</string>
     <string name="seguinos">Seguinos!</string>
     <string name="mensaje_tags_combo_incompleto">Algunas de las etiquetas del combo están incompletas!</string>

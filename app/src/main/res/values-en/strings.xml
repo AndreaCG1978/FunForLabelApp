@@ -10,7 +10,7 @@
     <string name="loginLabel">Enter</string>
     <string name="login_error">User data or password are incorrect.</string>
     <string name="conexion_server_error">Trouble connecting to server data.</string>
-    <string name="login_progress">Login in...</string>
+    <string name="login_progress">Login in…</string>
     <string name="atencion">Attention!</string>
 
     <string name="soy_cliente_title">░ I have an account!</string>
@@ -30,7 +30,7 @@
     <string name="customer_not_exists">There is no client registered with this account!</string>
     <string name="body1_nueva_contrasenia">The new password for your Fun For Labels acccount is:</string>
     <string name="body2_nueva_contrasenia">Remember to change it once you log in.</string>
-    <string name="sending_mail_progress">Sending the information to your mail account...</string>
+    <string name="sending_mail_progress">Sending the information to your mail account…</string>
     <string name="informacion_personal_title">░ Personal information</string>
     <string name="direccion_title">░ Address</string>
     <string name="informacion_contacto_title">░ Contact information </string>
@@ -45,7 +45,7 @@
     <string name="codigo_postal">Postal Code:</string>
     <string name="provincia">Province:</string>
     <string name="localidad">City:</string>
-    <string name="loading_data">Loading data...</string>
+    <string name="loading_data">Loading data…</string>
     <string name="partido">State:</string>
     <string name="telefono">Phone number:</string>
     <string name="fax">Fax:</string>
@@ -56,7 +56,7 @@
     <string name="campoRequerido">*</string>
     <string name="password_not_equal_error">Password and Confirmation do not match!</string>
     <string name="info_required_hint">Required</string>
-    <string name="creating_customer_progress">Creating new account...</string>
+    <string name="creating_customer_progress">Creating new account…</string>
     <string name="exists_customer">There is already an account linked to this mail account!</string>
     <string name="create_customer_success">The account was created successfully!</string>
     <string name="create_customer_error">There was a problem registering the new account</string>
@@ -69,13 +69,10 @@
     <string name="quantity">Quantity:</string>
     <string name="per_pack"> per pack</string>
     <string name="your_name_here">Enter your name</string>
-    <string name="select_font_style">Choose your font...</string>
-    <string name="select_tag_style">Choose your style...</string>
     <string name="your_title">Choose your title</string>
     <string name="culminarTag">Add to cart</string>
-    <string name="enter_comment">Add a comment...</string>
+    <string name="enter_comment">Add a comment…</string>
     <string name="agregar_tag_acarrito">Add</string>
-    <string name="tag_agregado_carrito">Product was addded to the cart!</string>
     <string name="su_carrito">Your cart!</string>
     <string name="confirmar_carrito">Buy</string>
     <string name="mensaje_borrar_producto_carrito">Are you sure you want to delete this item from your cart?</string>
@@ -101,15 +98,15 @@
     <string name="cancelo_compra">You have cancelled your purchase! The items will stay in the cart in case you want to buy them later.</string>
     <string name="cancelacion_compra">PURCHASE CANCELLED:</string>
     <string name="estado_compra">Purchase status:</string>
-    <string name="menu_acerca_de">About us...</string>
+    <string name="menu_acerca_de">About us…</string>
     <string name="cerrar_session">Leave</string>
     <string name="envio_devoluciones">░ Shipping Methods</string>
     <string name="politica_privacidad">░ Our privacy policy</string>
     <string name="condiciones_uso">░ Terms of use</string>
     <string name="formas_pago">░ Payment Methods</string>
     <string name="preguntas_frecuentes">░ Frequently Asked Questions</string>
-    <string name="quienesSomosTitle">Who we are...</string>
-    <string name="tePuedeInteresarTitle">We invite you to read...</string>
+    <string name="quienesSomosTitle">Who we are…</string>
+    <string name="tePuedeInteresarTitle">We invite you to read…</string>
     <string name="contactanos">Contact us!</string>
     <string name="seguinos">Follow us!</string>
     <string name="mensaje_tags_combo_incompleto">Some of your combo labels are incomplete!</string>

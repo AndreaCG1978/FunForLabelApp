@@ -278,15 +278,16 @@ public class ProductsListActivity extends FragmentActivity {
         //descEtiqueta.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
         TextView precioEtiqueta = new TextView(this);
-        String newPrice = p.getPrice().substring(0, p.getPrice().length() - 2);
-        precioEtiqueta.setText(getString(R.string.price) + newPrice);
+        String newPrice = getString(R.string.price) + p.getPrice().substring(0, p.getPrice().length() - 2);
+        precioEtiqueta.setText(newPrice);
         precioEtiqueta.setLayoutParams(lpText);
         precioEtiqueta.setTextSize(14);
         precioEtiqueta.setTextColor(Color.BLACK);
         precioEtiqueta.setTypeface(Typeface.SANS_SERIF);
 
         TextView cantidadEtiqueta = new TextView(this);
-        cantidadEtiqueta.setText(getString(R.string.quantity) + " " + p.getQuantity() + " " + getString(R.string.per_pack));
+        String temp = getString(R.string.quantity) + " " + p.getQuantity() + " " + getString(R.string.per_pack);
+        cantidadEtiqueta.setText(temp);
         cantidadEtiqueta.setLayoutParams(lpText);
         cantidadEtiqueta.setTextSize(12);
         cantidadEtiqueta.setTextColor(Color.BLACK);
@@ -298,7 +299,7 @@ public class ProductsListActivity extends FragmentActivity {
         layoutParams2.setMargins(5, 10, 10, 10);
         l2.setLayoutParams(layoutParams2);
         l2.setOrientation(LinearLayout.VERTICAL);
-        l2.setGravity(Gravity.LEFT);
+        l2.setGravity(Gravity.START);
 
 
         l2.addView(nombreEtiqueta);
@@ -361,7 +362,8 @@ public class ProductsListActivity extends FragmentActivity {
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearProducts = findViewById(R.id.linearProducts);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
         textCategorySelected = findViewById(R.id.textCategorySelected);
         //textCategorySelected.setText(getString(R.string.c));
     }

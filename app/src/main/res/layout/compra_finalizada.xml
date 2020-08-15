@@ -8,13 +8,6 @@
     android:layout_marginBottom="20dp">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            >
-
         <ImageView
             android:layout_width="320dp"
             android:layout_height="100dp"
@@ -48,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
-                android:gravity="left"
+                android:gravity="start"
                 android:textSize="15sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
@@ -100,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
-                android:gravity="left"
+                android:gravity="start"
                 android:textSize="15sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginBottom="15dp"
@@ -114,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_negro"
-                android:gravity="left"
+                android:gravity="start"
                 android:textSize="15sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginBottom="15dp"
@@ -143,8 +136,6 @@
                     android:textColor="@android:color/holo_red_dark"
                     />
             </LinearLayout>
-
-        </LinearLayout>
 
 
 

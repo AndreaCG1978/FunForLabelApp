@@ -59,7 +59,6 @@ public class MainActivity extends FragmentActivity {
     CategoriesProductsService categoriesProductsService = null;
     ArrayList<Category> categories;
     TextView verCarrito = null;
-    private ImageButton imagenVerCarrito = null;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,9 +129,11 @@ public class MainActivity extends FragmentActivity {
     private void configureWidgets() {
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearCategories = findViewById(R.id.linearCategories);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
         verCarrito = findViewById(R.id.verCarrito);
-        verCarrito.setText("[" + ConstantsAdmin.productosDelCarrito.size()  + ConstantsAdmin.combosDelCarrito.size() + "]");
+        String temp = "[" + ConstantsAdmin.productosDelCarrito.size()  + ConstantsAdmin.combosDelCarrito.size() + "]";
+        verCarrito.setText(temp);
 
         verCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +141,7 @@ public class MainActivity extends FragmentActivity {
                 openVerCarrito();
             }
         });
-        imagenVerCarrito = findViewById(R.id.imagenVerCarrito);
+        ImageButton imagenVerCarrito = findViewById(R.id.imagenVerCarrito);
         imagenVerCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,7 +404,8 @@ public class MainActivity extends FragmentActivity {
             ConstantsAdmin.finalizarHastaMenuPrincipal = false;
         }
         super.onStart();
-        verCarrito.setText("[" + (ConstantsAdmin.productosDelCarrito.size() + ConstantsAdmin.combosDelCarrito.size()) + "]");
+        String temp = "[" + (ConstantsAdmin.productosDelCarrito.size() + ConstantsAdmin.combosDelCarrito.size()) + "]";
+        verCarrito.setText(temp);
 
     }
 

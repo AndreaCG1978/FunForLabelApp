@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:background="@drawable/bg_body1">
 
-    <ScrollView
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+        android:background="@drawable/bg_body1"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -53,8 +48,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginRight="20dp"
-                    android:gravity="right">
+                    android:layout_marginEnd="20dp"
+                    android:gravity="end">
 
 
 
@@ -74,7 +69,7 @@
                     android:textSize="17sp"
                     android:background="@android:color/white"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginEnd="20dp"/>
 
                 </LinearLayout>
 
@@ -88,7 +83,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_gris_oscuro"
             android:textStyle="bold"
-            android:gravity="left"
+            android:gravity="start"
             android:textSize="17sp"
             android:text="@string/diseniosPrearmadosTitle"
             android:fontFamily="sans-serif-smallcaps"
@@ -101,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="left"
+            android:gravity="start"
             android:layout_margin="10dp"
             >
 
@@ -111,6 +106,3 @@
 
     </ScrollView>
 
-
-
-</LinearLayout>

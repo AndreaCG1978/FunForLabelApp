@@ -24,15 +24,12 @@ import java.util.ArrayList;
 public class CompraFinalizadaActivity extends AppCompatActivity {
 
     private CompraFinalizadaActivity me;
-    private TextView textWellcomeUsr;
     TextView textMensajeExito1;
     TextView textMensajeExito2;
     TextView textEnvioMail;
     TextView textEnvioWsp;
     Button btnFinalizar;
-    private TextView textConector;
     private Button btnLimpiarCarrito;
-    private TextView textMensajeExito3;
 
 
     @Override
@@ -50,10 +47,11 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
         textEnvioWsp = findViewById(R.id.textEnvioWsp);
         textMensajeExito1 = findViewById(R.id.textMensajeExito1);
         textMensajeExito2 = findViewById(R.id.textMensajeExito2);
-        textMensajeExito3 = findViewById(R.id.textMensajeExito3);
-        textConector = findViewById(R.id.textConector);
-        textWellcomeUsr = findViewById(R.id.textWellcomeUser);
-        textWellcomeUsr.setText(getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName());
+        TextView textMensajeExito3 = findViewById(R.id.textMensajeExito3);
+        TextView textConector = findViewById(R.id.textConector);
+        TextView textWellcomeUsr = findViewById(R.id.textWellcomeUser);
+        String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
+        textWellcomeUsr.setText(result);
       //  btnLimpiarCarrito = (Button) findViewById(R.id.btnLimpiarCarrito);
     /*  btnLimpiarCarrito.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +108,8 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             textEnvioMail.setVisibility(View.GONE);
             textMensajeExito2.setVisibility(View.GONE);
             textConector.setVisibility(View.GONE);
-            textMensajeExito1.setText(getString(R.string.cancelacion_compra) + "\n" + ConstantsAdmin.mensajeCompra);
+            String result1 = getString(R.string.cancelacion_compra) + "\n" + ConstantsAdmin.mensajeCompra;
+            textMensajeExito1.setText(result1);
 
         }
 
