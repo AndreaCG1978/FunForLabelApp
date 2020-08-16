@@ -1,9 +1,9 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import android.app.ProgressDialog;
+
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
+
 
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
@@ -24,7 +24,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.boxico.android.kn.funforlabelapp.utils.KNCarritoAdapterListView;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -60,9 +60,9 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         setContentView(R.layout.configurar_envio);
         this.initializeService();
         this.configureWidgets();
-        new LoadMetodosEnvioTask().execute();
+      //  new LoadMetodosEnvioTask().execute();
 
-
+        loadMetodosEnvios();
     }
 
 
@@ -76,6 +76,35 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 metodosEnvios = new ArrayList<>(response.body());
+                Call<List<AddressBook>> call1 = null;
+                Response<List<AddressBook>> response1;
+                ArrayList<AddressBook> customers;
+                try {
+                    call1 = ConstantsAdmin.customerService.getCustomerAddress(ConstantsAdmin.currentCustomer.getId(), ConstantsAdmin.tokenFFL);
+                    response1 = call1.execute();
+                    if(response1.body() != null){
+                        customers = new ArrayList<>(response1.body());
+                        if(customers.size() == 1){
+                            ConstantsAdmin.addressCustomer = customers.get(0);
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                            textDirEnvio = findViewById(R.id.textDirEnvio);
+                            cargarDireccionEnvio();
+                            configureRadioButtonsShipping();
+                        }else{
+                            ConstantsAdmin.mensaje = getResources().getString(R.string.customer_not_exists);
+
+                        }
+                    }else{
+                        ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                    }
+                }catch(Exception exc){
+                    ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+
+                    if(call != null) {
+                        call.cancel();
+                    }
+
+                }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
@@ -89,7 +118,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         }
 
     }
-
+/*
 
     private class LoadMetodosEnvioTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -113,16 +142,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-           /*textDirEnvio = findViewById(R.id.textDirEnvio);
-            Customer c = ConstantsAdmin.currentCustomer;
-            String temp = c.getFirstName() + " " + c.getLastName() + "\n";
-            temp = temp + addressCustomer.getCalle() + "\n";
-            if(addressCustomer.getSuburbio() != null && !addressCustomer.getSuburbio().equals("")){
-                temp = temp + addressCustomer.getSuburbio() + "\n";
-            }
-            temp = temp + addressCustomer.getCiudad() + ", " + addressCustomer.getCp() + "\n";
-            temp = temp + addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
-            textDirEnvio.setText(temp);*/
+
             if(dialog != null) {
                 dialog.cancel();
             }
@@ -130,7 +150,9 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         }
     }
 
+*/
 
+/*
     private class LoadCustomerTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -163,7 +185,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         }
 
     }
-
+*/
     private void cargarDireccionEnvio(){
         Customer c = ConstantsAdmin.currentCustomer;
         String temp = c.getFirstName() + " " + c.getLastName() + "\n";

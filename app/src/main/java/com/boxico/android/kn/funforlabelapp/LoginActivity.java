@@ -1,10 +1,5 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,25 +18,31 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.ListenableWorker;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkManager;
+
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.boxico.android.kn.funforlabelapp.utils.KNMail;
 import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
+import com.boxico.android.kn.funforlabelapp.utils.SendMailWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -50,6 +50,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -126,7 +127,9 @@ public class LoginActivity extends FragmentActivity {
 
 
     private void loadProperties() {
+
         new LoadPropertiesTask().execute();
+        //ConstantsAdmin.privateLoadProperties();
     }
 
 
@@ -222,19 +225,40 @@ public class LoginActivity extends FragmentActivity {
         body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
         body = body + this.getString(R.string.body2_nueva_contrasenia);
         try {
-            okSend =ConstantsAdmin.enviarMail(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia), body, customerTemp.getEmail());
-            if(okSend){
+        //    okSend =ConstantsAdmin.enviarMail(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia), body, customerTemp.getEmail());
+
+            Data inputData = new Data.Builder()
+                    .putString("to", customerTemp.getEmail())
+                    .putString("subject", this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia))
+                    .putString("body", body)
+                    .build();
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(SendMailWorker.class)
+                    .setInputData(inputData)
+                    .setConstraints(constraints)
+                    .build();
+            ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
+            passEntry.setText("");
+/*
+
+            if(obj != null && obj.isDone()){
                 ConstantsAdmin.mensaje = me.getString(R.string.send_mail_succes) + customerTemp.getEmail();
-            }
+                okSend = true;
+                createAlertDialog(ConstantsAdmin.mensaje,"");
+                passEntry.setText("");
+            }*/
         } catch(Exception e) {
                 //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-               ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
+            ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
         }
 
         return okSend;
 
     }
-
+/*
     private class SendMail extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -262,7 +286,7 @@ public class LoginActivity extends FragmentActivity {
                 dialog.cancel();
             }
         }
-    }
+    }*/
 
     private class LoadPropertiesTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -308,7 +332,9 @@ public class LoginActivity extends FragmentActivity {
         usrText = userEntry.getText().toString();
         if (!usrText.equals("")) {
             customerTemp = null;
-            new GetCustomerTask().execute();
+            getCustomerInfo();
+
+            //new GetCustomerTask().execute();
         }
 
     }
@@ -320,14 +346,16 @@ public class LoginActivity extends FragmentActivity {
 
         if (!usrText.equals("") && (!pswText.equals(""))) {
 
-            new LoginCustomerTask().execute();
+            //new LoginCustomerTask().execute();f
+            loadCustomerInfo();
+
         } else {
             createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion));
         }
 
     }
 
-
+/*
 
     private class LoginCustomerTask extends AsyncTask<Long, Integer, Integer> {
         private ProgressDialog dialog = null;
@@ -340,15 +368,7 @@ public class LoginActivity extends FragmentActivity {
 
 
             } catch (Exception e) {
-/*                String error;
-                error = e.getMessage() + "\n";
-                if(e.getCause() != null){
-                    error = error + e.getCause().toString();
-                }
-                for(int i=0; i< e.getStackTrace().length; i++){
-                    error = error +  e.getStackTrace()[i].toString()+ "\n";
-                }
-                ConstantsAdmin.mensaje = error;*/
+
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
             return 0;
@@ -372,7 +392,9 @@ public class LoginActivity extends FragmentActivity {
 
         }
     }
+*/
 
+/*
 
     private class UpdatePasswordTask extends AsyncTask<Long, Integer, Integer> {
         private ProgressDialog dialog = null;
@@ -383,15 +405,6 @@ public class LoginActivity extends FragmentActivity {
             try {
                 saveNewPassword();
             } catch (Exception e) {
-/*                String error;
-                error = e.getMessage() + "\n";
-                if(e.getCause() != null){
-                    error = error + e.getCause().toString();
-                }
-                for(int i=0; i< e.getStackTrace().length; i++){
-                    error = error +  e.getStackTrace()[i].toString()+ "\n";
-                }
-                ConstantsAdmin.mensaje = error;*/
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }
             return 0;
@@ -416,8 +429,8 @@ public class LoginActivity extends FragmentActivity {
             }
 
         }
-    }
-
+    }*/
+/*
 
     private class GetCustomerTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -435,7 +448,7 @@ public class LoginActivity extends FragmentActivity {
 
 
         @Override
-        protected void onPostExecute(Integer result) {
+       protected void onPostExecute(Integer result) {
             if(customerTemp != null){
                 AlertDialog.Builder builder = new AlertDialog.Builder(me);
                 builder.setMessage(me.getString(R.string.mensaje_enviar_contrasenia) + customerTemp.getEmail() + me.getString(R.string.mensaje_desea_continuar))
@@ -462,20 +475,36 @@ public class LoginActivity extends FragmentActivity {
                 buttonLogin.setEnabled(true);
             }
         }
-    }
+    }*/
 
-    private boolean saveNewPassword(){
+    private void saveNewPassword(){
         final LoginActivity me = this;
         Call<ResponseBody>  call = null;
-        boolean exito = false;
+
 
         try {
             ConstantsAdmin.mensaje = null;
             call = ConstantsAdmin.customerService.updatePasswordCustomer(customerTemp.getEmail(), nuevaContrasenia, ConstantsAdmin.tokenFFL);
-            Response<ResponseBody> respuesta = call.execute();
-            if(respuesta != null && respuesta.body() != null){
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response != null && response.body() != null){
+                            //new SendMail().execute(params);
+                        reenviarContrasenia();
+                     //   createAlertDialog(ConstantsAdmin.mensaje,"");
+                     //   passEntry.setText("");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    createAlertDialog(me.getString(R.string.conexion_server_error),me.getString(R.string.atencion));
+                }
+            });
+         //   Response<ResponseBody> respuesta = call.execute();
+           /* if(respuesta != null && respuesta.body() != null){
                 exito = true;
-            }
+            }*/
         }catch(Exception exc){
             ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             if(call != null) {
@@ -483,62 +512,66 @@ public class LoginActivity extends FragmentActivity {
             }
 
         }
-        return exito;
+
     }
 
+    ArrayList<Customer> customers;
 
     private void loadCustomerInfo() {
         final LoginActivity me = this;
         Call<List<Customer>> call = null;
         Response<List<Customer>> response;
-        ArrayList<Customer> customers;
+        customers = null;
 
         try {
-            ConstantsAdmin.mensaje = null;
-            //   this.inicializarConexionServidor();
-            call = ConstantsAdmin.customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
-       //     call = customerService.loginCustomer("grassanoandrea@gmail.com", "bocha123", ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                customers = new ArrayList<>(response.body());
-                if(customers.size() == 1){
-                    ConstantsAdmin.currentCustomer = customers.get(0);
-                    Intent intent = new Intent(me, MainActivity.class);
-              //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
-                    ConstantsAdmin.currentCustomer = ConstantsAdmin.currentCustomer;
-                    if(saveLogin.isChecked()){
-                        ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
-                        ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
-                    }else{
-                        ConstantsAdmin.deleteLogin(me);
-                    }
-                    ConstantsAdmin.customerJustCreated = false;
-                    startActivity(intent);
-                }else{
-                    //createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion) );
-                    ConstantsAdmin.mensaje = getResources().getString(R.string.login_error);
 
-                }
-            }else{
-                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-              /*  String error;
-                if(response.message() != null) {
-                    error = response.message();
-                }else{
-                    error = "Body is null";
-                }
-                ConstantsAdmin.mensaje = error;*/
-            }
+            ConstantsAdmin.mensaje = null;
+            call = ConstantsAdmin.customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
+
+            call.enqueue(new Callback<List<Customer>>() {
+                 @Override
+                 public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
+                     if(response.body() != null){
+                         customers = new ArrayList<>(response.body());
+                         if(customers.size() == 1){
+                             ConstantsAdmin.currentCustomer = customers.get(0);
+                             Intent intent = new Intent(me, MainActivity.class);
+                             //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                             ConstantsAdmin.currentCustomer = ConstantsAdmin.currentCustomer;
+                             if(saveLogin.isChecked()){
+                                 ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                                 ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
+                             }else{
+                                 ConstantsAdmin.deleteLogin(me);
+                             }
+                             ConstantsAdmin.customerJustCreated = false;
+                             startActivity(intent);
+                         }else{
+                             //createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion) );
+                             ConstantsAdmin.mensaje = getResources().getString(R.string.login_error);
+
+                         }
+                     }else{
+                         ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                     }
+                     if(ConstantsAdmin.mensaje != null){
+                         createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
+                         ConstantsAdmin.mensaje = null;
+                         buttonLogin.setEnabled(true);
+                     }
+
+                 }
+
+                 @Override
+                 public void onFailure(Call<List<Customer>> call, Throwable t) {
+                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+                 }
+             });
+
+
+
+
         }catch(Exception exc){
-/*            String error;
-            error = exc.getMessage() + "\n";
-            if(exc.getCause() != null){
-                error = error + exc.getCause().toString();
-            }
-            for(int i=0; i< exc.getStackTrace().length; i++){
-                error = error +  exc.getStackTrace()[i].toString()+ "\n";
-            }
-            ConstantsAdmin.mensaje = error;*/
             ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             if(call != null) {
                 call.cancel();
@@ -554,25 +587,76 @@ public class LoginActivity extends FragmentActivity {
         final LoginActivity me = this;
         Call<List<Customer>> call = null;
         Response<List<Customer>> response;
-        ArrayList<Customer> customers;
+        customers = null;
 
         try {
             ConstantsAdmin.mensaje = null;
             call = ConstantsAdmin.customerService.getCustomer(usrText, ConstantsAdmin.tokenFFL);
-            response = call.execute();
-            if(response.body() != null){
-                customers = new ArrayList<>(response.body());
-                if(customers.size() == 1){
-                    customerTemp = customers.get(0);
-                }else{
-                    ConstantsAdmin.mensaje = getResources().getString(R.string.customer_not_exists);
 
+            call.enqueue(new Callback<List<Customer>>() {
+                @Override
+                public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
+                    if(response.body() != null){
+                        customers = new ArrayList<>(response.body());
+                        if(customers.size() == 1){
+                            customerTemp = customers.get(0);
+                            if(customerTemp != null){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(me);
+                                builder.setMessage(me.getString(R.string.mensaje_enviar_contrasenia) + customerTemp.getEmail() + me.getString(R.string.mensaje_desea_continuar))
+                                        .setCancelable(true)
+                                        .setPositiveButton(R.string.label_si, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Long[] params = new Long[1];
+                                                params[0] = 1L;
+                                                nuevaContrasenia = me.crearNuevaContrasenia();
+                                                //  new UpdatePasswordTask().execute(params);
+                                                saveNewPassword();
+
+
+
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.label_no, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builder.show();
+                            }else{
+                                createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
+                                ConstantsAdmin.mensaje = null;
+                                buttonLogin.setEnabled(true);
+                            }
+
+
+
+                        }else{
+                            createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
+                            ConstantsAdmin.mensaje = null;
+                            buttonLogin.setEnabled(true);
+
+                        }
+                    }else{
+                        createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
+                        ConstantsAdmin.mensaje = null;
+                        buttonLogin.setEnabled(true);
+                    }
                 }
-            }else{
-                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-            }
+
+                @Override
+                public void onFailure(Call<List<Customer>> call, Throwable t) {
+                    createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
+                    ConstantsAdmin.mensaje = null;
+                    buttonLogin.setEnabled(true);
+                }
+            });
+
+
+
         }catch(Exception exc){
-            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
+            ConstantsAdmin.mensaje = null;
+            buttonLogin.setEnabled(true);
             if(call != null) {
                 call.cancel();
             }

@@ -77,7 +77,15 @@ public class CustomerActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
     //    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         me = this;
-        new InitializeLocationTask().execute();
+     //   new InitializeLocationTask().execute();
+        LocationManager.initialize();
+        setContentView(R.layout.customer);
+        configureWidgets();
+        if(!LocationManager.failed) {
+            bloquearLocation(false);
+        }else{
+            bloquearLocation(true);
+        }
 
     }
 
@@ -269,7 +277,17 @@ public class CustomerActivity extends FragmentActivity {
                 provinciaSeleccionada = pcia.getName();
                 geoIdProvinciaSeleccionada = pcia.getGeonameId();
                 LocationManager.setGeoIdProvincia(String.valueOf(pcia.getGeonameId()));
-                new ReloadCiudadesTask().execute();
+              //  new ReloadCiudadesTask().execute();
+                LocationManager.recargarCiudades();
+                if(!LocationManager.failed) {
+                    bloquearLocation(false);
+                    List<Geoname> ciudades = LocationManager.getCiudades();
+                    Collections.sort(ciudades);
+                    ciudades_spinner.setAdapter(new ArrayAdapter<Geoname>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, ciudades));
+                }else{
+                    bloquearLocation(true);
+                }
+
 
             }
 
@@ -285,7 +303,23 @@ public class CustomerActivity extends FragmentActivity {
                 cdad = (Geoname) parent.getAdapter().getItem(position);
                 ciudadSeleccionada = cdad.getName();
                 LocationManager.setGeoIdCiudad(String.valueOf(cdad.getGeonameId()));
-                new ReloadBarriosTask().execute();
+             //   new ReloadBarriosTask().execute();
+                LocationManager.recargarBarrios();
+                if(!LocationManager.failed) {
+                    bloquearLocation(false);
+                    List<Geoname> barrios = LocationManager.getBarrios();
+                    if(barrios != null && barrios.size() > 0) {
+                        Collections.sort(barrios);
+                        layoutBarrio.setVisibility(View.VISIBLE);
+                        tvPartidos.setText(getString(R.string.partido));
+                        barrio_spinner.setAdapter(new ArrayAdapter<Geoname>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, barrios));
+                    }else{
+                        tvPartidos.setText(getString(R.string.barrio));
+                        layoutBarrio.setVisibility(View.GONE);
+                    }
+                }else{
+                    bloquearLocation(true);
+                }
 
             }
 
@@ -337,7 +371,47 @@ public class CustomerActivity extends FragmentActivity {
     private void guardarCustomer() {
         if(validarCustomer()){
            // this.guardarCustomerEnBD();
-            new CreateCustomerTask().execute();
+            //new CreateCustomerTask().execute();
+            loadInfoCustomer();
+            int codigoExito = 1;// CREACION CON EXITO
+            Call<List<Customer>> callInsert;
+            Response<List<Customer>> resp;
+
+            try {
+                this.initializeService();
+                callInsert = ConstantsAdmin.customerService.createAccount(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPassword(), customer.getGender(), customer.getCiudad(), customer.getProvincia(), customer.getSuburbio(), customer.getDireccion(), customer.getCp(), customer.getTelephone(), customer.getFax(), customer.getNewsletter(), ConstantsAdmin.tokenFFL);
+                resp = callInsert.execute();
+                ArrayList<Customer> customers = new ArrayList<>(resp.body());
+                if (customers.size() == 1) {//DEVUELVE EL CLIENTE RECIEN CREADO
+                    Customer c = resp.body().get(0);
+                    ConstantsAdmin.currentCustomer = c;
+                    ConstantsAdmin.customerJustCreated = true;
+                    ConstantsAdmin.mensaje = getString(R.string.create_customer_success);
+                    finish();
+                    //selectedArtefact.setIdRemoteDB(a.getId());
+
+                }else{// SIGNIFICA QUE YA EXISTE UN CLIENTE CON EL MAIL INGRESADO
+                    codigoExito = 2;
+
+                }
+            } catch (Exception exc) {
+                codigoExito = 3;
+            }
+            String mensaje = "";
+            switch (codigoExito){
+                case 1:
+                    mensaje = getString(R.string.create_customer_success);
+                    break;
+                case 2:
+                    mensaje = getString(R.string.exists_customer);
+                    currentFocusedWidget = entryMail;
+                    break;
+                case 3:
+                    mensaje = getString(R.string.create_customer_error);
+                    break;
+            }
+            createAlertDialog(mensaje,"");
+
 
         }else{
             if(ConstantsAdmin.mensaje != null){

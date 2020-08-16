@@ -1,9 +1,7 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,9 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
-import com.boxico.android.kn.funforlabelapp.dtos.Customer;
-import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoPago;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
@@ -55,9 +50,31 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
         setContentView(R.layout.configurar_pago);
         this.initializeService();
         this.configureWidgets();
-        new LoadMetodosPagoTask().execute();
-    }
+      //  new LoadMetodosPagoTask().execute();
+        Call<List<MetodoPago>> call = null;
+        Response<List<MetodoPago>> response;
 
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = ConstantsAdmin.utilsService.getAllPaymentMethod(true, ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                metodosPago = new ArrayList<>(response.body());
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                configureRadioButtonsPayment();
+            }else{
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+/*
 
     private void loadMetodosPago() {
         Call<List<MetodoPago>> call = null;
@@ -81,8 +98,8 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
 
         }
 
-    }
-
+    }*/
+/*
     private class LoadMetodosPagoTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -106,16 +123,6 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-            /*
-            Customer c = ConstantsAdmin.currentCustomer;
-            String temp = c.getFirstName() + " " + c.getLastName() + "\n";
-            temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
-            if(ConstantsAdmin.addressCustomer.getSuburbio() != null && !ConstantsAdmin.addressCustomer.getSuburbio().equals("")){
-                temp = temp + ConstantsAdmin.addressCustomer.getSuburbio() + "\n";
-            }
-            temp = temp + ConstantsAdmin.addressCustomer.getCiudad() + ", " + ConstantsAdmin.addressCustomer.getCp() + "\n";
-            temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
-            */
             if(dialog != null) {
                 dialog.cancel();
             }
@@ -123,7 +130,7 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
         }
     }
 
-
+*/
     private void initializeService(){
         GsonBuilder gsonB = new GsonBuilder();
         gsonB.setLenient();

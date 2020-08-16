@@ -1,27 +1,19 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,23 +25,19 @@ import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
 import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
-import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
+
 import com.boxico.android.kn.funforlabelapp.dtos.MetodoEnvio;
 import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
-import com.boxico.android.kn.funforlabelapp.utils.BundleCodes;
+
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mercadopago.android.px.configuration.PaymentConfiguration;
+
 import com.mercadopago.android.px.core.MercadoPagoCheckout;
-import com.mercadopago.android.px.core.MercadoPagoCheckout.Builder;
-import com.mercadopago.android.px.core.PaymentProcessor;
-import com.mercadopago.android.px.model.Item;
 import com.mercadopago.android.px.model.Payment;
-import com.mercadopago.android.px.model.Sites;
+
 import com.mercadopago.android.px.model.exceptions.MercadoPagoError;
-import com.mercadopago.android.px.preferences.CheckoutPreference;
 
 
 import org.json.JSONArray;
@@ -57,15 +45,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -182,9 +167,46 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 
     private void finalizarCompra() {
-        new InsertarOrderTask().execute();
-    }
+      //  new InsertarOrderTask().execute();
+        Call<Integer> call = null;
+        Response<Integer> response = null;
+        Customer c = ConstantsAdmin.currentCustomer;
+        AddressBook ab = ConstantsAdmin.addressCustomer;
+        Date date= new Date();
+        long time = date.getTime();
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(time));
+        Properties p =  ConstantsAdmin.fflProperties;
+        MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
 
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = ConstantsAdmin.orderService.insertOrder(true, ConstantsAdmin.tokenFFL,(int) c.getId(),  c.getFirstName() + " " + c.getLastName(),
+                    ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(),
+                    ConstantsAdmin.ARGENTINA, c.getTelephone(), c.getEmail(), 1,c.getFirstName() + " " + c.getLastName(),
+                    ab.getCalle(),ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
+                    c.getFirstName() + " " + c.getLastName(), ab.getCalle(), ab.getSuburbio(), ab.getCiudad(), ab.getCp(), ab.getProvincia(), ConstantsAdmin.ARGENTINA,1,
+                    ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")",
+                    null, timeStamp, Integer.valueOf(p.getProperty(ConstantsAdmin.ORDER_STATUS_PENDING_TRANSFERENCE)),
+                    p.getProperty(ConstantsAdmin.CURRENCY), Integer.valueOf(p.getProperty(ConstantsAdmin.CURRENCY_VALUE)), me.getName() + "(" + me.getDescription() + ")",(int)(precioTotalTags + precioTotalEnvio),
+                    (int)precioTotalTags, (int)precioTotalEnvio,timeStamp,entryComentario.getText().toString());
+            response = call.execute();
+            if(response.body() != null){
+                idOrder = response.body();
+                this.insertarEtiquetas();
+            }else{
+                okInsert = false;
+                ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            }
+        }catch(Exception exc){
+            ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
+            okInsert = false;
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+/*
     private class InsertarOrderTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -226,7 +248,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 
     private void redirigirAMercadoLibre() {
         JSONObject jsonObject = new JSONObject();
@@ -433,7 +455,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     //  ((TextView) findViewById(R.id.mp_results)).setText("Error: " +  mercadoPagoError.getMessage());
                     //Resolve error in checkout
                 } else {
-                    new RegistrarCancelacionMercadoPagoTask().execute();
+                    //new RegistrarCancelacionMercadoPagoTask().execute();
+                    registrarCancelacionMercadoPago();
                     ConstantsAdmin.mensajeCompra = getString(R.string.cancelo_compra);
                 }
             }
@@ -466,7 +489,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     private class RegistrarCancelacionMercadoPagoTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -494,7 +517,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 
 /*
     MyReceiver receiver;
@@ -580,7 +603,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 */
 
-
+/*
 
     private class SendCustomerNotificationTask extends AsyncTask<Long, Integer, Integer> {
 
@@ -612,7 +635,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         }
     }
-
+*/
     private String getDescripcionTags(){
         Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
         ItemCarrito ic = null;
@@ -763,6 +786,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         String to = ConstantsAdmin.currentCustomer.getEmail();
         ConstantsAdmin.enviarMail(subject, body, to);
+        Intent intent = new Intent(me, CompraFinalizadaActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -912,12 +937,29 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
 
         }
-    }
 
+        if(okInsert){// PUDO INSERTAR EN ORDERS
+            switch ((int)ConstantsAdmin.selectedPaymentMethod.getId()){
+                case 1:// ES TRANSFERENCIA BANCARIA
+                   // new SendCustomerNotificationTask().execute();
+                    sendCustomerNotification();
+
+                    break;
+                case 2:
+                    break;
+                case 3: // ES MERCADOLIBRE
+                    redirigirAMercadoLibre();
+                default:
+                    break;
+            }
+
+        }
+    }
+/*
     private void almacenarImagenRemoto(ProductoCarrito p, String imageName) {
         new AlmacenarImagenRemotoTask().execute(imageName);
     }
-
+*//*
     private class AlmacenarImagenRemotoTask extends AsyncTask<Object, Integer, Integer> {
 
 
@@ -944,12 +986,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
 
     }
-
+*//*
     private void almacenarImagenRemotoPrivado(String n) {
         ConstantsAdmin.uploadFile(n);
     }
 
-
+*/
     private void cargarDetallePago() {
         String temp = "";
         temp = temp + ConstantsAdmin.selectedPaymentMethod.getName() + "\n";
