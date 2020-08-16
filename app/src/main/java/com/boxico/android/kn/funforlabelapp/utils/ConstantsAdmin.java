@@ -17,7 +17,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -32,6 +31,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkManager;
 
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
@@ -53,6 +59,7 @@ import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -1306,7 +1313,18 @@ public class ConstantsAdmin {
         }
     }
 
+    public static void uploadFile(String sourceFileUri, Activity ctx){
+        Data inputData = new Data.Builder().putString("sourceFileUri", sourceFileUri).build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED).build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(UploadFileWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(ctx).enqueue(request);
 
+    }
+/*
     public static int uploadFile(String sourceFileUri){
         final String temp = sourceFileUri;
 
@@ -1442,8 +1460,10 @@ public class ConstantsAdmin {
         new UploadFileAsync().execute("");
         return 1;
     }
+*/
 
-    public static int uploadFile1(String sourceFileUri) {
+
+   /* public static int uploadFile1(String sourceFileUri) {
 
 
         String fileName = sourceFileUri;
@@ -1527,5 +1547,8 @@ public class ConstantsAdmin {
         }
         return serverResponseCode;
      }
+
+     */
+
 
 }

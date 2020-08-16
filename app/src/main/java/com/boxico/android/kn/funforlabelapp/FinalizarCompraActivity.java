@@ -871,7 +871,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }else{
-                ConstantsAdmin.uploadFile(imageName + ".png");
+                ConstantsAdmin.uploadFile(imageName + ".png", this);
                // this.almacenarImagenRemoto(p, imageName + ".png");
             }
         }
@@ -928,7 +928,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     okInsert = false;
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
-                    ConstantsAdmin.uploadFile(imageName + ".png");
+                    ConstantsAdmin.uploadFile(imageName + ".png", this);
                 }
             }
          /*   if(okInsert){

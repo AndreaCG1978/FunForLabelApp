@@ -2,11 +2,9 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -16,24 +14,30 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.work.Constraints;
 import androidx.work.Data;
-import androidx.work.ListenableWorker;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.Operation;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.LoadPropertieslWorker;
 import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
 import com.boxico.android.kn.funforlabelapp.utils.SendMailWorker;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -127,8 +131,17 @@ public class LoginActivity extends FragmentActivity {
 
 
     private void loadProperties() {
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadPropertieslWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(this).enqueue(request);
 
-        new LoadPropertiesTask().execute();
+//        new LoadPropertiesTask().execute();
         //ConstantsAdmin.privateLoadProperties();
     }
 
@@ -227,6 +240,15 @@ public class LoginActivity extends FragmentActivity {
         try {
         //    okSend =ConstantsAdmin.enviarMail(this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia), body, customerTemp.getEmail());
 
+
+            // CREO EL PROGRESS BAR
+
+            LinearLayout layout = findViewById(R.id.loginLayout);
+            final ProgressBar progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            layout.addView(progressBar, 1,params);
+
             Data inputData = new Data.Builder()
                     .putString("to", customerTemp.getEmail())
                     .putString("subject", this.getString(R.string.app_name) + " - " + this.getString(R.string.title_nueva_contrasenia))
@@ -239,8 +261,25 @@ public class LoginActivity extends FragmentActivity {
                     .setInputData(inputData)
                     .setConstraints(constraints)
                     .build();
-            ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
 
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                    .observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(@Nullable WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                                createAlertDialog(me.getString(R.string.send_mail_succes) + customerTemp.getEmail(),"");
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                progressBar.setVisibility(View.GONE);
+                                passEntry.setText("");
+                            }
+                        }
+                    });
+            ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
             passEntry.setText("");
 /*
 
@@ -287,7 +326,7 @@ public class LoginActivity extends FragmentActivity {
             }
         }
     }*/
-
+/*
     private class LoadPropertiesTask extends AsyncTask<Long, Integer, Integer> {
 
 
@@ -315,7 +354,7 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-
+*/
 
     private String crearNuevaContrasenia() {
 
@@ -335,6 +374,8 @@ public class LoginActivity extends FragmentActivity {
             getCustomerInfo();
 
             //new GetCustomerTask().execute();
+        }else{
+           createAlertDialog(getString(R.string.campo_mail_no_valido), getString(R.string.atencion));
         }
 
     }
@@ -491,8 +532,7 @@ public class LoginActivity extends FragmentActivity {
                     if(response != null && response.body() != null){
                             //new SendMail().execute(params);
                         reenviarContrasenia();
-                     //   createAlertDialog(ConstantsAdmin.mensaje,"");
-                     //   passEntry.setText("");
+
                     }
                 }
 
