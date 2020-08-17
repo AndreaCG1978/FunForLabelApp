@@ -1,7 +1,6 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -17,18 +16,14 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
-import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
-import com.boxico.android.kn.funforlabelapp.utils.KNCustomCarritoAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,10 +37,8 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

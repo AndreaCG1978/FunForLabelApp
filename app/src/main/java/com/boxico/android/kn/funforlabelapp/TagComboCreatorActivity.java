@@ -13,8 +13,10 @@ import android.os.StrictMode;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -39,7 +41,6 @@ import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.TagParams;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadAllComboWorker;
-import com.boxico.android.kn.funforlabelapp.utils.workers.SendMailWorker;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -576,7 +577,15 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         final ProgressBar progressBar = new ProgressBar(TagComboCreatorActivity.this, null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout.addView(progressBar, 1,params);
+        layout.addView(progressBar, 4,params);
+
+        final TextView txt = new TextView(this);
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txt.setBackgroundColor(Color.TRANSPARENT);
+        txt.setText(getString(R.string.loading_data));
+        txt.setGravity(Gravity.CENTER);
+        txt.setVisibility(View.GONE);
+        layout.addView(txt, 4,params);
 
         Data inputData = new Data.Builder().build();
         Constraints constraints = new Constraints.Builder()
@@ -593,11 +602,13 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     public void onChanged(@Nullable WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
                             progressBar.setVisibility(View.VISIBLE);
+                            txt.setVisibility(View.VISIBLE);
                             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
                         if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            txt.setVisibility(View.GONE);
                             progressBar.setVisibility(View.GONE);
                             try {
                                 cargarCreador();

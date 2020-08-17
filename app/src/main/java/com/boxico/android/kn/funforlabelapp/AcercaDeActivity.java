@@ -1,28 +1,18 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.net.URLEncoder;
 import java.util.Properties;
 
 public class AcercaDeActivity extends AppCompatActivity {

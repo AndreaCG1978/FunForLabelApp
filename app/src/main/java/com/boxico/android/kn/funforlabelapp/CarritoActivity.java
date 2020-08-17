@@ -4,24 +4,19 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.SyncStateContract;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.boxico.android.kn.funforlabelapp.dtos.ComboCarrito;
 import com.boxico.android.kn.funforlabelapp.dtos.ItemCarrito;
-import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.utils.KNCarritoAdapterListView;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class CarritoActivity extends FragmentActivity {
 

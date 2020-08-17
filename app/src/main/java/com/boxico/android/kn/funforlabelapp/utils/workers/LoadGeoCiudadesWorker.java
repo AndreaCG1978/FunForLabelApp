@@ -12,7 +12,6 @@ import com.boxico.android.kn.funforlabelapp.utils.location.GeoApiClient;
 import com.boxico.android.kn.funforlabelapp.utils.location.GeoChilds;
 import com.boxico.android.kn.funforlabelapp.utils.location.Geoname;
 import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
-import com.boxico.android.kn.funforlabelapp.utils.location.Paises;
 
 import java.util.ArrayList;
 import java.util.Iterator;

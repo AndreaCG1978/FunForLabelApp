@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -248,6 +249,7 @@ public class LoginActivity extends FragmentActivity {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
             layout.addView(progressBar, 1,params);
+            ScrollView sv = findViewById(R.id.scroll_view);
 
             Data inputData = new Data.Builder()
                     .putString("to", customerTemp.getEmail())

@@ -1,10 +1,8 @@
 package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import androidx.annotation.NonNull;
 
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
-import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 
 import java.io.File;
 

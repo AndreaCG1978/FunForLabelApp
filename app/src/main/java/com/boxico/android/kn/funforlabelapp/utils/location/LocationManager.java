@@ -9,18 +9,11 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.boxico.android.kn.funforlabelapp.services.GeoService;
-import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoBarriosWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoCiudadesWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoProvinciasWorker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-
-import retrofit2.Call;
 
 
 public class LocationManager {

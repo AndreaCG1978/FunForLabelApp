@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.boxico.android.kn.funforlabelapp.R;
-import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
 import java.util.List;

@@ -1,9 +1,7 @@
 package com.boxico.android.kn.funforlabelapp;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,19 +37,15 @@ import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoBarriosWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoCiudadesWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoProvinciasWorker;
-import com.boxico.android.kn.funforlabelapp.utils.workers.LoadPropertiesWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.SaveCustomerWorker;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import javax.xml.transform.Result;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -106,7 +100,7 @@ public class CustomerActivity extends FragmentActivity {
         progressBar = new ProgressBar(CustomerActivity.this, null, android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout.addView(progressBar, 1,params);
+        layout.addView(progressBar, 6,params);
 
         Data inputData = new Data.Builder().build();
         Constraints constraints = new Constraints.Builder()
@@ -611,7 +605,7 @@ public class CustomerActivity extends FragmentActivity {
                                             break;
                                     }
                                     ConstantsAdmin.mensaje = mensaje;
-
+                                    createAlertDialog(ConstantsAdmin.mensaje, me.getString(R.string.atencion));
 
                                 }
                             }
@@ -708,7 +702,7 @@ public class CustomerActivity extends FragmentActivity {
         ConstantsAdmin.tempCustomer.setTelephone(entryTel.getText().toString());
     }
 
-    private class CreateCustomerTask extends AsyncTask<Long, Integer, Integer> {
+   /* private class CreateCustomerTask extends AsyncTask<Long, Integer, Integer> {
 
 
         private ProgressDialog dialog = null;
@@ -751,7 +745,7 @@ public class CustomerActivity extends FragmentActivity {
     }
 
 
-
+*//*
     private int guardarCustomerEnBD() {
         loadInfoCustomer();
         int codigoExito = 1;// CREACION CON EXITO
@@ -782,7 +776,7 @@ public class CustomerActivity extends FragmentActivity {
         return codigoExito;
     }
 
-
+*/
     private boolean validarCustomer() {
         boolean esValido = true;
         ConstantsAdmin.mensaje = null;

@@ -1,6 +1,5 @@
 package com.boxico.android.kn.funforlabelapp.utils.workers;
 
-import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;

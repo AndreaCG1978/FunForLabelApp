@@ -2,7 +2,6 @@ package com.boxico.android.kn.funforlabelapp.utils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.boxico.android.kn.funforlabelapp.R;
-import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
-
-import java.io.File;
 
 
 public class KNCustomFontSizeAdapter extends ArrayAdapter<String> {

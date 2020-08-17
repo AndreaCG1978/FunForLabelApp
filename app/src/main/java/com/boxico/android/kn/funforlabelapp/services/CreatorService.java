@@ -1,11 +1,9 @@
 package com.boxico.android.kn.funforlabelapp.services;
 
-import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
-import com.boxico.android.kn.funforlabelapp.dtos.Product;
 
 import java.util.List;
 

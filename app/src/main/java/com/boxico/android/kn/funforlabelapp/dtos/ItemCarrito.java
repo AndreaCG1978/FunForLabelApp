@@ -2,8 +2,6 @@ package com.boxico.android.kn.funforlabelapp.dtos;
 
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
-
 public class ItemCarrito {
 
     protected int id;
