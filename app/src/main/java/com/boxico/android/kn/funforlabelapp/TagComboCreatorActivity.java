@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +38,9 @@ import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundProductAdapt
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.TagParams;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadAllComboWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.SendMailWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -47,9 +52,19 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -90,7 +105,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     private int selectedPosFontSizeTitle = -1;
     private int selectedTitleColor = Color.BLACK;
 
-    private ArrayList<Product> productsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,7 +344,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
     }
 
     private void loadImagesForComboProducts() {
-        Iterator<Product> it = productsList.iterator();
+        Iterator<Product> it = ConstantsAdmin.productsList.iterator();
         Product p;
         String url;
         Bitmap b;
@@ -355,11 +370,11 @@ public class TagComboCreatorActivity extends AppCompatActivity {
             call = ConstantsAdmin.productService.getProductsFromComboProduct(true, ConstantsAdmin.currentProduct.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                productsList = new ArrayList<>(response.body());
-                if(productsList.size() == 0){
+                ConstantsAdmin.productsList = new ArrayList<>(response.body());
+                if(ConstantsAdmin.productsList.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
-                    ConstantsAdmin.selectedComboProduct = productsList.get(0);
+                    ConstantsAdmin.selectedComboProduct = ConstantsAdmin.productsList.get(0);
                     TagParams param = null;
                     if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
                         param = new TagParams();
@@ -370,7 +385,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                     }
                     param.setInicializadoFont(false);
                     param.setInicializadoSize(false);
-                    Iterator<Product> it = productsList.iterator();
+                    Iterator<Product> it = ConstantsAdmin.productsList.iterator();
                     Product p;
                     String url;
                     Bitmap b;
@@ -381,56 +396,12 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                             b = ConstantsAdmin.getImageFromURL(url);
                             p.setImage(b);
                         }
-                        spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, productsList));
-                        spinnerProducts.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View v, MotionEvent event) {
-                                actualizarTagActual();
-                                return false;
-                            }
-                        });
-                        spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
-                                    TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                                    if(textTag != null && textTag.getText()!= null){
-                                        tp.setText(textTag.getText().toString());
-                                        if(!textTag.getText().toString().equals("")) {
-                                            ConstantsAdmin.selectedComboProduct.setChecked(true);
-                                        }
-                                    }
+                        spinnerProducts.setAdapter(new KNCustomBackgroundProductAdapter(getApplicationContext(), R.layout.spinner_item,R.id.rowValor, ConstantsAdmin.productsList));
 
-                                    if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
-                                        tp.setTitle(titleTag.getText().toString());
-                                    }
-                                }
-                                ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
-                                TagParams param = null;
-                                if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
-                                    param = new TagParams();
-                                    param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
-                                    ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
-                                }else{
-                                    param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-                                }
-                                param.setInicializadoFont(false);
-                                param.setInicializadoSize(false);
-                                try {
-                                    cargarCreador();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                  //      loadAll();
 
-                            }
+                        invokeLoadAllWorker();
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                        loadAll();
-                  //      cargarCreador();
 
                         /*
 
@@ -598,11 +569,100 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         }
     }
 
+    private void invokeLoadAllWorker() {
+        // CREO EL PROGRESS BAR
+
+        LinearLayout layout = findViewById(R.id.tagComboCreatorLayout);
+        final ProgressBar progressBar = new ProgressBar(TagComboCreatorActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 1,params);
+
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadAllComboWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.GONE);
+                            try {
+                                cargarCreador();
+                                spinnerProducts.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        actualizarTagActual();
+                                        return false;
+                                    }
+                                });
+                                spinnerProducts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        if(ConstantsAdmin.selectedComboProduct !=null){// SE GUARDA EL TEXT/TITLE DE LA ETIQUETA ANTERIOR
+                                            TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                                            if(textTag != null && textTag.getText()!= null){
+                                                tp.setText(textTag.getText().toString());
+                                                if(!textTag.getText().toString().equals("")) {
+                                                    ConstantsAdmin.selectedComboProduct.setChecked(true);
+                                                }
+                                            }
+
+                                            if(ConstantsAdmin.currentCreator != null && ConstantsAdmin.currentCreator.getTitle()==1 && titleTag != null && titleTag.getText()!= null){
+                                                tp.setTitle(titleTag.getText().toString());
+                                            }
+                                        }
+                                        ConstantsAdmin.selectedComboProduct = (Product) parent.getAdapter().getItem(position);
+                                        TagParams param = null;
+                                        if(!ConstantsAdmin.params.containsKey(ConstantsAdmin.selectedComboProduct.getId())){
+                                            param = new TagParams();
+                                            param.setIdProduct(ConstantsAdmin.selectedComboProduct.getId());
+                                            ConstantsAdmin.params.put(ConstantsAdmin.selectedComboProduct.getId(), param);
+                                        }else{
+                                            param = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
+                                        }
+                                        param.setInicializadoFont(false);
+                                        param.setInicializadoSize(false);
+                                        try {
+                                            cargarCreador();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+    }
+/*
 
     private void loadAll() throws IOException {
-        Iterator<Product> it = productsList.iterator();
+        Iterator<Product> it = ConstantsAdmin.productsList.iterator();
         Product p = null;
         TagParams tp = null;
+
 
         while(it.hasNext()){
             p = it.next();
@@ -747,12 +807,14 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         cargarCreador();
 
     }
-
+*/
     private void cargarCreador() throws IOException {
         TagParams tp = ConstantsAdmin.params.get(ConstantsAdmin.selectedComboProduct.getId());
-        if (tp != null && tp.getCreator() != null) {
+
+
+   //     if (tp != null && tp.getCreator() != null) {
             ConstantsAdmin.currentCreator = tp.getCreator();
-        } else {
+   /*     } else {
             Call<Creator> call1 = null;
             Response<Creator> response1;
             try {
@@ -777,13 +839,13 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
             }
 
-        }
-        if (tp != null && tp.getFonts() != null) {
+        }*/
+   //     if (tp != null && tp.getFonts() != null) {
             fonts = tp.getFonts();
-        }
-        if (tp != null && tp.getLabelAttributes() != null) {
+  //      }
+    //    if (tp != null && tp.getLabelAttributes() != null) {
             labelAttributes = tp.getLabelAttributes();
-        } else {
+   /*     } else {
             Call<List<LabelAttributes>> call2 = null;
             Response<List<LabelAttributes>> response2;
             List<LabelAttributes> temp2;
@@ -853,11 +915,11 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
 
             }
-        }
+        }*/
             //new LoadImagesTask().execute();
-        if (tp != null && tp.getImages() != null) {
+    //    if (tp != null && tp.getImages() != null) {
             images = tp.getImages();
-        } else {
+    /*    } else {
             Call<List<LabelImage>> call4 = null;
             Response<List<LabelImage>> response4;
             ArrayList temp4;
@@ -893,7 +955,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
                 }
 
             }
-        }
+        }*/
         initializeCreator();
     }
 
@@ -1740,7 +1802,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
         boolean allChecked = verificarTodosTagsCheckeados();
         if(allChecked){
 
-            ConstantsAdmin.currentComboProducts = productsList;
+            ConstantsAdmin.currentComboProducts = ConstantsAdmin.productsList;
             Intent intent = new Intent(me, TagReadyComboToGoActivity.class);
             startActivity(intent);
         }else{
@@ -1781,7 +1843,7 @@ public class TagComboCreatorActivity extends AppCompatActivity {
 
     private boolean verificarTodosTagsCheckeados() {
         boolean result = true;
-        Iterator<Product> it = productsList.iterator();
+        Iterator<Product> it = ConstantsAdmin.productsList.iterator();
         while(result && it.hasNext()){
             result = it.next().isChecked();
         }

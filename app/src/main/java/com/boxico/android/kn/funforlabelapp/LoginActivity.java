@@ -37,9 +37,9 @@ import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
-import com.boxico.android.kn.funforlabelapp.utils.LoadPropertieslWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadPropertiesWorker;
 import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
-import com.boxico.android.kn.funforlabelapp.utils.SendMailWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.SendMailWorker;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -135,7 +135,7 @@ public class LoginActivity extends FragmentActivity {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadPropertieslWorker.class)
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadPropertiesWorker.class)
                 .setInputData(inputData)
                 .setConstraints(constraints)
                 .build();

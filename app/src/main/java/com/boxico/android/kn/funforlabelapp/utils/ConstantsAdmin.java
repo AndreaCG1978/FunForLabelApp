@@ -36,7 +36,6 @@ import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.Operation;
 import androidx.work.WorkManager;
 
 import com.boxico.android.kn.funforlabelapp.R;
@@ -59,7 +58,7 @@ import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.boxico.android.kn.funforlabelapp.utils.workers.UploadFileWorker;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -74,10 +73,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +85,8 @@ import java.util.Properties;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class ConstantsAdmin {
 
@@ -263,6 +262,7 @@ public class ConstantsAdmin {
     public static Product selectedComboProduct;
     public static ArrayList<Product> currentComboProducts;
     public static ArrayMap<Long,TagParams> params;
+    public static int codigoExito;
 
     private static ArrayList<LabelImage> capturas = null;
 
@@ -287,11 +287,150 @@ public class ConstantsAdmin {
     public static String TITULO_MP__DETALLE_TAGS_EN="TITULO_MP__DETALLE_TAGS_EN";
     public static String TITULO_MP__DETALLE_ENVIO_EN="TITULO_MP__DETALLE_ENVIO_EN";
 
+    public static ArrayList<Product> productsList = null;
+    public static Customer tempCustomer;
+
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
         return stream.toByteArray();
     }
+
+    public static void loadAllInCombo() throws IOException {
+        Iterator<Product> it = productsList.iterator();
+        Product p = null;
+        TagParams tp = null;
+
+
+        while(it.hasNext()){
+            p = it.next();
+            tp = new TagParams();
+
+            // Busco el CREATOR
+            Call<Creator> call1 = null;
+            Response<Creator> response1;
+            try {
+                call1 = creatorService.getCreator(p.getId(), true, tokenFFL);
+                response1 = call1.execute();
+                if (response1.body() != null) {
+                    //    ConstantsAdmin.currentCreator = response1.body();
+                    if (tp != null) {
+                        tp.setCreator(response1.body());
+                    }
+
+                }
+            } catch (Exception exc) {
+                if (call1 != null) {
+                    call1.cancel();
+                }
+            }
+            // CARGO LABELATTRIB
+
+            Call<List<LabelAttributes>> call2 = null;
+            Response<List<LabelAttributes>> response2;
+            List<LabelAttributes> temp2;
+            LabelAttributes[] labelAttrs = null;
+            try {
+                call2 = creatorService.getLabelAttributes(tp.getCreator().getId(), true, tokenFFL);
+                response2 = call2.execute();
+                if (response2.body() != null) {
+                    temp2 = new ArrayList<>(response2.body());
+                    labelAttrs = temp2.toArray(new LabelAttributes[temp2.size()]);
+                    if (tp != null) {
+                        tp.setLabelAttributes(labelAttrs);
+                        if (labelAttrs.length > 1) {
+                            tp.setTitle(true);
+                        } else {
+                            tp.setTitle(false);
+                        }
+                    }
+                    // labelAttributes = response.body();
+                }
+            } catch (Exception exc) {
+                if (call2 != null) {
+                    call2.cancel();
+                }
+            }
+            boolean needLoadFontFile = true;
+            LabelFont[] fs = null;
+            if (tp != null && tp.getFonts() != null) {
+                //  fonts = tp.getFonts();
+                needLoadFontFile = false;
+            } else {
+                Call<List<LabelFont>> call3 = null;
+                Response<List<LabelFont>> response3;
+                List<LabelFont> temp3;
+
+                try {
+                    call3 = creatorService.getFonts(labelAttrs[0].getTextAreasId(), true,tokenFFL);
+                    response3 = call3.execute();
+                    if (response3.body() != null) {
+                        temp3 = new ArrayList<>(response3.body());
+                        fs = temp3.toArray(new LabelFont[temp3.size()]);
+                        if (tp != null) {
+                            tp.setFonts(fs);
+                        }
+
+                    }
+                } catch (Exception exc) {
+                    if (call3 != null) {
+                        call3.cancel();
+                    }
+                }
+
+            }
+            if (needLoadFontFile) {
+//                                new GetFontFilesTask().execute();
+                String temp, extension;
+                for (LabelFont lf : fs) {
+                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                    temp = lf.getBasename().substring(0, lf.getBasename().length() - 4);
+                    temp = temp + "-Regular" + extension;
+                    lf.setBasename(temp);
+                    ConstantsAdmin.copyFileFromUrl(fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + temp, temp);
+                }
+
+            }
+            Call<List<LabelImage>> call4 = null;
+            Response<List<LabelImage>> response4;
+            ArrayList temp4;
+            LabelImage[] ims = null;
+            try {
+                call4 = creatorService.getImages(tp.getCreator().getId(), true, ConstantsAdmin.tokenFFL);
+                response4 = call4.execute();
+                if (response4.body() != null) {
+                    temp4 = new ArrayList<>(response4.body());
+                    if (temp4.size() > 0) {
+                        ims = (LabelImage[]) temp4.toArray(new LabelImage[temp4.size()]);
+                        if (tp != null) {
+                            tp.setImages(ims);
+                        }
+                    }
+                }
+            } catch (Exception exc) {
+                if (call4 != null) {
+                    call4.cancel();
+                }
+            }
+            String url1;
+            Bitmap b1;
+            for (LabelImage li : ims) {
+                if (li.getImage() == null) {
+                    url1 = fflProperties.getProperty(ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                    b1 = getImageFromURL(url1);
+                    li.setImage(b1);
+                }
+
+            }
+
+            params.put(p.getId(), tp);
+
+
+        }
+        //cargarCreador();
+
+    }
+
 
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {

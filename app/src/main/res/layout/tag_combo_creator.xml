@@ -5,7 +5,7 @@
         android:background="@drawable/bg_body1"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/tagComboCreatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

@@ -1,4 +1,4 @@
-package com.boxico.android.kn.funforlabelapp.utils;
+package com.boxico.android.kn.funforlabelapp.utils.workers;
 
 import android.content.Context;
 
@@ -7,6 +7,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.boxico.android.kn.funforlabelapp.services.GeoService;
+import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.location.GeoApiClient;
 import com.boxico.android.kn.funforlabelapp.utils.location.GeoChilds;
 import com.boxico.android.kn.funforlabelapp.utils.location.LocationManager;
@@ -16,10 +17,10 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class LoadGeoDataWorker extends Worker {
+public class LoadGeoBarriosWorker extends Worker {
     WorkerParameters myWorkerParams;
 
-    public LoadGeoDataWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public LoadGeoBarriosWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         myWorkerParams = workerParams;
     }
@@ -28,31 +29,24 @@ public class LoadGeoDataWorker extends Worker {
     @Override
     public Result doWork() {
         Result r = null;
-     /*   try {
+        try {
+            LocationManager.failed = false;
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
-            Call<Paises> responseCallPais = service.getPaises(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, ConstantsAdmin.GEOCODIGOARGENTINA);
-            Paises paises = responseCallPais.execute().body();
-            Call<GeoChilds> responseCallProvincias =
-                    service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, String.valueOf(paises.getPaises().get(0).getGeonameId()));
-            GeoChilds pcias = responseCallProvincias.execute().body();
-            if (pcias != null) {
-                provincias = pcias.getChilds();
-                failed = false;
+            Call<GeoChilds> responseCallBarrios =
+                    service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, LocationManager.getGeoIdCiudad());
+            GeoChilds brios = responseCallBarrios.execute().body();
+            if(brios != null){
+                LocationManager.barrios = brios.getChilds();
+                r = Result.success();
             }else{
-                failed = true;
+                LocationManager.failed = true;
+                r = Result.failure();
             }
 
         } catch (Exception e) {
-            failed = true;
-        }
-
-
-        try {
-            LocationManager.initialize();
-            r = Result.success();
-        } catch(Exception e) {
+            LocationManager.failed = true;
             r = Result.failure();
-        }*/
+        }
         return r;
     }
 

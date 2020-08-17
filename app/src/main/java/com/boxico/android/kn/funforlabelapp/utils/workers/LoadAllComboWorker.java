@@ -1,4 +1,4 @@
-package com.boxico.android.kn.funforlabelapp.utils;
+package com.boxico.android.kn.funforlabelapp.utils.workers;
 
 import android.content.Context;
 
@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-public class LoadPropertieslWorker extends Worker {
+import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+
+public class LoadAllComboWorker extends Worker {
     WorkerParameters myWorkerParams;
 
-    public LoadPropertieslWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public LoadAllComboWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         myWorkerParams = workerParams;
     }
@@ -19,7 +21,7 @@ public class LoadPropertieslWorker extends Worker {
     public Result doWork() {
         Result r = null;
         try {
-            ConstantsAdmin.privateLoadProperties();
+            ConstantsAdmin.loadAllInCombo();
             r = Result.success();
         } catch(Exception e) {
             e.printStackTrace();

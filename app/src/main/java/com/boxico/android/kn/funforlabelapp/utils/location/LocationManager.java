@@ -1,11 +1,19 @@
 package com.boxico.android.kn.funforlabelapp.utils.location;
 
-import android.content.ContentValues;
-import android.os.AsyncTask;
+import android.app.Activity;
 
+
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.boxico.android.kn.funforlabelapp.services.GeoService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoBarriosWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoCiudadesWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadGeoProvinciasWorker;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,9 +25,9 @@ import retrofit2.Call;
 
 public class LocationManager {
 
-    private static List<Geoname> provincias;
-    private static List<Geoname> ciudades;
-    private static List<Geoname> barrios;
+    public static List<Geoname> provincias;
+    public static List<Geoname> ciudades;
+    public static List<Geoname> barrios;
     private static String geoIdProvincia = "0";
     private static String geoIdCiudad = "0";
     public static boolean failed = false;
@@ -65,9 +73,18 @@ public class LocationManager {
     }
 
 
-    public static void initialize(){
+    public static void initialize(Activity ctx){
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadGeoProvinciasWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(ctx).enqueue(request);
         //new GetProvinciasTask().execute();
-
+/*
         try {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<Paises> responseCallPais = service.getPaises(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, ConstantsAdmin.GEOCODIGOARGENTINA);
@@ -84,14 +101,14 @@ public class LocationManager {
 
         } catch (Exception e) {
             failed = true;
-        }
+        }*/
 
     }
 
 
-    public static void recargarCiudades(){
+    public static void recargarCiudades(Activity ctx){
         //new GetProvinciasTask().execute();
-
+/*
         try {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<GeoChilds> responseCallCiudades = null;
@@ -143,12 +160,33 @@ public class LocationManager {
 
         } catch (Exception e) {
             failed = true;
-        }
+        }*/
+
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadGeoCiudadesWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(ctx).enqueue(request);
 
     }
 
-    public static void recargarBarrios(){
-        try {
+    public static void recargarBarrios(Activity ctx){
+
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadGeoBarriosWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(ctx).enqueue(request);
+
+       /* try {
             failed = false;
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<GeoChilds> responseCallBarrios =
@@ -162,7 +200,7 @@ public class LocationManager {
 
         } catch (Exception e) {
             failed = true;
-        }
+        }*/
 
     }
 /*
