@@ -17,7 +17,7 @@ import java.util.Locale;
 import retrofit2.Call;
 
 public class LoadGeoBarriosWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadGeoBarriosWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -27,7 +27,7 @@ public class LoadGeoBarriosWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             LocationManager.failed = false;
             GeoService service = GeoApiClient.getClient().create(GeoService.class);

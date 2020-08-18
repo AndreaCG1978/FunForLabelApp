@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -79,7 +78,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     private float precioTotalEnvio;
     Integer idOrder = -1;
     private boolean okInsert = true;
-    private Integer PAYMENT_REQUEST = 1001;
+    private final Integer PAYMENT_REQUEST = 1001;
   //  final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
    // final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("8755027555974708", "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU").build();
 
@@ -169,7 +168,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     private void finalizarCompra() {
       //  new InsertarOrderTask().execute();
         Call<Integer> call = null;
-        Response<Integer> response = null;
+        btnFinalizar.setEnabled(false);
+        Response<Integer> response;
         Customer c = ConstantsAdmin.currentCustomer;
         AddressBook ab = ConstantsAdmin.addressCustomer;
         Date date= new Date();
@@ -205,6 +205,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
         }
+
+
     }
 /*
     private class InsertarOrderTask extends AsyncTask<Long, Integer, Integer> {
@@ -392,7 +394,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
         }){
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -467,9 +469,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private void registrarCancelacionMercadoPago() {
         Call<Integer> call = null;
-        Response<Integer> response = null;
+        Response<Integer> response;
         Properties p =  ConstantsAdmin.fflProperties;
-        MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
+      //  MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
 
         try {
             ConstantsAdmin.mensaje = null;
@@ -638,13 +640,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 */
     private String getDescripcionTags(){
         Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ItemCarrito ic = null;
+        ItemCarrito ic;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
                 temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
@@ -657,8 +659,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         it = ConstantsAdmin.combosDelCarrito.iterator();
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
                 temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
@@ -672,13 +674,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private String getDescripcionTagsLite(){
         Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ItemCarrito ic = null;
+        ItemCarrito ic;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
@@ -688,8 +690,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         it = ConstantsAdmin.combosDelCarrito.iterator();
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
@@ -776,7 +778,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + "-----------------------------------------------" + "\n";
         body = body + ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")";
 
-        String subject = null;
+        String subject;
         if(ConstantsAdmin.currentLanguage == 1){
             subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT_EN);
         }else{
@@ -798,7 +800,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     private void insertarOrder() {
         Call<Integer> call = null;
         Response<Integer> response = null;
@@ -838,11 +840,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         }
     }
-
+*/
 
     private void insertarEtiquetas() throws IOException {
-        Call<Integer> call = null;
-        Response<Integer> response = null;
+        Call<Integer> call;
+        Response<Integer> response;
         ProductoCarrito p;
         Customer c = ConstantsAdmin.currentCustomer;
         Properties prop = ConstantsAdmin.fflProperties;
@@ -850,7 +852,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         while(it.hasNext() && okInsert){
             p = (ProductoCarrito) it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
-            String imageName = ConstantsAdmin.takeScreenshot(this, p);
+            String imageName = ConstantsAdmin.takeScreenshot(p);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = ConstantsAdmin.orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
@@ -876,9 +878,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
         }
         it = ConstantsAdmin.combosDelCarrito.iterator();
-        ComboCarrito combo = null;
+        ComboCarrito combo;
         Integer idProduct = -1;
-        String imageNameCombo, imageName;
+        String imageName;
         while(it.hasNext() && okInsert){
             combo = (ComboCarrito) it.next();
       //      imageNameCombo = ConstantsAdmin.takeScreenshot(this, combo);
@@ -907,10 +909,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
             Iterator<ItemCarrito> it1 = combo.getProductos().iterator();
-            ProductoCarrito pc = null;
+            ProductoCarrito pc;
             while (it1.hasNext() && okInsert){
                 pc = (ProductoCarrito) it1.next();
-                imageName = ConstantsAdmin.takeScreenshot(this, pc);
+                imageName = ConstantsAdmin.takeScreenshot(pc);
                 if(pc.isTieneTitulo()){
                     call = ConstantsAdmin.orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
                             "imageName",(int)c.getId(),pc.getIdProduct(), 0,
@@ -1007,12 +1009,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         textFormaEnvio.setText(temp);
         temp = ConstantsAdmin.selectedShippingMethod.getDescription();
         textFormaEnvioDetalle.setText(temp);
-        precioTotalEnvio = Float.valueOf(ConstantsAdmin.selectedShippingMethod.getPrice());
+        precioTotalEnvio = Float.parseFloat(ConstantsAdmin.selectedShippingMethod.getPrice());
     }
 
 
     private String getStringDirEnvio(){
-        String temp="";
+        String temp;
         Customer c = ConstantsAdmin.currentCustomer;
         temp = c.getFirstName() + " " + c.getLastName() + "\n";
         temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
@@ -1028,16 +1030,15 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         ItemCarrito ic;
         String temp = "";
         precioTotalTags = 0;
-        float precioTemp = 0;
+        float precioTemp;
         ArrayList<ItemCarrito> items = new ArrayList<>();
         items.addAll(ConstantsAdmin.productosDelCarrito);
         items.addAll(ConstantsAdmin.combosDelCarrito);
-        Iterator<ItemCarrito> it = items.iterator();
-        while(it.hasNext()){
-            ic = it.next();
-            precioTemp = (Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad()));
+        for (ItemCarrito item : items) {
+            ic = item;
+            precioTemp = (Float.parseFloat(ic.getPrecio()) * Float.parseFloat(ic.getCantidad()));
 //            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + "-"+ ic.getCantidad() + " x " + ic.getNombre() + ": $" + precioTemp + "\n";
+            temp = temp + "-" + ic.getCantidad() + " x " + ic.getNombre() + ": $" + precioTemp + "\n";
             precioTotalTags = precioTotalTags + precioTemp;
         }
 

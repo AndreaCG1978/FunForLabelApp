@@ -293,18 +293,17 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     public void addCategoryInView(Category cat1, Category cat2) {
-        LinearLayout l1 = null;
-        LinearLayout l2 = null;
+        LinearLayout l1;
+        LinearLayout l2;
 
         LinearLayout parent = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -400,8 +399,8 @@ public class MainActivity extends FragmentActivity {
                     try {
                         loadImageForCategories();
                         Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
-                        Category cat1 = null;
-                        Category cat2 = null;
+                        Category cat1;
+                        Category cat2;
                         while(it.hasNext()){
                             cat2 = null;
                             cat1 = it.next();

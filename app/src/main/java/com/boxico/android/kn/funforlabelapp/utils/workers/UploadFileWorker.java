@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class UploadFileWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public UploadFileWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -25,13 +25,13 @@ public class UploadFileWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             String sourceFileUri = myWorkerParams.getInputData().getString("sourceFileUri");
             // String sourceFileUri = temp;
 
-            HttpURLConnection conn = null;
-            DataOutputStream dos = null;
+            HttpURLConnection conn;
+            DataOutputStream dos;
             String lineEnd = "\r\n";
             String twoHyphens = "--";
             String boundary = "*****";
@@ -98,7 +98,7 @@ public class UploadFileWorker extends Worker {
                             + lineEnd);
 
                     // Responses from the server (code and message)
-                    int serverResponseCode = conn.getResponseCode();
+                /*    int serverResponseCode = conn.getResponseCode();
                     String serverResponseMessage = conn
                             .getResponseMessage();
 
@@ -111,7 +111,7 @@ public class UploadFileWorker extends Worker {
                         // recursiveDelete(mDirectory1);
 
                     }
-
+*/
                     // close the streams //
                     fileInputStream.close();
                     dos.flush();

@@ -91,18 +91,16 @@ public class CarritoActivity extends FragmentActivity {
     }
 
     private String calcularPrecioTotal() {
-        String result = null;
+        String result;
         float valor = 0;
-        ItemCarrito ic = null;
-        Iterator<ItemCarrito> it1 = ConstantsAdmin.productosDelCarrito.iterator();
-        while(it1.hasNext()){
-            ic = it1.next();
-            valor = valor + Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad());
+        ItemCarrito ic;
+        for (ItemCarrito itemCarrito : ConstantsAdmin.productosDelCarrito) {
+            ic = itemCarrito;
+            valor = valor + Float.parseFloat(ic.getPrecio()) * Float.parseFloat(ic.getCantidad());
         }
-        Iterator<ItemCarrito> it2 = ConstantsAdmin.combosDelCarrito.iterator();
-        while(it2.hasNext()){
-            ic = it2.next();
-            valor = valor + Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad());
+        for (ItemCarrito itemCarrito : ConstantsAdmin.combosDelCarrito) {
+            ic = itemCarrito;
+            valor = valor + Float.parseFloat(ic.getPrecio()) * Float.parseFloat(ic.getCantidad());
         }
         result = String.valueOf(valor);
         result = result.substring(0, result.length() - 2);

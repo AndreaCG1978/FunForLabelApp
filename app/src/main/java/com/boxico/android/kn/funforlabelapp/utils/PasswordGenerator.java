@@ -2,13 +2,13 @@ package com.boxico.android.kn.funforlabelapp.utils;
 
 public class PasswordGenerator {
 
-    public static String NUMEROS = "0123456789";
+    public static final String NUMEROS = "0123456789";
 
-    public static String MAYUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String MAYUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static String MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
+    public static final String MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
 
-    public static String ESPECIALES = "ñÑ";
+    public static final String ESPECIALES = "ñÑ";
 
     //
     public static String getPinNumber() {

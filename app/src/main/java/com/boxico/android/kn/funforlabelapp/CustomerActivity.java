@@ -50,8 +50,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -126,7 +124,7 @@ public class CustomerActivity extends FragmentActivity {
                             provincias_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    Geoname pcia = null;
+                                    Geoname pcia;
                                     pcia = (Geoname) parent.getAdapter().getItem(position);
                                     provinciaSeleccionada = pcia.getName();
                                     geoIdProvinciaSeleccionada = pcia.getGeonameId();
@@ -159,7 +157,7 @@ public class CustomerActivity extends FragmentActivity {
                                                         ciudades_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                             @Override
                                                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                                Geoname cdad = null;
+                                                                Geoname cdad;
                                                                 cdad = (Geoname) parent.getAdapter().getItem(position);
                                                                 ciudadSeleccionada = cdad.getName();
                                                                 LocationManager.setGeoIdCiudad(String.valueOf(cdad.getGeonameId()));
@@ -197,7 +195,7 @@ public class CustomerActivity extends FragmentActivity {
                                                                                             barrio_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                                 @Override
                                                                                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                                                                    Geoname barrio = null;
+                                                                                                    Geoname barrio;
                                                                                                     barrio = (Geoname) parent.getAdapter().getItem(position);
                                                                                                     barrioSeleccionado = barrio.getName();
                                                                                                 }
@@ -443,7 +441,7 @@ public class CustomerActivity extends FragmentActivity {
         entryConfirmacion = this.findViewById(R.id.entryConfirmacion);
         checkNewsletter = this.findViewById(R.id.checkNewsletter);
         radioFemenino = this.findViewById(R.id.radio_femenino);
-        RadioButton radioMasculino = this.findViewById(R.id.radio_masculino);
+      //  RadioButton radioMasculino = this.findViewById(R.id.radio_masculino);
         Button btnCancel = this.findViewById(R.id.buttonCancel);
         Button btnGuardar = this.findViewById(R.id.buttonGuardar);
         entryNombre.clearFocus();
@@ -549,10 +547,9 @@ public class CustomerActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -564,8 +561,8 @@ public class CustomerActivity extends FragmentActivity {
             //new CreateCustomerTask().execute();
             loadInfoCustomer();
             ConstantsAdmin.codigoExito = 1;// CREACION CON EXITO
-            Call<List<Customer>> callInsert;
-            Response<List<Customer>> resp;
+      //      Call<List<Customer>> callInsert;
+       //     Response<List<Customer>> resp;
 
             try {
                 this.initializeService();
@@ -677,7 +674,7 @@ public class CustomerActivity extends FragmentActivity {
         } else {
 
             ConstantsAdmin.tempCustomer.setCiudad(ciudadSeleccionada);
-            if(geoIdProvinciaSeleccionada != Long.valueOf(ConstantsAdmin.GEOIDCAPITALFEDERAL)) {
+            if(geoIdProvinciaSeleccionada != Long.parseLong(ConstantsAdmin.GEOIDCAPITALFEDERAL)) {
                 ConstantsAdmin.tempCustomer.setProvincia(provinciaSeleccionada);
                 ConstantsAdmin.tempCustomer.setSuburbio(barrioSeleccionado);
             }else{

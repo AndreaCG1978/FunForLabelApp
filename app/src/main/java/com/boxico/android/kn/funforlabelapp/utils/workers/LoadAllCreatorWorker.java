@@ -9,7 +9,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class LoadAllCreatorWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadAllCreatorWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -19,7 +19,7 @@ public class LoadAllCreatorWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             ConstantsAdmin.loadAllInCreator();
             r = Result.success();

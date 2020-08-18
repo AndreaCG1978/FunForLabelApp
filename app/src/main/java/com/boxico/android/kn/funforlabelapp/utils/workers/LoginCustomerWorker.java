@@ -1,11 +1,7 @@
 package com.boxico.android.kn.funforlabelapp.utils.workers;
 
 import android.content.Context;
-import android.content.Intent;
 
-import com.boxico.android.kn.funforlabelapp.LoginActivity;
-import com.boxico.android.kn.funforlabelapp.MainActivity;
-import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
@@ -20,7 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginCustomerWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoginCustomerWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -30,7 +26,7 @@ public class LoginCustomerWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
            // final LoginActivity me = this;
             Call<List<Customer>> call = null;

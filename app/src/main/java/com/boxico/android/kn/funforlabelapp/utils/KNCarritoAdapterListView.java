@@ -33,8 +33,8 @@ import java.util.List;
 
 public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
 
-    CarritoActivity mContext;
-    int resourceLayout;
+    final CarritoActivity mContext;
+    final int resourceLayout;
 
 /*
     public KNCarritoAdapterListView(@NonNull Context context, int resource, @NonNull List<ProductoCarrito> objects) {
@@ -97,7 +97,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
                 @Override
                 public void onClick(View v) {
                     TextView txtCantidad = (TextView) v.getTag();
-                    int cant = Integer.valueOf(txtCantidad.getText().toString());
+                    int cant = Integer.parseInt(txtCantidad.getText().toString());
                     cant++;
                     txtCantidad.setText(String.valueOf(cant));
                     ic.setCantidad(String.valueOf(cant));
@@ -116,7 +116,7 @@ public class KNCarritoAdapterListView extends ArrayAdapter<ItemCarrito> {
                 @Override
                 public void onClick(View v) {
                     TextView txtCantidad = (TextView) v.getTag();
-                    int cant = Integer.valueOf(txtCantidad.getText().toString());
+                    int cant = Integer.parseInt(txtCantidad.getText().toString());
                     if(cant > 1) {
                         cant--;
                         txtCantidad.setText(String.valueOf(cant));

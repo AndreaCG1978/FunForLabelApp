@@ -20,7 +20,7 @@ import java.util.Locale;
 import retrofit2.Call;
 
 public class LoadGeoCiudadesWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadGeoCiudadesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -33,8 +33,8 @@ public class LoadGeoCiudadesWorker extends Worker {
         Result r = null;
         try {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
-            Call<GeoChilds> responseCallCiudades = null;
-            Call<GeoChilds> responseCallBarrios = null;
+            Call<GeoChilds> responseCallCiudades;
+            Call<GeoChilds> responseCallBarrios;
             LocationManager.failed = false;
             responseCallCiudades =
                     service.getChilds(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, LocationManager.getGeoIdProvincia());
@@ -65,7 +65,7 @@ public class LoadGeoCiudadesWorker extends Worker {
             }else{
                 Iterator<Geoname> it = cdades.getChilds().iterator();
                 ArrayList<Geoname> temp = new ArrayList<>();
-                Geoname geoTemp = null;
+                Geoname geoTemp;
                 while (it.hasNext() && !LocationManager.failed){
                     geoTemp = it.next();
                     responseCallBarrios =

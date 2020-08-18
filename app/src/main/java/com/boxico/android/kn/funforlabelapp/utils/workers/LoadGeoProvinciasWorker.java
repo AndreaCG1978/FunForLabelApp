@@ -18,7 +18,7 @@ import java.util.Locale;
 import retrofit2.Call;
 
 public class LoadGeoProvinciasWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadGeoProvinciasWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -28,7 +28,7 @@ public class LoadGeoProvinciasWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             GeoService service = GeoApiClient.getClient().create(GeoService.class);
             Call<Paises> responseCallPais = service.getPaises(Locale.getDefault().getLanguage(), ConstantsAdmin.GEOUSERNAME, ConstantsAdmin.GEOCODIGOARGENTINA);

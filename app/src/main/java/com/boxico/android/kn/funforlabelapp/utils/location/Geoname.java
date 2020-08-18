@@ -28,7 +28,7 @@ public class Geoname implements Comparable {
         }else if(name.contains("Departamento de")){
             result = name.replaceAll("Departamento de","");
         }
-        if(geonameId == Long.valueOf(ConstantsAdmin.GEOIDCAPITALFEDERAL)){
+        if(geonameId == Long.parseLong(ConstantsAdmin.GEOIDCAPITALFEDERAL)){
             result = ConstantsAdmin.CAPITAL_FEDERAL;
         }
 

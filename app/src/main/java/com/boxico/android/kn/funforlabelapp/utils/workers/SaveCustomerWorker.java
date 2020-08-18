@@ -16,7 +16,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class SaveCustomerWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public SaveCustomerWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -29,14 +29,13 @@ public class SaveCustomerWorker extends Worker {
         ConstantsAdmin.codigoExito = 1;// CREACION CON EXITO
         Call<List<Customer>> callInsert;
         Response<List<Customer>> resp;
-        Result r = null;
+        Result r;
         try {
             callInsert = ConstantsAdmin.customerService.createAccount(ConstantsAdmin.tempCustomer.getFirstName(), ConstantsAdmin.tempCustomer.getLastName(), ConstantsAdmin.tempCustomer.getEmail(), ConstantsAdmin.tempCustomer.getPassword(), ConstantsAdmin.tempCustomer.getGender(), ConstantsAdmin.tempCustomer.getCiudad(), ConstantsAdmin.tempCustomer.getProvincia(), ConstantsAdmin.tempCustomer.getSuburbio(), ConstantsAdmin.tempCustomer.getDireccion(), ConstantsAdmin.tempCustomer.getCp(), ConstantsAdmin.tempCustomer.getTelephone(), ConstantsAdmin.tempCustomer.getFax(), ConstantsAdmin.tempCustomer.getNewsletter(), ConstantsAdmin.tokenFFL);
             resp = callInsert.execute();
             ArrayList<Customer> customers = new ArrayList<>(resp.body());
             if (customers.size() == 1) {//DEVUELVE EL CLIENTE RECIEN CREADO
-                Customer c = resp.body().get(0);
-                ConstantsAdmin.currentCustomer = c;
+                ConstantsAdmin.currentCustomer = resp.body().get(0);
                 ConstantsAdmin.customerJustCreated = true;
              //   ConstantsAdmin.mensaje = getString(R.string.create_customer_success);
                 // finish();

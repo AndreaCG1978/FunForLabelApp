@@ -1,10 +1,8 @@
 package com.boxico.android.kn.funforlabelapp;
 
-import android.app.AlertDialog;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TagReadyToGoActivity extends AppCompatActivity {
 
-    private TagReadyToGoActivity me;
     TextView textWellcomeUsr = null;
     Button agregarAlCarrito = null;
     EditText comentarioUsr = null;
@@ -27,7 +24,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        me = this;
+        TagReadyToGoActivity me = this;
         setContentView(R.layout.tag_ready_to_go);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -102,7 +99,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         finish();
 
     }
-
+/*
     private void createAlertDialog(String message, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(me);
         builder.setMessage(message).setTitle(title);
@@ -110,18 +107,18 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+*/
     private void initializeCreator() {
 
       //  LabelAttributes la1, la2 = null;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+      //  DisplayMetrics displayMetrics = new DisplayMetrics();
+      //  getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 /*
         la1 = ConstantsAdmin.selectedLabelAttrbText;
         if(ConstantsAdmin.selectedLabelAttrbTitle != null){
             la2 = ConstantsAdmin.selectedLabelAttrbTitle;
         }
-*/
+*//*
         int width = displayMetrics.widthPixels;
 
         float screenWidthMM = ConstantsAdmin.pxToMm((float) width, this);
@@ -129,7 +126,7 @@ public class TagReadyToGoActivity extends AppCompatActivity {
         if(screenWidthMM < ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }
-
+*/
         LinearLayout linearTag = this.findViewById(R.id.linearReadyToGoTag);
         BitmapDrawable bd = new BitmapDrawable(this.getResources(), ConstantsAdmin.screenShot);
         linearTag.setBackground(bd);
