@@ -40,6 +40,7 @@ import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.workers.LoadPropertiesWorker;
 import com.boxico.android.kn.funforlabelapp.utils.PasswordGenerator;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoginCustomerWorker;
 import com.boxico.android.kn.funforlabelapp.utils.workers.SendMailWorker;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
@@ -390,7 +391,64 @@ public class LoginActivity extends FragmentActivity {
         if (!usrText.equals("") && (!pswText.equals(""))) {
 
             //new LoginCustomerTask().execute();f
-            loadCustomerInfo();
+            LinearLayout layout = findViewById(R.id.loginLayout);
+            final ProgressBar progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            layout.addView(progressBar, 1,params);
+            ScrollView sv = findViewById(R.id.scroll_view);
+
+            Data inputData = new Data.Builder().putString("usrText", usrText).putString("pswText", pswText).build();
+
+
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoginCustomerWorker.class)
+                    .setInputData(inputData)
+                    .setConstraints(constraints)
+                    .build();
+
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                    .observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(@Nullable WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                progressBar.setVisibility(View.GONE);
+                                if(ConstantsAdmin.currentCustomer != null){
+                                    Intent intent = new Intent(me, MainActivity.class);
+                                    //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                                    if(saveLogin.isChecked()){
+                                        ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                                        ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
+                                    }else{
+                                        ConstantsAdmin.deleteLogin(me);
+                                    }
+                                    ConstantsAdmin.customerJustCreated = false;
+                                    startActivity(intent);
+                                }else{
+                                    createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
+                                    ConstantsAdmin.mensaje = null;
+                                    buttonLogin.setEnabled(true);
+                                }
+
+                            }
+                        }
+                    });
+            ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
+
+
+
+
+
+            //loadCustomerInfo();
 
         } else {
             createAlertDialog(getResources().getString(R.string.login_error), getResources().getString(R.string.atencion));
@@ -557,13 +615,14 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
-    ArrayList<Customer> customers;
+
 
     private void loadCustomerInfo() {
         final LoginActivity me = this;
         Call<List<Customer>> call = null;
         Response<List<Customer>> response;
-        customers = null;
+        final ArrayList<Customer> customers =  new ArrayList<>();
+       // customers = null;
 
         try {
 
@@ -574,7 +633,7 @@ public class LoginActivity extends FragmentActivity {
                  @Override
                  public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
                      if(response.body() != null){
-                         customers = new ArrayList<>(response.body());
+                         customers.addAll(response.body());
                          if(customers.size() == 1){
                              ConstantsAdmin.currentCustomer = customers.get(0);
                              Intent intent = new Intent(me, MainActivity.class);
@@ -629,17 +688,15 @@ public class LoginActivity extends FragmentActivity {
         final LoginActivity me = this;
         Call<List<Customer>> call = null;
         Response<List<Customer>> response;
-        customers = null;
-
+        final ArrayList<Customer> customers =  new ArrayList<>();
         try {
             ConstantsAdmin.mensaje = null;
             call = ConstantsAdmin.customerService.getCustomer(usrText, ConstantsAdmin.tokenFFL);
-
             call.enqueue(new Callback<List<Customer>>() {
                 @Override
                 public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
                     if(response.body() != null){
-                        customers = new ArrayList<>(response.body());
+                        customers.addAll(response.body());
                         if(customers.size() == 1){
                             customerTemp = customers.get(0);
                             if(customerTemp != null){

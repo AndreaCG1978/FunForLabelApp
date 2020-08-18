@@ -289,12 +289,104 @@ public class ConstantsAdmin {
 
     public static ArrayList<Product> productsList = null;
     public static Customer tempCustomer;
+    public static ArrayList<Category> allCategories;
+    public static LabelAttributes[] labelAttributes;
+    public static LabelFont[] fonts;
+    public static LabelImage[] images;
 
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
         return stream.toByteArray();
     }
+
+    public static void loadAllInCreator() {
+        Call<Creator> call = null;
+        Response<Creator> response;
+
+        try {
+            ConstantsAdmin.mensaje = null;
+            call = ConstantsAdmin.creatorService.getCreator(ConstantsAdmin.currentProduct.getId(), true, ConstantsAdmin.tokenFFL);
+            response = call.execute();
+            if(response.body() != null){
+                ConstantsAdmin.currentCreator = response.body();
+                if(ConstantsAdmin.currentCreator != null){
+                    Call<List<LabelAttributes>> call1 = null;
+                    Response<List<LabelAttributes>> response1 = null;
+                    List<LabelAttributes> temp;
+                    try {
+                        call1 = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                        response1 = call1.execute();
+                        if(response.body() != null){
+                            temp = new ArrayList<>(response1.body());
+                            labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
+                            Call<List<LabelFont>> call2 = null;
+                            Response<List<LabelFont>> response2;
+                            List<LabelFont> temp2;
+                            call2 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
+                            response2 = call2.execute();
+                            if(response2.body() != null){
+                                temp2 = new ArrayList<>(response2.body());
+                                fonts = temp2.toArray(new LabelFont[temp2.size()]);
+                                String tem, extension;
+                                for (LabelFont lf: fonts) {
+                                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                                    tem = lf.getBasename().substring(0,lf.getBasename().length() - 4);
+                                    tem = tem + "-Regular" + extension;
+                                    lf.setBasename(tem);
+                                    ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + tem, tem);
+                                }
+
+                                Call<List<LabelImage>> call3 = null;
+                                Response<List<LabelImage>> response3;
+                                ArrayList temp3;
+
+                                try {
+                                    call3 = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                                    response3 = call3.execute();
+                                    if(response3.body() != null){
+                                        temp3 = new ArrayList<>(response3.body());
+                                        if(temp3.size() != 0){
+                                            images = (LabelImage[]) temp3.toArray(new LabelImage[temp3.size()]);
+                                            String url;
+                                            Bitmap b;
+                                            for (LabelImage li: images) {
+                                                url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                                                b = ConstantsAdmin.getImageFromURL(url);
+                                                li.setImage(b);
+                                            }
+                                          //  initializeCreator();
+                                        }
+                                    }
+                                }catch(Exception exc){
+
+                                    if(call3 != null) {
+                                        call3.cancel();
+                                    }
+
+                                }
+                            }
+                            // labelAttributes = response.body();
+                        }
+                    }catch(Exception exc){
+                        if(call1 != null) {
+                            call1.cancel();
+                        }
+
+                    }
+
+
+
+                }
+            }
+        }catch(Exception exc){
+            if(call != null) {
+                call.cancel();
+            }
+
+        }
+    }
+
 
     public static void loadAllInCombo() throws IOException {
         Iterator<Product> it = productsList.iterator();

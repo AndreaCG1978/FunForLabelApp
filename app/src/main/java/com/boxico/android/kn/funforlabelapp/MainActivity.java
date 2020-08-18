@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity {
     LinearLayout linearCategories = null;
     MainActivity me;
 
-    ArrayList<Category> categories;
+
     TextView verCarrito = null;
 
     @Override
@@ -211,8 +211,8 @@ public class MainActivity extends FragmentActivity {
         }
     }
 */
-    private void loadImageForCategories() throws IOException {
-        Iterator<Category> it = categories.iterator();
+    public void loadImageForCategories() throws IOException {
+        Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
         Category cat;
         String url;
         Bitmap b;
@@ -302,7 +302,7 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addCategoryInView(Category cat1, Category cat2) {
+    public void addCategoryInView(Category cat1, Category cat2) {
         LinearLayout l1 = null;
         LinearLayout l2 = null;
 
@@ -393,13 +393,13 @@ public class MainActivity extends FragmentActivity {
             call = ConstantsAdmin.categoriesProductsService.getCategories(ConstantsAdmin.categories[0], ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                categories = new ArrayList<>(response.body());
-                if(categories.size() == 0){
+                ConstantsAdmin.allCategories = new ArrayList<>(response.body());
+                if(ConstantsAdmin.allCategories.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
                     try {
                         loadImageForCategories();
-                        Iterator<Category> it = categories.iterator();
+                        Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
                         Category cat1 = null;
                         Category cat2 = null;
                         while(it.hasNext()){

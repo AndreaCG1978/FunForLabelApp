@@ -13,16 +13,22 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -31,11 +37,16 @@ import com.boxico.android.kn.funforlabelapp.dtos.Creator;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelAttributes;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelFont;
 import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
+import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomBackgroundAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontSizeAdapter;
 import com.boxico.android.kn.funforlabelapp.utils.KNCustomFontTypeAdapter;
+import com.boxico.android.kn.funforlabelapp.utils.TagParams;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadAllComboWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadAllCreatorWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -45,6 +56,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -68,9 +87,9 @@ public class TagCreatorActivity extends AppCompatActivity {
     List<Bitmap> listImages = null;
 
   //  private Creator currentCreator;
-    private LabelImage[] images;
-    private LabelFont[] fonts;
-    private LabelAttributes[] labelAttributes;
+  //  private LabelImage[] images;
+ //   private LabelFont[] fonts;
+ //   private LabelAttributes[] labelAttributes;
     private Spinner spinnerFontSizes;
     private Spinner spinnerFonts;
     private Spinner spinnerBackgrounds;
@@ -137,8 +156,55 @@ public class TagCreatorActivity extends AppCompatActivity {
     }
 
     private void loadCreator() {
-        privateLoadCreator();
+   //     privateLoadCreator();
       //  new LoadCreatorTask().execute();
+        ConstantsAdmin.fonts = null;
+        ConstantsAdmin.images = null;
+        ConstantsAdmin.labelAttributes = null;
+        LinearLayout layout = findViewById(R.id.tagCreatorLayout);
+        final ProgressBar progressBar = new ProgressBar(TagCreatorActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 4,params);
+
+        final TextView txt = new TextView(this);
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        txt.setBackgroundColor(Color.TRANSPARENT);
+        txt.setText(getString(R.string.loading_data));
+        txt.setGravity(Gravity.CENTER);
+        txt.setVisibility(View.GONE);
+        layout.addView(txt, 4,params);
+
+        Data inputData = new Data.Builder().build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadAllCreatorWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            txt.setVisibility(View.VISIBLE);
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            txt.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                            initializeCreator();
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
+
     }
 /*
     @Override
@@ -254,9 +320,9 @@ public class TagCreatorActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        la1 = labelAttributes[0];
-        if(labelAttributes.length > 1){
-            la2 = labelAttributes[1];
+        la1 = ConstantsAdmin.labelAttributes[0];
+        if(ConstantsAdmin.labelAttributes.length > 1){
+            la2 = ConstantsAdmin.labelAttributes[1];
         }
         //int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
@@ -266,7 +332,7 @@ public class TagCreatorActivity extends AppCompatActivity {
         if((screenWidthMM - 2.0f) <= (float)ConstantsAdmin.currentCreator.getWidth()){
             acotar = true;
         }
-        Bitmap firstBitmap = images[0].getImage();
+        Bitmap firstBitmap = ConstantsAdmin.images[0].getImage();
         ConstantsAdmin.customizeBackground(firstBitmap,ConstantsAdmin.currentCreator, acotar, linearTag, this);
 
 
@@ -376,9 +442,9 @@ public class TagCreatorActivity extends AppCompatActivity {
             }
         });
 
-        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, fonts));
+        spinnerFonts.setAdapter(new KNCustomFontTypeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, ConstantsAdmin.fonts));
         spinnerFontSizes.setAdapter(new KNCustomFontSizeAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, ConstantsAdmin.FONT_SIZES));
-        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, images));
+        spinnerBackgrounds.setAdapter(new KNCustomBackgroundAdapter(this.getApplicationContext(), R.layout.spinner_simple_item,R.id.rowValor, ConstantsAdmin.images));
 
         textTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -411,7 +477,7 @@ public class TagCreatorActivity extends AppCompatActivity {
     private void loadImagesForCreator() throws IOException {
         String url;
         Bitmap b;
-        for (LabelImage li: images) {
+        for (LabelImage li: ConstantsAdmin.images) {
             url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
             b = ConstantsAdmin.getImageFromURL(url);
             li.setImage(b);
@@ -491,7 +557,7 @@ public class TagCreatorActivity extends AppCompatActivity {
             ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL_FONTS + temp, temp);
         }
 */
-        for (LabelFont lf: fonts) {
+        for (LabelFont lf: ConstantsAdmin.fonts) {
             extension = lf.getBasename().substring(lf.getBasename().length() - 4);
             temp = lf.getBasename().substring(0,lf.getBasename().length() - 4);
             temp = temp + "-Regular" + extension;
@@ -532,17 +598,17 @@ public class TagCreatorActivity extends AppCompatActivity {
                         response1 = call1.execute();
                         if(response.body() != null){
                             temp = new ArrayList<>(response1.body());
-                            labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
+                            ConstantsAdmin.labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
                             Call<List<LabelFont>> call2 = null;
                             Response<List<LabelFont>> response2;
                             List<LabelFont> temp2;
-                            call2 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
+                            call2 = ConstantsAdmin.creatorService.getFonts(ConstantsAdmin.labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
                             response2 = call2.execute();
                             if(response2.body() != null){
                                 temp2 = new ArrayList<>(response2.body());
-                                fonts = temp2.toArray(new LabelFont[temp2.size()]);
+                                ConstantsAdmin.fonts = temp2.toArray(new LabelFont[temp2.size()]);
                                 String tem, extension;
-                                for (LabelFont lf: fonts) {
+                                for (LabelFont lf: ConstantsAdmin.fonts) {
                                     extension = lf.getBasename().substring(lf.getBasename().length() - 4);
                                     tem = lf.getBasename().substring(0,lf.getBasename().length() - 4);
                                     tem = tem + "-Regular" + extension;
@@ -562,10 +628,10 @@ public class TagCreatorActivity extends AppCompatActivity {
                                         if(temp3.size() == 0){
                                             ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                                         }else{
-                                            images = (LabelImage[]) temp3.toArray(new LabelImage[temp3.size()]);
+                                            ConstantsAdmin.images = (LabelImage[]) temp3.toArray(new LabelImage[temp3.size()]);
                                             String url;
                                             Bitmap b;
-                                            for (LabelImage li: images) {
+                                            for (LabelImage li: ConstantsAdmin.images) {
                                                 url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
                                                 b = ConstantsAdmin.getImageFromURL(url);
                                                 li.setImage(b);
@@ -626,7 +692,7 @@ public class TagCreatorActivity extends AppCompatActivity {
                 if(temp.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
-                    images = (LabelImage[]) temp.toArray(new LabelImage[temp.size()]);
+                    ConstantsAdmin.images = (LabelImage[]) temp.toArray(new LabelImage[temp.size()]);
                 }
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -651,7 +717,7 @@ public class TagCreatorActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
-                fonts = temp.toArray(new LabelFont[temp.size()]);
+                ConstantsAdmin.fonts = temp.toArray(new LabelFont[temp.size()]);
 
             }
         }catch(Exception exc){
@@ -673,7 +739,7 @@ public class TagCreatorActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 temp = new ArrayList<>(response.body());
-                labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
+                ConstantsAdmin.labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
                // labelAttributes = response.body();
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
@@ -783,9 +849,9 @@ public class TagCreatorActivity extends AppCompatActivity {
             ConstantsAdmin.selectedTextFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontText);
             ConstantsAdmin.selectedTextFontSize = Float.valueOf((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeText));
             ConstantsAdmin.selectedTextFontColor = selectedTextColor;
-            ConstantsAdmin.selectedLabelAttrbText = labelAttributes[0];
-            if(labelAttributes.length > 1){//ES UN TAG CON TITULO
-                ConstantsAdmin.selectedLabelAttrbTitle =  labelAttributes[1];
+            ConstantsAdmin.selectedLabelAttrbText = ConstantsAdmin.labelAttributes[0];
+            if(ConstantsAdmin.labelAttributes.length > 1){//ES UN TAG CON TITULO
+                ConstantsAdmin.selectedLabelAttrbTitle =  ConstantsAdmin.labelAttributes[1];
                 ConstantsAdmin.selectedTitleFontColor = selectedTitleColor;
                 ConstantsAdmin.selectedTitleFont = (LabelFont)spinnerFonts.getItemAtPosition(selectedPosFontTitle);
                 ConstantsAdmin.selectedTitleFontSize = Float.valueOf ((String)spinnerFontSizes.getItemAtPosition(selectedPosFontSizeTitle));
