@@ -37,6 +37,7 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.boxico.android.kn.funforlabelapp.FinalizarCompraActivity;
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
@@ -260,6 +261,7 @@ public class ConstantsAdmin {
     public static ArrayList<Product> currentComboProducts;
     public static ArrayMap<Long,TagParams> params;
     public static int codigoExito;
+    public static FinalizarCompraActivity activityTemp;
 
     private static ArrayList<LabelImage> capturas = null;
 
@@ -1523,7 +1525,7 @@ public class ConstantsAdmin {
             }
         }
     }
-
+/*
     public static void uploadFile(String sourceFileUri, Activity ctx){
         Data inputData = new Data.Builder().putString("sourceFileUri", sourceFileUri).build();
         Constraints constraints = new Constraints.Builder()
@@ -1534,18 +1536,12 @@ public class ConstantsAdmin {
                 .build();
         WorkManager.getInstance(ctx).enqueue(request);
 
-    }
-/*
-    public static int uploadFile(String sourceFileUri){
-        final String temp = sourceFileUri;
+    }*/
 
-        class UploadFileAsync extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected String doInBackground(String... params) {
+    public static void uploadFile(String sourceFileUri){
 
                 try {
-                    String sourceFileUri = temp;
+              //      String sourceFileUri = temp;
 
                     HttpURLConnection conn = null;
                     DataOutputStream dos = null;
@@ -1651,27 +1647,10 @@ public class ConstantsAdmin {
 
                     ex.printStackTrace();
                 }
-                return "Executed";
-            }
 
-            @Override
-            protected void onPostExecute(String result) {
 
-            }
-
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @Override
-            protected void onProgressUpdate(Void... values) {
-            }
-        }
-
-        new UploadFileAsync().execute("");
-        return 1;
     }
-*/
+
 
 
    /* public static int uploadFile1(String sourceFileUri) {

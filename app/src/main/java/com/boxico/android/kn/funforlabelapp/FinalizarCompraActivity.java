@@ -6,13 +6,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 
 import com.android.volley.Request;
@@ -30,6 +42,9 @@ import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.workers.FinalizarCompraWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoginCustomerWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -76,8 +91,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     Button btnFinalizar;
     private float precioTotalTags;
     private float precioTotalEnvio;
-    Integer idOrder = -1;
-    private boolean okInsert = true;
+    public Integer idOrder = -1;
+    public boolean okInsert = true;
     private final Integer PAYMENT_REQUEST = 1001;
   //  final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
    // final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("8755027555974708", "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU").build();
@@ -167,7 +182,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private void finalizarCompra() {
       //  new InsertarOrderTask().execute();
-        Call<Integer> call = null;
+      /*  Call<Integer> call = null;s
         btnFinalizar.setEnabled(false);
         Response<Integer> response;
         Customer c = ConstantsAdmin.currentCustomer;
@@ -205,6 +220,76 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
         }
+*/
+        LinearLayout layout = findViewById(R.id.finalizarLayout);
+        //    buttonLogin.setEnabled(false);
+        ProgressBar progressBar = null;
+        progressBar = new ProgressBar(FinalizarCompraActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 12,params);
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        //    ScrollView sv = findViewById(R.id.scroll_view);
+
+        Data inputData = new Data.Builder().putFloat("precioTotalTags", precioTotalTags).putFloat("precioTotalEnvio", precioTotalEnvio).putString("comentario", entryComentario.getText().toString()).build();
+
+      /*  float precioTotalTags = myWorkerParams.getInputData().getFloat("precioTotalTags",0);
+        float precioTotalEnvio = myWorkerParams.getInputData().getFloat("precioTotalEnvio", 0);
+        String comentario = myWorkerParams.getInputData().getString("comentario");
+
+*/
+        ConstantsAdmin.activityTemp = this;
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(FinalizarCompraWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        final ProgressBar finalProgressBar = progressBar;
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                                finalProgressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            finalProgressBar.setVisibility(View.GONE);
+                            if(okInsert){// PUDO INSERTAR EN ORDERS
+                                switch ((int)ConstantsAdmin.selectedPaymentMethod.getId()){
+                                    case 1:// ES TRANSFERENCIA BANCARIA
+                                        // new SendCustomerNotificationTask().execute();
+                                        sendCustomerNotification();
+
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3: // ES MERCADOLIBRE
+                                        redirigirAMercadoLibre();
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
+
+
+
+
+
+
 
 
     }
@@ -842,7 +927,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     }
 */
 
-    private void insertarEtiquetas() throws IOException {
+    public void insertarEtiquetas() throws IOException {
         Call<Integer> call;
         Response<Integer> response;
         ProductoCarrito p;
@@ -873,7 +958,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }else{
-                ConstantsAdmin.uploadFile(imageName + ".png", this);
+                ConstantsAdmin.uploadFile(imageName + ".png");
                // this.almacenarImagenRemoto(p, imageName + ".png");
             }
         }
@@ -930,7 +1015,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     okInsert = false;
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
-                    ConstantsAdmin.uploadFile(imageName + ".png", this);
+                    ConstantsAdmin.uploadFile(imageName + ".png");
                 }
             }
          /*   if(okInsert){

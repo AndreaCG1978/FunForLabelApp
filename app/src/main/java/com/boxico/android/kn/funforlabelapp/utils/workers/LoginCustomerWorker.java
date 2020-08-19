@@ -40,6 +40,14 @@ public class LoginCustomerWorker extends Worker {
                 String pswText = myWorkerParams.getInputData().getString("pswText");
                 call = ConstantsAdmin.customerService.loginCustomer(usrText, pswText, ConstantsAdmin.tokenFFL);
 
+                response = call.execute();
+                if(response != null && response.body()!= null){
+                    customers.addAll(response.body());
+                    if(customers.size() == 1){
+                        ConstantsAdmin.currentCustomer = customers.get(0);
+                    }
+                }
+                /*
                 call.enqueue(new Callback<List<Customer>>() {
                     @Override
                     public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
@@ -56,7 +64,7 @@ public class LoginCustomerWorker extends Worker {
                     public void onFailure(Call<List<Customer>> call, Throwable t) {
 
                     }
-                });
+                });*/
             }catch(Exception exc){
                 if(call != null) {
                     call.cancel();
