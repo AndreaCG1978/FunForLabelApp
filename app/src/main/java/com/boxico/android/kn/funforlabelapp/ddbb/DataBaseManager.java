@@ -162,7 +162,7 @@ public class DataBaseManager {
 		}else{// ES UNA ACTUALIZACION DE CANTIDAD
 			initialValues.put(ConstantsAdmin.KEY_CANTIDAD_PRODUCTO, item.getCantidad());
 		}
-		long id = -1;
+		long id;
 		if(item.getId() == 0 ){//ES UN COMBO NUEVO
 			id= mDb.insert(ConstantsAdmin.TABLE_COMBO_CARRITO, null, initialValues);
 			item.setId((int) id);
@@ -246,7 +246,7 @@ public class DataBaseManager {
 
 	public void deleteComboProductoCarrito(ComboCarrito c){
 		Iterator<ItemCarrito> it = c.getProductos().iterator();
-		ProductoCarrito pc = null;
+		ProductoCarrito pc;
 		while (it.hasNext()){
 			pc = (ProductoCarrito)it.next();
 			mDb.delete(ConstantsAdmin.TABLE_PRODUCTO_CARRITO, ConstantsAdmin.KEY_ROWID + "=" + pc.getId(), null);

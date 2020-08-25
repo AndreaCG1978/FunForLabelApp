@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 
@@ -38,6 +37,7 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.boxico.android.kn.funforlabelapp.FinalizarCompraActivity;
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
 import com.boxico.android.kn.funforlabelapp.dtos.AddressBook;
@@ -111,7 +111,7 @@ public class ConstantsAdmin {
     public static final String ATR_FFL_PASSWORD = "FFL_PASSWORD";
     public static final String CAPITAL_FEDERAL = "Capital Federal" ;
     public static final String ARGENTINA = "Argentina" ;
-    public static final float PARAM_TO_INCREASE = 1.465f;
+  //  public static final float PARAM_TO_INCREASE = 1.465f;
     public static final String KEY_USER = "usuario";
     public static final String KEY_PASSWORD = "contrasenia";
     public static final String KEY_NOT_ENCRIPTED_PASSWORD = "contraseniaSinEncriptar";
@@ -161,7 +161,6 @@ public class ConstantsAdmin {
     public static final String TITULO_MP__DETALLE_ENVIO = "TITULO_MP__DETALLE_ENVIO";
     public static final int ACTIVITY_EJECUTAR_ACERCA_DE = 1;
     public static final int ACTIVITY_EJECUTAR_CERRAR_SESSION = 2;
-    public static final String ACERCADE_TITULO_ACERCA_DE = "TITULO_ACERCA_DE";
     public static final String ACERCADE_QUIENES_SOMOS_TEXTO = "QUIENES_SOMOS_TEXTO";
     public static final String ACERCADE_POLITICA_PRIVACIDAD_LINK = "POLITICA_PRIVACIDAD_LINK";
     public static final String ACERCADE_ENVIO_DEVOLUCIONES_LINK = "ENVIO_DEVOLUCIONES_LINK";
@@ -187,30 +186,29 @@ public class ConstantsAdmin {
     public static final String TABLE_PRODUCTO_CARRITO = "tabla_producto_carrito";
     public static final String TABLE_COMBO_CARRITO = "tabla_combo_carrito";
 
-    public static final String KEY_NAME = "name";
+  //  public static final String KEY_NAME = "name";
     public static final String ENTER = "\n";
     public static final String TAB = "\t";
     public static final String GEOUSERNAME = "andreacg1978";
     public static final String GEOAPIURL = "http://api.geonames.org/";
     public static final String GEOCODIGOARGENTINA = "AR";
-    public static final String GEOAPITOGETPROVINCIA = "childrenJSON?geonameId=";
     public static final String GEOIDCAPITALFEDERAL = "3433955";
 
 
     public static boolean customerJustCreated = false;
-    public static long[] categories = {46};
+    public static final long[] categories = {46};
     public static long currentLanguage;
     public static Category currentCategory;
 
-    public static double MILLS_TO_PXL = 3.7795275591;
-    public static String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
+   // public static double MILLS_TO_PXL = 3.7795275591;
+    public static final String[] FONT_SIZES= {"8","10","12","14","16","18","20","22"};
   //  public static long ID_CREATOR_MINICIRCULARES = 59;
     public static Properties fflProperties;
 
     public static boolean finalizarHastaMenuPrincipal;
     public static Customer currentCustomer = null;
-    public static List<ItemCarrito> productosDelCarrito = new ArrayList<ItemCarrito>();
-    public static List<ItemCarrito> combosDelCarrito = new ArrayList<ItemCarrito>();
+    public static List<ItemCarrito> productosDelCarrito = new ArrayList<>();
+    public static List<ItemCarrito> combosDelCarrito = new ArrayList<>();
 
     public static Product currentProduct;
     public static String selectedBackgroundFilename;
@@ -230,31 +228,31 @@ public class ConstantsAdmin {
     public static MetodoPago selectedPaymentMethod;
     public static MetodoEnvio selectedShippingMethod;
     public static String comentarioIngresado;
-    public static String CURRENCY = "CURRENCY";
-    public static String CURRENCY_VALUE = "CURRENCY_VALUE";
-    public static String ORDER_STATUS_PENDING_TRANSFERENCE = "ORDER_STATUS_PENDING_TRANSFERENCE";
-    public static String ORDER_STATUS_MERCADO_PAGO_CANCELED = "ORDER_STATUS_MERCADO_PAGO_CANCELED";
-    public static String TAG_LEGEND_TYPE_TEXT = "TAG_LEGEND_TYPE_TEXT";
-    public static String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
+    public static final String CURRENCY = "CURRENCY";
+    public static final String CURRENCY_VALUE = "CURRENCY_VALUE";
+    public static final String ORDER_STATUS_PENDING_TRANSFERENCE = "ORDER_STATUS_PENDING_TRANSFERENCE";
+    public static final String ORDER_STATUS_MERCADO_PAGO_CANCELED = "ORDER_STATUS_MERCADO_PAGO_CANCELED";
+    public static final String TAG_LEGEND_TYPE_TEXT = "TAG_LEGEND_TYPE_TEXT";
+    public static final String TAG_LEGEND_TYPE_TITLE = "TAG_LEGEND_TYPE_TITLE";
     public static LabelImage selectedImage;
 
-    public static String MENSAJE_EXITO_ORDEN_GENERADA1="MENSAJE_EXITO_ORDEN_GENERADA1";
-    public static String MENSAJE_EXITO_ORDEN_GENERADA2="MENSAJE_EXITO_ORDEN_GENERADA2";
-    public static String MAIL_PROCESO_ORDEN_SUBJECT="MAIL_PROCESO_ORDEN_SUBJECT";
-    public static String MAIL_PROCESO_ORDEN_NRO="MAIL_PROCESO_ORDEN_NRO";
-    public static String MAIL_PROCESO_ORDEN_FACTURA_DETALLE="MAIL_PROCESO_ORDEN_FACTURA_DETALLE";
-    public static String MAIL_PROCESO_ORDEN_FECHA="MAIL_PROCESO_ORDEN_FECHA";
-    public static String MAIL_PROCESO_ORDEN_COMENTARIO="MAIL_PROCESO_ORDEN_COMENTARIO";
-    public static String MAIL_PROCESO_ORDEN_PRODUCTOS="MAIL_PROCESO_ORDEN_PRODUCTOS";
-    public static String MAIL_PROCESO_ORDEN_SUBTOTAL="MAIL_PROCESO_ORDEN_SUBTOTAL";
-    public static String MAIL_PROCESO_ORDEN_TOTAL="MAIL_PROCESO_ORDEN_TOTAL";
-    public static String MAIL_PROCESO_ORDEN_DIR_ENTREGA="MAIL_PROCESO_ORDEN_DIR_ENTREGA";
-    public static String MAIL_PROCESO_ORDEN_DIR_FACTURACION="MAIL_PROCESO_ORDEN_DIR_FACTURACION";
-    public static String MAIL_PROCESO_ORDEN_METODO_PAGO="MAIL_PROCESO_ORDEN_METODO_PAGO";
-    public static String URL_DETALLE_ORDEN="URL_DETALLE_ORDEN";
+    public static final String MENSAJE_EXITO_ORDEN_GENERADA1="MENSAJE_EXITO_ORDEN_GENERADA1";
+    public static final String MENSAJE_EXITO_ORDEN_GENERADA2="MENSAJE_EXITO_ORDEN_GENERADA2";
+    public static final String MAIL_PROCESO_ORDEN_SUBJECT="MAIL_PROCESO_ORDEN_SUBJECT";
+    public static final String MAIL_PROCESO_ORDEN_NRO="MAIL_PROCESO_ORDEN_NRO";
+    public static final String MAIL_PROCESO_ORDEN_FACTURA_DETALLE="MAIL_PROCESO_ORDEN_FACTURA_DETALLE";
+    public static final String MAIL_PROCESO_ORDEN_FECHA="MAIL_PROCESO_ORDEN_FECHA";
+    public static final String MAIL_PROCESO_ORDEN_COMENTARIO="MAIL_PROCESO_ORDEN_COMENTARIO";
+    public static final String MAIL_PROCESO_ORDEN_PRODUCTOS="MAIL_PROCESO_ORDEN_PRODUCTOS";
+    public static final String MAIL_PROCESO_ORDEN_SUBTOTAL="MAIL_PROCESO_ORDEN_SUBTOTAL";
+    public static final String MAIL_PROCESO_ORDEN_TOTAL="MAIL_PROCESO_ORDEN_TOTAL";
+    public static final String MAIL_PROCESO_ORDEN_DIR_ENTREGA="MAIL_PROCESO_ORDEN_DIR_ENTREGA";
+    public static final String MAIL_PROCESO_ORDEN_DIR_FACTURACION="MAIL_PROCESO_ORDEN_DIR_FACTURACION";
+    public static final String MAIL_PROCESO_ORDEN_METODO_PAGO="MAIL_PROCESO_ORDEN_METODO_PAGO";
+    public static final String URL_DETALLE_ORDEN="URL_DETALLE_ORDEN";
     public static final String url_whatsapp ="https://api.whatsapp.com/";
     public static final String TEL_WSP ="TEL_FFLABEL";
-    public static final String ID_PRODUCTS_COMBO ="ID_PRODUCTS_COMBO";
+   // public static final String ID_PRODUCTS_COMBO ="ID_PRODUCTS_COMBO";
     public static final String ID_CATEGORY_COMBO ="ID_CATEGORY_COMBO";
     public static Bitmap screenShot;
     public static String mensajeCompra = "";
@@ -263,29 +261,30 @@ public class ConstantsAdmin {
     public static ArrayList<Product> currentComboProducts;
     public static ArrayMap<Long,TagParams> params;
     public static int codigoExito;
+    public static FinalizarCompraActivity activityTemp;
 
     private static ArrayList<LabelImage> capturas = null;
 
-    public static String INTRO_ENVIO_EN="DIRECCION_ENVIO_INTRO_EN";
+    public static final String INTRO_ENVIO_EN="DIRECCION_ENVIO_INTRO_EN";
     public static final String INTRO_PAGO_EN = "METODO_PAGO_INTRO_EN";
-    public static String MENSAJE_EXITO_ORDEN_GENERADA1_EN="MENSAJE_EXITO_ORDEN_GENERADA1_EN";
-    public static String MENSAJE_EXITO_ORDEN_GENERADA2_EN="MENSAJE_EXITO_ORDEN_GENERADA2_EN";
-    public static String MAIL_PROCESO_ORDEN_SUBJECT_EN="MAIL_PROCESO_ORDEN_SUBJECT_EN";
-    public static String MAIL_PROCESO_ORDEN_NRO_EN="MAIL_PROCESO_ORDEN_NRO_EN";
-    public static String MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN="MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN";
-    public static String MAIL_PROCESO_ORDEN_FECHA_EN="MAIL_PROCESO_ORDEN_FECHA_EN";
-    public static String MAIL_PROCESO_ORDEN_COMENTARIO_EN="MAIL_PROCESO_ORDEN_COMENTARIO_EN";
-    public static String MAIL_PROCESO_ORDEN_PRODUCTOS_EN="MAIL_PROCESO_ORDEN_PRODUCTOS_EN";
-    public static String MAIL_PROCESO_ORDEN_SUBTOTAL_EN="MAIL_PROCESO_ORDEN_SUBTOTAL_EN";
-    public static String MAIL_PROCESO_ORDEN_TOTAL_EN="MAIL_PROCESO_ORDEN_TOTAL_EN";
-    public static String MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN="MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN";
-    public static String MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN="MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN";
-    public static String MAIL_PROCESO_ORDEN_METODO_PAGO_EN="MAIL_PROCESO_ORDEN_METODO_PAGO_EN";
-    public static String ACERCADE_QUIENES_SOMOS_TEXTO_EN="QUIENES_SOMOS_TEXTO_EN";
-    public static String ACERCADE_TEXTO_ENVIO_WSP_EN="TEXTO_ENVIO_WSP_EN";
-    public static String ACERCADE_TEXTO_ENVIO_MAIL_EN="TEXTO_ENVIO_MAIL_EN";
-    public static String TITULO_MP__DETALLE_TAGS_EN="TITULO_MP__DETALLE_TAGS_EN";
-    public static String TITULO_MP__DETALLE_ENVIO_EN="TITULO_MP__DETALLE_ENVIO_EN";
+    public static final String MENSAJE_EXITO_ORDEN_GENERADA1_EN="MENSAJE_EXITO_ORDEN_GENERADA1_EN";
+    public static final String MENSAJE_EXITO_ORDEN_GENERADA2_EN="MENSAJE_EXITO_ORDEN_GENERADA2_EN";
+    public static final String MAIL_PROCESO_ORDEN_SUBJECT_EN="MAIL_PROCESO_ORDEN_SUBJECT_EN";
+    public static final String MAIL_PROCESO_ORDEN_NRO_EN="MAIL_PROCESO_ORDEN_NRO_EN";
+    public static final String MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN="MAIL_PROCESO_ORDEN_FACTURA_DETALLE_EN";
+    public static final String MAIL_PROCESO_ORDEN_FECHA_EN="MAIL_PROCESO_ORDEN_FECHA_EN";
+    public static final String MAIL_PROCESO_ORDEN_COMENTARIO_EN="MAIL_PROCESO_ORDEN_COMENTARIO_EN";
+    public static final String MAIL_PROCESO_ORDEN_PRODUCTOS_EN="MAIL_PROCESO_ORDEN_PRODUCTOS_EN";
+    public static final String MAIL_PROCESO_ORDEN_SUBTOTAL_EN="MAIL_PROCESO_ORDEN_SUBTOTAL_EN";
+    public static final String MAIL_PROCESO_ORDEN_TOTAL_EN="MAIL_PROCESO_ORDEN_TOTAL_EN";
+    public static final String MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN="MAIL_PROCESO_ORDEN_DIR_ENTREGA_EN";
+    public static final String MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN="MAIL_PROCESO_ORDEN_DIR_FACTURACION_EN";
+    public static final String MAIL_PROCESO_ORDEN_METODO_PAGO_EN="MAIL_PROCESO_ORDEN_METODO_PAGO_EN";
+    public static final String ACERCADE_QUIENES_SOMOS_TEXTO_EN="QUIENES_SOMOS_TEXTO_EN";
+    public static final String ACERCADE_TEXTO_ENVIO_WSP_EN="TEXTO_ENVIO_WSP_EN";
+    public static final String ACERCADE_TEXTO_ENVIO_MAIL_EN="TEXTO_ENVIO_MAIL_EN";
+    public static final String TITULO_MP__DETALLE_TAGS_EN="TITULO_MP__DETALLE_TAGS_EN";
+    public static final String TITULO_MP__DETALLE_ENVIO_EN="TITULO_MP__DETALLE_ENVIO_EN";
 
     public static ArrayList<Product> productsList = null;
     public static Customer tempCustomer;
@@ -310,74 +309,71 @@ public class ConstantsAdmin {
             response = call.execute();
             if(response.body() != null){
                 ConstantsAdmin.currentCreator = response.body();
-                if(ConstantsAdmin.currentCreator != null){
-                    Call<List<LabelAttributes>> call1 = null;
-                    Response<List<LabelAttributes>> response1 = null;
-                    List<LabelAttributes> temp;
-                    try {
-                        call1 = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
-                        response1 = call1.execute();
-                        if(response.body() != null){
-                            temp = new ArrayList<>(response1.body());
-                            labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
-                            Call<List<LabelFont>> call2 = null;
-                            Response<List<LabelFont>> response2;
-                            List<LabelFont> temp2;
-                            call2 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
-                            response2 = call2.execute();
-                            if(response2.body() != null){
-                                temp2 = new ArrayList<>(response2.body());
-                                fonts = temp2.toArray(new LabelFont[temp2.size()]);
-                                String tem, extension;
-                                for (LabelFont lf: fonts) {
-                                    extension = lf.getBasename().substring(lf.getBasename().length() - 4);
-                                    tem = lf.getBasename().substring(0,lf.getBasename().length() - 4);
-                                    tem = tem + "-Regular" + extension;
-                                    lf.setBasename(tem);
-                                    ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + tem, tem);
-                                }
-
-                                Call<List<LabelImage>> call3 = null;
-                                Response<List<LabelImage>> response3;
-                                ArrayList temp3;
-
-                                try {
-                                    call3 = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
-                                    response3 = call3.execute();
-                                    if(response3.body() != null){
-                                        temp3 = new ArrayList<>(response3.body());
-                                        if(temp3.size() != 0){
-                                            images = (LabelImage[]) temp3.toArray(new LabelImage[temp3.size()]);
-                                            String url;
-                                            Bitmap b;
-                                            for (LabelImage li: images) {
-                                                url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
-                                                b = ConstantsAdmin.getImageFromURL(url);
-                                                li.setImage(b);
-                                            }
-                                          //  initializeCreator();
-                                        }
-                                    }
-                                }catch(Exception exc){
-
-                                    if(call3 != null) {
-                                        call3.cancel();
-                                    }
-
-                                }
+                Call<List<LabelAttributes>> call1 = null;
+                Response<List<LabelAttributes>> response1;
+                List<LabelAttributes> temp;
+                try {
+                    call1 = ConstantsAdmin.creatorService.getLabelAttributes(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                    response1 = call1.execute();
+                    if(response.body() != null){
+                        temp = new ArrayList<>(response1.body());
+                        labelAttributes = temp.toArray(new LabelAttributes[temp.size()]);
+                        Call<List<LabelFont>> call2;
+                        Response<List<LabelFont>> response2;
+                        List<LabelFont> temp2;
+                        call2 = ConstantsAdmin.creatorService.getFonts(labelAttributes[0].getTextAreasId(), true,  ConstantsAdmin.tokenFFL);
+                        response2 = call2.execute();
+                        if(response2.body() != null){
+                            temp2 = new ArrayList<>(response2.body());
+                            fonts = temp2.toArray(new LabelFont[temp2.size()]);
+                            String tem, extension;
+                            for (LabelFont lf: fonts) {
+                                extension = lf.getBasename().substring(lf.getBasename().length() - 4);
+                                tem = lf.getBasename().substring(0,lf.getBasename().length() - 4);
+                                tem = tem + "-Regular" + extension;
+                                lf.setBasename(tem);
+                                ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_FONTS) + tem, tem);
                             }
-                            // labelAttributes = response.body();
-                        }
-                    }catch(Exception exc){
-                        if(call1 != null) {
-                            call1.cancel();
-                        }
 
+                            Call<List<LabelImage>> call3 = null;
+                            Response<List<LabelImage>> response3;
+                            ArrayList temp3;
+
+                            try {
+                                call3 = ConstantsAdmin.creatorService.getImages(ConstantsAdmin.currentCreator.getId(), true,  ConstantsAdmin.tokenFFL);
+                                response3 = call3.execute();
+                                if(response3.body() != null){
+                                    temp3 = new ArrayList<>(response3.body());
+                                    if(temp3.size() != 0){
+                                        images = (LabelImage[]) temp3.toArray(new LabelImage[temp3.size()]);
+                                        String url;
+                                        Bitmap b;
+                                        for (LabelImage li: images) {
+                                            url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_LABEL_IMAGES) + li.getUniquename();
+                                            b = ConstantsAdmin.getImageFromURL(url);
+                                            li.setImage(b);
+                                        }
+                                      //  initializeCreator();
+                                    }
+                                }
+                            }catch(Exception exc){
+
+                                if(call3 != null) {
+                                    call3.cancel();
+                                }
+
+                            }
+                        }
+                        // labelAttributes = response.body();
+                    }
+                }catch(Exception exc){
+                    if(call1 != null) {
+                        call1.cancel();
                     }
 
-
-
                 }
+
+
             }
         }catch(Exception exc){
             if(call != null) {
@@ -390,8 +386,8 @@ public class ConstantsAdmin {
 
     public static void loadAllInCombo() throws IOException {
         Iterator<Product> it = productsList.iterator();
-        Product p = null;
-        TagParams tp = null;
+        Product p;
+        TagParams tp;
 
 
         while(it.hasNext()){
@@ -406,9 +402,7 @@ public class ConstantsAdmin {
                 response1 = call1.execute();
                 if (response1.body() != null) {
                     //    ConstantsAdmin.currentCreator = response1.body();
-                    if (tp != null) {
-                        tp.setCreator(response1.body());
-                    }
+                    tp.setCreator(response1.body());
 
                 }
             } catch (Exception exc) {
@@ -428,13 +422,11 @@ public class ConstantsAdmin {
                 if (response2.body() != null) {
                     temp2 = new ArrayList<>(response2.body());
                     labelAttrs = temp2.toArray(new LabelAttributes[temp2.size()]);
-                    if (tp != null) {
-                        tp.setLabelAttributes(labelAttrs);
-                        if (labelAttrs.length > 1) {
-                            tp.setTitle(true);
-                        } else {
-                            tp.setTitle(false);
-                        }
+                    tp.setLabelAttributes(labelAttrs);
+                    if (labelAttrs.length > 1) {
+                        tp.setTitle(true);
+                    } else {
+                        tp.setTitle(false);
                     }
                     // labelAttributes = response.body();
                 }
@@ -445,7 +437,7 @@ public class ConstantsAdmin {
             }
             boolean needLoadFontFile = true;
             LabelFont[] fs = null;
-            if (tp != null && tp.getFonts() != null) {
+            if (tp.getFonts() != null) {
                 //  fonts = tp.getFonts();
                 needLoadFontFile = false;
             } else {
@@ -459,9 +451,7 @@ public class ConstantsAdmin {
                     if (response3.body() != null) {
                         temp3 = new ArrayList<>(response3.body());
                         fs = temp3.toArray(new LabelFont[temp3.size()]);
-                        if (tp != null) {
-                            tp.setFonts(fs);
-                        }
+                        tp.setFonts(fs);
 
                     }
                 } catch (Exception exc) {
@@ -494,9 +484,7 @@ public class ConstantsAdmin {
                     temp4 = new ArrayList<>(response4.body());
                     if (temp4.size() > 0) {
                         ims = (LabelImage[]) temp4.toArray(new LabelImage[temp4.size()]);
-                        if (tp != null) {
-                            tp.setImages(ims);
-                        }
+                        tp.setImages(ims);
                     }
                 }
             } catch (Exception exc) {
@@ -542,11 +530,9 @@ public class ConstantsAdmin {
             inputStream = new FileInputStream(filename);
 
             properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if(inputStream != null){
                 try {
                     inputStream.close();
@@ -564,17 +550,16 @@ public class ConstantsAdmin {
         }
         ConstantsAdmin.fflProperties = properties;
     }
-
+/*
     public static ArrayList<LabelImage> getCapturas() {
         if(capturas == null){
             capturas = new ArrayList<LabelImage>();
         }
         return capturas;
     }
-
+*/
     public static String convertIntColorToHex(int color){
-        String hexColor = String.format("#%06X", (0xFFFFFF & color));
-        return hexColor;
+        return String.format("#%06X", (0xFFFFFF & color));
     }
 
     public static float pxToMm(float px, Context context){
@@ -588,20 +573,19 @@ public class ConstantsAdmin {
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-        final float roundPx = roundPixelSize;
         paint.setAntiAlias(true);
-        canvas.drawRoundRect(rectF,roundPx,roundPx, paint);
+        canvas.drawRoundRect(rectF, (float) roundPixelSize, (float) roundPixelSize, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
 
-    public static EditText createTextArea(EditText ta, LabelAttributes la, String hint, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
+    public static EditText createTextArea(EditText ta, LabelAttributes la, String hint, boolean acot, RelativeLayout rl, Activity context) {
         //EditText ta = new EditText(this);
         ta.setHint(hint);
         ta.setHintTextColor(Color.GRAY);
-        float temp = 0;
-        int w, h = 0;
+        float temp;
+        int w, h;
      //   if (currentC.getId() != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, la.getWidth(),
                     context.getResources().getDisplayMetrics());
@@ -675,12 +659,12 @@ public class ConstantsAdmin {
     }
 
 
-    public static EditText createTextArea(float achicar, EditText ta, String hint, int idCreator, int anchoArea, int altoArea, int fromX, int fromY, int esMultilinea, boolean acot, RelativeLayout rl, Activity context) {
+    public static EditText createTextArea(float achicar, EditText ta, String hint, int anchoArea, int altoArea, int fromX, int fromY, int esMultilinea, boolean acot, RelativeLayout rl, Activity context) {
         //EditText ta = new EditText(this);
         ta.setHint(hint);
         ta.setHintTextColor(Color.GRAY);
-        float temp = 0;
-        int w, h = 0;
+        float temp;
+        int w, h;
       //  if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {
             temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, anchoArea,
                     context.getResources().getDisplayMetrics());
@@ -761,41 +745,40 @@ public class ConstantsAdmin {
 
 
     public static void customizeBackground(Bitmap img, Creator currentC, boolean acot, RelativeLayout rl, Activity context) {
-        int realWidthImage = 0;
-        int realHeightImage = 0;
-        final Object mutex = new Object();
-        synchronized (mutex) {
+        int realWidthImage;
+        int realHeightImage;
 
-            float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
-                    context.getResources().getDisplayMetrics());
-            if (acot) {
-                temp = temp - temp * 3 / 19;
-            }
-            realWidthImage = (int) temp;
-            temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
-                    context.getResources().getDisplayMetrics());
 
-            if (acot) {
-                temp = temp - temp * 3 / 19;
-            }
-            realHeightImage = (int) temp;
-
-            Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
-            if (currentC.getRounded() == 1) {
-                b = getRoundedCornerBitmap(b, currentC.getRound());
-            }
-
-            Drawable d = new BitmapDrawable(context.getResources(), b);
-            rl.setBackground(d);
+        float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getWidth(),
+                context.getResources().getDisplayMetrics());
+        if (acot) {
+            temp = temp - temp * 3 / 19;
         }
+        realWidthImage = (int) temp;
+        temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, currentC.getHeight(),
+                context.getResources().getDisplayMetrics());
+
+        if (acot) {
+            temp = temp - temp * 3 / 19;
+        }
+        realHeightImage = (int) temp;
+
+        Bitmap b = Bitmap.createScaledBitmap(img, realWidthImage, realHeightImage, false);
+        if (currentC.getRounded() == 1) {
+            b = getRoundedCornerBitmap(b, currentC.getRound());
+        }
+
+        Drawable d = new BitmapDrawable(context.getResources(), b);
+        rl.setBackground(d);
+
 
 
     }
 
 
     public static void customizeBackground(float achicar, Bitmap img, int w, int h, int round, boolean acot, RelativeLayout rl, Activity context) {
-        int realWidthImage = 0;
-        int realHeightImage = 0;
+        int realWidthImage;
+        int realHeightImage;
       //  if (idCreator != ConstantsAdmin.ID_CREATOR_MINICIRCULARES) {// NO ES EL CREADOR DE MINI-CIRCULARES
         float temp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, w,
                 context.getResources().getDisplayMetrics());
@@ -842,8 +825,8 @@ public class ConstantsAdmin {
         dbm.close();
     }
 
-    public static boolean enviarMail(String subject, String body, String to){
-        boolean okSend = false;
+    public static void enviarMail(String subject, String body, String to){
+     //   boolean okSend = false;
         KNMail m = new KNMail(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_MAIL), ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_FFL_PASSWORD));
         String[] toArr = {to};
         m.setTo(toArr);
@@ -851,12 +834,15 @@ public class ConstantsAdmin {
             //    m.setFrom("info@funforlabels.com");
         m.setSubject(subject);
         m.setBody(body);
+      //  try {
         try {
-            okSend = m.send();
-        } catch(Exception e) {
+            m.send();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return okSend;
+    /*    } catch(Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
 
@@ -907,12 +893,12 @@ public class ConstantsAdmin {
                 .url(url)
                 .build();
 
-        okhttp3.Response responses = null;
+        okhttp3.Response responses;
         responses = client.newCall(request).execute();
-        int responseCode = 0;
+   //     int responseCode = 0;
 
         // Make the request
-        if ((responseCode = responses.code()) == 200) {
+        if (responses.code() == 200) {
             bmp = BitmapFactory.decodeStream(responses.body().byteStream());
         }
         return bmp;
@@ -923,23 +909,20 @@ public class ConstantsAdmin {
         String completeFilename = Environment
                 .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/"
                 + filename;
-        File f = new File(completeFilename);
-        return f;
+        return new File(completeFilename);
     }
 
     public static File getImageFile(String filename){
         String completeFilename = Environment
                 .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/"
                 + filename;
-        File f = new File(completeFilename);
-        return f;
+        return new File(completeFilename);
     }
 
     public static File getTempFolder(){
         String completeFilename = Environment
                 .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP;
-        File f = new File(completeFilename);
-        return f;
+        return new File(completeFilename);
     }
 
     public static void copyBitmapInStorage(Bitmap bmp, String filename){
@@ -966,7 +949,7 @@ public class ConstantsAdmin {
         String twoHyphens = "--";
         String boundary =  "*****";
 
-        HttpURLConnection httpUrlConnection = null;
+        HttpURLConnection httpUrlConnection;
         URL url = new URL(fflProperties.getProperty(ATR_URL_LABEL_THUMBS));
         httpUrlConnection = (HttpURLConnection) url.openConnection();
         httpUrlConnection.setUseCaches(false);
@@ -1011,7 +994,7 @@ public class ConstantsAdmin {
         BufferedReader responseStreamReader =
                 new BufferedReader(new InputStreamReader(responseStream));
 
-        String line = "";
+        String line;
         StringBuilder stringBuilder = new StringBuilder();
 
         while ((line = responseStreamReader.readLine()) != null) {
@@ -1019,7 +1002,7 @@ public class ConstantsAdmin {
         }
         responseStreamReader.close();
 
-        String response = stringBuilder.toString();
+      //  String response = stringBuilder.toString();
 
         responseStream.close();
 
@@ -1046,7 +1029,7 @@ public class ConstantsAdmin {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.setMargins(7,7,7,7);
         rl.setLayoutParams(lp);
-        LinearLayout ll = popupInputDialogView.findViewById(R.id.linearTagView);
+       // LinearLayout ll = popupInputDialogView.findViewById(R.id.linearTagView);
         initializeCreatorFull(pc, rl, mContext);
         return popupInputDialogView;
     }
@@ -1054,11 +1037,11 @@ public class ConstantsAdmin {
     public static void makeTag(ProductoCarrito pc, float achicar, boolean acotar, RelativeLayout linearTag, Activity mContext){
         Bitmap imagen = getImageFromStorage(pc.getBackgroundFilename());
         customizeBackground(achicar, imagen, pc.getAnchoTag(), pc.getLargoTag(), pc.getRound(), acotar, linearTag, mContext);
-        EditText textTag = null;
+        EditText textTag;
         EditText titleTag = null;
-        textTag = createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(), pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+        textTag = createTextArea(achicar, new EditText(mContext), "", pc.getAnchoAreaTexto(), pc.getLargoAreaTexto(), pc.getFromXTexto(), pc.getFromYTexto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
         if(pc.getIdAreaTitulo()!= -1) {
-            titleTag = createTextArea(achicar, new EditText(mContext), "", pc.getIdCreador(),pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
+            titleTag = createTextArea(achicar, new EditText(mContext), "", pc.getAnchoAreaTituto(),pc.getLargoAreaTituto() , pc.getFromXTituto(), pc.getFromYTituto(), pc.getEsMultilineaTexto(), acotar, linearTag, mContext);
         }
         textTag.setText(pc.getTexto());
         textTag.setTextColor(pc.getFontTextColor());
@@ -1079,12 +1062,12 @@ public class ConstantsAdmin {
     }
 
 
-    public static String takeScreenshot(Activity context, ItemCarrito ic) {
+    public static String takeScreenshot(ItemCarrito ic) {
         Date now = new Date();
         String temp = (String) android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
         temp = "cart_" + ic.getIdProduct() + "_" + temp;
         String nameFile = temp + ".png";
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         try {
             // image naming and path  to include sd card  appending name you choose for file
 
@@ -1101,7 +1084,7 @@ public class ConstantsAdmin {
             //v.setDrawingCacheEnabled(true);
             bitmap = ConstantsAdmin.getImage(ic.getImagenDeTag());
 
-            Bitmap bitmapSmall = null;
+            Bitmap bitmapSmall;
             if(ic.isProduct()){
                 bitmapSmall= getResizedBitmap(bitmap, 150);
             }else{
@@ -1141,10 +1124,23 @@ public class ConstantsAdmin {
 
 
     public static Bitmap takeScreenshot(View v) {
-       Bitmap bmp = null;
+       Bitmap bmp;
        v.setDrawingCacheEnabled(true);
        bmp = Bitmap.createBitmap(v.getDrawingCache());
        v.setDrawingCacheEnabled(false);
+/*
+        v.setDrawingCacheEnabled(true);
+        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+
+        v.buildDrawingCache(true);
+        bmp = Bitmap.createBitmap(v.getDrawingCache());
+        v.setDrawingCacheEnabled(false); // clear drawing cache
+
+*/
+
+
        return bmp;
     }
 
@@ -1257,7 +1253,7 @@ public class ConstantsAdmin {
     }
 
     public static ArrayList<ItemCarrito> getCombosCarrito(Context ctx) {
-        ArrayList<ItemCarrito> listaCombos = new ArrayList<ItemCarrito>();
+        ArrayList<ItemCarrito> listaCombos = new ArrayList<>();
         ArrayList<ItemCarrito> listaProductos;
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
@@ -1269,7 +1265,7 @@ public class ConstantsAdmin {
         String nombre;
         String precio;
         String cantidad;
-        ComboCarrito item = null;
+        ComboCarrito item;
         byte[] img;
         Cursor cursor = dbm.cursorComboProductoCarrito();
         cursor.moveToFirst();
@@ -1293,7 +1289,7 @@ public class ConstantsAdmin {
             item.setComentarioUsr(comentario);
             item.setId(itemId);
             item.setImagenDeTag(img);
-            listaProductos = getProductosCarrito(ctx, item.getId(), dbm);
+            listaProductos = getProductosCarrito(item.getId(), dbm);
             item.setProductos(listaProductos);
             cursor.moveToNext();
             listaCombos.add(item);
@@ -1306,13 +1302,13 @@ public class ConstantsAdmin {
         ArrayList<ItemCarrito> listaProductos;
         DataBaseManager dbm = DataBaseManager.getInstance(ctx);
         dbm.open();
-        listaProductos = getProductosCarrito(ctx, idCombo, dbm);
+        listaProductos = getProductosCarrito(idCombo, dbm);
         dbm.close();
         return listaProductos;
     }
 
-    public static ArrayList<ItemCarrito> getProductosCarrito(Context ctx, int idCombo, DataBaseManager dbm) {
-        ArrayList<ItemCarrito> listaProductos = new ArrayList<ItemCarrito>();
+    public static ArrayList<ItemCarrito> getProductosCarrito(int idCombo, DataBaseManager dbm) {
+        ArrayList<ItemCarrito> listaProductos = new ArrayList<>();
         int itemId;
         String texto;
         String titulo;
@@ -1351,7 +1347,7 @@ public class ConstantsAdmin {
         String cantidadPorPack;
         String modelo;
         byte[] img;
-        ProductoCarrito item = null;
+        ProductoCarrito item;
        // DataBaseManager dbm = DataBaseManager.getInstance(ctx);
        // dbm.open();
         Cursor cursor = dbm.cursorProductoCarrito(idCombo);
@@ -1375,7 +1371,7 @@ public class ConstantsAdmin {
                 idFontTitle = cursor.getInt(cursor.getColumnIndexOrThrow(ConstantsAdmin.KEY_ID_FONT_TITLE));
                 item.setTitulo(titulo);
                 item.setTitleFontName(tituloFuente);
-                item.setTitleFontSize(Float.valueOf(tituloSize));
+                item.setTitleFontSize(Float.parseFloat(tituloSize));
                 item.setFontTitleColor(tituloColor);
                 item.setIdAreaTitulo(idAreaTitulo);
                 item.setAnchoAreaTituto(anchoTitulo);
@@ -1414,7 +1410,7 @@ public class ConstantsAdmin {
             item.setLargoTag(largoTag);
             item.setTexto(texto);
             item.setTextFontName(textoFuente);
-            item.setTextFontSize(Float.valueOf(textoSize));
+            item.setTextFontSize(Float.parseFloat(textoSize));
             item.setFontTextColor(textoColor);
             item.setIdAreaTexto(idAreaTexto);
             item.setAnchoAreaTexto(anchoTexto);
@@ -1468,14 +1464,14 @@ public class ConstantsAdmin {
 
     public static void agregarProductoAlCarrito(ItemCarrito pc) {
         if(productosDelCarrito == null){
-            productosDelCarrito = new ArrayList<ItemCarrito>();
+            productosDelCarrito = new ArrayList<>();
         }
         productosDelCarrito.add(pc);
     }
 
     public static void agregarComboAlCarrito(ItemCarrito c) {
         if(combosDelCarrito == null){
-            combosDelCarrito = new ArrayList<ItemCarrito>();
+            combosDelCarrito = new ArrayList<>();
         }
         combosDelCarrito.add(c);
     }
@@ -1493,7 +1489,7 @@ public class ConstantsAdmin {
 
     public static void deleteImageFromStorage(String backgroundFilename) {
         File f = getImageFile(backgroundFilename);
-        if(f != null && f.exists()){
+        if(f.exists()){
             f.delete();
         }
     }
@@ -1525,7 +1521,7 @@ public class ConstantsAdmin {
     }
 
     public static String getFechaYHoraActual() {
-        String fecha = null;
+       // String fecha = null;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         return formatter.format(date);
@@ -1537,13 +1533,12 @@ public class ConstantsAdmin {
         if (tempFolder.isDirectory())
         {
             String[] children = tempFolder.list();
-            for (int i = 0; i < children.length; i++)
-            {
-                new File(tempFolder, children[i]).delete();
+            for (String child : children) {
+                new File(tempFolder, child).delete();
             }
         }
     }
-
+/*
     public static void uploadFile(String sourceFileUri, Activity ctx){
         Data inputData = new Data.Builder().putString("sourceFileUri", sourceFileUri).build();
         Constraints constraints = new Constraints.Builder()
@@ -1554,18 +1549,12 @@ public class ConstantsAdmin {
                 .build();
         WorkManager.getInstance(ctx).enqueue(request);
 
-    }
-/*
-    public static int uploadFile(String sourceFileUri){
-        final String temp = sourceFileUri;
+    }*/
 
-        class UploadFileAsync extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected String doInBackground(String... params) {
+    public static void uploadFile(String sourceFileUri){
 
                 try {
-                    String sourceFileUri = temp;
+              //      String sourceFileUri = temp;
 
                     HttpURLConnection conn = null;
                     DataOutputStream dos = null;
@@ -1671,27 +1660,10 @@ public class ConstantsAdmin {
 
                     ex.printStackTrace();
                 }
-                return "Executed";
-            }
 
-            @Override
-            protected void onPostExecute(String result) {
 
-            }
-
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @Override
-            protected void onProgressUpdate(Void... values) {
-            }
-        }
-
-        new UploadFileAsync().execute("");
-        return 1;
     }
-*/
+
 
 
    /* public static int uploadFile1(String sourceFileUri) {

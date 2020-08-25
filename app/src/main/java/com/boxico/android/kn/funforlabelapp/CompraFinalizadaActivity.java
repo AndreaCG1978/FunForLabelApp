@@ -1,7 +1,6 @@
 package com.boxico.android.kn.funforlabelapp;
 
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,19 +21,17 @@ import java.util.ArrayList;
 
 public class CompraFinalizadaActivity extends AppCompatActivity {
 
-    private CompraFinalizadaActivity me;
     TextView textMensajeExito1;
     TextView textMensajeExito2;
     TextView textEnvioMail;
     TextView textEnvioWsp;
     Button btnFinalizar;
-    private Button btnLimpiarCarrito;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        me = this;
+        CompraFinalizadaActivity me = this;
         setContentView(R.layout.compra_finalizada);
         this.configureWidgets();
 
@@ -79,7 +76,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             if(ConstantsAdmin.mensajeCompra != null && !ConstantsAdmin.mensajeCompra.equals("")){
                 temp = "\n\n\n" + ConstantsAdmin.selectedPaymentMethod.getName() + "-" + getString(R.string.estado_compra) + ConstantsAdmin.mensajeCompra;
             }
-            String temp1 = null;
+            String temp1;
             if(ConstantsAdmin.currentLanguage == 1){
                 temp1 = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.MENSAJE_EXITO_ORDEN_GENERADA2_EN) + temp;
             }else{
@@ -138,7 +135,7 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
             createAlertDialog(getString(R.string.carrito_vacio), getString(R.string.atencion));
         }
     }*/
-
+/*
     private void createAlertDialog(String message, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(me);
         builder.setMessage(message).setTitle(title);
@@ -146,14 +143,14 @@ public class CompraFinalizadaActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+*/
 
     private void vaciarCarritoPrivado() {
         ConstantsAdmin.deleteAllProductoCarrito(this);
         ConstantsAdmin.deleteAllComboProductoCarrito(this);
         ConstantsAdmin.deleteAllImagesFromStorage();
-        ConstantsAdmin.productosDelCarrito = new ArrayList<ItemCarrito>();
-        ConstantsAdmin.combosDelCarrito = new ArrayList<ItemCarrito>();
+        ConstantsAdmin.productosDelCarrito = new ArrayList<>();
+        ConstantsAdmin.combosDelCarrito = new ArrayList<>();
     }
 
     @Override

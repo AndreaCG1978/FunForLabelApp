@@ -19,7 +19,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.LabelImage;
 
 public class KNCustomBackgroundAdapter extends ArrayAdapter<LabelImage> {
 
-	Context myContext;
+	final Context myContext;
 
 
 	public KNCustomBackgroundAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull LabelImage[] objects) {

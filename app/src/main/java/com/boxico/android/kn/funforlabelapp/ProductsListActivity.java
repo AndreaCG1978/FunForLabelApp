@@ -65,10 +65,9 @@ public class ProductsListActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -355,7 +354,7 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void goToTagCreator(Product prod) {
-        Long idCat = Long.valueOf(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ID_CATEGORY_COMBO));
+        long idCat = Long.parseLong(ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ID_CATEGORY_COMBO));
         ConstantsAdmin.currentProduct = prod;
         Intent intent;
         if(ConstantsAdmin.currentCategory.getId()!=idCat) {// NO ES UN COMBO

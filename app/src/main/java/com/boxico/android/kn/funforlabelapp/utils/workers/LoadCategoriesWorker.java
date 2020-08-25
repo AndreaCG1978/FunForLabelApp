@@ -3,9 +3,7 @@ package com.boxico.android.kn.funforlabelapp.utils.workers;
 import android.content.Context;
 
 import com.boxico.android.kn.funforlabelapp.MainActivity;
-import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
-import com.boxico.android.kn.funforlabelapp.dtos.Customer;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 import java.io.IOException;
@@ -17,12 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoadCategoriesWorker extends Worker {
-    WorkerParameters myWorkerParams;
-    MainActivity myContext = null;
+    final WorkerParameters myWorkerParams;
+    MainActivity myContext;
 
     public LoadCategoriesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -47,8 +44,8 @@ public class LoadCategoriesWorker extends Worker {
                     try {
                         myContext.loadImageForCategories();
                         Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
-                        Category cat1 = null;
-                        Category cat2 = null;
+                        Category cat1;
+                        Category cat2;
                         while(it.hasNext()){
                             cat2 = null;
                             cat1 = it.next();

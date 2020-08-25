@@ -9,7 +9,7 @@ import androidx.work.WorkerParameters;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 public class LoadPropertiesWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadPropertiesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -19,7 +19,7 @@ public class LoadPropertiesWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             ConstantsAdmin.privateLoadProperties();
             r = Result.success();

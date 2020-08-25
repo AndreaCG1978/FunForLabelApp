@@ -9,7 +9,7 @@ import androidx.work.WorkerParameters;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
 public class LoadAllComboWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public LoadAllComboWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -19,7 +19,7 @@ public class LoadAllComboWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Result r = null;
+        Result r;
         try {
             ConstantsAdmin.loadAllInCombo();
             r = Result.success();

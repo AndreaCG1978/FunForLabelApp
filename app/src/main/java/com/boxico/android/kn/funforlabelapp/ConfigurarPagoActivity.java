@@ -168,21 +168,20 @@ public class ConfigurarPagoActivity extends AppCompatActivity {
         RadioButton rb;
         TextView txt;
         radioButtonsGroup = this.findViewById(R.id.opciones_pago);
-        Iterator<MetodoPago> it = metodosPago.iterator();
-        while(it.hasNext()){
-            m = it.next();
+        for (MetodoPago pago : metodosPago) {
+            m = pago;
             rb = new RadioButton(this);
             rb.setText(m.getName());
             rb.setTextColor(Color.BLACK);
             rb.setTextSize(15);
 
-            rb.setId((int)m.getId());
+            rb.setId((int) m.getId());
             rb.setTag(m);
-            if(m.getId()==1){
+            if (m.getId() == 1) {
                 rb.setChecked(true);
             }
             radioButtonsGroup.addView(rb);
-            if(m.getDescription() != null && !m.getDescription().equals("")){
+            if (m.getDescription() != null && !m.getDescription().equals("")) {
                 txt = new TextView(this);
                 txt.setText(m.getDescription());
                 txt.setTextColor(Color.DKGRAY);

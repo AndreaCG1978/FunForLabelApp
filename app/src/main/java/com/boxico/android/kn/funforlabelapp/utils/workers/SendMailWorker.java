@@ -10,7 +10,7 @@ import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 import com.boxico.android.kn.funforlabelapp.utils.KNMail;
 
 public class SendMailWorker extends Worker {
-    WorkerParameters myWorkerParams;
+    final WorkerParameters myWorkerParams;
 
     public SendMailWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -30,7 +30,7 @@ public class SendMailWorker extends Worker {
         m.setSubject(tmp);
         tmp = myWorkerParams.getInputData().getString("body");
         m.setBody(tmp);
-        Result r = null;
+        Result r;
         try {
             m.send();
             r = Result.success();

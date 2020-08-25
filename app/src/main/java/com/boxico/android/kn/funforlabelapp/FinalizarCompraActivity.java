@@ -6,16 +6,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -31,6 +42,9 @@ import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.workers.FinalizarCompraWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoginCustomerWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -77,9 +91,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
     Button btnFinalizar;
     private float precioTotalTags;
     private float precioTotalEnvio;
-    Integer idOrder = -1;
-    private boolean okInsert = true;
-    private Integer PAYMENT_REQUEST = 1001;
+    public Integer idOrder = -1;
+    public boolean okInsert = true;
+    private final Integer PAYMENT_REQUEST = 1001;
   //  final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("TEST-58494951-d07a-4350-af4e-0e069b4c6b5a", "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9").build();
    // final MercadoPagoCheckout checkout = new MercadoPagoCheckout.Builder("8755027555974708", "9Eb4IgoOjpYfxftaSXTYeFtUyYUQeecU").build();
 
@@ -168,8 +182,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private void finalizarCompra() {
       //  new InsertarOrderTask().execute();
-        Call<Integer> call = null;
-        Response<Integer> response = null;
+      /*  Call<Integer> call = null;s
+        btnFinalizar.setEnabled(false);
+        Response<Integer> response;
         Customer c = ConstantsAdmin.currentCustomer;
         AddressBook ab = ConstantsAdmin.addressCustomer;
         Date date= new Date();
@@ -205,6 +220,78 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
         }
+*/
+        LinearLayout layout = findViewById(R.id.finalizarLayout);
+        //    buttonLogin.setEnabled(false);
+        ProgressBar progressBar = null;
+        progressBar = new ProgressBar(FinalizarCompraActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 12,params);
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        //    ScrollView sv = findViewById(R.id.scroll_view);
+
+        Data inputData = new Data.Builder().putFloat("precioTotalTags", precioTotalTags).putFloat("precioTotalEnvio", precioTotalEnvio).putString("comentario", entryComentario.getText().toString()).build();
+
+      /*  float precioTotalTags = myWorkerParams.getInputData().getFloat("precioTotalTags",0);
+        float precioTotalEnvio = myWorkerParams.getInputData().getFloat("precioTotalEnvio", 0);
+        String comentario = myWorkerParams.getInputData().getString("comentario");
+
+*/
+        ConstantsAdmin.activityTemp = this;
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(FinalizarCompraWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        final ProgressBar finalProgressBar = progressBar;
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                                finalProgressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            finalProgressBar.setVisibility(View.GONE);
+                            if(okInsert){// PUDO INSERTAR EN ORDERS
+                                switch ((int)ConstantsAdmin.selectedPaymentMethod.getId()){
+                                    case 1:// ES TRANSFERENCIA BANCARIA
+                                        // new SendCustomerNotificationTask().execute();
+                                        sendCustomerNotification();
+
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3: // ES MERCADOLIBRE
+                                        redirigirAMercadoLibre();
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
+
+
+
+
+
+
+
+
     }
 /*
     private class InsertarOrderTask extends AsyncTask<Long, Integer, Integer> {
@@ -392,7 +479,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
         }){
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -467,9 +554,9 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private void registrarCancelacionMercadoPago() {
         Call<Integer> call = null;
-        Response<Integer> response = null;
+        Response<Integer> response;
         Properties p =  ConstantsAdmin.fflProperties;
-        MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
+      //  MetodoEnvio me = ConstantsAdmin.selectedShippingMethod;
 
         try {
             ConstantsAdmin.mensaje = null;
@@ -638,13 +725,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 */
     private String getDescripcionTags(){
         Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ItemCarrito ic = null;
+        ItemCarrito ic;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
                 temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
@@ -657,8 +744,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         it = ConstantsAdmin.combosDelCarrito.iterator();
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             if(ic.getModelo() != null && !ic.getModelo().equals("")){
                 temp = temp + ic.getCantidad() + " x " + ic.getNombre() + "(" + ic.getModelo() + "): $" + precioTemp + "\n";
@@ -672,13 +759,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
     private String getDescripcionTagsLite(){
         Iterator<ItemCarrito> it = ConstantsAdmin.productosDelCarrito.iterator();
-        ItemCarrito ic = null;
+        ItemCarrito ic;
         String temp = "";
         float precioTemp;
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
@@ -688,8 +775,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         it = ConstantsAdmin.combosDelCarrito.iterator();
         while(it.hasNext()){
             ic = it.next();
-            precioTemp = Float.valueOf(ic.getPrecio());
-            precioTemp = precioTemp * Float.valueOf(ic.getCantidad());
+            precioTemp = Float.parseFloat(ic.getPrecio());
+            precioTemp = precioTemp * Float.parseFloat(ic.getCantidad());
             //String precio =pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
             temp = temp + ic.getNombre() +": $" + precioTemp;
             if(it.hasNext()){
@@ -776,7 +863,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         body = body + "-----------------------------------------------" + "\n";
         body = body + ConstantsAdmin.selectedPaymentMethod.getName() + "(" + ConstantsAdmin.selectedPaymentMethod.getDescription() + ")";
 
-        String subject = null;
+        String subject;
         if(ConstantsAdmin.currentLanguage == 1){
             subject = p.getProperty(ConstantsAdmin.MAIL_PROCESO_ORDEN_SUBJECT_EN);
         }else{
@@ -798,7 +885,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     private void insertarOrder() {
         Call<Integer> call = null;
         Response<Integer> response = null;
@@ -838,11 +925,11 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         }
     }
+*/
 
-
-    private void insertarEtiquetas() throws IOException {
-        Call<Integer> call = null;
-        Response<Integer> response = null;
+    public void insertarEtiquetas() throws IOException {
+        Call<Integer> call;
+        Response<Integer> response;
         ProductoCarrito p;
         Customer c = ConstantsAdmin.currentCustomer;
         Properties prop = ConstantsAdmin.fflProperties;
@@ -850,7 +937,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         while(it.hasNext() && okInsert){
             p = (ProductoCarrito) it.next();
             String precio =p.getPrecio().substring(0, p.getPrecio().length() - 5);
-            String imageName = ConstantsAdmin.takeScreenshot(this, p);
+            String imageName = ConstantsAdmin.takeScreenshot(p);
             if(p.isTieneTitulo()){// ES UN TAG DE TEXTO SIMPLE
                 call = ConstantsAdmin.orderService.insertTagWithTitle(true, ConstantsAdmin.tokenFFL, idOrder, p.getIdProduct(),p.getModelo(),
                         p.getNombre(),Integer.parseInt(precio),Integer.parseInt(precio), 0, Integer.valueOf(p.getCantidad()),
@@ -871,14 +958,14 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                 okInsert = false;
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }else{
-                ConstantsAdmin.uploadFile(imageName + ".png", this);
+                ConstantsAdmin.uploadFile(imageName + ".png");
                // this.almacenarImagenRemoto(p, imageName + ".png");
             }
         }
         it = ConstantsAdmin.combosDelCarrito.iterator();
-        ComboCarrito combo = null;
+        ComboCarrito combo;
         Integer idProduct = -1;
-        String imageNameCombo, imageName;
+        String imageName;
         while(it.hasNext() && okInsert){
             combo = (ComboCarrito) it.next();
       //      imageNameCombo = ConstantsAdmin.takeScreenshot(this, combo);
@@ -907,10 +994,10 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             }
 
             Iterator<ItemCarrito> it1 = combo.getProductos().iterator();
-            ProductoCarrito pc = null;
+            ProductoCarrito pc;
             while (it1.hasNext() && okInsert){
                 pc = (ProductoCarrito) it1.next();
-                imageName = ConstantsAdmin.takeScreenshot(this, pc);
+                imageName = ConstantsAdmin.takeScreenshot(pc);
                 if(pc.isTieneTitulo()){
                     call = ConstantsAdmin.orderService.insertOnlyTagWithTitle(true, ConstantsAdmin.tokenFFL, idProduct,pc.getFillsTexturedId(),pc.getComentarioUsr(),
                             "imageName",(int)c.getId(),pc.getIdProduct(), 0,
@@ -928,7 +1015,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
                     okInsert = false;
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
-                    ConstantsAdmin.uploadFile(imageName + ".png", this);
+                    ConstantsAdmin.uploadFile(imageName + ".png");
                 }
             }
          /*   if(okInsert){
@@ -1007,12 +1094,12 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         textFormaEnvio.setText(temp);
         temp = ConstantsAdmin.selectedShippingMethod.getDescription();
         textFormaEnvioDetalle.setText(temp);
-        precioTotalEnvio = Float.valueOf(ConstantsAdmin.selectedShippingMethod.getPrice());
+        precioTotalEnvio = Float.parseFloat(ConstantsAdmin.selectedShippingMethod.getPrice());
     }
 
 
     private String getStringDirEnvio(){
-        String temp="";
+        String temp;
         Customer c = ConstantsAdmin.currentCustomer;
         temp = c.getFirstName() + " " + c.getLastName() + "\n";
         temp = temp + ConstantsAdmin.addressCustomer.getCalle() + "\n";
@@ -1028,16 +1115,15 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         ItemCarrito ic;
         String temp = "";
         precioTotalTags = 0;
-        float precioTemp = 0;
+        float precioTemp;
         ArrayList<ItemCarrito> items = new ArrayList<>();
         items.addAll(ConstantsAdmin.productosDelCarrito);
         items.addAll(ConstantsAdmin.combosDelCarrito);
-        Iterator<ItemCarrito> it = items.iterator();
-        while(it.hasNext()){
-            ic = it.next();
-            precioTemp = (Float.valueOf(ic.getPrecio()) * Float.valueOf(ic.getCantidad()));
+        for (ItemCarrito item : items) {
+            ic = item;
+            precioTemp = (Float.parseFloat(ic.getPrecio()) * Float.parseFloat(ic.getCantidad()));
 //            precio = pc.getPrecio().substring(0, pc.getPrecio().length() - 5);
-            temp = temp + "-"+ ic.getCantidad() + " x " + ic.getNombre() + ": $" + precioTemp + "\n";
+            temp = temp + "-" + ic.getCantidad() + " x " + ic.getNombre() + ": $" + precioTemp + "\n";
             precioTotalTags = precioTotalTags + precioTemp;
         }
 

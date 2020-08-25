@@ -76,7 +76,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
             response = call.execute();
             if(response.body() != null){
                 metodosEnvios = new ArrayList<>(response.body());
-                Call<List<AddressBook>> call1 = null;
+                Call<List<AddressBook>> call1;
                 Response<List<AddressBook>> response1;
                 ArrayList<AddressBook> customers;
                 try {
@@ -100,9 +100,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
                 }catch(Exception exc){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
 
-                    if(call != null) {
-                        call.cancel();
-                    }
+                    call.cancel();
 
                 }
             }else{
@@ -197,7 +195,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         temp = temp + ConstantsAdmin.addressCustomer.getProvincia() + ", " + ConstantsAdmin.GEOCODIGOARGENTINA;
         textDirEnvio.setText(temp);
     }
-
+/*
     private void loadAddressBook() {
         Call<List<AddressBook>> call = null;
         Response<List<AddressBook>> response;
@@ -229,7 +227,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
 
     }
 
-
+*/
     private void initializeService(){
         GsonBuilder gsonB = new GsonBuilder();
         gsonB.setLenient();
@@ -271,7 +269,7 @@ public class ConfigurarEnvioActivity extends AppCompatActivity {
         TextView txt;
         radioButtonsGroup = this.findViewById(R.id.opciones_envio);
         Iterator<MetodoEnvio> it = metodosEnvios.iterator();
-        String temp = null;
+        String temp;
         while(it.hasNext()){
             m = it.next();
             rb = new RadioButton(this);

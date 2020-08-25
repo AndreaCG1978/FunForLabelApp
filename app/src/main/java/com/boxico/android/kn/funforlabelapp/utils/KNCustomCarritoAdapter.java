@@ -12,7 +12,7 @@ import com.boxico.android.kn.funforlabelapp.dtos.ProductoCarrito;
 
 public class KNCustomCarritoAdapter extends ArrayAdapter<ProductoCarrito> {
 
-	Context myContext;
+	final Context myContext;
 
 
 	public KNCustomCarritoAdapter(@NonNull Context context, int resource, @NonNull ProductoCarrito[] objects) {
@@ -22,8 +22,7 @@ public class KNCustomCarritoAdapter extends ArrayAdapter<ProductoCarrito> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final View view = super.getView(position, convertView, parent);
-		return view;
+        return super.getView(position, convertView, parent);
 	}
 
 
@@ -35,7 +34,7 @@ public class KNCustomCarritoAdapter extends ArrayAdapter<ProductoCarrito> {
 		}
 */
 		final View view = super.getView(position, convertView, parent);
-		ProductoCarrito pc = getItem(position);
+		//ProductoCarrito pc = getItem(position);
 		/*
 		int srcWidth = li.getImage().getWidth();
 		int srcHeight = li.getImage().getHeight();

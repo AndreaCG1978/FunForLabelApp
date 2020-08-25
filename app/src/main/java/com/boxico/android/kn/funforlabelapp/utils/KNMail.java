@@ -29,19 +29,19 @@ public class KNMail extends Authenticator {
     private String[] _to;
     private String _from;
 
-    private String _port;
-    private String _sport;
+    private final String _port;
+    private final String _sport;
 
-    private String _host;
+    private final String _host;
 
     private String _subject;
     private String _body;
 
-    private boolean _auth;
+    private final boolean _auth;
 
-    private boolean _debuggable;
+    private final boolean _debuggable;
 
-    private Multipart _multipart;
+    private final Multipart _multipart;
 
 
     public KNMail() {

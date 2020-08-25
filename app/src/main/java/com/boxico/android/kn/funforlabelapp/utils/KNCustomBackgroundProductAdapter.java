@@ -21,7 +21,7 @@ import java.util.List;
 
 public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 
-	Context myContext;
+	final Context myContext;
 
 
 	public KNCustomBackgroundProductAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<Product> objects) {
@@ -60,10 +60,8 @@ public class KNCustomBackgroundProductAdapter extends ArrayAdapter<Product> {
 		Product p = getItem(position);
 		int srcWidth = p.getImage().getWidth();
 		int srcHeight = p.getImage().getHeight();
-		int dstWidth = srcWidth;
-		int dstHeight = srcHeight;
-		//	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
-		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), dstWidth,dstHeight, false);
+        //	Bitmap dstBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, true);
+		Bitmap b =Bitmap.createScaledBitmap(p.getImage(), srcWidth, srcHeight, false);
 		BitmapDrawable icon = new BitmapDrawable(myContext.getResources(), b);
 		txt.setCompoundDrawablesWithIntrinsicBounds(icon, null, null,null);
 		txt.setTextSize(14);

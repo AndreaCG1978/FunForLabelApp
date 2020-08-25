@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,7 +65,6 @@ public class LoginActivity extends FragmentActivity {
 
     private EditText userEntry = null;
     private EditText passEntry = null;
-    private Button buttonLogin = null;
 
     private TextView recuperarContrasenia = null;
     private String pswText;
@@ -79,6 +77,7 @@ public class LoginActivity extends FragmentActivity {
     private String nuevaContrasenia;
     private Customer customerTemp;
     private final int PERMISSIONS_WRITE_STORAGE = 102;
+    private ProgressBar progressBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +165,12 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void configureWidgets() {
-        buttonLogin = findViewById(R.id.buttonLogin);
+        Button buttonLogin = findViewById(R.id.buttonLogin);
+        LinearLayout layout = findViewById(R.id.loginLayout);
+        progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 4,params);
         Button buttonCancel = findViewById(R.id.buttonCancel);
         userEntry = findViewById(R.id.usrEntry);
         passEntry = findViewById(R.id.passEntry);
@@ -230,7 +234,7 @@ public class LoginActivity extends FragmentActivity {
     }
 
 
-    private boolean reenviarContrasenia(){
+    private void reenviarContrasenia(){
         boolean okSend = false;
         String body = "";
         body = body + ConstantsAdmin.ENTER + ConstantsAdmin.ENTER;
@@ -245,12 +249,12 @@ public class LoginActivity extends FragmentActivity {
 
             // CREO EL PROGRESS BAR
 
-            LinearLayout layout = findViewById(R.id.loginLayout);
-            final ProgressBar progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
-            layout.addView(progressBar, 1,params);
-            ScrollView sv = findViewById(R.id.scroll_view);
+         //   LinearLayout layout = findViewById(R.id.loginLayout);
+          //  final ProgressBar progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
+         //   RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        //    params.addRule(RelativeLayout.CENTER_IN_PARENT);
+         //   layout.addView(progressBar, 1,params);
+        //    ScrollView sv = findViewById(R.id.scroll_view);
 
             Data inputData = new Data.Builder()
                     .putString("to", customerTemp.getEmail())
@@ -296,8 +300,6 @@ public class LoginActivity extends FragmentActivity {
                 //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
             ConstantsAdmin.mensaje = me.getString(R.string.send_mail_error);
         }
-
-        return okSend;
 
     }
 /*
@@ -361,12 +363,10 @@ public class LoginActivity extends FragmentActivity {
 
     private String crearNuevaContrasenia() {
 
-        String temp = PasswordGenerator.getPassword(
+        return PasswordGenerator.getPassword(
                 PasswordGenerator.MINUSCULAS+
                         PasswordGenerator.MAYUSCULAS+
                         PasswordGenerator.ESPECIALES,6);
-
-        return temp;
     }
 
 
@@ -383,6 +383,8 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
+
+
     private void loginCustomer() {
 
         usrText = userEntry.getText().toString();
@@ -392,11 +394,16 @@ public class LoginActivity extends FragmentActivity {
 
             //new LoginCustomerTask().execute();f
             LinearLayout layout = findViewById(R.id.loginLayout);
-            final ProgressBar progressBar = new ProgressBar(LoginActivity.this, null, android.R.attr.progressBarStyleLarge);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        //    buttonLogin.setEnabled(false);
+
+      /*      RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
-            layout.addView(progressBar, 1,params);
-            ScrollView sv = findViewById(R.id.scroll_view);
+            layout.addView(progressBar, 1,params);*/
+            progressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        //    ScrollView sv = findViewById(R.id.scroll_view);
 
             Data inputData = new Data.Builder().putString("usrText", usrText).putString("pswText", pswText).build();
 
@@ -413,14 +420,13 @@ public class LoginActivity extends FragmentActivity {
                     .observe(this, new Observer<WorkInfo>() {
                         @Override
                         public void onChanged(@Nullable WorkInfo workInfo) {
-                            if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                       /*     if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
                                 progressBar.setVisibility(View.VISIBLE);
                                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            }
+                            }*/
                             if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                progressBar.setVisibility(View.GONE);
+
                                 if(ConstantsAdmin.currentCustomer != null){
                                     Intent intent = new Intent(me, MainActivity.class);
                                     //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
@@ -433,9 +439,11 @@ public class LoginActivity extends FragmentActivity {
                                     ConstantsAdmin.customerJustCreated = false;
                                     startActivity(intent);
                                 }else{
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    progressBar.setVisibility(View.GONE);
                                     createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
                                     ConstantsAdmin.mensaje = null;
-                                    buttonLogin.setEnabled(true);
+                                  //  buttonLogin.setEnabled(true);
                                 }
 
                             }
@@ -638,7 +646,7 @@ public class LoginActivity extends FragmentActivity {
                              ConstantsAdmin.currentCustomer = customers.get(0);
                              Intent intent = new Intent(me, MainActivity.class);
                              //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
-                             ConstantsAdmin.currentCustomer = ConstantsAdmin.currentCustomer;
+
                              if(saveLogin.isChecked()){
                                  ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
                                  ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
@@ -658,7 +666,7 @@ public class LoginActivity extends FragmentActivity {
                      if(ConstantsAdmin.mensaje != null){
                          createAlertDialog(ConstantsAdmin.mensaje,getResources().getString(R.string.atencion));
                          ConstantsAdmin.mensaje = null;
-                         buttonLogin.setEnabled(true);
+                   //      buttonLogin.setEnabled(true);
                      }
 
                  }
@@ -724,7 +732,7 @@ public class LoginActivity extends FragmentActivity {
                             }else{
                                 createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
                                 ConstantsAdmin.mensaje = null;
-                                buttonLogin.setEnabled(true);
+                           //     buttonLogin.setEnabled(true);
                             }
 
 
@@ -732,13 +740,13 @@ public class LoginActivity extends FragmentActivity {
                         }else{
                             createAlertDialog(me.getResources().getString(R.string.usuario_inexistente), me.getResources().getString(R.string.atencion));
                             ConstantsAdmin.mensaje = null;
-                            buttonLogin.setEnabled(true);
+                  //          buttonLogin.setEnabled(true);
 
                         }
                     }else{
                         createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
                         ConstantsAdmin.mensaje = null;
-                        buttonLogin.setEnabled(true);
+               //         buttonLogin.setEnabled(true);
                     }
                 }
 
@@ -746,7 +754,7 @@ public class LoginActivity extends FragmentActivity {
                 public void onFailure(Call<List<Customer>> call, Throwable t) {
                     createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
                     ConstantsAdmin.mensaje = null;
-                    buttonLogin.setEnabled(true);
+            //        buttonLogin.setEnabled(true);
                 }
             });
 
@@ -755,7 +763,7 @@ public class LoginActivity extends FragmentActivity {
         }catch(Exception exc){
             createAlertDialog(me.getResources().getString(R.string.conexion_server_error), me.getResources().getString(R.string.atencion));
             ConstantsAdmin.mensaje = null;
-            buttonLogin.setEnabled(true);
+    //        buttonLogin.setEnabled(true);
             if(call != null) {
                 call.cancel();
             }
@@ -807,7 +815,9 @@ public class LoginActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        buttonLogin.setEnabled(true);
+    //    buttonLogin.setEnabled(true);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBar.setVisibility(View.GONE);
         if(ConstantsAdmin.currentCustomer != null && ConstantsAdmin.customerJustCreated){
             userEntry.setText(ConstantsAdmin.currentCustomer.getEmail());
             passEntry.setText("");
