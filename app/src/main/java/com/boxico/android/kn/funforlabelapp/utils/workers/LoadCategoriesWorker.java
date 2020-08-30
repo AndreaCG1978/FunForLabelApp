@@ -19,7 +19,7 @@ import retrofit2.Response;
 
 public class LoadCategoriesWorker extends Worker {
     final WorkerParameters myWorkerParams;
-    MainActivity myContext;
+    final MainActivity myContext;
 
     public LoadCategoriesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

@@ -31,12 +31,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
 import com.boxico.android.kn.funforlabelapp.FinalizarCompraActivity;
 import com.boxico.android.kn.funforlabelapp.R;
 import com.boxico.android.kn.funforlabelapp.ddbb.DataBaseManager;
@@ -58,7 +52,6 @@ import com.boxico.android.kn.funforlabelapp.services.CreatorService;
 import com.boxico.android.kn.funforlabelapp.services.CustomerService;
 import com.boxico.android.kn.funforlabelapp.services.OrdersService;
 import com.boxico.android.kn.funforlabelapp.services.UtilsService;
-import com.boxico.android.kn.funforlabelapp.utils.workers.UploadFileWorker;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
