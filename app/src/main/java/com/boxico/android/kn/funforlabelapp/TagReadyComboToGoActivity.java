@@ -240,8 +240,8 @@ public class TagReadyComboToGoActivity extends AppCompatActivity {
             params.setMargins(15,5,15,20);
             int srcWidth = bm.getWidth();
             int srcHeight = bm.getHeight();
-            int dstWidth = (int)(srcWidth*0.77f);
-            int dstHeight = (int)(srcHeight*0.77f);
+            int dstWidth = (int)(srcWidth*0.60f);
+            int dstHeight = (int)(srcHeight*0.60f);
             // Add image path from drawable folder.
 
             Bitmap b =Bitmap.createScaledBitmap(bm, dstWidth,dstHeight, false);
