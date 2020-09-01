@@ -25,7 +25,6 @@ CREATE TABLE payment_method(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 INSERT INTO payment_method VALUES(1,"Transferencia Bancaria.","Solicita los datos por mail.");
-INSERT INTO payment_method VALUES(2,"PayU","Dinero Mail.");
 INSERT INTO payment_method VALUES(3,"Mercado Pago","");
 
 
