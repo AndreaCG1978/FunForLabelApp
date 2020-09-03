@@ -30,7 +30,7 @@ public class LoginCustomerWorker extends Worker {
            // final LoginActivity me = this;
             Call<List<Customer>> call = null;
             Response<List<Customer>> response;
-            final ArrayList<Customer> customers =  new ArrayList<>();
+       //     final ArrayList<Customer> customers =  new ArrayList<>();
 
             try {
 
@@ -41,10 +41,14 @@ public class LoginCustomerWorker extends Worker {
 
                 response = call.execute();
                 if(response != null && response.body()!= null){
-                    customers.addAll(response.body());
+                    ConstantsAdmin.currentCustomer = response.body().get(0);
+
+              /*      customers.addAll(response.body());
                     if(customers.size() == 1){
                         ConstantsAdmin.currentCustomer = customers.get(0);
-                    }
+                    }*/
+                }else{
+                    r = Result.failure();
                 }
                 /*
                 call.enqueue(new Callback<List<Customer>>() {
@@ -65,10 +69,11 @@ public class LoginCustomerWorker extends Worker {
                     }
                 });*/
             }catch(Exception exc){
-                if(call != null) {
-                    call.cancel();
-                }
 
+                r = Result.failure();
+            }
+            if(call != null) {
+                call.cancel();
             }
             r = Result.success();
         } catch(Exception e) {

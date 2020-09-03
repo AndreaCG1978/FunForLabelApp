@@ -128,7 +128,13 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ConstantsAdmin.currentCustomer = null;
 
+
+    }
 
 
     private void loadProperties() {
@@ -393,7 +399,7 @@ public class LoginActivity extends FragmentActivity {
         if (!usrText.equals("") && (!pswText.equals(""))) {
 
             //new LoginCustomerTask().execute();f
-            LinearLayout layout = findViewById(R.id.loginLayout);
+            //LinearLayout layout = findViewById(R.id.loginLayout);
         //    buttonLogin.setEnabled(false);
 
       /*      RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
@@ -441,7 +447,7 @@ public class LoginActivity extends FragmentActivity {
                                 }else{
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     progressBar.setVisibility(View.GONE);
-                                    createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
+                                    createAlertDialog(getString(R.string.login_error), getString(R.string.atencion));
                                     ConstantsAdmin.mensaje = null;
                                   //  buttonLogin.setEnabled(true);
                                 }

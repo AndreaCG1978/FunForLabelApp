@@ -2,13 +2,12 @@ package com.boxico.android.kn.funforlabelapp.utils.workers;
 
 import android.content.Context;
 
-import com.boxico.android.kn.funforlabelapp.MainActivity;
+
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -19,12 +18,11 @@ import retrofit2.Response;
 
 public class LoadCategoriesWorker extends Worker {
     final WorkerParameters myWorkerParams;
-    final MainActivity myContext;
 
     public LoadCategoriesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         myWorkerParams = workerParams;
-        myContext = (MainActivity) context;
+
     }
 
     @NonNull
@@ -40,30 +38,18 @@ public class LoadCategoriesWorker extends Worker {
             response = call.execute();
             if(response.body() != null){
                 ConstantsAdmin.allCategories = new ArrayList<>(response.body());
-                if(ConstantsAdmin.allCategories.size() >= 0){
-                    try {
-                        myContext.loadImageForCategories();
-                        Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
-                        Category cat1;
-                        Category cat2;
-                        while(it.hasNext()){
-                            cat2 = null;
-                            cat1 = it.next();
-                            if(it.hasNext()){
-                                cat2 = it.next();
-                            }
-                            myContext.addCategoryInView(cat1, cat2);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if(ConstantsAdmin.allCategories.size() != 0){
+                    r = Result.success();
+                }else{
+                    r = Result.failure();
                 }
+
             }
         }catch(Exception exc){
-
             if(call != null) {
                 call.cancel();
             }
+            r = Result.failure();
 
         }
         return r;

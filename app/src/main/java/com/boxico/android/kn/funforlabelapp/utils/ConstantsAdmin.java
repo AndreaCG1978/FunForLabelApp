@@ -255,6 +255,7 @@ public class ConstantsAdmin {
     public static ArrayMap<Long,TagParams> params;
     public static int codigoExito;
     public static FinalizarCompraActivity activityTemp;
+    public static ArrayList<Product> allProducts;
 
     private static ArrayList<LabelImage> capturas = null;
 

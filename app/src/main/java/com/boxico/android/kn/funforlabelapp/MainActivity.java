@@ -13,17 +13,34 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadCategoriesWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadImageFromUrlWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoginCustomerWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.SendMailWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,7 +67,7 @@ public class MainActivity extends FragmentActivity {
     TextView textWellcomeUsr = null;
     LinearLayout linearCategories = null;
     MainActivity me;
-
+    private ProgressBar progressBar = null;
 
     TextView verCarrito = null;
 
@@ -97,9 +114,10 @@ public class MainActivity extends FragmentActivity {
         this.initializeLang();
         this.initializeCarrito();
         this.configureWidgets();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         this.loadCategories();
         
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     }
 
@@ -117,11 +135,66 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void loadCategories() {
-        privateLoadCategories();
+      //  privateLoadCategories();
       //  new LoadCategoriesTask().execute();
+
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Data inputData = new Data.Builder().build();
+
+
+
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadCategoriesWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+
+                            if(ConstantsAdmin.currentCustomer != null){
+                                if(ConstantsAdmin.allCategories != null && ConstantsAdmin.allCategories.size() > 0){
+                                    loadImageForCategories();
+                                }
+                            }else{
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                progressBar.setVisibility(View.GONE);
+                                createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
+                                ConstantsAdmin.mensaje = null;
+                                //  buttonLogin.setEnabled(true);
+                            }
+
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.FAILED) {
+                            ConstantsAdmin.mensaje = null;
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
     }
 
     private void configureWidgets() {
+
+        LinearLayout layout = findViewById(R.id.mainLayout);
+        progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 4,params);
+
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearCategories = findViewById(R.id.linearCategories);
         String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
@@ -211,7 +284,10 @@ public class MainActivity extends FragmentActivity {
         }
     }
 */
-    public void loadImageForCategories() throws IOException {
+    public void loadImageForCategories() {
+
+        /*
+
         Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
         Category cat;
         String url;
@@ -221,8 +297,39 @@ public class MainActivity extends FragmentActivity {
             url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_IMAGES) + cat.getImageString();
             b = ConstantsAdmin.getImageFromURL(url);
             cat.setImage(b);
-         //   this.addCategoryInView(cat);
-        }
+        }*/
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        Data inputData = new Data.Builder().build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadImageFromUrlWorker.class)
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
+                            Category cat1;
+                            Category cat2;
+                            while(it.hasNext()){
+                                cat2 = null;
+                                cat1 = it.next();
+                                if(it.hasNext()){
+                                    cat2 = it.next();
+                                }
+                                addCategoryInView(cat1, cat2);
+                            }
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
     }
 
 
@@ -395,7 +502,8 @@ public class MainActivity extends FragmentActivity {
                 ConstantsAdmin.allCategories = new ArrayList<>(response.body());
                 if(ConstantsAdmin.allCategories.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
-                }else{
+                }
+                /*else{
                     try {
                         loadImageForCategories();
                         Iterator<Category> it = ConstantsAdmin.allCategories.iterator();
@@ -412,7 +520,7 @@ public class MainActivity extends FragmentActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
             }else{
                 ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
             }

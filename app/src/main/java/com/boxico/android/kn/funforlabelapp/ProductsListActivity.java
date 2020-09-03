@@ -12,17 +12,35 @@ import android.text.Html;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 
+import com.boxico.android.kn.funforlabelapp.dtos.Category;
 import com.boxico.android.kn.funforlabelapp.dtos.Product;
 import com.boxico.android.kn.funforlabelapp.services.CategoriesProductsService;
 import com.boxico.android.kn.funforlabelapp.utils.ConstantsAdmin;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadCategoriesWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadImageFromUrlWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadProductImageFromUrlWorker;
+import com.boxico.android.kn.funforlabelapp.utils.workers.LoadProductsWorker;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -46,10 +64,11 @@ public class ProductsListActivity extends FragmentActivity {
 
     private ProductsListActivity me;
 
-    ArrayList<Product> products;
+   // ArrayList<Product> products;
     LinearLayout linearProducts = null;
     TextView textWellcomeUsr = null;
     TextView textCategorySelected = null;
+    private ProgressBar progressBar = null;
 
 
     @Override
@@ -59,8 +78,9 @@ public class ProductsListActivity extends FragmentActivity {
         setContentView(R.layout.products_list);
         this.initializeService();
         this.configureWidgets();
-        this.loadProducts();
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        this.loadProducts();
+
     }
 
     @Override
@@ -148,6 +168,8 @@ public class ProductsListActivity extends FragmentActivity {
         }
     }
 */
+
+/*
     private void privateLoadProducts() {
         Call<List<Product>> call = null;
         Response<List<Product>> response;
@@ -156,8 +178,8 @@ public class ProductsListActivity extends FragmentActivity {
             call = ConstantsAdmin.categoriesProductsService.getProductsFromCategory(ConstantsAdmin.currentCategory.getId(), ConstantsAdmin.currentLanguage, ConstantsAdmin.tokenFFL);
             response = call.execute();
             if(response.body() != null){
-                products = new ArrayList<>(response.body());
-                if(products.size() == 0){
+                ConstantsAdmin.allProducts = new ArrayList<>(response.body());
+                if(ConstantsAdmin.allProducts.size() == 0){
                     ConstantsAdmin.mensaje = getResources().getString(R.string.conexion_server_error);
                 }else{
                     try {
@@ -178,7 +200,7 @@ public class ProductsListActivity extends FragmentActivity {
 
         }
     }
-
+*/
     @Override
     protected void onStart() {
         super.onStart();
@@ -199,7 +221,7 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void loadImageForProducts() throws IOException {
-        Iterator<Product> it = products.iterator();
+/*        Iterator<Product> it = ConstantsAdmin.allProducts.iterator();
         Product p;
         String url;
         Bitmap b;
@@ -209,7 +231,38 @@ public class ProductsListActivity extends FragmentActivity {
             b = ConstantsAdmin.getImageFromURL(url);
             p.setImage(b);
             this.addProductInView(p);
-        }
+        }*/
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        Data inputData = new Data.Builder().build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadProductImageFromUrlWorker.class)
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            Iterator<Product> it = ConstantsAdmin.allProducts.iterator();
+                            Product p;
+                            while (it.hasNext()){
+                                p = it.next();
+                                //url = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ATR_URL_IMAGES) + p.getImageString();
+                              //  b = ConstantsAdmin.getImageFromURL(url);
+                                //p.setImage(b);
+                                me.addProductInView(p);
+                            }
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
+
     }
 
     private void addProductInView(Product p) {
@@ -366,6 +419,12 @@ public class ProductsListActivity extends FragmentActivity {
     }
 
     private void configureWidgets() {
+
+        LinearLayout layout = findViewById(R.id.mainLayout);
+        progressBar = new ProgressBar(ProductsListActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, 4,params);
         textWellcomeUsr = findViewById(R.id.textWellcomeUser);
         linearProducts = findViewById(R.id.linearProducts);
         String result = getString(R.string.wellcomeUser) + " " + ConstantsAdmin.currentCustomer.getFirstName() + " " + ConstantsAdmin.currentCustomer.getLastName();
@@ -376,7 +435,59 @@ public class ProductsListActivity extends FragmentActivity {
 
     private void loadProducts(){
       //  new LoadProductsTask().execute();
-        privateLoadProducts();
+      //  privateLoadProducts();
+
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Data inputData = new Data.Builder().build();
+
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadProductsWorker.class)
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.RUNNING) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+
+                            if(ConstantsAdmin.currentCustomer != null){
+                                if(ConstantsAdmin.allProducts.size() == 0){
+                                    createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
+                                }else{
+                                    try {
+                                        loadImageForProducts();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    textCategorySelected.setText(ConstantsAdmin.currentCategory.getName());
+                                }
+                            }else{
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                progressBar.setVisibility(View.GONE);
+                                createAlertDialog(getString(R.string.conexion_server_error), getString(R.string.atencion));
+                                ConstantsAdmin.mensaje = null;
+                                //  buttonLogin.setEnabled(true);
+                            }
+
+                        }
+                        if (workInfo != null && workInfo.getState() == WorkInfo.State.FAILED) {
+                            ConstantsAdmin.mensaje = null;
+                        }
+                    }
+                });
+        ListenableFuture<Operation.State.SUCCESS> obj = WorkManager.getInstance(this).enqueue(request).getResult();
 
     }
 
