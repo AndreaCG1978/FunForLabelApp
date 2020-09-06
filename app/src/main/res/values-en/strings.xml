@@ -113,5 +113,6 @@
     <string name="productos_combo">Preview</string>
     <string name="tag_incompleto">You have to fill the label with text!</string>
     <string name="guarda_carrito">If you want to repeat any of these labels in the future, contact us, we keep all the images.</string>
+    <string name="aceptar_permisos">You need to accept this permission to continue using the application!</string>
 
 </resources>

@@ -77,6 +77,7 @@ public class LoginActivity extends FragmentActivity {
     private String nuevaContrasenia;
     private Customer customerTemp;
     private final int PERMISSIONS_WRITE_STORAGE = 102;
+    private final int PERMISSIONS_WRITE_STORAGE_1 = 103;
     private ProgressBar progressBar = null;
 
     @Override
@@ -103,6 +104,26 @@ public class LoginActivity extends FragmentActivity {
         if (requestCode == PERMISSIONS_WRITE_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 this.loadProperties();
+            }
+        }else if (requestCode == PERMISSIONS_WRITE_STORAGE_1) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+             /*   Intent intent = new Intent(me, MainActivity.class);
+                //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                if(saveLogin.isChecked()){
+                    ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                    ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
+                }else{
+                    ConstantsAdmin.deleteLogin(me);
+                }
+                ConstantsAdmin.customerJustCreated = false;
+                startActivity(intent);
+
+              */
+                createAlertDialog(getString(R.string.aceptar_permisos), getString(R.string.atencion));
+            }else{
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
         }
 
@@ -434,16 +455,38 @@ public class LoginActivity extends FragmentActivity {
                             if (workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED) {
 
                                 if(ConstantsAdmin.currentCustomer != null){
-                                    Intent intent = new Intent(me, MainActivity.class);
-                                    //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
-                                    if(saveLogin.isChecked()){
-                                        ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
-                                        ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer,me);
-                                    }else{
-                                        ConstantsAdmin.deleteLogin(me);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        if (ContextCompat.checkSelfPermission(me, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(me,
+                                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                    PERMISSIONS_WRITE_STORAGE_1);
+
+
+                                        } else {
+                                            Intent intent = new Intent(me, MainActivity.class);
+                                            //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                                            if (saveLogin.isChecked()) {
+                                                ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                                                ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer, me);
+                                            } else {
+                                                ConstantsAdmin.deleteLogin(me);
+                                            }
+                                            ConstantsAdmin.customerJustCreated = false;
+                                            startActivity(intent);
+                                        }
+                                    }else {
+                                        Intent intent = new Intent(me, MainActivity.class);
+                                        //      intent.putExtra(ConstantsAdmin.currentCustomer, currentCustomer);
+                                        if (saveLogin.isChecked()) {
+                                            ConstantsAdmin.currentCustomer.setNotEncriptedPassword(pswText);
+                                            ConstantsAdmin.createLogin(ConstantsAdmin.currentCustomer, me);
+                                        } else {
+                                            ConstantsAdmin.deleteLogin(me);
+                                        }
+                                        ConstantsAdmin.customerJustCreated = false;
+                                        startActivity(intent);
                                     }
-                                    ConstantsAdmin.customerJustCreated = false;
-                                    startActivity(intent);
                                 }else{
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     progressBar.setVisibility(View.GONE);
