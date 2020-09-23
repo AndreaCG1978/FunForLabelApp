@@ -1,0 +1,32 @@
+DROP TABLE IF EXISTS shipping_method; 
+
+CREATE TABLE shipping_method(
+  id int(20) NOT NULL,
+  name varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  description varchar(250) COLLATE utf8_spanish_ci,
+  price varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+INSERT INTO shipping_method VALUES(1,"Pickit","Envío via Pickit y retira en sucursal.","160");
+INSERT INTO shipping_method VALUES(2,"OCA Postal","Con seguimiento.","285");
+INSERT INTO shipping_method VALUES(3,"OCA envíos","Con seguimiento, se abona al retirar en la sucursal.","0");
+INSERT INTO shipping_method VALUES(4,"Mensajeria CABA","Se abona al recibir, ($150).","0");
+INSERT INTO shipping_method VALUES(5,"Retiro por congreso o microcentro","Sin costo AR : 3 lb(s).","0");
+
+
+DROP TABLE IF EXISTS payment_method; 
+
+CREATE TABLE payment_method(
+  id int(20) NOT NULL,
+  name varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  description varchar(250) COLLATE utf8_spanish_ci,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+INSERT INTO payment_method VALUES(1,"Transferencia Bancaria.","Solicita los datos por mail.");
+INSERT INTO payment_method VALUES(2,"PayU","Dinero Mail.");
+INSERT INTO payment_method VALUES(3,"Mercado Pago","");
+
+
+
