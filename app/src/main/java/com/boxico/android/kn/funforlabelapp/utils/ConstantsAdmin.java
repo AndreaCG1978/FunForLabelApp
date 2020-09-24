@@ -191,7 +191,7 @@ public class ConstantsAdmin {
 
 
     public static boolean customerJustCreated = false;
-    public static final long[] categories = {46};
+    public static final long[] categories = {53};
     public static long currentLanguage;
     public static Category currentCategory;
 
