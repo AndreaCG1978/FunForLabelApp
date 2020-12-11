@@ -455,8 +455,13 @@ public class FinalizarCompraActivity extends AppCompatActivity {
 
         String ACCESS_TOKEN_SANDBOX = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.ACCESS_TOKEN_SANDBOX);
         final String PUBLIC_KEY_SANDBOX = ConstantsAdmin.fflProperties.getProperty(ConstantsAdmin.PUBLIC_KEY_SANDBOX);
+        RequestQueue requestQueue = null;
+        try {
+            requestQueue = Volley.newRequestQueue(this);
+        }catch (Exception exc){
+            exc.printStackTrace();
+        }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         final String url = ConstantsAdmin.URL_MERCADO_PAGO +ACCESS_TOKEN_SANDBOX;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new com.android.volley.Response.Listener<JSONObject>() {
             @Override
@@ -472,6 +477,7 @@ public class FinalizarCompraActivity extends AppCompatActivity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
              //   Log.i("debinf MainAct", "response ERROR: "+error.networkResponse.allHeaders);
             }
         }){

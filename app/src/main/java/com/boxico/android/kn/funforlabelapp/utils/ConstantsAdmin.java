@@ -89,9 +89,12 @@ public class ConstantsAdmin {
     public static OrdersService orderService = null;
     public static CreatorService creatorService = null;
     public static CategoriesProductsService productService = null;
- //   public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
+    // TESTI
+   // public static final String URL = "http://test.funforlabels.com/funforlabelsApp/";
+    //public static final String URL_BASE = "http://test.funforlabels.com/";
+
+    // PRODUCCION
     public static final String URL = "http://www.funforlabels.com/funforlabelsApp/";
- //   public static final String URL_BASE = "http://test.funforlabels.com/";
     public static final String URL_BASE = "http://www.funforlabels.com/";
     public static final String PROPERTIES_FILE = "funforlabels.properties";
     public static final String ATR_URL_IMAGES = "URL_IMAGES";
