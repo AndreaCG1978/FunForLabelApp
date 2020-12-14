@@ -21,7 +21,7 @@
 			{
 			$email_address = tep_db_prepare_input($_GET['email']);
 			$pswEntry = tep_db_prepare_input($_GET['psw']);
-			$consulta = "SELECT * FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
+			$consulta = "SELECT customers_id, customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id, customers_telephone, customers_fax, customers_password, customers_newsletter FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
 			$sql = $dbConn->prepare($consulta);
 			$sql->execute();
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
@@ -40,7 +40,7 @@
 			
 		}else if(isset($_GET['email']) && !isset($_GET['psw'])){
 			$email_address = tep_db_prepare_input($_GET['email']);
-			$consulta = "SELECT * FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
+			$consulta = "SELECT customers_id, customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id, customers_telephone, customers_fax, customers_password, customers_newsletter FROM ". TABLE_CUSTOMERS . " where customers_email_address = '".$email_address."'";
 			$sql = $dbConn->prepare($consulta);
 			$sql->execute();
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
