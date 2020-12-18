@@ -2,9 +2,11 @@ package com.boxico.android.kn.funforlabelapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -89,9 +91,22 @@ public class LoginActivity extends FragmentActivity {
         this.initializeService();
         this.initializeDataBase();
         this.initializeLogin();
-      //  this.loadProperties();
-        this.askForWriteStoragePermission();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        if(isNetworkConnected()){
+
+            //  this.loadProperties();
+            this.askForWriteStoragePermission();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        }else{
+            createAlertDialog(getString(R.string.debe_contectarse), getString(R.string.atencion));
+            //this.finish();
+        }
+
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     @Override

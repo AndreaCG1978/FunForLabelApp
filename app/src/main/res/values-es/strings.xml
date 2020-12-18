@@ -116,4 +116,5 @@
     <string name="tag_incompleto">Debe completar la etiqueta con algún texto!</string>
     <string name="guarda_carrito">Si querés repetir alguna de estas etiquetas en el futuro, contactate con nosotros que guardamos todas las imágenes.</string>
     <string name="aceptar_permisos">Es necesario aceptar este permiso para poder continuar usando la aplicación!</string>
+    <string name="debe_contectarse">Debe tener acceso a Internet para usar la aplicación!</string>
 </resources>
