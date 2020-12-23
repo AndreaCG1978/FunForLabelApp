@@ -104,9 +104,15 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private boolean isNetworkConnected() {
+
+        /*
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        */
+        return true;
+
+
     }
 
     @Override
@@ -174,15 +180,20 @@ public class LoginActivity extends FragmentActivity {
 
 
     private void loadProperties() {
-        Data inputData = new Data.Builder().build();
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadPropertiesWorker.class)
-                .setInputData(inputData)
-                .setConstraints(constraints)
-                .build();
-        WorkManager.getInstance(this).enqueue(request);
+        try {
+            Data inputData = new Data.Builder().build();
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(LoadPropertiesWorker.class)
+                    .setInputData(inputData)
+                    .setConstraints(constraints)
+                    .build();
+            WorkManager.getInstance(this).enqueue(request);
+
+        }catch (Exception exc){
+            createAlertDialog(getString(R.string.debe_contectarse), getString(R.string.atencion));
+        }
 
 //        new LoadPropertiesTask().execute();
         //ConstantsAdmin.privateLoadProperties();
