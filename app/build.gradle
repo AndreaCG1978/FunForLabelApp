@@ -8,8 +8,8 @@ android {
         applicationId "com.boxico.android.kn.funforlabelapp"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.022"
+        versionCode 9
+        versionName "1.023"
         multiDexEnabled true
 
     }
