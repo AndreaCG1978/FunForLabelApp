@@ -381,8 +381,8 @@ public class FinalizarCompraActivity extends AppCompatActivity {
             addressJSON.put("street_name", ConstantsAdmin.currentCustomer.getDireccion());
             addressJSON.put("street_number", 0);
             addressJSON.put("zip_code", ConstantsAdmin.currentCustomer.getCp());
-
-            payerJSON.put("name", ConstantsAdmin.currentCustomer.getFirstName());
+            String fn =  ConstantsAdmin.currentCustomer.getFirstName();
+            payerJSON.put("name", fn);
             payerJSON.put("surname", ConstantsAdmin.currentCustomer.getLastName());
             payerJSON.put("email", ConstantsAdmin.currentCustomer.getEmail());
             Date date= new Date();
