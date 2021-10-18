@@ -523,8 +523,7 @@ public class ConstantsAdmin {
         ConstantsAdmin.copyFileFromUrl(ConstantsAdmin.URL + ConstantsAdmin.PROPERTIES_FILE, ConstantsAdmin.PROPERTIES_FILE);
         properties = new Properties();
         try {
-            String filename = Environment
-                    .getExternalStorageDirectory().toString() + "/" + FOLDER_FFL + "/"
+            String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/" + FOLDER_FFL + "/"
                     + ConstantsAdmin.PROPERTIES_FILE;
             inputStream = new FileInputStream(filename);
 
@@ -535,8 +534,7 @@ public class ConstantsAdmin {
             if(inputStream != null){
                 try {
                     inputStream.close();
-                    String filename = Environment
-                            .getExternalStorageDirectory().toString() +"/" + FOLDER_FFL + "/"
+                    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() +"/" + FOLDER_FFL + "/"
                             + ConstantsAdmin.PROPERTIES_FILE;
                     File f = new File(filename);
                     if(f.exists()) {
@@ -906,27 +904,28 @@ public class ConstantsAdmin {
 
     public static File getFile(String filename){
         String completeFilename = Environment
-                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/"
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/"
                 + filename;
         return new File(completeFilename);
     }
 
     public static File getImageFile(String filename){
         String completeFilename = Environment
-                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/"
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/"
                 + filename;
         return new File(completeFilename);
     }
 
     public static File getTempFolder(){
         String completeFilename = Environment
-                .getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP;
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP;
         return new File(completeFilename);
     }
 
     public static void copyBitmapInStorage(Bitmap bmp, String filename){
        // String root = Environment.getExternalStorageDirectory().toString();
-        String completeFilename = Environment.getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + filename;
+      //  String completeFilename = Environment.getExternalStorageDirectory().toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + filename;
+        String completeFilename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() +"/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + filename;
         File newFile = new File(completeFilename);
         if (newFile.exists())
             newFile.delete();
@@ -1069,8 +1068,8 @@ public class ConstantsAdmin {
         Bitmap bitmap;
         try {
             // image naming and path  to include sd card  appending name you choose for file
-
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + nameFile;
+            String mPath =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + nameFile;
+            //String mPath = Environment.getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/" + ConstantsAdmin.FOLDER_TEMP + "/" + nameFile;
 
             //View v = initPopupViewTag(pc, context);
             // create bitmap screen capture
@@ -1144,7 +1143,9 @@ public class ConstantsAdmin {
     }
 
     public static void createFolder(){
-        File f = new File(Environment.getExternalStorageDirectory(), FOLDER_FFL);
+        //File f = new File(Environment.getExternalStorageDirectory(), FOLDER_FFL);
+        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), FOLDER_FFL);
+
         if (!f.exists()) {
             f.mkdirs();
             File subdir = new File(f, FOLDER_TEMP);
@@ -1159,7 +1160,7 @@ public class ConstantsAdmin {
         int count;
         try {
             String filename = Environment
-                    .getExternalStorageDirectory().toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/"
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/" + ConstantsAdmin.FOLDER_FFL + "/"
                     + fontFilename;
             File f = new File(filename);
             if(!f.exists()) {
